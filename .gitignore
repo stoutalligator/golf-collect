@@ -1,0 +1,27 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Secrets
+.env
+.env*.local
+*.p8
+*.p12
+*.mobileprovision
+
+# Xcode / Swift
+build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+.swiftpm/
+Pods/
+
+# Node / Expo (if chosen)
+node_modules/
+.expo/
+dist/
+web-build/
