@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
 import { LocalRepository, type AppSnapshot, type NewEvent, type Repository } from '@/data/repository';
+import type { EventFormat, EventRound } from '@/domain/competition';
 import { SupabaseRepository } from '@/data/supabase-repository';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/state/auth';
@@ -101,6 +102,8 @@ export interface AppData extends AppSnapshot {
   leaveEvent(eventId: string): Promise<void>;
   deleteEvent(eventId: string): Promise<void>;
   setPairings(eventRoundId: string, pairs: [string, string][]): Promise<void>;
+  updateEvent(eventId: string, changes: { name?: string; format?: EventFormat }): Promise<void>;
+  updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>): Promise<void>;
 }
 
 const Ctx = createContext<AppData | null>(null);
@@ -269,6 +272,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     leaveEvent: async (id) => { await repo!.leaveEvent(id); await reload(); },
     deleteEvent: async (id) => { await repo!.deleteEvent(id); await reload(); },
     setPairings: async (id, pairs) => { await repo!.setPairings(id, pairs); await reload(); },
+    updateEvent: async (id, changes) => { await repo!.updateEvent(id, changes); await reload(); },
+    updateEventRound: async (id, changes) => { await repo!.updateEventRound(id, changes); await reload(); },
   }), [snap, derived, ready, error, auth.offline, repo, reload]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

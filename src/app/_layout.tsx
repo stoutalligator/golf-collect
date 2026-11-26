@@ -79,6 +79,7 @@ function AppStack() {
         <Stack.Screen name="friends" />
         <Stack.Screen name="events/index" />
         <Stack.Screen name="events/new" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="schedule" options={{ presentation: 'modal' }} />
         <Stack.Screen name="event/[id]/index" />
         <Stack.Screen name="event/[id]/round/[roundId]" />
       </Stack.Protected>

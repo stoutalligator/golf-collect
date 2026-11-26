@@ -100,7 +100,7 @@ export default function CourseDetail() {
 
           <View style={styles.actions}>
             <Button label="Log a Round" icon="flag" onPress={() => router.push(`/round/new?courseId=${course.id}`)} style={{ flex: 1.2 }} />
-            <Button label="Schedule" icon="calendar" variant="secondary" onPress={() => router.push(`/events/new?kind=outing&courseId=${course.id}`)} style={{ flex: 1 }} />
+            <Button label="Schedule" icon="calendar" variant="secondary" onPress={() => router.push(`/schedule?courseId=${course.id}`)} style={{ flex: 1 }} />
           </View>
           <Button label="View your scorecards here" variant="secondary" onPress={() => router.navigate(`/stats?view=rounds&courseId=${course.id}`)} />
 

@@ -25,6 +25,10 @@ export interface EventFormat {
   seasonPoints?: number[];
   /** League season: only a player's best N event-round point totals count (undefined = all). */
   countBest?: number;
+  /** Scheduled round: group size (2–4 = twosome…foursome); undefined = no limit. */
+  spots?: number;
+  /** Scheduled round: the organizer's note to the group ("Carts on me, meet at the range"). */
+  note?: string;
 }
 
 export const DEFAULT_SEASON_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];

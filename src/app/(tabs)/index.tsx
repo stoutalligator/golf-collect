@@ -99,7 +99,7 @@ export default function Home() {
           ) : null}
 
           <View style={styles.quick}>
-            <Tap onPress={() => router.push('/events/new?kind=outing')} scaleTo={0.97} accessibilityRole="button" style={styles.quickBtn}>
+            <Tap onPress={() => router.push('/schedule')} scaleTo={0.97} accessibilityRole="button" style={styles.quickBtn}>
               <Icon name="calendar" size={16} color={colors.fairway} />
               <Text style={styles.quickText}>Schedule a round</Text>
             </Tap>

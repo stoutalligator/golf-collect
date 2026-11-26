@@ -20,7 +20,7 @@ export default function NewEvent() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
   const params = useLocalSearchParams<{ kind?: EventKind; courseId?: string }>();
-  const startKind: EventKind = params.kind === 'outing' || params.kind === 'tournament' ? params.kind : 'league';
+  const startKind: EventKind = params.kind === 'tournament' ? 'tournament' : 'league';
   const [kind, setKind] = useState<EventKind>(startKind);
   const [name, setName] = useState('');
   const [scoring, setScoring] = useState<Scoring>('stroke');
@@ -84,7 +84,7 @@ export default function NewEvent() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Chips value={kind} onChange={changeKind} options={[{ value: 'league', label: 'League' }, { value: 'tournament', label: 'Tournament' }, { value: 'outing', label: 'Round' }]} />
+        <Chips value={kind} onChange={changeKind} options={[{ value: 'league', label: 'League' }, { value: 'tournament', label: 'Tournament' }]} />
         <Text style={styles.help}>
           {kind === 'league' ? 'A season of weekly rounds with a points table.' : kind === 'tournament' ? 'One to four rounds and a single leaderboard.' : 'Plan a round with friends. No scoring, just who’s in.'}
         </Text>

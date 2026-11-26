@@ -68,6 +68,10 @@ export interface Repository {
   deleteEvent(eventId: string): Promise<void>;
   /** Match play: replace an event round's pairings. */
   setPairings(eventRoundId: string, pairs: [string, string][]): Promise<void>;
+  /** Organizer: rename the event or change its format settings (e.g. a scheduled round's note or group size). */
+  updateEvent(eventId: string, changes: { name?: string; format?: EventFormat }): Promise<void>;
+  /** Organizer: move an event round (date, tee time, course, tee, holes). */
+  updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>): Promise<void>;
   /** Offline demo only: restore the generated sample data. */
   resetToSample?(): Promise<void>;
 }
@@ -201,6 +205,10 @@ export class LocalRepository implements Repository {
   async deleteEvent() { this.needsAccount(); }
 
   async setPairings() { this.needsAccount(); }
+
+  async updateEvent() { this.needsAccount(); }
+
+  async updateEventRound() { this.needsAccount(); }
 
   async resetToSample() {
     await this.write(sample());

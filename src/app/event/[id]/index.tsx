@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Share, StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
+import { OutingView } from '@/components/outing-view';
 import { Tap } from '@/components/motion';
 import { Avatar } from '@/components/social';
 import { Button, Card, Chips, Empty, Group, IconButton, SectionHeader, SheetScreen } from '@/components/ui';
@@ -24,6 +25,7 @@ export default function EventScreen() {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   if (!view) return <SheetScreen title="Event" back><Empty title="Event not found" body="It may have been deleted, or you left it." /></SheetScreen>;
+  if (view.event.kind === 'outing') return <OutingView view={view} />;
   const { event } = view;
 
   const act = async (key: string, fn: () => Promise<unknown>) => {
@@ -88,11 +90,12 @@ export default function EventScreen() {
           onPress={async () => {
             if (!confirmDelete) return setConfirmDelete(true);
             await act('delete', () => data.deleteEvent(event.id));
-            router.back();
+            if (router.canGoBack()) router.back();
+            else router.replace('/events');
           }}
         />
       ) : view.myMembership?.status === 'joined' ? (
-        <Button variant="secondary" label="Leave event" haptic="warning" onPress={async () => { await act('leave', () => data.leaveEvent(event.id)); router.back(); }} />
+        <Button variant="secondary" label="Leave event" haptic="warning" onPress={async () => { await act('leave', () => data.leaveEvent(event.id)); if (router.canGoBack()) router.back(); else router.replace('/events'); }} />
       ) : null}
     </SheetScreen>
   );

@@ -112,7 +112,8 @@ export default function Events() {
       ) : null}
 
       <View style={styles.section}>
-        <Button label="Create a league, tournament or round" icon="plus" onPress={() => router.push('/events/new')} disabled={auth.offline} />
+        <Button label="Schedule a round" icon="calendar" onPress={() => router.push('/schedule')} disabled={auth.offline} />
+        <Button variant="secondary" label="Start a league or tournament" icon="trophy" onPress={() => router.push('/events/new')} disabled={auth.offline} />
         <View style={styles.join}>
           <TextInput
             value={code}

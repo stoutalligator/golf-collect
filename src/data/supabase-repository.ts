@@ -509,6 +509,33 @@ export class SupabaseRepository implements Repository {
     await this.load(true);
   }
 
+  async updateEvent(eventId: string, changes: { name?: string; format?: EventFormat }) {
+    await this.must(this.db.from('events').update({
+      ...(changes.name !== undefined ? { name: changes.name.trim() } : {}),
+      ...(changes.format ? { format: changes.format } : {}),
+    }).eq('id', eventId), 'update event');
+    await this.load(true);
+  }
+
+  async updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>) {
+    const row: Record<string, unknown> = {};
+    if (changes.scheduledOn !== undefined) row.scheduled_on = changes.scheduledOn;
+    if ('teeTime' in changes) row.tee_time = changes.teeTime ?? null;
+    if (changes.courseId !== undefined) row.course_id = changes.courseId;
+    if ('teeId' in changes) row.tee_id = changes.teeId ?? null;
+    if (changes.holes !== undefined) row.holes = changes.holes;
+    await this.must(this.db.from('event_rounds').update(row).eq('id', eventRoundId), 'update event round');
+    // Keep the event's date range in step with a single-round event.
+    if (changes.scheduledOn) {
+      const er = this.snap?.eventRounds.find((r) => r.id === eventRoundId);
+      const siblings = this.snap?.eventRounds.filter((r) => r.eventId === er?.eventId) ?? [];
+      if (er && siblings.length === 1) {
+        await this.must(this.db.from('events').update({ starts_on: changes.scheduledOn, ends_on: changes.scheduledOn }).eq('id', er.eventId), 'update event dates');
+      }
+    }
+    await this.load(true);
+  }
+
   async setPairings(eventRoundId: string, pairs: [string, string][]) {
     await this.must(this.db.from('event_matches').delete().eq('event_round_id', eventRoundId), 'clear pairings');
     if (pairs.length) {

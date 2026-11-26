@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Tap } from '@/components/motion';
+import { OutingView } from '@/components/outing-view';
 import { Avatar } from '@/components/social';
 import { Button, Card, Empty, Group, SectionHeader, SheetScreen } from '@/components/ui';
 import { FORMAT_LABEL, positionLabel, roundRobin } from '@/domain/competition';
@@ -18,6 +19,7 @@ export default function EventRoundScreen() {
   const [busy, setBusy] = useState(false);
   const r = view?.rounds.find((x) => x.round.id === roundId);
   if (!view || !r) return <SheetScreen title="Round" back><Empty title="Round not found" body="" /></SheetScreen>;
+  if (view.event.kind === 'outing') return <OutingView view={view} />;
 
   const f = view.event.format;
   const name = (pid: string) => (pid === data.me.id ? 'You' : data.playerById(pid)?.name ?? 'Player');
@@ -50,7 +52,7 @@ export default function EventRoundScreen() {
         <Text style={styles.meta}>
           {formatDay(r.round.scheduledOn)}{r.round.teeTime ? ` · ${formatTeeTime(r.round.teeTime)}` : ''}
           {r.round.holes !== 'all' ? ` · ${r.round.holes === 'front' ? 'Front' : 'Back'} 9` : ''}
-          {view.event.kind !== 'outing' ? ` · ${FORMAT_LABEL(f)}` : ''}
+          {` · ${FORMAT_LABEL(f)}`}
         </Text>
         {canLog ? <Button label="Log my round for this" icon="flag" onPress={() => router.push(`/round/new?eventRound=${r.round.id}`)} style={{ marginTop: space.md }} /> : null}
         {mine ? (
@@ -60,7 +62,7 @@ export default function EventRoundScreen() {
         ) : null}
       </Card>
 
-      {f.scoring === 'match' && view.event.kind !== 'outing' ? (
+      {f.scoring === 'match' ? (
         <View style={styles.section}>
           <SectionHeader title="Matches" />
           {r.matches.length ? (
@@ -82,7 +84,7 @@ export default function EventRoundScreen() {
         </View>
       ) : null}
 
-      {view.event.kind !== 'outing' && f.scoring !== 'match' ? (
+      {f.scoring !== 'match' ? (
         <View style={styles.section}>
           <SectionHeader title="Leaderboard" action={f.scoring === 'stableford' ? 'Points' : 'Gross / Net'} />
           {r.board.length ? (
@@ -103,7 +105,7 @@ export default function EventRoundScreen() {
       ) : null}
 
       <View style={styles.section}>
-        <SectionHeader title={view.event.kind === 'outing' ? 'Who’s in' : 'Players'} />
+        <SectionHeader title="Players" />
         <Group>
           {view.joined.map((p) => {
             const lr = r.linked.get(p.id);
