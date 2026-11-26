@@ -14,7 +14,7 @@ import { recentRounds } from '@/domain/analytics';
 import { formatDay, formatTeeTime, greeting, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { useEventLists } from '@/state/events';
-import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
+import { colors, currentScheme, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 /** Left-to-right fade so the greeting reads over the painting without darkening the whole scene. */
 function GreetingFade() {
@@ -40,6 +40,8 @@ const PAGE = 10;
 export default function Home() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
+  // Gold icons on the forest quick buttons; on the pale-green dark-mode buttons, match the text instead.
+  const quickIcon = currentScheme() === 'dark' ? colors.cream : colors.gold;
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [limit, setLimit] = useState(PAGE);
   const firstName = data.me.name.split(' ')[0];
@@ -99,12 +101,12 @@ export default function Home() {
           ) : null}
 
           <View style={styles.quick}>
-            <Tap onPress={() => router.push('/schedule')} scaleTo={0.97} accessibilityRole="button" style={styles.quickBtn}>
-              <Icon name="calendar" size={16} color={colors.fairway} />
+            <Tap onPress={() => router.push('/schedule')} scaleTo={0.97} swish accessibilityRole="button" style={styles.quickBtn}>
+              <Icon name="calendar" size={16} color={quickIcon} />
               <Text style={styles.quickText}>Schedule a round</Text>
             </Tap>
-            <Tap onPress={() => router.push('/events')} scaleTo={0.97} accessibilityRole="button" style={styles.quickBtn}>
-              <Icon name="trophy" size={16} color={colors.fairway} />
+            <Tap onPress={() => router.push('/events')} scaleTo={0.97} swish accessibilityRole="button" style={styles.quickBtn}>
+              <Icon name="trophy" size={16} color={quickIcon} />
               <Text style={styles.quickText}>Leagues & events</Text>
             </Tap>
           </View>
@@ -164,10 +166,10 @@ const styles = themed(() => StyleSheet.create({
   activeTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.cream },
   activeSub: { ...type.caption, color: colors.onFillMuted },
   quick: { flexDirection: 'row', gap: space.sm, marginTop: -space.sm },
-  quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.paper },
-  quickText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway },
+  quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: 46, borderRadius: radius.pill, backgroundColor: colors.fairway, ...shadow.card },
+  quickText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },
   upNext: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.creamLight, borderRadius: radius.xl, padding: space.md, ...shadow.card },
-  upNextIcon: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  upNextIcon: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   upNextTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
   upNextSub: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   upNextInvite: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, marginTop: 2 },

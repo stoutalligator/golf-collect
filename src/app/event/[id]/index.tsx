@@ -298,7 +298,7 @@ const styles = themed(() => StyleSheet.create({
   next: { flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md },
   nextMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md },
   nextTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
-  calendar: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  calendar: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   calendarToday: { backgroundColor: colors.fairway },
   calDay: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.fairway },
   logBtn: { paddingHorizontal: 14, minHeight: 36, borderRadius: radius.pill, backgroundColor: colors.fairway, justifyContent: 'center' },

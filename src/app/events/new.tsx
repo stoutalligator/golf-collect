@@ -255,7 +255,7 @@ const styles = themed(() => StyleSheet.create({
   pillTextOn: { color: colors.cream, fontFamily: fonts.bodySemibold },
   friend: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 4, paddingRight: 12, height: 36, borderRadius: radius.pill, backgroundColor: colors.paper },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  stepBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  stepBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   stepValue: { minWidth: 120, textAlign: 'center', fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
   stepExtra: { paddingHorizontal: 12, minHeight: 34, borderRadius: radius.pill, backgroundColor: colors.paper, justifyContent: 'center' },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },

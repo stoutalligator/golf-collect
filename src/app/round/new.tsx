@@ -1,15 +1,17 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Collectible, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
 import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
+import { formatMiles, nearest } from '@/domain/geo';
 import type { Round, RoundKind } from '@/domain/types';
-import { todayISO } from '@/lib/format';
+import { addDaysISO, formatDay, todayISO } from '@/lib/format';
 import { uuid } from '@/lib/ids';
+import { useLocation } from '@/lib/location';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
 import { linkableEventRounds } from '@/state/events';
@@ -18,6 +20,19 @@ import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
 
 type Holes = '18' | 'front' | 'back';
+/** Play now, log one you've already played, or plan one. */
+type When = 'now' | 'earlier' | 'later';
+
+/** How far back "Earlier" lets you pick a date. */
+const PAST_DAYS = 120;
+const dayParts = (iso: string) => {
+  const d = new Date(`${iso}T12:00:00`);
+  return {
+    dow: d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase(),
+    day: d.getDate(),
+    month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+  };
+};
 
 export default function NewRound() {
   const insets = useSafeAreaInsets();
@@ -26,6 +41,10 @@ export default function NewRound() {
   // Opened from an event round: start from its course, tee and holes, and count toward it.
   const fromEvent = params.eventRound ? data.eventRounds.find((r) => r.id === params.eventRound) : undefined;
   const [kind, setKind] = useState<RoundKind>('course');
+  const [when, setWhen] = useState<When>('now');
+  const [playedOn, setPlayedOn] = useState(todayISO());
+  const pastDays = useMemo(() => Array.from({ length: PAST_DAYS }, (_, i) => addDaysISO(todayISO(), -i)), []);
+  const date = when === 'earlier' ? playedOn : todayISO();
   const [courseId, setCourseId] = useState<string | undefined>(fromEvent?.courseId ?? params.courseId);
   const [teeId, setTeeId] = useState<string | undefined>(fromEvent?.teeId);
   const [holes, setHoles] = useState<Holes>(fromEvent?.holes === 'front' ? 'front' : fromEvent?.holes === 'back' ? 'back' : '18');
@@ -54,14 +73,28 @@ export default function NewRound() {
     return list.filter((o) => !q || o.name.toLowerCase().includes(q) || o.sub.toLowerCase().includes(q));
   }, [kind, data.courseIndex, data.simCourses, query]);
 
+  // Courses near you first (no search typed yet); ask for location only while picking a real course.
+  const picking = kind === 'course' && !courseId;
+  const loc = useLocation(picking);
+  const nearby = useMemo(() => (loc.status === 'ready' ? nearest(data.courseIndex, loc.here, { limit: 8, maxMiles: 60 }) : []), [loc, data.courseIndex]);
+  const recent = useMemo(() => {
+    const ids = [...new Set([data.me.homeCourseId, ...data.roundsByDate.filter((r) => r.kind === 'course').map((r) => r.courseId)].filter((x): x is string => !!x))];
+    const shown = new Set(nearby.map((c) => c.id));
+    return ids.filter((id) => !shown.has(id)).map((id) => data.courseSummary(id)).filter((c) => !!c).slice(0, 5);
+  }, [data, nearby]);
+
   const { course: loaded, loading: courseLoading } = useCourse(kind === 'course' ? courseId : undefined);
   const course = kind === 'course' ? loaded : undefined;
   const sim = kind === 'sim' && courseId ? data.simCourseById(courseId) : undefined;
   const layout = course ?? sim;
-  const linkable = kind === 'course' ? linkableEventRounds(data, courseId) : [];
+  const linkable = kind === 'course' ? linkableEventRounds(data, courseId, date) : [];
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
 
   const start = async () => {
+    if (when === 'later') {
+      router.replace(courseId && kind === 'course' ? `/schedule?courseId=${courseId}` : '/schedule');
+      return;
+    }
     if (!layout || starting) return;
     const all = playLayout(layout).holes.map((h) => h.number); // 9-hole courses: 18 = twice around
     const effective = isNineHole(layout) && holes === 'back' ? 'front' : holes;
@@ -78,7 +111,7 @@ export default function NewRound() {
       kind,
       courseId: layout.id,
       teeId: selectedTee,
-      date: todayISO(),
+      date,
       status: 'active',
       holeNumbers,
       playerIds: [owner, ...everyone.filter((p) => p !== owner)],
@@ -109,10 +142,42 @@ export default function NewRound() {
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Chips
           value={kind}
-          onChange={(k) => { setKind(k); setCourseId(undefined); setTeeId(undefined); }}
+          onChange={(k) => { setKind(k); setCourseId(undefined); setTeeId(undefined); if (k === 'sim' && when === 'later') setWhen('now'); }}
           options={[{ value: 'course', label: 'On the course' }, { value: 'sim', label: 'Simulator' }]}
         />
         {kind === 'sim' ? <Text style={styles.note}>Sim rounds count toward sim stats and sim badges only, never real-course collectibles.</Text> : null}
+
+        <Text style={styles.label}>When</Text>
+        <Chips
+          value={when}
+          onChange={setWhen}
+          options={[
+            { value: 'now' as When, label: 'Play now' },
+            { value: 'earlier' as When, label: 'Already played' },
+            ...(kind === 'course' ? [{ value: 'later' as When, label: 'Schedule' }] : []),
+          ]}
+        />
+        {when === 'earlier' ? (
+          <>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.days} style={styles.daysScroll}>
+              {pastDays.map((d) => {
+                const p = dayParts(d);
+                const on = d === playedOn;
+                const label = d === todayISO() ? 'TODAY' : d === addDaysISO(todayISO(), -1) ? 'YDAY' : p.dow;
+                return (
+                  <Tap key={d} onPress={() => setPlayedOn(d)} haptic={on ? 'none' : 'select'} scaleTo={0.94} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={formatDay(d)} style={[styles.day, on && styles.dayOn]}>
+                    <Text style={[styles.dayDow, on && styles.dayOnSub]}>{label}</Text>
+                    <Text style={[styles.dayNum, on && styles.dayOnText]}>{p.day}</Text>
+                    <Text style={[styles.dayMonth, on && styles.dayOnSub]}>{p.month}</Text>
+                  </Tap>
+                );
+              })}
+            </ScrollView>
+            <Text style={styles.note}>Played {playedOn === todayISO() ? 'today' : formatDay(playedOn)}. You’ll enter it hole by hole; it counts toward stats, collectibles and badges on that date.</Text>
+          </>
+        ) : when === 'later' ? (
+          <Text style={styles.note}>Pick a date and tee time, and invite friends, on the next screen.</Text>
+        ) : null}
 
         {layout ? (
           <Tap haptic="select" scaleTo={0.98} style={styles.selected} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
@@ -130,8 +195,58 @@ export default function NewRound() {
         ) : (
           <>
             <SearchField value={query} onChange={setQuery} placeholder={kind === 'course' ? 'Search courses or towns...' : 'Search sim courses...'} />
-            {options.length > 50 ? <Text style={styles.note}>Showing 50 of {options.length.toLocaleString('en-US')}. Type to narrow it down.</Text> : null}
-            {options.slice(0, 50).map((o) => (
+            {kind === 'course' && !query.trim() ? (
+              <>
+                <Text style={styles.label}>Near you</Text>
+                {loc.status === 'loading' ? (
+                  <Loading label="Finding courses near you…" />
+                ) : loc.status === 'denied' ? (
+                  <View style={styles.locNote}>
+                    <Icon name="pin" size={18} color={colors.fairway} />
+                    <Text style={[styles.note, { flex: 1 }]}>Turn on location to see the courses around you. Or search above.</Text>
+                    <Tap haptic="tap" onPress={() => (loc.canAskAgain ? loc.retry() : Linking.openSettings())} accessibilityRole="button" hitSlop={8}>
+                      <Text style={styles.link}>{loc.canAskAgain ? 'Turn on' : 'Settings'}</Text>
+                    </Tap>
+                  </View>
+                ) : loc.status === 'unavailable' ? (
+                  <View style={styles.locNote}>
+                    <Icon name="pin" size={18} color={colors.inkMuted} />
+                    <Text style={[styles.note, { flex: 1 }]}>Couldn’t get your location right now. Search above.</Text>
+                    <Tap haptic="tap" onPress={loc.retry} accessibilityRole="button" hitSlop={8}><Text style={styles.link}>Try again</Text></Tap>
+                  </View>
+                ) : nearby.length === 0 ? (
+                  <Text style={styles.note}>No courses we know of within 60 miles yet. Search above.</Text>
+                ) : (
+                  nearby.map((c) => (
+                    <Tap key={c.id} haptic="select" scaleTo={0.985} dim onPress={() => setCourseId(c.id)} style={styles.option} accessibilityRole="button" accessibilityLabel={`${c.name}, ${formatMiles(c.miles)} away`}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.optionName}>{c.name}</Text>
+                        <Text style={styles.sub}>{c.city}, {c.state}{c.holeCount === 9 ? ' · 9 holes' : ''}</Text>
+                      </View>
+                      <Text style={styles.miles}>{formatMiles(c.miles)}</Text>
+                      <Icon name="chevron-right" size={16} color={colors.inkMuted} />
+                    </Tap>
+                  ))
+                )}
+                {recent.length ? (
+                  <>
+                    <Text style={styles.label}>Your courses</Text>
+                    {recent.map((c) => (
+                      <Tap key={c.id} haptic="select" scaleTo={0.985} dim onPress={() => setCourseId(c.id)} style={styles.option} accessibilityRole="button">
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.optionName}>{c.name}</Text>
+                          <Text style={styles.sub}>{c.id === data.me.homeCourseId ? 'Home course · ' : ''}{c.city}, {c.state}</Text>
+                        </View>
+                        {loc.status === 'ready' ? <Text style={styles.miles}>{formatMiles(nearest([c], loc.here, { limit: 1, maxMiles: 100000 })[0]?.miles ?? 0)}</Text> : null}
+                        <Icon name="chevron-right" size={16} color={colors.inkMuted} />
+                      </Tap>
+                    ))}
+                  </>
+                ) : null}
+              </>
+            ) : null}
+            {kind === 'course' && !query.trim() ? null : options.length > 50 ? <Text style={styles.note}>Showing 50 of {options.length.toLocaleString('en-US')}. Type to narrow it down.</Text> : null}
+            {(kind === 'course' && !query.trim() ? [] : options.slice(0, 50)).map((o) => (
               <Tap key={o.id} haptic="select" scaleTo={0.985} dim onPress={() => setCourseId(o.id)} style={styles.option} accessibilityRole="button">
                 <View style={{ flex: 1 }}>
                   <Text style={styles.optionName}>{o.name}</Text>
@@ -143,7 +258,7 @@ export default function NewRound() {
           </>
         )}
 
-        {course ? (
+        {course && when !== 'later' ? (
           <>
             <Text style={styles.label}>Tees</Text>
             <View style={styles.tees}>
@@ -160,7 +275,7 @@ export default function NewRound() {
           </>
         ) : null}
 
-        {layout ? (
+        {layout && when !== 'later' ? (
           <>
             <Text style={styles.label}>Holes</Text>
             <Chips
@@ -221,7 +336,12 @@ export default function NewRound() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
-        <Button label={starting ? 'Setting up…' : 'Tee Off'} icon="flag" onPress={start} disabled={!layout || starting} />
+        <Button
+          label={starting ? 'Setting up…' : when === 'later' ? 'Pick a date & time' : when === 'earlier' ? 'Enter scores' : 'Tee Off'}
+          icon={when === 'later' ? 'calendar' : 'flag'}
+          onPress={start}
+          disabled={(when !== 'later' && !layout) || starting}
+        />
       </View>
     </View>
   );
@@ -249,6 +369,18 @@ const styles = themed(() => StyleSheet.create({
   friend: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 4, paddingRight: 12, height: 36, borderRadius: radius.pill, borderWidth: 1.5, borderColor: colors.rule, backgroundColor: colors.creamLight },
   friendOn: { backgroundColor: colors.fairway, borderColor: colors.fairway },
   friendName: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
+  daysScroll: { marginHorizontal: -space.lg },
+  days: { gap: space.sm, paddingHorizontal: space.lg },
+  day: { width: 56, paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.paper, alignItems: 'center', gap: 1 },
+  dayOn: { backgroundColor: colors.fairway },
+  dayDow: { fontFamily: fonts.bodySemibold, fontSize: 10, letterSpacing: 1, color: colors.inkMuted },
+  dayNum: { fontFamily: fonts.displayBold, fontSize: 22, lineHeight: 26, color: colors.ink },
+  dayMonth: { fontFamily: fonts.bodyMedium, fontSize: 10, letterSpacing: 1, color: colors.inkMuted },
+  dayOnText: { color: colors.cream },
+  dayOnSub: { color: colors.goldSoft },
+  locNote: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: space.sm },
+  link: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway },
+  miles: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.inkMuted, marginRight: space.sm, fontVariant: ['tabular-nums'] },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
   startButton: { backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
   startText: { fontFamily: fonts.bodySemibold, fontSize: 17, color: colors.cream },

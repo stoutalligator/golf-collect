@@ -47,6 +47,12 @@
         {
           "color": "#173D32"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Greens Keeper uses your location to show golf courses near you when you log a round."
+        }
       ]
     ],
     "experiments": {

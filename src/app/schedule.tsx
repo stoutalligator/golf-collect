@@ -436,7 +436,7 @@ const styles = themed(() => StyleSheet.create({
   timeText: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.ink, fontVariant: ['tabular-nums'] },
   fine: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   fineValue: { minWidth: 96, textAlign: 'center', fontFamily: fonts.bodySemibold, fontSize: 16, color: colors.ink, fontVariant: ['tabular-nums'] },
-  stepBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  stepBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   tbd: { marginLeft: 'auto', paddingHorizontal: 14, minHeight: 36, borderRadius: radius.pill, backgroundColor: colors.paper, justifyContent: 'center' },
   friend: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 4, paddingRight: 12, height: 38, borderRadius: radius.pill, backgroundColor: colors.paper },
   friendName: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },

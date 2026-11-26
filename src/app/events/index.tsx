@@ -167,7 +167,7 @@ const styles = themed(() => StyleSheet.create({
   rowMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.md, paddingRight: space.lg },
   name: { fontFamily: fonts.display, fontSize: 17, color: colors.ink },
   meta: { ...type.caption, fontSize: 13, color: colors.inkMuted },
-  dateBadge: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  dateBadge: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   dateBadgeToday: { backgroundColor: colors.fairway },
   join: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   codeInput: { flex: 1, height: 46, borderRadius: radius.md, backgroundColor: colors.paper, paddingHorizontal: space.md, fontFamily: fonts.bodySemibold, fontSize: 17, letterSpacing: 3, color: colors.ink, outlineStyle: 'none' } as never,

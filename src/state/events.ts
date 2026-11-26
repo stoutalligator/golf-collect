@@ -185,10 +185,10 @@ export function useEventLists() {
   }, [data]);
 }
 
-/** Event rounds you could link a new round at this course to (scheduled within a week either side of today). */
-export function linkableEventRounds(data: AppData, courseId: string | undefined) {
+/** Event rounds you could link a round at this course to (scheduled within a week either side of the day it's played). */
+export function linkableEventRounds(data: AppData, courseId: string | undefined, playedOn: string = todayISO()) {
   if (!courseId) return [];
-  const today = new Date(`${todayISO()}T12:00:00`);
+  const today = new Date(`${playedOn}T12:00:00`);
   const within = (iso: string) => Math.abs(new Date(`${iso}T12:00:00`).getTime() - today.getTime()) <= 7 * 864e5;
   const joined = new Set(data.eventMembers.filter((m) => m.playerId === data.me.id && m.status === 'joined').map((m) => m.eventId));
   return data.eventRounds

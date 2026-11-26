@@ -264,6 +264,7 @@ export function Button({ label, onPress, variant = 'primary', icon, disabled, ha
       disabled={disabled}
       haptic={haptic ?? (primary ? 'press' : 'tap')}
       scaleTo={0.97}
+      swish={!disabled}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       style={[primary ? styles.btnPrimary : styles.btnSecondary, disabled && { opacity: 0.4 }, style]}>
@@ -316,7 +317,7 @@ const styles = themed(() => StyleSheet.create({
   headerTitle: { fontFamily: fonts.display, fontSize: 30, lineHeight: 38, color: colors.fairway, flexShrink: 1 },
   headerRight: { flexDirection: 'row', gap: space.sm },
   content: { paddingHorizontal: space.lg, paddingTop: space.sm, gap: space.xl, paddingBottom: space.xxl * 3 },
-  iconButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  iconButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   iconButtonOnArt: { backgroundColor: colors.artButton, ...shadow.control },
   chips: { flexDirection: 'row', backgroundColor: colors.paper, borderRadius: radius.md, padding: 3, position: 'relative' },
   chipPill: { position: 'absolute', top: 3, bottom: 3, left: 0, borderRadius: 10, backgroundColor: colors.segment, ...shadow.control },
@@ -346,7 +347,7 @@ const styles = themed(() => StyleSheet.create({
   group: { backgroundColor: colors.creamLight, borderRadius: radius.xl, ...shadow.card },
   groupRule: { height: StyleSheet.hairlineWidth, backgroundColor: colors.rule },
   listRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: 14, paddingHorizontal: space.lg, minHeight: 56 },
-  rowIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  rowIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   rowLabel: { fontFamily: fonts.bodyMedium, fontSize: 16, color: colors.ink },
   rowSub: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   progressTrack: { height: 6, borderRadius: 3, backgroundColor: colors.paper, overflow: 'hidden' },

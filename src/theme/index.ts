@@ -46,6 +46,8 @@ const light = {
   segment: '#FFFFFF',
   /** The bottom tab bar: white in light (set apart by its shadow), a raised surface in dark. */
   tabBar: '#FFFFFF',
+  /** Soft green fill for round icon buttons (back, close, header actions). */
+  tint: '#E6EEE7',
 };
 
 /**
@@ -77,6 +79,7 @@ const dark: typeof light = {
   artButton: 'rgba(18,25,21,0.82)',
   segment: '#3A4740',
   tabBar: '#1B241F',
+  tint: '#26352D',
 };
 
 /**
