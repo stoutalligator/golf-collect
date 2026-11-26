@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
-import { LocalRepository, type AppSnapshot, type Repository } from '@/data/repository';
+import { LocalRepository, type AppSnapshot, type NewEvent, type Repository } from '@/data/repository';
 import { SupabaseRepository } from '@/data/supabase-repository';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/state/auth';
@@ -94,6 +94,13 @@ export interface AppData extends AppSnapshot {
   sendFriendRequest(playerId: string): Promise<void>;
   respondToRequest(playerId: string, accept: boolean): Promise<void>;
   removeFriend(playerId: string): Promise<void>;
+  createEvent(input: NewEvent): Promise<string>;
+  joinEvent(code: string): Promise<string>;
+  respondToEvent(eventId: string, accept: boolean): Promise<void>;
+  inviteToEvent(eventId: string, playerIds: string[]): Promise<void>;
+  leaveEvent(eventId: string): Promise<void>;
+  deleteEvent(eventId: string): Promise<void>;
+  setPairings(eventRoundId: string, pairs: [string, string][]): Promise<void>;
 }
 
 const Ctx = createContext<AppData | null>(null);
@@ -101,6 +108,7 @@ const Ctx = createContext<AppData | null>(null);
 const EMPTY: AppSnapshot = {
   me: { id: 'me', name: '', initials: '', isMe: true }, friends: [], others: [], requests: { incoming: [], outgoing: [] },
   courseIndex: [], courses: [], simCourses: [], rounds: [], friendRounds: [], wishlist: [], social: { reactions: {}, comments: {} },
+  events: [], eventMembers: [], eventRounds: [], eventMatches: [],
 };
 
 const byNewest = (a: Round, b: Round) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt);
@@ -254,6 +262,13 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     sendFriendRequest: async (id) => { await repo!.sendFriendRequest(id); await reload(); },
     respondToRequest: async (id, accept) => { await repo!.respondToRequest(id, accept); await reload(); },
     removeFriend: async (id) => { await repo!.removeFriend(id); await reload(); },
+    createEvent: async (input) => { const id = await repo!.createEvent(input); await reload(); return id; },
+    joinEvent: async (code) => { const id = await repo!.joinEvent(code); await reload(); return id; },
+    respondToEvent: async (id, accept) => { await repo!.respondToEvent(id, accept); await reload(); },
+    inviteToEvent: async (id, ids) => { await repo!.inviteToEvent(id, ids); await reload(); },
+    leaveEvent: async (id) => { await repo!.leaveEvent(id); await reload(); },
+    deleteEvent: async (id) => { await repo!.deleteEvent(id); await reload(); },
+    setPairings: async (id, pairs) => { await repo!.setPairings(id, pairs); await reload(); },
   }), [snap, derived, ready, error, auth.offline, repo, reload]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

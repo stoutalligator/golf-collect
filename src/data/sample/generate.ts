@@ -191,3 +191,12 @@ export function generateFriendRounds(courses: Course[], simCourses: SimCourse[],
   });
   return rounds;
 }
+
+/** Generated hole scores for one player's round (test data for leagues and events). */
+export function generateHoleScores(holes: Course['holes'], skill: number, seed: number, holeNumbers = holes.map((h) => h.number)): HoleScore[] {
+  const r = rng(seed);
+  return holeNumbers.map((n) => {
+    const h = holes.find((x) => x.number === n)!;
+    return holeScore(r, h.par, h.handicap, skill, false);
+  });
+}

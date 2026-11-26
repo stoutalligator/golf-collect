@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { LaunchOverlay } from '@/components/launch-overlay';
+import { PushManager } from '@/components/push-manager';
 import { Button } from '@/components/ui';
 import { WebPhoneFrame } from '@/components/web-phone-frame';
 import { AppDataProvider, useAppData } from '@/state/app-data';
@@ -39,6 +40,7 @@ export default function RootLayout() {
         <WebPhoneFrame>
           <StatusBar style="dark" />
           <AppStack />
+          <PushManager />
           <LaunchOverlay />
         </WebPhoneFrame>
       </AppDataProvider>
@@ -75,6 +77,10 @@ function AppStack() {
         <Stack.Screen name="profile" />
         <Stack.Screen name="player/[id]" />
         <Stack.Screen name="friends" />
+        <Stack.Screen name="events/index" />
+        <Stack.Screen name="events/new" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="event/[id]/index" />
+        <Stack.Screen name="event/[id]/round/[roundId]" />
       </Stack.Protected>
       <Stack.Protected guard={!auth.signedIn}>
         <Stack.Screen name="sign-in" />

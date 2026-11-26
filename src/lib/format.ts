@@ -28,3 +28,22 @@ export const pct = (v: number | null) => (v === null ? '—' : `${Math.round(v *
 export const oneDecimal = (v: number | null) => (v === null ? '—' : v.toFixed(1));
 
 export const ACCESS_LABEL = { public: 'Public', municipal: 'Municipal', 'semi-private': 'Semi-private', private: 'Private' } as const;
+
+/** "Thu, Dec 3" for schedules (dates are local calendar days). */
+export function formatDay(iso: string): string {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+/** "6:40 PM" from "18:40". */
+export function formatTeeTime(hhmm: string): string {
+  const [h, m] = hhmm.split(':').map(Number);
+  return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+}
+
+/** Add days to an ISO date. */
+export function addDaysISO(iso: string, days: number): string {
+  const d = new Date(`${iso}T12:00:00`);
+  d.setDate(d.getDate() + days);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}

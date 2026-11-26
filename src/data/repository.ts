@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import type { CompetitionEvent, EventKind, EventFormat, EventMatch, EventMember, EventRound } from '@/domain/competition';
 import { summarizeCourse, type Comment, type Course, type CourseSummary, type Player, type ReactionEmoji, type Round, type SimCourse, type SocialState } from '@/domain/types';
 
 import { FRIENDS, generateFriendRounds, generateSampleRounds, ME } from './sample/generate';
@@ -25,6 +26,20 @@ export interface AppSnapshot {
   friendRounds: Round[];
   wishlist: string[];
   social: SocialState;
+  /** Leagues, tournaments and scheduled rounds you organize, belong to, or are invited to. */
+  events: CompetitionEvent[];
+  eventMembers: EventMember[];
+  eventRounds: EventRound[];
+  eventMatches: EventMatch[];
+}
+
+/** Input for creating an event (the organizer is added automatically). */
+export interface NewEvent {
+  kind: EventKind;
+  name: string;
+  format: EventFormat;
+  rounds: Omit<EventRound, 'id' | 'eventId' | 'seq'>[];
+  inviteIds: string[];
 }
 
 export interface Repository {
@@ -43,6 +58,16 @@ export interface Repository {
   sendFriendRequest(playerId: string): Promise<void>;
   respondToRequest(playerId: string, accept: boolean): Promise<void>;
   removeFriend(playerId: string): Promise<void>;
+  /** Returns the new event's id. */
+  createEvent(input: NewEvent): Promise<string>;
+  /** Join with a share code; returns the event id. */
+  joinEvent(code: string): Promise<string>;
+  respondToEvent(eventId: string, accept: boolean): Promise<void>;
+  inviteToEvent(eventId: string, playerIds: string[]): Promise<void>;
+  leaveEvent(eventId: string): Promise<void>;
+  deleteEvent(eventId: string): Promise<void>;
+  /** Match play: replace an event round's pairings. */
+  setPairings(eventRoundId: string, pairs: [string, string][]): Promise<void>;
   /** Offline demo only: restore the generated sample data. */
   resetToSample?(): Promise<void>;
 }
@@ -104,6 +129,7 @@ export class LocalRepository implements Repository {
     const s = await this.read();
     return {
       me: ME, friends: FRIENDS, others: [], requests: { incoming: [], outgoing: [] },
+      events: [], eventMembers: [], eventRounds: [], eventMatches: [],
       courseIndex: courses.map(summarizeCourse), courses, simCourses: SIM_COURSES, rounds: s.rounds, friendRounds: s.friendRounds, wishlist: s.wishlist, social: s.social,
     };
   }
@@ -157,6 +183,24 @@ export class LocalRepository implements Repository {
   async respondToRequest() {}
 
   async removeFriend() {}
+
+  private needsAccount(): never {
+    throw new Error('Leagues and events need an account (this is the offline demo).');
+  }
+
+  async createEvent(): Promise<string> { this.needsAccount(); }
+
+  async joinEvent(): Promise<string> { this.needsAccount(); }
+
+  async respondToEvent() { this.needsAccount(); }
+
+  async inviteToEvent() { this.needsAccount(); }
+
+  async leaveEvent() { this.needsAccount(); }
+
+  async deleteEvent() { this.needsAccount(); }
+
+  async setPairings() { this.needsAccount(); }
 
   async resetToSample() {
     await this.write(sample());

@@ -43,6 +43,7 @@ npx expo start            # dev server (scan QR with Expo Go on iPhone)
 npx expo start --web      # web preview
 npx tsc --noEmit          # typecheck
 npx expo lint             # lint (ESLint via eslint-config-expo)
+npm run lock:fix          # after any `npx expo install`: rewrite package-lock with npm 10 (EAS uses npm 10; Windows npm 11 drops wasm optional deps and the cloud build fails)
 npm test                  # vitest (domain logic)
 node scripts/courses/build-ct-seed.mjs [--refresh]   # rebuild CT course seed
 npm run art:prompts       # create/compile art prompts (assets/_prompts/compiled)

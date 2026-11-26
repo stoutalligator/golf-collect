@@ -169,6 +169,8 @@ export interface Round {
   /** Keyed by player id; index i corresponds to holeNumbers[i]. Missing = not yet played. */
   scores: Record<string, (HoleScore | null)[]>;
   competitionId?: string;
+  /** League/tournament/scheduled round this round counts toward (see domain/competition). */
+  eventRoundId?: string;
   createdAt: ISODateTime;
   completedAt?: ISODateTime;
 }

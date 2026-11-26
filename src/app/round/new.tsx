@@ -12,6 +12,7 @@ import { todayISO } from '@/lib/format';
 import { uuid } from '@/lib/ids';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
+import { linkableEventRounds } from '@/state/events';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { Tap } from '@/components/motion';
 
@@ -20,11 +21,23 @@ type Holes = '18' | 'front' | 'back';
 export default function NewRound() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const params = useLocalSearchParams<{ courseId?: string }>();
+  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string }>();
+  // Opened from an event round: start from its course, tee and holes, and count toward it.
+  const fromEvent = params.eventRound ? data.eventRounds.find((r) => r.id === params.eventRound) : undefined;
   const [kind, setKind] = useState<RoundKind>('course');
-  const [courseId, setCourseId] = useState<string | undefined>(params.courseId);
-  const [teeId, setTeeId] = useState<string | undefined>();
-  const [holes, setHoles] = useState<Holes>('18');
+  const [courseId, setCourseId] = useState<string | undefined>(fromEvent?.courseId ?? params.courseId);
+  const [teeId, setTeeId] = useState<string | undefined>(fromEvent?.teeId);
+  const [holes, setHoles] = useState<Holes>(fromEvent?.holes === 'front' ? 'front' : fromEvent?.holes === 'back' ? 'back' : '18');
+  const [eventRoundId, setEventRoundId] = useState<string | undefined>(fromEvent?.id);
+  // Event data can arrive after the first render (cold start from a link): apply it once when it does.
+  const [appliedEvent, setAppliedEvent] = useState<string | undefined>(fromEvent?.id);
+  if (fromEvent && appliedEvent !== fromEvent.id) {
+    setAppliedEvent(fromEvent.id);
+    setCourseId(fromEvent.courseId);
+    setTeeId(fromEvent.teeId);
+    setHoles(fromEvent.holes === 'front' ? 'front' : fromEvent.holes === 'back' ? 'back' : '18');
+    setEventRoundId(fromEvent.id);
+  }
   const [query, setQuery] = useState('');
   const [withIds, setWithIds] = useState<string[]>([]);
   const toggleWith = (id: string) => setWithIds((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
@@ -41,6 +54,7 @@ export default function NewRound() {
   const course = kind === 'course' ? loaded : undefined;
   const sim = kind === 'sim' && courseId ? data.simCourseById(courseId) : undefined;
   const layout = course ?? sim;
+  const linkable = kind === 'course' ? linkableEventRounds(data, courseId) : [];
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
 
   const start = async () => {
@@ -59,6 +73,7 @@ export default function NewRound() {
       playerIds: [data.me.id, ...withIds],
       scores: { [data.me.id]: holeNumbers.map(() => null) },
       createdAt: now,
+      ...(kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? { eventRoundId } : {}),
     };
     await data.saveRound(round);
     router.replace(`/round/play/${round.id}`);
@@ -129,6 +144,22 @@ export default function NewRound() {
           <>
             <Text style={styles.label}>Holes</Text>
             <Chips value={holes} onChange={setHoles} options={[{ value: '18', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]} />
+
+            {linkable.length ? (
+              <>
+                <Text style={styles.label}>Counts toward</Text>
+                <View style={styles.friends}>
+                  {[{ id: undefined, label: 'Just a round' }, ...linkable.map((l) => ({ id: l.round.id as string | undefined, label: `${l.event.name} · ${l.round.name}` }))].map((o) => {
+                    const on = o.id === eventRoundId;
+                    return (
+                      <Tap key={o.id ?? 'none'} haptic="select" scaleTo={0.95} onPress={() => setEventRoundId(o.id)} accessibilityRole="button" accessibilityState={{ selected: on }} style={[styles.friend, { paddingLeft: 12 }, on && styles.friendOn]}>
+                        <Text style={[styles.friendName, on && { color: colors.cream }]} numberOfLines={1}>{o.label}</Text>
+                      </Tap>
+                    );
+                  })}
+                </View>
+              </>
+            ) : null}
 
             <Text style={styles.label}>Playing with</Text>
             <View style={styles.friends}>

@@ -114,7 +114,7 @@ export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; hea
 }
 
 /** Row for profile links (friends, stats, badges); kept as a named export for existing callers. */
-export function ProfileLink({ icon, label, sub, onPress, right }: { icon: 'users' | 'chart' | 'settings' | 'trophy'; label: string; sub?: string; onPress: () => void; right?: ReactNode }) {
+export function ProfileLink({ icon, label, sub, onPress, right }: { icon: 'users' | 'chart' | 'settings' | 'trophy' | 'calendar'; label: string; sub?: string; onPress: () => void; right?: ReactNode }) {
   return <ListRow icon={icon} label={label} sub={sub} onPress={onPress} right={right} />;
 }
 

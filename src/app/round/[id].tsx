@@ -54,6 +54,7 @@ export default function Scorecard() {
           <Icon name="chevron-right" size={16} color={colors.inkMuted} />
         </Tap>
       ) : null}
+      {round.eventRoundId ? <EventChip eventRoundId={round.eventRoundId} /> : null}
       <View style={styles.paper}>
         <View style={styles.paperTop}>
           <Tree size={52} />
@@ -268,4 +269,24 @@ const styles = StyleSheet.create({
   input: { flex: 1, height: 40, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.rule, backgroundColor: colors.cream, paddingHorizontal: space.lg, fontFamily: fonts.body, fontSize: 14, color: colors.ink, outlineStyle: 'none' } as never,
   send: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
   deleteText: { ...type.caption, color: colors.inkMuted, textDecorationLine: 'underline' },
+});
+
+/** "Counts toward Thursday Night League · Week 3" link on an event-linked scorecard. */
+function EventChip({ eventRoundId }: { eventRoundId: string }) {
+  const data = useAppData();
+  const er = data.eventRounds.find((r) => r.id === eventRoundId);
+  const event = er ? data.events.find((e) => e.id === er.eventId) : undefined;
+  if (!er || !event) return null;
+  return (
+    <Tap onPress={() => router.push(`/event/${event.id}/round/${er.id}`)} scaleTo={0.98} accessibilityRole="button" style={eventChip.chip}>
+      <Icon name="calendar" size={14} color={colors.fairway} />
+      <Text style={eventChip.text} numberOfLines={1}>{event.name} · {er.name}</Text>
+      <Icon name="chevron-right" size={14} color={colors.inkMuted} />
+    </Tap>
+  );
+}
+
+const eventChip = StyleSheet.create({
+  chip: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', paddingHorizontal: 12, minHeight: 32, borderRadius: radius.pill, backgroundColor: colors.paper },
+  text: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, flexShrink: 1 },
 });

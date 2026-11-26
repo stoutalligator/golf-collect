@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 import { ProfileLink, ProfileView } from '@/components/profile-view';
 import { AvatarStack } from '@/components/social';
 import { Button, Card, Group, IconButton } from '@/components/ui';
+import { pushEnabled, pushSupported, setPushEnabled } from '@/lib/push';
 import { useAppData } from '@/state/app-data';
 import { useAuth } from '@/state/auth';
 import { colors, fonts, space, type } from '@/theme';
@@ -14,6 +15,17 @@ export default function Profile() {
   const auth = useAuth();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [notify, setNotify] = useState<boolean | null>(null);
+  const [notifyNote, setNotifyNote] = useState<string | null>(null);
+  useEffect(() => {
+    if (pushSupported) pushEnabled().then(setNotify);
+  }, []);
+  const toggleNotify = async () => {
+    const next = !notify;
+    setNotify(next);
+    const why = await setPushEnabled(next, auth.offline ? null : auth.userId);
+    setNotifyNote(why === 'denied' ? 'Notifications are off for Greens Keeper in iOS Settings → Notifications.' : why === 'no-token' ? 'Push isn’t available in this build yet.' : null);
+  };
   const pending = data.requests.incoming.length;
 
   return (
@@ -26,6 +38,7 @@ export default function Profile() {
           onPress={() => router.push('/friends')}
           right={<AvatarStack players={data.friends.slice(0, 4)} size={24} />}
         />
+        <ProfileLink icon="calendar" label="Leagues & events" sub={`${data.events.length} ${data.events.length === 1 ? 'event' : 'events'}`} onPress={() => router.push('/events')} />
         <ProfileLink icon="chart" label="Your stats" sub="Trends, scoring and strokes by category" onPress={() => router.navigate('/stats')} />
         <ProfileLink icon="trophy" label="Badges" sub={`${data.achievements.filter((a) => a.earned).length} of ${data.achievements.length} earned`} onPress={() => router.push('/achievements')} />
       </Group>
@@ -33,6 +46,13 @@ export default function Profile() {
       {settingsOpen ? (
         <Card style={styles.settings}>
           <Text style={styles.title}>Settings</Text>
+          {pushSupported && notify !== null ? (
+            <>
+              <Button variant="secondary" label={notify ? 'Notifications: on' : 'Notifications: off'} icon="bell" onPress={toggleNotify} />
+              <Text style={styles.note}>Friend requests, event invites, comments and reactions, plus a reminder 2 hours before tee times.</Text>
+              {notifyNote ? <Text style={styles.note}>{notifyNote}</Text> : null}
+            </>
+          ) : null}
           {auth.offline ? (
             <>
               <Text style={styles.note}>Offline demo: running on bundled sample data (Supabase isn’t configured).</Text>

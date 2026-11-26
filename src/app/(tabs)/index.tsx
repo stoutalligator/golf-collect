@@ -11,8 +11,9 @@ import { Animated, enterItem, Tap } from '@/components/motion';
 import { Avatar, FeedCard } from '@/components/social';
 import { Button, Chips, Empty, IconButton, SectionHeader, StatStrip } from '@/components/ui';
 import { recentRounds } from '@/domain/analytics';
-import { greeting } from '@/lib/format';
+import { formatDay, formatTeeTime, greeting, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
+import { useEventLists } from '@/state/events';
 import { colors, fonts, radius, shadow, space, type } from '@/theme';
 
 /** Left-to-right fade so the greeting reads over the painting without darkening the whole scene. */
@@ -47,6 +48,8 @@ export default function Home() {
   const last5 = mine.slice(-5).map((s) => s.strokes);
   const avg5 = last5.length ? last5.reduce((a, b) => a + b, 0) / last5.length : null;
   const active = data.roundsByDate.find((r) => r.status === 'active');
+  const { invitations, upcoming } = useEventLists();
+  const nextEvent = upcoming[0];
 
   const posts = data.feed.filter((p) => (filter === 'all' ? true : filter === 'me' ? p.owner.id === data.me.id : p.owner.id !== data.me.id));
 
@@ -57,6 +60,7 @@ export default function Home() {
           <Emblem size={40} onDark={false} />
           <Text style={styles.wordmark}>Greens Keeper</Text>
           <View style={{ flex: 1 }} />
+          <IconButton name="calendar" label="Leagues and events" onPress={() => router.push('/events')} />
           <IconButton name="users" label="Friends" onPress={() => router.push('/friends')} />
           <Tap onPress={() => router.push('/profile')} scaleTo={0.9} accessibilityRole="button" accessibilityLabel="Your profile">
             <Avatar player={data.me} size={40} />
@@ -91,6 +95,33 @@ export default function Home() {
               </View>
               <Text style={styles.activeCta}>Resume</Text>
               <Icon name="chevron-right" size={16} color={colors.cream} />
+            </Tap>
+          ) : null}
+
+          <View style={styles.quick}>
+            <Tap onPress={() => router.push('/events/new?kind=outing')} scaleTo={0.97} accessibilityRole="button" style={styles.quickBtn}>
+              <Icon name="calendar" size={16} color={colors.fairway} />
+              <Text style={styles.quickText}>Schedule a round</Text>
+            </Tap>
+            <Tap onPress={() => router.push('/events')} scaleTo={0.97} accessibilityRole="button" style={styles.quickBtn}>
+              <Icon name="trophy" size={16} color={colors.fairway} />
+              <Text style={styles.quickText}>Leagues & events</Text>
+            </Tap>
+          </View>
+
+          {nextEvent || invitations.length ? (
+            <Tap onPress={() => router.push(nextEvent ? `/event/${nextEvent.event.id}/round/${nextEvent.round.id}` : '/events')} scaleTo={0.98} accessibilityRole="button" style={styles.upNext}>
+              <View style={styles.upNextIcon}><Icon name="calendar" size={18} color={colors.fairway} /></View>
+              <View style={{ flex: 1 }}>
+                {nextEvent ? (
+                  <>
+                    <Text style={styles.upNextTitle} numberOfLines={1}>{nextEvent.round.scheduledOn === todayISO() ? 'Today' : formatDay(nextEvent.round.scheduledOn)}{nextEvent.round.teeTime ? ` · ${formatTeeTime(nextEvent.round.teeTime)}` : ''} · {nextEvent.event.name}</Text>
+                    <Text style={styles.upNextSub} numberOfLines={1}>{nextEvent.round.name} at {nextEvent.courseName}</Text>
+                  </>
+                ) : null}
+                {invitations.length ? <Text style={styles.upNextInvite}>{invitations.length} event {invitations.length === 1 ? 'invitation' : 'invitations'} waiting</Text> : null}
+              </View>
+              <Icon name="chevron-right" size={16} color={colors.inkMuted} />
             </Tap>
           ) : null}
 
@@ -132,5 +163,13 @@ const styles = StyleSheet.create({
   liveDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.gold },
   activeTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.cream },
   activeSub: { ...type.caption, color: 'rgba(246,239,227,0.75)' },
+  quick: { flexDirection: 'row', gap: space.sm, marginTop: -space.sm },
+  quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.paper },
+  quickText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway },
+  upNext: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.creamLight, borderRadius: radius.xl, padding: space.md, ...shadow.card },
+  upNextIcon: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
+  upNextTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
+  upNextSub: { ...type.caption, fontSize: 13, color: colors.inkMuted },
+  upNextInvite: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, marginTop: 2 },
   activeCta: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.cream },
 });

@@ -17,7 +17,8 @@ import { join } from 'node:path';
 
 import { createClient } from '@supabase/supabase-js';
 
-import { FRIENDS, generateFriendRounds, generateSampleRounds, ME } from '../../src/data/sample/generate';
+import { FRIENDS, generateFriendRounds, generateHoleScores, generateSampleRounds, ME } from '../../src/data/sample/generate';
+import { defaultFormat, roundRobin } from '../../src/domain/competition';
 import { SIM_COURSES } from '../../src/data/sample/sim-courses';
 import { generateSocial } from '../../src/data/sample/social';
 import type { Course, Round } from '../../src/domain/types';
@@ -131,5 +132,85 @@ if (reactions.length) await must('reactions', db.from('reactions').insert(reacti
 if (comments.length) await must('comments', db.from('comments').insert(comments));
 await must('wishlist', db.from('wishlist').insert(['fox-hopyard', 'tpc-river-highlands', 'crestbrook-park'].map((course_id) => ({ user_id: me, course_id }))));
 
-console.log(`Test accounts ready: ${accounts.length + 1} accounts, ${sample.length} rounds, ${scoreRows.length} hole scores, ${reactions.length} reactions, ${comments.length} comments.`);
+// 6. Leagues, tournaments and a scheduled round (all on test accounts), with linked rounds.
+const SKILL: Record<string, number> = { [ME.id]: 0.6, 'f-mike': 0.2, 'f-dana': 1.4, 'f-chris': 0.6, 'f-sam': -0.5 };
+const courseById = new Map(courses.map((c) => [c.id, c]));
+const addDays = (iso: string, n: number) => { const d = new Date(`${iso}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const today = new Date().toISOString().slice(0, 10);
+let eventRounds = 0;
+let eventScores = 0;
+
+async function seedEvent(spec: {
+  kind: 'league' | 'tournament' | 'outing'; name: string; code: string; organizer: string; format: object;
+  members: string[]; invited?: string[]; courseId: string; teeId: string; teeTime: string;
+  dates: string[]; label: (i: number) => string; pairings?: boolean;
+}) {
+  const org = idOf.get(spec.organizer)!;
+  const { id: eventId } = await must(`event ${spec.name}`, db.from('events').insert({
+    kind: spec.kind, name: spec.name, organizer_id: org, format: spec.format, join_code: spec.code,
+    starts_on: spec.dates[0], ends_on: spec.dates[spec.dates.length - 1],
+  }).select('id').single()) as { id: string };
+  // The organizer membership comes from a trigger; add everyone else.
+  const others = spec.members.filter((m) => m !== spec.organizer);
+  const rows = [
+    ...others.map((m) => ({ event_id: eventId, profile_id: idOf.get(m)!, status: 'joined', invited_by: org })),
+    ...(spec.invited ?? []).map((m) => ({ event_id: eventId, profile_id: idOf.get(m)!, status: 'invited', invited_by: org })),
+  ];
+  if (rows.length) await must('members', db.from('event_members').insert(rows));
+  const ers = await must('event rounds', db.from('event_rounds').insert(spec.dates.map((d, i) => ({
+    event_id: eventId, seq: i + 1, name: spec.label(i), course_id: spec.courseId, tee_id: spec.teeId, scheduled_on: d, tee_time: spec.teeTime, holes: 'all',
+  }))).select('id, seq, scheduled_on')) as { id: string; seq: number; scheduled_on: string }[];
+
+  const pairs = spec.pairings ? roundRobin(spec.members) : [];
+  const course = courseById.get(spec.courseId)!;
+  for (const er of ers.sort((a, b) => a.seq - b.seq)) {
+    if (pairs.length) {
+      await must('pairings', db.from('event_matches').insert(pairs[(er.seq - 1) % pairs.length].map(([a, b]) => ({ event_round_id: er.id, player_a: idOf.get(a)!, player_b: idOf.get(b)! }))));
+    }
+    if (spec.kind === 'outing' || er.scheduled_on >= today) continue; // only past rounds have scores
+    for (const [i, m] of spec.members.entries()) {
+      if ((er.seq + i) % 7 === 3) continue; // someone misses a week now and then
+      const owner = idOf.get(m)!;
+      const rid = randomUUID();
+      const slot = randomUUID();
+      const scores = generateHoleScores(course.holes, SKILL[m] ?? 0, er.seq * 101 + i * 7 + spec.code.charCodeAt(0));
+      await must('event round', db.from('rounds').insert({
+        id: rid, owner_id: owner, kind: 'course', course_id: course.id, tee_id: spec.teeId, played_on: er.scheduled_on, status: 'complete',
+        hole_numbers: course.holes.map((h) => h.number), created_at: `${er.scheduled_on}T21:00:00Z`, completed_at: `${er.scheduled_on}T23:30:00Z`, event_round_id: er.id,
+      }));
+      await must('event round player', db.from('round_players').insert({ id: slot, round_id: rid, profile_id: owner, is_owner: true }));
+      await must('event round scores', db.from('hole_scores').insert(scores.map((x, h) => ({
+        round_player_id: slot, hole_number: h + 1, strokes: x.strokes, putts: x.putts ?? null, fairway: x.fairway ?? null, gir: x.gir ?? null,
+        penalties: x.penalties ?? null, chips: null, sand_shots: null,
+      }))));
+      eventRounds++;
+      eventScores += scores.length;
+    }
+  }
+}
+
+const everyone = [ME.id, ...FRIENDS.map((f) => f.id)];
+const weekly = (start: string, n: number) => Array.from({ length: n }, (_, i) => addDays(start, i * 7));
+// Thursdays: past weeks have results; today's and later weeks are open.
+await seedEvent({
+  kind: 'league', name: 'Thursday Night League', code: 'THNITE', organizer: ME.id, format: defaultFormat('league', 'stroke', 'net'),
+  members: everyone, courseId: 'keney-park', teeId: 'blue', teeTime: '17:30', dates: weekly(addDays(today, -49), 10), label: (i) => `Week ${i + 1}`,
+});
+await seedEvent({
+  kind: 'tournament', name: 'Fall Classic', code: 'FALLCL', organizer: 'f-dana', format: defaultFormat('tournament', 'stableford', 'net'),
+  members: ['f-dana', ME.id, 'f-chris', 'f-mike'], courseId: 'wintonbury-hills', teeId: 'white', teeTime: '08:30',
+  dates: [addDays(today, -12), addDays(today, -11)], label: (i) => `Round ${i + 1}`,
+});
+await seedEvent({
+  kind: 'league', name: 'Winter Match Play', code: 'WINTMP', organizer: ME.id, format: defaultFormat('league', 'match', 'net'),
+  members: [ME.id, 'f-mike', 'f-chris', 'f-sam'], courseId: 'airways', teeId: 'white', teeTime: '10:00',
+  dates: weekly(addDays(today, -14), 3), label: (i) => `Match ${i + 1}`, pairings: true,
+});
+await seedEvent({
+  kind: 'outing', name: 'Saturday at Fox Hopyard', code: 'SATFOX', organizer: 'f-mike', format: defaultFormat('outing'),
+  members: ['f-mike', 'f-dana'], invited: [ME.id, 'f-chris'], courseId: 'fox-hopyard', teeId: 'white', teeTime: '08:10',
+  dates: [addDays(today, 3)], label: () => 'Saturday round',
+});
+
+console.log(`Test accounts ready: ${accounts.length + 1} accounts, ${sample.length} rounds + ${eventRounds} event rounds (4 events), ${scoreRows.length} hole scores, ${reactions.length} reactions, ${comments.length} comments.`);
 console.log(`Sign in as ${myEmail} (password in .env as TEST_ACCOUNT_PASSWORD).`);

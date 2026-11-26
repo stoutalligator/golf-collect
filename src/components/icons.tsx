@@ -6,7 +6,7 @@ import { colors } from '@/theme';
 export type IconName =
   | 'home' | 'flag' | 'pin' | 'layers' | 'bell' | 'plus' | 'chart'
   | 'bookmark' | 'bookmark-filled' | 'chevron-right' | 'chevron-left' | 'search' | 'user' | 'trophy'
-  | 'check' | 'book' | 'minus' | 'x' | 'settings' | 'users' | 'message' | 'grid' | 'trend' | 'lock';
+  | 'check' | 'book' | 'minus' | 'x' | 'settings' | 'users' | 'message' | 'grid' | 'trend' | 'lock' | 'calendar' | 'share';
 
 const paths: Record<IconName, string[]> = {
   home: ['M4 11.5 12 5l8 6.5', 'M6 10v9h4.5v-5h3v5H18v-9'],
@@ -28,6 +28,8 @@ const paths: Record<IconName, string[]> = {
   grid: ['M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6zM13.5 13.5h6v6h-6z'],
   trend: ['M4 17l5-5 3.5 3.5L20 8', 'M15 8h5v5'],
   lock: ['M6.5 11h11v9h-11z', 'M9 11V8a3 3 0 0 1 6 0v3'],
+  calendar: ['M5 6.5h14v13H5z', 'M5 10.5h14', 'M9 4.5v4', 'M15 4.5v4'],
+  share: ['M12 15V4', 'm8 8 4-4 4 4', 'M6 12v7h12v-7'],
   'chevron-right': ['m9.5 6 6 6-6 6'],
   'chevron-left': ['m14.5 6-6 6 6 6'],
   search: ['m20 20-4.2-4.2'],

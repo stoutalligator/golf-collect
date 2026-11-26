@@ -11,7 +11,10 @@ import type {
   Comment, Course, CourseAccess, CourseSummary, FairwayResult, HoleScore, Player, Reaction, ReactionEmoji, Round, SimCourse, SocialState, Tee,
 } from '@/domain/types';
 
-import type { AppSnapshot, Repository } from './repository';
+import type { CompetitionEvent, EventFormat, EventMember, EventRound } from '@/domain/competition';
+import { makeJoinCode } from '@/domain/competition';
+
+import type { AppSnapshot, NewEvent, Repository } from './repository';
 
 // ── Row shapes (only the columns we read) ───────────────────────────────────
 
@@ -27,6 +30,7 @@ type RoundPlayerRow = { id: string; profile_id: string | null; guest_name: strin
 type RoundRow = {
   id: string; owner_id: string; kind: 'course' | 'sim'; course_id: string | null; sim_course_id: string | null; tee_id: string | null;
   played_on: string; status: 'active' | 'complete'; hole_numbers: number[]; created_at: string; completed_at: string | null;
+  event_round_id: string | null;
   round_players: RoundPlayerRow[];
 };
 
@@ -82,6 +86,7 @@ function toRound(r: RoundRow): Round {
     scores,
     createdAt: r.created_at,
     completedAt: r.completed_at ?? undefined,
+    eventRoundId: r.event_round_id ?? undefined,
   };
 }
 
@@ -144,6 +149,20 @@ type IndexRow = {
 const toSummary = (c: IndexRow): CourseSummary => ({
   id: c.id, name: c.name, city: c.city, state: c.state, county: c.county ?? undefined, region: c.region, access: c.access,
   location: { lat: c.lat, lng: c.lng }, par: c.par ?? 0, holeCount: c.hole_count ?? 18,
+});
+
+type EventRow = { id: string; kind: CompetitionEvent['kind']; name: string; organizer_id: string; format: EventFormat; join_code: string; starts_on: string; ends_on: string | null; created_at: string };
+type MemberRow = { event_id: string; profile_id: string; role: EventMember['role']; status: EventMember['status'] };
+type EventRoundRow = { id: string; event_id: string; seq: number; name: string; course_id: string; tee_id: string | null; scheduled_on: string; tee_time: string | null; holes: EventRound['holes'] };
+type MatchRow = { id: string; event_round_id: string; player_a: string; player_b: string };
+
+const toEvent = (e: EventRow): CompetitionEvent => ({
+  id: e.id, kind: e.kind, name: e.name, organizerId: e.organizer_id, format: e.format, joinCode: e.join_code,
+  startsOn: e.starts_on, endsOn: e.ends_on ?? undefined, createdAt: e.created_at,
+});
+const toEventRound = (r: EventRoundRow): EventRound => ({
+  id: r.id, eventId: r.event_id, seq: r.seq, name: r.name, courseId: r.course_id, teeId: r.tee_id ?? undefined,
+  scheduledOn: r.scheduled_on, teeTime: r.tee_time?.slice(0, 5) ?? undefined, holes: r.holes,
 });
 
 /** Strip characters that would break a PostgREST `or=` filter. */
@@ -221,12 +240,12 @@ export class SupabaseRepository implements Repository {
   async load(force = false): Promise<AppSnapshot> {
     if (this.snap && !force) return this.snap;
     const me = this.userId;
-    const [ref, friendships, roundRows, wish, reactions, comments] = await Promise.all([
+    const [ref, friendships, roundRows, wish, reactions, comments, eventRows, memberRows, eventRoundRows, matchRows] = await Promise.all([
       this.referenceData(),
       this.must(this.db.from('friendships').select('requester_id, addressee_id, status'), 'friendships'),
       this.must(
         this.db.from('rounds')
-          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
+          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
           .order('played_on', { ascending: false })
           .limit(500),
         'rounds',
@@ -234,7 +253,15 @@ export class SupabaseRepository implements Repository {
       this.must(this.db.from('wishlist').select('course_id'), 'wishlist'),
       this.must(this.db.from('reactions').select('round_id, user_id, emoji'), 'reactions'),
       this.must(this.db.from('comments').select('id, round_id, user_id, body, created_at').order('created_at'), 'comments'),
+      this.must(this.db.from('events').select('id, kind, name, organizer_id, format, join_code, starts_on, ends_on, created_at'), 'events'),
+      this.must(this.db.from('event_members').select('event_id, profile_id, role, status'), 'event members'),
+      this.must(this.db.from('event_rounds').select('id, event_id, seq, name, course_id, tee_id, scheduled_on, tee_time, holes').order('scheduled_on'), 'event rounds'),
+      this.must(this.db.from('event_matches').select('id, event_round_id, player_a, player_b'), 'event matches'),
     ]);
+    const events = (eventRows as EventRow[]).map(toEvent);
+    const eventMembers = (memberRows as MemberRow[]).map((m) => ({ eventId: m.event_id, playerId: m.profile_id, role: m.role, status: m.status }));
+    const eventRounds = (eventRoundRows as EventRoundRow[]).map(toEventRound);
+    const eventMatches = (matchRows as MatchRow[]).map((m) => ({ id: m.id, eventRoundId: m.event_round_id, playerA: m.player_a, playerB: m.player_b }));
 
     const fs = friendships as { requester_id: string; addressee_id: string; status: 'pending' | 'accepted' }[];
     const other = (f: (typeof fs)[number]) => (f.requester_id === me ? f.addressee_id : f.requester_id);
@@ -247,7 +274,7 @@ export class SupabaseRepository implements Repository {
       if (owner && r.owner_id === me) this.ownerSlot.set(r.id, owner.id);
       return toRound(r);
     });
-    const taggedIds = rounds.flatMap((r) => r.playerIds);
+    const taggedIds = [...rounds.flatMap((r) => r.playerIds), ...eventMembers.map((m) => m.playerId), ...events.map((e) => e.organizerId)];
     const ids = [...new Set([me, ...friendIds, ...incomingIds, ...outgoingIds, ...taggedIds])];
     const profiles = (await this.must(this.db.from('profiles').select('*').in('id', ids), 'profiles')) as ProfileRow[];
     const byId = new Map(profiles.map((p) => [p.id, toPlayer(p, me)]));
@@ -264,13 +291,13 @@ export class SupabaseRepository implements Repository {
 
     const wishlist = (wish as { course_id: string }[]).map((w) => w.course_id);
     // Full scorecards only for courses that stats, feed and collections need right away.
-    await this.fetchCourses([...rounds.filter((r) => r.kind === 'course').map((r) => r.courseId), ...wishlist]);
+    await this.fetchCourses([...rounds.filter((r) => r.kind === 'course').map((r) => r.courseId), ...wishlist, ...eventRounds.map((r) => r.courseId)]);
 
     const pick = (list: string[]) => list.map((id) => byId.get(id)).filter((p): p is Player => !!p);
     this.snap = {
       me: mine,
       friends: pick(friendIds),
-      others: pick(taggedIds.filter((id) => id !== me && !friendIds.includes(id))),
+      others: pick([...new Set(taggedIds)].filter((id) => id !== me && !friendIds.includes(id))),
       requests: { incoming: pick(incomingIds), outgoing: pick(outgoingIds) },
       courseIndex: ref.index,
       courses: this.loadedCourses(),
@@ -279,6 +306,10 @@ export class SupabaseRepository implements Repository {
       friendRounds: rounds.filter((r) => r.ownerId !== me),
       wishlist,
       social,
+      events,
+      eventMembers,
+      eventRounds,
+      eventMatches,
     };
     return this.snap;
   }
@@ -301,6 +332,7 @@ export class SupabaseRepository implements Repository {
       hole_numbers: round.holeNumbers,
       created_at: round.createdAt,
       completed_at: round.completedAt ?? null,
+      event_round_id: round.eventRoundId ?? null,
     }), 'save round');
 
     // Players: the owner row once; tagged friends added/removed to match playerIds.
@@ -418,6 +450,70 @@ export class SupabaseRepository implements Repository {
       this.db.from('friendships').delete().or(`and(requester_id.eq.${me},addressee_id.eq.${playerId}),and(requester_id.eq.${playerId},addressee_id.eq.${me})`),
       'remove friend',
     );
+    await this.load(true);
+  }
+
+  // ── Events ──────────────────────────────────────────────────────────────
+
+  async createEvent(input: NewEvent): Promise<string> {
+    const dates = input.rounds.map((r) => r.scheduledOn).sort();
+    let event: { id: string } | null = null;
+    for (let attempt = 0; attempt < 3 && !event; attempt++) {
+      const { data, error } = await this.db.from('events').insert({
+        kind: input.kind, name: input.name.trim(), organizer_id: this.userId, format: input.format, join_code: makeJoinCode(),
+        starts_on: dates[0], ends_on: dates[dates.length - 1] ?? null,
+      }).select('id').single();
+      if (error && !/join_code/.test(error.message)) throw new Error(`create event: ${error.message}`);
+      event = data as { id: string } | null; // retry only on a join-code collision
+    }
+    if (!event) throw new Error('create event: could not allocate a join code');
+    if (input.rounds.length) {
+      await this.must(this.db.from('event_rounds').insert(input.rounds.map((r, i) => ({
+        event_id: event!.id, seq: i + 1, name: r.name, course_id: r.courseId, tee_id: r.teeId ?? null,
+        scheduled_on: r.scheduledOn, tee_time: r.teeTime ?? null, holes: r.holes,
+      }))), 'schedule');
+    }
+    const invite = input.inviteIds.filter((id) => id !== this.userId);
+    if (invite.length) {
+      await this.must(this.db.from('event_members').insert(invite.map((profile_id) => ({ event_id: event!.id, profile_id, invited_by: this.userId }))), 'invites');
+    }
+    await this.load(true);
+    return event.id;
+  }
+
+  async joinEvent(code: string): Promise<string> {
+    const { data, error } = await this.db.rpc('join_event', { code });
+    if (error) throw new Error(/No event/.test(error.message) ? 'No event with that code.' : error.message);
+    await this.load(true);
+    return data as string;
+  }
+
+  async respondToEvent(eventId: string, accept: boolean) {
+    await this.must(this.db.from('event_members').update({ status: accept ? 'joined' : 'declined' }).eq('event_id', eventId).eq('profile_id', this.userId), 'respond');
+    await this.load(true);
+  }
+
+  async inviteToEvent(eventId: string, playerIds: string[]) {
+    if (!playerIds.length) return;
+    await this.must(this.db.from('event_members').upsert(playerIds.map((profile_id) => ({ event_id: eventId, profile_id, invited_by: this.userId, status: 'invited' })), { onConflict: 'event_id,profile_id', ignoreDuplicates: true }), 'invite');
+    await this.load(true);
+  }
+
+  async leaveEvent(eventId: string) {
+    await this.must(this.db.from('event_members').delete().eq('event_id', eventId).eq('profile_id', this.userId), 'leave');
+    await this.load(true);
+  }
+
+  async deleteEvent(eventId: string) {
+    await this.must(this.db.from('events').delete().eq('id', eventId), 'delete event');
+    await this.load(true);
+  }
+
+  async setPairings(eventRoundId: string, pairs: [string, string][]) {
+    await this.must(this.db.from('event_matches').delete().eq('event_round_id', eventRoundId), 'clear pairings');
+    if (pairs.length) {
+      await this.must(this.db.from('event_matches').insert(pairs.map(([a, b]) => ({ event_round_id: eventRoundId, player_a: a, player_b: b }))), 'pairings');
+    }
     await this.load(true);
   }
 }

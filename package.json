@@ -17,6 +17,7 @@
     "expo-haptics": "~58.0.8",
     "expo-image": "~58.0.18",
     "expo-linking": "~58.0.17",
+    "expo-notifications": "~58.1.10",
     "expo-router": "~58.0.32",
     "expo-splash-screen": "~58.0.14",
     "expo-status-bar": "~58.0.5",
@@ -55,7 +56,12 @@
     "screens": "node scripts/screens.mjs",
     "art:specs": "node scripts/art/art.mjs prompts && python scripts/art/gen-specs.py",
     "db:import-courses": "node --env-file=.env scripts/db/import-courses.ts",
-    "db:seed-test": "node --env-file=.env --import ./scripts/db/register.mjs scripts/db/seed-test-accounts.ts"
+    "db:seed-test": "node --env-file=.env --import ./scripts/db/register.mjs scripts/db/seed-test-accounts.ts",
+    "lock:fix": "npx -y npm@10.9 install --package-lock-only --no-audit --no-fund"
   },
-  "private": true
+  "private": true,
+  "optionalDependencies": {
+    "@emnapi/core": "2.0.0-beta.2",
+    "@emnapi/runtime": "2.0.0-beta.2"
+  }
 }
