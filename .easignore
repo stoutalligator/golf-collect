@@ -26,3 +26,5 @@ scripts/courses/.cache/
 *.key
 *.pem
 *.mobileprovision
+
+.secrets/
