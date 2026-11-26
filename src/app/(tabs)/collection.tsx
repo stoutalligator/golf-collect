@@ -1,93 +1,114 @@
 import { router } from 'expo-router';
-import { useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import type { ReactNode } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { Collectible } from '@/art/components';
-import { Chips, Empty, IconButton, SearchField, SheetScreen } from '@/components/ui';
-import { KIND_CATEGORY } from '@/domain/collection';
-import type { CollectibleCategory } from '@/domain/types';
+import { Badge, Collectible } from '@/art/components';
+import { Animated, CountUp, enterItem, Tap } from '@/components/motion';
+import { LockMark, ProgressBar, SectionHeader, SheetScreen } from '@/components/ui';
+import { TIERS } from '@/data/config/game';
+import type { CollectibleItem } from '@/domain/types';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
+import { useShelves, type ShelfEntry } from '@/state/collection-view';
 import { colors, fonts, radius, shadow, space, type } from '@/theme';
-import { Animated, enterItem, Tap } from '@/components/motion';
 
-type Filter = 'all' | CollectibleCategory;
-
+/** Trophy Room: one shelf per collectible type plus a badge shelf; each opens its full case. */
 export default function Collection() {
   const data = useAppData();
-  const [filter, setFilter] = useState<Filter>('all');
-  const [searching, setSearching] = useState(false);
-  const [query, setQuery] = useState('');
-
-  const earned = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return data.courses.flatMap((course) => {
-      const col = data.collections.get(course.id);
-      if (!col) return [];
-      return col.items
-        .filter((i) => i.earned)
-        .map((i) => ({ course, state: i, def: i.def, tier: col.tier?.tier }))
-        .filter((x) => filter === 'all' || KIND_CATEGORY[x.def.kind] === filter)
-        .filter((x) => !q || x.course.name.toLowerCase().includes(q));
-    }).sort((a, b) => (b.state.earnedOn ?? '').localeCompare(a.state.earnedOn ?? ''));
-  }, [data.courses, data.collections, filter, query]);
-
-  const total = [...data.collections.values()].reduce((n, c) => n + c.items.length, 0);
-  const owned = [...data.collections.values()].reduce((n, c) => n + c.earnedCount, 0);
+  const shelves = useShelves(data.meData);
+  const total = shelves.reduce((n, s) => n + s.total, 0);
+  const owned = shelves.reduce((n, s) => n + s.earned.length, 0);
   const complete = [...data.collections.values()].filter((c) => c.complete).length;
+  const badges = data.achievements;
+  const badgesEarned = badges.filter((b) => b.earned).sort((a, b) => (b.earnedOn ?? '').localeCompare(a.earnedOn ?? ''));
 
   return (
-    <SheetScreen
-      title="My Collection"
-      right={
-        <View style={{ flexDirection: 'row', gap: space.sm }}>
-          <IconButton name="trophy" label="Achievements" onPress={() => router.push('/achievements')} />
-          <IconButton name="search" label="Search collection" onPress={() => setSearching((s) => !s)} />
+    <SheetScreen title="Trophy Room">
+      <Animated.View entering={enterItem(0)} style={styles.summary}>
+        <View style={styles.summaryTop}>
+          <Text style={styles.summaryValue}>
+            <CountUp value={owned} style={styles.summaryValue} />
+            <Text style={styles.summaryOf}> of {total} collected</Text>
+          </Text>
         </View>
-      }
-      headerExtra={searching ? <SearchField value={query} onChange={setQuery} placeholder="Search by course..." /> : undefined}>
-      <Chips
-        value={filter}
-        onChange={setFilter}
-        options={[
-          { value: 'all', label: 'All' },
-          { value: 'bag-tags', label: 'Bag Tags' },
-          { value: 'markers', label: 'Markers' },
-          { value: 'patches', label: 'Patches' },
-          { value: 'pins', label: 'Pins' },
-        ]}
-      />
-      <Text style={styles.summary}>{owned} of {total} collected · {complete} full course {complete === 1 ? 'set' : 'sets'}</Text>
+        <ProgressBar value={owned} max={total} />
+        <Text style={styles.summaryLine}>
+          {data.meData.coursesPlayed} courses played  ·  {complete} full {complete === 1 ? 'set' : 'sets'}  ·  {badgesEarned.length} badges
+        </Text>
+      </Animated.View>
 
-      {earned.length === 0 ? (
-        <Empty title="Nothing collected yet" body="Play a course to earn its ball marker. Bag tags, pitch markers, patches and pins follow." />
-      ) : (
-        <View style={styles.grid}>
-          {earned.map(({ course, state, def, tier }, i) => (
-            <Animated.View key={`${course.id}-${def.id}`} entering={enterItem(i)} style={styles.tileWrap}>
-            <Tap
-              scaleTo={0.95}
-              onPress={() => router.push(`/collectible/${course.id}/${def.id}`)}
-              accessibilityRole="button"
-              accessibilityLabel={`${shortCourseName(course.name)} ${def.name}`}
-              style={styles.tile}>
-              <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={tier} label={shortCourseName(course.name)} size={118} />
-              <Text style={styles.tileName} numberOfLines={1}>{shortCourseName(course.name)}</Text>
-              <Text style={styles.tileMeta}>{def.name}</Text>
+      {shelves.map((s, i) => (
+        <Animated.View key={s.kind} entering={enterItem(i + 1)}>
+          <Shelf
+            title={s.title}
+            count={`${s.earned.length}/${s.total}`}
+            onOpen={() => router.push(`/collection/${s.kind}`)}
+            empty={s.earned.length === 0 ? s.hint : undefined}>
+            {s.earned.map((e) => <ShelfItem key={`${e.course.id}-${e.def.id}`} entry={e} kind={s.kind} />)}
+            {s.locked.slice(0, Math.max(1, 3 - s.earned.length)).map((e) => <ShelfItem key={`${e.course.id}-${e.def.id}`} entry={e} kind={s.kind} locked />)}
+          </Shelf>
+        </Animated.View>
+      ))}
+
+      <Animated.View entering={enterItem(shelves.length + 1)}>
+        <Shelf title="Badges" count={`${badgesEarned.length}/${badges.length}`} onOpen={() => router.push('/achievements')}>
+          {badgesEarned.map((b) => (
+            <Tap key={b.def.id} onPress={() => router.push(`/achievement/${b.def.id}`)} scaleTo={0.94} accessibilityRole="button" accessibilityLabel={b.def.name} style={styles.item}>
+              <Badge id={b.def.id} name={b.def.name} sim={b.def.track === 'sim'} size={84} />
+              <Text style={styles.itemName} numberOfLines={1}>{b.def.name}</Text>
             </Tap>
-            </Animated.View>
           ))}
-        </View>
-      )}
+        </Shelf>
+      </Animated.View>
     </SheetScreen>
   );
 }
 
+/** A section with a horizontal row of items standing on a soft ledge (no card around it). */
+function Shelf({ title, count, onOpen, empty, children }: { title: string; count: string; onOpen: () => void; empty?: string; children: ReactNode }) {
+  return (
+    <View style={styles.shelf}>
+      <SectionHeader title={title} count={count} action="View all" onAction={onOpen} />
+      <View>
+        <View style={styles.ledge} />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.shelfRow} style={styles.shelfScroll}>
+          {children}
+        </ScrollView>
+      </View>
+      {empty ? <Text style={styles.shelfEmpty}>{empty}</Text> : null}
+    </View>
+  );
+}
+
+function ShelfItem({ entry, kind, locked }: { entry: ShelfEntry; kind: CollectibleItem; locked?: boolean }) {
+  const { course, def, tier } = entry;
+  const short = shortCourseName(course.name);
+  const tierName = kind === 'ball-marker' && tier ? TIERS.find((t) => t.tier === tier)?.name : undefined;
+  return (
+    <Tap onPress={() => router.push(`/collectible/${course.id}/${def.id}`)} scaleTo={0.94} accessibilityRole="button" accessibilityLabel={`${short} ${def.name}${tierName ? `, ${tierName}` : ''}${locked ? ', not yet earned' : ''}`} style={styles.item}>
+      <View>
+        <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={kind} id={def.id} tier={tier} label={short} size={84} dim={locked} />
+        {locked ? <View style={styles.lock}><LockMark /></View> : null}
+      </View>
+      <Text style={[styles.itemName, locked && { color: colors.inkMuted }]} numberOfLines={2}>{short}</Text>
+      {tierName && !locked ? <Text style={styles.itemTier}>{tierName}</Text> : null}
+    </Tap>
+  );
+}
+
 const styles = StyleSheet.create({
-  summary: { ...type.caption, color: colors.inkMuted, textAlign: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: space.md },
-  tileWrap: { width: '48%' },
-  tile: { width: '100%', backgroundColor: colors.creamLight, borderRadius: radius.lg, alignItems: 'center', paddingVertical: space.lg, paddingHorizontal: space.sm, gap: 4, borderWidth: 1, borderColor: colors.rule, ...shadow.card },
-  tileName: { fontFamily: fonts.display, fontSize: 15, color: colors.ink },
-  tileMeta: { ...type.caption, color: colors.inkMuted },
+  summary: { backgroundColor: colors.creamLight, borderRadius: radius.xl, padding: space.lg, gap: space.sm, ...shadow.card },
+  summaryTop: { flexDirection: 'row', alignItems: 'baseline' },
+  summaryValue: { fontFamily: fonts.displayBold, fontSize: 36, lineHeight: 42, color: colors.fairway },
+  summaryOf: { fontFamily: fonts.body, fontSize: 16, color: colors.inkMuted },
+  summaryLine: { ...type.caption, fontSize: 13, color: colors.inkMuted },
+  shelf: { gap: space.md },
+  shelfScroll: { marginHorizontal: -space.lg },
+  shelfRow: { gap: space.md, paddingHorizontal: space.lg, paddingTop: space.xs, paddingBottom: space.xs },
+  ledge: { position: 'absolute', left: 0, right: 0, top: 70, height: 26, borderRadius: radius.md, backgroundColor: colors.paper },
+  shelfEmpty: { ...type.caption, fontSize: 13, color: colors.inkMuted },
+  item: { width: 92, alignItems: 'center', gap: 2 },
+  itemName: { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 15, color: colors.ink, textAlign: 'center', marginTop: 4 },
+  itemTier: { ...type.caption, fontSize: 11, color: colors.inkMuted },
+  lock: { position: 'absolute', right: 2, bottom: 2 },
 });

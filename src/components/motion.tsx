@@ -3,10 +3,12 @@
  * a soft spring scale on press-in / release plus the right haptic for the action.
  */
 import { useEffect, useState, type ReactNode } from 'react';
-import { Pressable, type PressableProps, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native';
+import { Platform, Pressable, type PressableProps, type StyleProp, Text, type TextStyle, type ViewStyle } from 'react-native';
 import Animated, {
   Easing,
+  FadeIn,
   FadeInDown,
+  Keyframe,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -17,9 +19,11 @@ import { haptics, type HapticKind } from '@/lib/haptics';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-/** Springs tuned to feel weighty but quick (no wobble on release). */
-export const SPRING = { damping: 18, stiffness: 320, mass: 0.6 } as const;
-export const SPRING_SOFT = { damping: 16, stiffness: 180, mass: 0.8 } as const;
+/**
+ * Springs are critically damped (damping = 2·√(stiffness·mass)): quick, and they settle without overshoot.
+ */
+export const SPRING = { damping: 28, stiffness: 320, mass: 0.6 } as const;
+export const SPRING_SOFT = { damping: 24, stiffness: 180, mass: 0.8 } as const;
 
 type TapProps = Omit<PressableProps, 'style' | 'children'> & {
   style?: StyleProp<ViewStyle>;
@@ -63,6 +67,23 @@ export function Tap({ style, children, scaleTo = 0.97, haptic = 'tap', dim = fal
 /** Staggered fade-and-rise for list items (cap the delay so long lists don't lag). */
 export const enterItem = (index: number) =>
   FadeInDown.delay(Math.min(index, 8) * 45).duration(380).easing(Easing.out(Easing.cubic));
+
+/**
+ * Calm entrance for badges, collectibles and icons: a short fade with a small scale-up, eased out with no overshoot.
+ * `from` is the starting scale (0.85 default; use ~0.9 for big hero art).
+ *
+ * Web gets a plain fade: Reanimated's web build pins custom Keyframe entrances to `position: absolute`
+ * when they finish, which collapses the parent's layout.
+ */
+export const popIn = (delay = 0, { from = 0.85, duration = 320 }: { from?: number; duration?: number } = {}) =>
+  Platform.OS === 'web'
+    ? FadeIn.duration(duration).delay(delay)
+    : new Keyframe({
+        0: { opacity: 0, transform: [{ scale: from }] },
+        100: { opacity: 1, transform: [{ scale: 1 }], easing: Easing.out(Easing.cubic) },
+      })
+        .duration(duration)
+        .delay(delay);
 
 /** Number that counts up from 0 the first time it appears. */
 export function CountUp({ value, style, duration = 700 }: { value: number; style?: StyleProp<TextStyle>; duration?: number }) {

@@ -30,29 +30,28 @@ Short, sincere sentences. No hype or exclamation marks.
 
 ## 2. Color
 
-These five swatches are from the board's *Brand Elements* section. The hex values were **sampled from the board image** and should be fine-tuned once they're seen in real UI.
+**Refreshed 2026-11-26** (design update brief + the Home mockup): calmer and warmer, lighter page, forest as an anchor rather than a fill. Code tokens keep their names in `src/theme`; only the values changed.
 
-| Token | Hex (sampled) | Primary use |
+| Token | Hex | Primary use |
 | --- | --- | --- |
-| `fairway` | `#1F3D2F` | Brand color: home header, tab bar, app icon background, wordmark, ribbon banners |
-| `cream` | `#F2E6CF` | App background, cards, stat tiles, course sheet |
-| `gold` | `#BB8B2B` | Accent: wordmark rule, icon emblem, collectible rims, highlighted score cells |
-| `slate` | `#486E8B` | Supporting: ocean/sky in illustration, secondary accents |
-| `sage` | `#748056` | Supporting: foliage in illustration, muted tags and states |
-
-Supporting neutrals (*proposed*, based on board surfaces):
-
-| Token | Hex | Use |
-| --- | --- | --- |
-| `paper` | `#EFE2C8` | Aged keepsake scorecard surface |
-| `ink` | `#22281F` | Body text and scorecard print on cream/paper |
-| `ink-muted` | `#5E6459` | Secondary text, captions |
-| `rule` | `#D9CBB0` | Hairlines, scorecard grid lines |
+| `fairway` (forest) | `#173D32` | Titles, wordmark, primary buttons, active tab, the + button |
+| `cream` | `#F6EFE3` | Page background on every screen, headers and tab bar |
+| `creamLight` | `#FCF8F1` | Raised surfaces: grouped lists, stat strips, feed cards, tab bar |
+| `paper` | `#F1E8D8` | Scorecard paper, inset fills (score boxes, segmented-control track, icon buttons) |
+| `gold` (muted) | `#B39556` | Thin accents only: stat-strip icons, the + ring, progress, tier details |
+| `slate` | `#526B78` | Secondary accent, sim track |
+| `sage` | `#829977` | Supporting accent |
+| `ink` (charcoal) | `#343A34` | Primary text |
+| `ink-muted` | `#6A6E64` | Secondary text, captions |
+| `rule` (warm line) | `#D6CCB9` | Hairlines, dividers, scorecard rules |
 | `pennant` | `#D9622B` | The flag pennant in illustrations only. Never use it in UI. |
+
+The brief's suggested `cream` (`#EAE3D3`) read grey on screen next to the mockup, so the page uses the lighter `#F6EFE3` sampled from it; the brief's values are kept for the art prompts.
 
 ### Usage rules
 
-- Most surfaces are cream; fairway anchors the header and tab bar; gold is a thin accent (rules, rims, highlights).
+- Pages, headers and the tab bar are cream; forest is the anchor for titles and primary actions, not a full-screen fill; gold is a thin accent (icons, rims, the + ring, progress).
+- Three surface levels only: page (cream), raised (creamLight + soft shadow, no border), inset (paper). Don't nest raised surfaces.
 - Gold is never used for body text on cream.
 - The orange-red pennant is the only bright color and appears **only in artwork**.
 

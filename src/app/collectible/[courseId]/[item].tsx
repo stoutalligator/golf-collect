@@ -12,8 +12,7 @@ import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
-import { Animated } from '@/components/motion';
-import { ZoomIn } from 'react-native-reanimated';
+import { Animated, popIn } from '@/components/motion';
 
 const KIND_LABEL: Record<CollectibleItem, string> = {
   'ball-marker': 'Ball Marker', 'bag-tag': 'Bag Tag', 'pitch-marker': 'Pitch Marker', patch: 'Patch', pin: 'Pin',
@@ -41,7 +40,7 @@ export default function CollectibleDetail() {
           <IconButton name="chevron-left" label="Back" onPress={() => router.back()} />
         </View>
         <View style={styles.glow} />
-        <Animated.View style={styles.hero} entering={ZoomIn.springify().damping(14).stiffness(160)}>
+        <Animated.View style={styles.hero} entering={popIn(0, { from: 0.9, duration: 420 })}>
           <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={tier?.tier} label={short} size={230} dim={!state?.earned} />
         </Animated.View>
       </View>
@@ -89,7 +88,7 @@ export default function CollectibleDetail() {
             );
           })}
         </View>
-        <Text style={styles.tierNote}>The ball marker's finish is set by your best 18 here.</Text>
+        <Text style={styles.tierNote}>The ball marker’s finish is set by your best 18 here.</Text>
         </>
         ) : (
           <Text style={styles.tierNote}>Course achievements have one finish; only the ball marker is tiered by your score.</Text>
@@ -101,13 +100,13 @@ export default function CollectibleDetail() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
-  stage: { height: 360, backgroundColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
+  stage: { height: 340, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center' },
   topRow: { position: 'absolute', left: space.lg, right: space.lg, flexDirection: 'row', zIndex: 2 },
   hero: { position: 'relative', zIndex: 1 },
-  glow: { position: 'absolute', width: 260, height: 260, borderRadius: 130, backgroundColor: '#2C5240', bottom: 40 },
-  sheet: { flex: 1, marginTop: -24, backgroundColor: colors.cream, borderTopLeftRadius: 24, borderTopRightRadius: 24 },
+  glow: { position: 'absolute', width: 250, height: 250, borderRadius: 125, backgroundColor: colors.paper, bottom: 36 },
+  sheet: { flex: 1, backgroundColor: colors.cream },
   sheetContent: { padding: space.lg, gap: space.md, paddingBottom: space.xxl * 2 },
-  title: { ...type.displayL, color: colors.ink, textAlign: 'center' },
+  title: { fontFamily: fonts.displayBold, fontSize: 30, lineHeight: 36, color: colors.fairway, textAlign: 'center' },
   subtitle: { ...type.caption, fontSize: 13, color: colors.inkMuted, textAlign: 'center' },
   body: { ...type.body, color: colors.ink, textAlign: 'center' },
   earned: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.sm, padding: space.md },

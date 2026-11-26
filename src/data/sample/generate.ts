@@ -17,7 +17,7 @@ function rng(seed: number) {
   };
 }
 
-type Plan = { courseId: string; date: string; kind?: 'course' | 'sim'; skill?: number; nine?: boolean; scoreOnly?: boolean };
+type Plan = { courseId: string; date: string; kind?: 'course' | 'sim'; skill?: number; nine?: boolean; scoreOnly?: boolean; with?: string[] };
 
 /** skill: 0 = typical (~mid-80s on these courses), positive = hotter day. */
 const PLAN: Plan[] = [
@@ -88,34 +88,106 @@ function holeScore(r: () => number, par: number, handicap: number, skill: number
   return score;
 }
 
-export function generateSampleRounds(courses: Course[], simCourses: SimCourse[], seed = 20261125): Round[] {
-  const r = rng(seed);
-  const layouts = new Map<string, { holes: Course['holes']; teeId?: string }>([
+type Layouts = Map<string, { holes: Course['holes']; teeId?: string }>;
+
+function layoutsFor(courses: Course[], simCourses: SimCourse[]): Layouts {
+  return new Map([
     ...courses.map((c) => [c.id, { holes: c.holes, teeId: c.tees[Math.min(1, c.tees.length - 1)]?.id }] as const),
     ...simCourses.map((s) => [s.id, { holes: s.holes }] as const),
   ]);
+}
 
-  return PLAN.flatMap((p, i) => {
-    const layout = layouts.get(p.courseId);
-    if (!layout) return [];
-    const holeNumbers = p.nine ? layout.holes.slice(0, 9).map((h) => h.number) : layout.holes.map((h) => h.number);
-    const scores = holeNumbers.map((n) => {
-      const h = layout.holes.find((x) => x.number === n)!;
-      return holeScore(r, h.par, h.handicap, p.skill ?? 0, !!p.scoreOnly);
-    });
-    const round: Round = {
-      id: `sample-${String(i + 1).padStart(2, '0')}`,
-      kind: p.kind ?? 'course',
-      courseId: p.courseId,
-      teeId: layout.teeId,
-      date: p.date,
-      status: 'complete',
-      holeNumbers,
-      playerIds: [ME.id],
-      scores: { [ME.id]: scores },
-      createdAt: `${p.date}T12:00:00.000Z`,
-      completedAt: `${p.date}T16:30:00.000Z`,
-    };
-    return [round];
+function buildRound(r: () => number, layouts: Layouts, p: Plan, id: string, ownerId: string, playerIds: string[]): Round | null {
+  const layout = layouts.get(p.courseId);
+  if (!layout) return null;
+  const holeNumbers = p.nine ? layout.holes.slice(0, 9).map((h) => h.number) : layout.holes.map((h) => h.number);
+  const scores = holeNumbers.map((n) => {
+    const h = layout.holes.find((x) => x.number === n)!;
+    return holeScore(r, h.par, h.handicap, p.skill ?? 0, !!p.scoreOnly);
   });
+  return {
+    id,
+    ...(ownerId === ME.id ? {} : { ownerId }),
+    kind: p.kind ?? 'course',
+    courseId: p.courseId,
+    teeId: layout.teeId,
+    date: p.date,
+    status: 'complete',
+    holeNumbers,
+    playerIds,
+    scores: { [ownerId]: scores },
+    createdAt: `${p.date}T12:00:00.000Z`,
+    completedAt: `${p.date}T16:30:00.000Z`,
+  };
+}
+
+/** Friends you played with on some of your sample rounds (index in PLAN → friend ids). */
+const PLAYED_WITH: Record<number, string[]> = {
+  9: ['f-mike'], 13: ['f-dana'], 17: ['f-mike', 'f-chris'], 20: ['f-chris'], 23: ['f-mike'], 26: ['f-dana', 'f-sam'], 29: ['f-mike'],
+};
+
+export function generateSampleRounds(courses: Course[], simCourses: SimCourse[], seed = 20261125): Round[] {
+  const r = rng(seed);
+  const layouts = layoutsFor(courses, simCourses);
+  return PLAN.flatMap((p, i) => {
+    const round = buildRound(r, layouts, p, `sample-${String(i + 1).padStart(2, '0')}`, ME.id, [ME.id, ...(PLAYED_WITH[i] ?? [])]);
+    return round ? [round] : [];
+  });
+}
+
+// ── Friends ────────────────────────────────────────────────────────────────
+
+export const FRIENDS: Player[] = [
+  { id: 'f-mike', name: 'Mike Russo', initials: 'MR', homeState: 'CT', memberSince: '2026-04-12', homeCourseId: 'keney-park', tagline: 'Weekend warrior · chasing 85' },
+  { id: 'f-dana', name: 'Dana Kim', initials: 'DK', homeState: 'CT', memberSince: '2026-03-20', homeCourseId: 'wintonbury-hills', tagline: 'Club champ hopeful' },
+  { id: 'f-chris', name: 'Chris Lane', initials: 'CL', homeState: 'CT', memberSince: '2026-05-02', homeCourseId: 'timberlin', tagline: 'Never met a par 5 I liked' },
+  { id: 'f-sam', name: 'Sam Patel', initials: 'SP', homeState: 'CT', memberSince: '2026-07-08', homeCourseId: 'airways', tagline: 'New to the game, loving it' },
+];
+
+/** Typical form per friend (see `skill` in holeToPar). */
+const FRIEND_SKILL: Record<string, number> = { 'f-mike': 0.2, 'f-dana': 1.4, 'f-chris': 0.6, 'f-sam': -0.5 };
+
+const FRIEND_COURSES = [
+  'keney-park', 'wintonbury-hills', 'airways', 'simsbury-farms', 'timberlin', 'shennecossett', 'richter-park',
+  'lyman-orchards-jones', 'tashua-knolls', 'fox-hopyard', 'crestbrook-park', 'h-smith-richardson', 'alling-memorial',
+];
+
+const addDays = (iso: string, days: number) => {
+  const d = new Date(`${iso}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
+/**
+ * Friends' rounds: their own rounds spread over the season, plus their side of every round
+ * they played with you (same course and date, so the feed shows "played with").
+ */
+export function generateFriendRounds(courses: Course[], simCourses: SimCourse[], seed = 20261126): Round[] {
+  const r = rng(seed);
+  const layouts = layoutsFor(courses, simCourses);
+  const rounds: Round[] = [];
+
+  FRIENDS.forEach((f, fi) => {
+    const skill = FRIEND_SKILL[f.id] ?? 0;
+    const plans: Plan[] = [];
+    let date = addDays('2026-05-01', fi * 5);
+    while (date <= '2026-11-24') {
+      const home = r() < 0.3;
+      const courseId = home ? f.homeCourseId! : FRIEND_COURSES[Math.floor(r() * FRIEND_COURSES.length)];
+      plans.push({ courseId, date, skill: skill + (r() - 0.5) * 0.6, scoreOnly: r() < 0.2 });
+      date = addDays(date, 9 + Math.floor(r() * 14));
+    }
+    // Their side of rounds played with you.
+    Object.entries(PLAYED_WITH).forEach(([i, ids]) => {
+      if (!ids.includes(f.id)) return;
+      const mine = PLAN[Number(i)];
+      plans.push({ courseId: mine.courseId, date: mine.date, skill: skill + (r() - 0.5) * 0.4, with: [ME.id, ...ids.filter((x) => x !== f.id)] });
+    });
+    plans.sort((a, b) => a.date.localeCompare(b.date));
+    plans.forEach((p, i) => {
+      const round = buildRound(r, layouts, p, `${f.id}-${String(i + 1).padStart(2, '0')}`, f.id, [f.id, ...(p.with ?? [])]);
+      if (round) rounds.push(round);
+    });
+  });
+  return rounds;
 }

@@ -19,16 +19,22 @@ const CHROME = process.env.CHROME_PATH ?? [
 /** name → route. Sample data is deterministic, so these ids are stable. */
 const SCREENS = [
   ['01-splash', '/?splash=hold'],
-  ['02-home', '/'],
+  ['02-home-feed', '/'],
   ['03-courses', '/courses'],
   ['04-course-detail', '/course/keney-park'],
   ['05-scorecard', '/round/sample-30'],
-  ['06-collection', '/collection'],
-  ['07-collectible-detail', '/collectible/keney-park/patch'],
-  ['08-achievements', '/achievements'],
-  ['09-rounds', '/rounds'],
-  ['10-profile', '/profile'],
-  ['11-log-round', '/round/new?courseId=airways'],
+  ['06-friend-round', '/round/f-mike-01'],
+  ['07-stats', '/stats'],
+  ['08-stats-rounds', '/stats?view=rounds'],
+  ['09-trophy-room', '/collection'],
+  ['10-collection-case', '/collection/ball-marker'],
+  ['11-collectible-detail', '/collectible/keney-park/patch'],
+  ['12-badges', '/achievements'],
+  ['13-badge-detail', '/achievement/break-90'],
+  ['14-profile', '/profile'],
+  ['15-friend-profile', '/player/f-dana'],
+  ['16-friends', '/friends'],
+  ['17-log-round', '/round/new?courseId=airways'],
 ];
 
 if (!CHROME) {

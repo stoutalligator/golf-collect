@@ -1,26 +1,28 @@
-# Achievement badges
+# Achievement badges (v2: milestone keepsakes)
 
-**Form** (from board 02): an arched-top shield with an antique gold rim and a painted scene inside. A ribbon banner wraps across the lower third: deep forest green for course badges, slate blue for sim badges. **The ribbon is left blank**; the app writes the badge name on it (no garbled lettering, and renames need no new art).
+*Rewritten 2026-11-26. The previous shield + ribbon set stays in `assets/art/badges/` and in the app until you regenerate.*
 
-- **Size:** 1024×1024 PNG each, transparent background in the final file.
-- **Generate on solid magenta (#FF00FF)**, one badge or a sheet of several. Claude keys out the magenta, splits sheets and measures each ribbon.
-- **Every badge uses the same shield silhouette, rim and ribbon shape**, so the set looks like one family. Only the scene inside changes.
-- Locked badges are dimmed in code; generate only the earned look.
+**Direction:** every badge shows **what the milestone is**, as a small physical golf keepsake. Badges belong to a few **families** that share a material, so the wall reads as one set, but each badge's subject is its own. No shield, no ribbon, no laurels, no stars, no words. The app prints the badge name under the art.
 
-Generate in three sheets: **A: Game** (5), **B: Courses & Collection** (6), **C: Sim** (2). Each sheet has a ready-to-paste sheet prompt below, and each badge also has its own prompt if you'd rather make them one at a time.
+| Family | Material | Badges |
+|---|---|---|
+| **Scorecard** | Torn fragment of a printed paper scorecard, pencil marks | Break 100, Break 90, Break 80 |
+| **Birdie** | Round enamel lapel pin with a painted bird | First Birdie, 100 Birdies |
+| **Travel** | Inked rubber-stamp impression on a cream page | Course Explorer, State Traveler, Golf Traveler, Parks & Links |
+| **Collecting** | Small wooden keepsake tray or box | Course Collector, Keepsake Keeper |
+| **Simulator** | Same subjects, slate-blue palette and a hint of a screen | Sim Break 80, Sim Explorer |
+
+**Format:** 1024×1024 PNG, transparent background in the final file. Generate on solid magenta (#FF00FF), one badge or a family sheet; Claude keys out the magenta and splits sheets. Locked badges are dimmed in code, so generate only the earned look.
+
+**After you regenerate a badge:** save it over the old file, run `npm run art:sync`, and set that badge to `{ "label": false }` in `src/art/badges.json` so the app stops writing a name across it (the old art has a ribbon for the name; the new art doesn't).
 
 ---
 
-## Sheet A: Game
+## Family: Scorecard
 
 ```prompt
-{{PAINTED_BADGE}}
-A sheet of five matching golf achievement badges on a perfectly flat, solid pure magenta (#FF00FF) background, arranged three on the top row and two centered on the bottom row, evenly spaced with clear magenta gaps so they never touch. Every badge has exactly the same shape: an arched-top heraldic shield with a polished antique-gold rim, a painted scene inside, and a deep forest green ribbon banner wrapping across the lower third. Every ribbon is completely blank, with no letters or words on it. Each badge is front-facing and straight-on, with no shadow on the magenta.
-Badge 1 (top left): a paper golf scorecard with a pencil, the number "100" written on the card, on a green background.
-Badge 2 (top middle): a paper golf scorecard with a pencil and the number "90" written on it, sprigs of laurel.
-Badge 3 (top right): a paper golf scorecard with a pencil and the number "80" written on it, framed by golden laurel leaves.
-Badge 4 (bottom left): a small songbird perched on a flagstick above a putting green.
-Badge 5 (bottom right): a flock of small birds rising over a green with an orange-pennant flag, golden light.
+{{MILESTONE_BADGE}}
+A sheet of three matching keepsakes on a perfectly flat, solid pure magenta (#FF00FF) background, in a row with clear magenta gaps so they never touch. Each is a torn fragment of a cream printed golf scorecard with thin forest green printed rules and a few hole columns, a short wooden golf pencil resting across one corner, and one large total score written by hand in pencil and circled. Fragment 1 (left): the total "99". Fragment 2 (middle): the total "89". Fragment 3 (right): the total "79", with a thin muted-gold foil edge along the torn side. Front-facing, straight-on, no shadow on the magenta.
 {{NEGATIVE}}
 ```
 
@@ -29,8 +31,8 @@ Badge 5 (bottom right): a flock of small birds rising over a green with an orang
 - **Save as:** `assets/art/badges/break-100.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a paper golf scorecard with a pencil and the number "100" written on the card, on a green background. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+A torn fragment of a cream printed golf scorecard with thin forest green printed rules and a few hole columns, a short wooden golf pencil resting across one corner, and the total "99" written by hand in pencil and circled.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -40,8 +42,8 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/break-90.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a paper golf scorecard with a pencil and the number "90" written on it, sprigs of laurel. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+A torn fragment of a cream printed golf scorecard with thin forest green printed rules and a few hole columns, a short wooden golf pencil resting across one corner, and the total "89" written by hand in pencil and circled twice.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -51,9 +53,19 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/break-80.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a paper golf scorecard with a pencil and the number "80" written on it, framed by golden laurel leaves. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+A torn fragment of a cream printed golf scorecard with thin forest green printed rules and a few hole columns, a thin muted-gold foil edge along the torn side, a short wooden golf pencil resting across one corner, and the total "79" written by hand in pencil and circled twice.
 {{BADGE_BG}}
+{{NEGATIVE}}
+```
+
+---
+
+## Family: Birdie
+
+```prompt
+{{MILESTONE_BADGE}}
+Two matching round enamel lapel pins side by side on a perfectly flat, solid pure magenta (#FF00FF) background with a clear magenta gap. Each pin is a cream enamel disc with a thin muted-gold metal rim and a small butterfly clutch peeking from behind. Pin 1 (left): a single small songbird perched on the top of a golf flagstick, painted in enamel. Pin 2 (right): a flock of small songbirds in flight crossing the disc over a sliver of green, with the numeral "100" in small forest green enamel along the bottom of the disc. Front-facing, straight-on, no shadow on the magenta.
 {{NEGATIVE}}
 ```
 
@@ -62,8 +74,8 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/first-birdie.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a small songbird perched on a flagstick above a putting green. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+A round enamel lapel pin: a cream enamel disc with a thin muted-gold metal rim, a single small songbird perched on the top of a golf flagstick painted in enamel, a sliver of putting green at the bottom of the disc.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -73,25 +85,19 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/100-birdies.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a flock of small birds rising over a green with an orange-pennant flag, golden light. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+A round enamel lapel pin: a cream enamel disc with a thin muted-gold metal rim, a flock of small songbirds in flight crossing the disc above a sliver of green, and the numeral "100" in small forest green enamel along the bottom edge of the disc.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
 
 ---
 
-## Sheet B: Courses & Collection
+## Family: Travel
 
 ```prompt
-{{PAINTED_BADGE}}
-A sheet of six matching golf achievement badges on a perfectly flat, solid pure magenta (#FF00FF) background, arranged in two rows of three, evenly spaced with clear magenta gaps so they never touch. Every badge has exactly the same shape: an arched-top heraldic shield with a polished antique-gold rim, a painted scene inside, and a deep forest green ribbon banner wrapping across the lower third. Every ribbon is completely blank, with no letters or words on it. Each badge is front-facing and straight-on, with no shadow on the magenta.
-Badge 1 (top left): a putting green with an orange-pennant flag, dark pine trees, distant rolling hills.
-Badge 2 (top middle): a gold silhouette map of the United States on a slate blue field.
-Badge 3 (top right): a weathered wooden signpost with arrows pointing different directions, rolling green hills and distant mountains.
-Badge 4 (bottom left): snow-capped mountain peaks, dark pine forest, a fairway winding through a valley.
-Badge 5 (bottom middle): a classic golf bag with clubs standing against a warm sunset sky and green hills.
-Badge 6 (bottom right): an open wooden keepsake box holding golf ball markers, a bag tag and an embroidered patch.
+{{MILESTONE_BADGE}}
+A sheet of four inked rubber-stamp impressions on small squares of cream passport paper, arranged in a 2×2 grid on a perfectly flat, solid pure magenta (#FF00FF) background with clear magenta gaps. The ink is slightly uneven like a real stamp, in forest green, slate blue or muted gold. Stamp 1: a round stamp with a golf flag in the center and the numeral "25" below it. Stamp 2: a rectangular stamp showing a small cluster of five simple, unlabeled US state outlines. Stamp 3: an oval stamp with a compass rose over a golf flag and the numeral "10". Stamp 4: a round stamp with a mountain, a pine tree and a golf flag, framed by a simple ring. Front-facing, straight-on, no shadow on the magenta.
 {{NEGATIVE}}
 ```
 
@@ -100,8 +106,8 @@ Badge 6 (bottom right): an open wooden keepsake box holding golf ball markers, a
 - **Save as:** `assets/art/badges/course-explorer.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a putting green with an orange-pennant flag, dark pine trees, distant rolling hills. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+An inked round rubber-stamp impression in forest green on a small square of cream passport paper, slightly uneven like a real stamp: a golf flag in the center and the numeral "25" below it, inside a double ring.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -111,8 +117,8 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/state-traveler.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a gold silhouette map of the United States on a slate blue field. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+An inked rectangular rubber-stamp impression in slate blue on a small square of cream passport paper, slightly uneven like a real stamp: a small cluster of five simple, unlabeled neighboring US state outlines with a tiny golf flag planted in one of them.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -122,20 +128,30 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/golf-traveler.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a weathered wooden signpost with arrows pointing different directions, rolling green hills and distant mountains. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+An inked oval rubber-stamp impression in muted gold on a small square of cream passport paper, slightly uneven like a real stamp: a compass rose behind a golf flag and the numeral "10" at the bottom of the oval.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
 
-### Parks & Links: play 5 courses in National Parks
+### Parks & Links: play 5 courses in national parks
 
 - **Save as:** `assets/art/badges/parks-and-links.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: snow-capped mountain peaks, dark pine forest, a fairway winding through a valley. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+An inked round rubber-stamp impression in forest green on a small square of cream passport paper, slightly uneven like a real stamp: a simple mountain, a tall pine tree and a golf flag inside a plain ring. Not any official park service emblem or arrowhead shape.
 {{BADGE_BG}}
+{{NEGATIVE}}
+```
+
+---
+
+## Family: Collecting
+
+```prompt
+{{MILESTONE_BADGE}}
+Two small wooden keepsake pieces side by side on a perfectly flat, solid pure magenta (#FF00FF) background with a clear magenta gap. Piece 1 (left): a shallow wooden display tray lined with forest green felt holding exactly five small golf keepsakes in a row: a round ball marker coin, a pitchfork divot tool, a leather bag tag, an embroidered patch and a small enamel pin. Piece 2 (right): an open wooden keepsake box with a brass hinge, overflowing with many small round golf ball markers and a few enamel pins. Front-facing, slight three-quarter top view, no shadow on the magenta.
 {{NEGATIVE}}
 ```
 
@@ -144,8 +160,8 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/course-collector.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a classic golf bag with clubs standing against a warm sunset sky and green hills. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+A shallow wooden display tray lined with forest green felt holding exactly five small golf keepsakes in a row, each in its own recess: a round ball marker coin, a pitchfork-shaped divot repair tool, a small leather bag tag with a strap, an embroidered patch and a small enamel pin. Slight three-quarter top view.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -155,31 +171,29 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/keepsake-50.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: an open wooden keepsake box holding golf ball markers, a bag tag and an embroidered patch. A deep forest green ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+An open wooden keepsake box with a brass hinge and forest green felt lining, filled to the brim with many small round golf ball markers in bronze, silver and gold tones, a few enamel pins and a folded leather bag tag. Slight three-quarter top view.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
 
 ---
 
-## Sheet C: Sim (slate ribbon)
+## Family: Simulator (slate palette)
 
 ```prompt
-{{PAINTED_BADGE}}
-Two matching golf achievement badges side by side on a perfectly flat, solid pure magenta (#FF00FF) background, evenly spaced with a clear magenta gap. Both have exactly the same shape: an arched-top heraldic shield with a polished antique-gold rim, a painted scene inside, and a slate blue (#486E8B) ribbon banner wrapping across the lower third. Both ribbons are completely blank, with no letters or words. Front-facing, straight-on, no shadow on the magenta.
-Badge 1 (left): a golf ball on a tee in front of a glowing simulator screen showing a painted fairway, the number "80" small in the corner of the screen.
-Badge 2 (right): several small framed screens each showing a different painted golf hole (coast, desert, mountain), arranged like a gallery wall.
+{{MILESTONE_BADGE}}
+Two keepsakes side by side on a perfectly flat, solid pure magenta (#FF00FF) background with a clear magenta gap, both in a slate blue (#526B78) and cream palette. Piece 1 (left): a torn fragment of a cream printed golf scorecard clipped to the corner of a small slate-blue rectangular screen showing a simple painted fairway, the total "79" written in pencil and circled. Piece 2 (right): an inked rectangular rubber-stamp impression in slate blue on cream paper, showing a grid of four tiny golf hole pictures (coast, desert, mountain, parkland) and the numeral "10". Front-facing, straight-on, no shadow on the magenta.
 {{NEGATIVE}}
 ```
 
-### Sim Break 80
+### Sim Break 80: shoot under 80 in a sim round
 
 - **Save as:** `assets/art/badges/sim-break-80.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: a golf ball on a tee in front of a glowing simulator screen showing a painted fairway, the number "80" small in the corner of the screen. A slate blue (#486E8B) ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+In a slate blue (#526B78) and cream palette: a torn fragment of a cream printed golf scorecard clipped to the corner of a small slate-blue rectangular screen that shows a simple painted fairway, the total "79" written by hand in pencil on the card and circled.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```
@@ -189,8 +203,8 @@ A golf achievement badge: an arched-top heraldic shield with a polished antique-
 - **Save as:** `assets/art/badges/sim-explorer.png`
 
 ```prompt
-{{PAINTED_BADGE}}
-A golf achievement badge: an arched-top heraldic shield with a polished antique-gold rim. Inside: several small framed screens each showing a different painted golf hole (coast, desert, mountain), arranged like a gallery wall. A slate blue (#486E8B) ribbon banner wraps across the lower third and is completely blank, with no letters.
+{{MILESTONE_BADGE}}
+An inked rectangular rubber-stamp impression in slate blue on a small square of cream paper, slightly uneven like a real stamp: a grid of four tiny golf hole pictures (coastal, desert, mountain, parkland) and the numeral "10" beneath them.
 {{BADGE_BG}}
 {{NEGATIVE}}
 ```

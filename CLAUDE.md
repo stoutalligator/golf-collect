@@ -28,7 +28,11 @@ An iOS golf app for tracking rounds, discovering courses, and **collecting the c
   - `success`: accomplishments
   - `warning`: destructive confirms
 
-  Use `Button` (primary/secondary) from `ui.tsx` for actions, `enterItem(i)` for list entrances, `CountUp` for headline numbers, and `ProgressBar` (animated). Keep motion quick and springy; no wobble.
+  Use `Button` (primary/secondary) from `ui.tsx` for actions, `enterItem(i)` for list entrances, `CountUp` for headline numbers, and `ProgressBar` (animated). Keep motion quick and settled: springs are critically damped (no overshoot), and badge/collectible entrances use `popIn()`, never `ZoomIn.springify()`.
+- **Chrome & surfaces:** cream pages, headers and tab bar (see the brand guidelines' 2026-11-26 tokens). Use `SheetScreen` for standard screens, `IconButton` (round) for header actions, `Group` + rows for lists, `StatStrip` for headline numbers, `SectionHeader` (with pill action), `Chips` (segmented). Don't nest raised surfaces.
+- **Navigation:** tabs are Home/Feed · Courses · (+) · Stats · Collection. Profile (`/profile`) opens from the avatar on Home; friends are `/friends` and `/player/[id]`.
+- **Rounds have owners.** `Round.ownerId` (omitted = you); use `roundOwner(r)`. `data.roundsByDate`/`courseStats`/`collections`/`achievements` are yours; anyone's derived data comes from `data.playerData(id)`. Friends' rounds are read-only.
+- **Charts** use `src/components/charts.tsx` and `chart` tokens in `src/theme` (diverging to-par scale). Text never takes a series color.
 - Keep the app name in `app.json` only (it will be rebranded).
 
 ## Commands
@@ -37,6 +41,7 @@ An iOS golf app for tracking rounds, discovering courses, and **collecting the c
 npx expo start            # dev server (scan QR with Expo Go on iPhone)
 npx expo start --web      # web preview
 npx tsc --noEmit          # typecheck
+npx expo lint             # lint (ESLint via eslint-config-expo)
 npm test                  # vitest (domain logic)
 node scripts/courses/build-ct-seed.mjs [--refresh]   # rebuild CT course seed
 npm run art:prompts       # create/compile art prompts (assets/_prompts/compiled)

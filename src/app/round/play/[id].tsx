@@ -99,8 +99,8 @@ export default function PlayRound() {
             const active = i === index;
             return (
               <Tap key={n} haptic={active ? 'none' : 'select'} scaleTo={0.88} onPress={() => go(i)} style={[styles.stripCell, active && styles.stripActive]} accessibilityRole="button" accessibilityLabel={`Hole ${n}`}>
-                <Text style={[styles.stripHole, active && { color: colors.fairway }]}>{n}</Text>
-                <Text style={[styles.stripScore, active && { color: colors.fairway }, s && s.strokes < h.par && { color: colors.gold }]}>{s ? s.strokes : '·'}</Text>
+                <Text style={[styles.stripHole, active && { color: colors.goldSoft }]}>{n}</Text>
+                <Text style={[styles.stripScore, s && s.strokes < h.par && { color: colors.gold }, active && { color: colors.cream }]}>{s ? s.strokes : '·'}</Text>
               </Tap>
             );
           })}
@@ -211,15 +211,15 @@ function SmallStepper({ label, value, onChange }: { label: string; value: number
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
-  header: { backgroundColor: colors.fairway, paddingHorizontal: space.md, paddingBottom: space.sm, gap: space.sm },
+  header: { backgroundColor: colors.cream, paddingHorizontal: space.lg, paddingBottom: space.sm, gap: space.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.rule },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  courseName: { flex: 1, fontFamily: fonts.display, fontSize: 18, color: colors.cream },
-  running: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.goldSoft },
+  courseName: { flex: 1, fontFamily: fonts.display, fontSize: 19, color: colors.fairway, marginLeft: space.xs },
+  running: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   strip: { gap: 4, paddingVertical: 2 },
-  stripCell: { width: 34, alignItems: 'center', paddingVertical: 4, borderRadius: radius.sm },
-  stripActive: { backgroundColor: colors.cream },
-  stripHole: { fontFamily: fonts.body, fontSize: 10, color: colors.goldSoft },
-  stripScore: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.cream },
+  stripCell: { width: 36, alignItems: 'center', paddingVertical: 5, borderRadius: radius.sm, backgroundColor: colors.paper },
+  stripActive: { backgroundColor: colors.fairway },
+  stripHole: { fontFamily: fonts.body, fontSize: 10, color: colors.inkMuted },
+  stripScore: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
   body: { padding: space.lg, gap: space.xl },
   holeInfo: { alignItems: 'center', gap: 2 },
   holeTitle: { ...type.displayXL, color: colors.fairway },

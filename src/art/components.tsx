@@ -184,12 +184,14 @@ type RibbonLayout = { x: number; y: number; maxWidth: number; maxFontSize: numbe
 export function Badge({ id, name, sim, earned = true, size = 72 }: { id: string; name: string; sim?: boolean; earned?: boolean; size?: number }) {
   const src = getArt(artKeys.badge(id));
   if (src) {
-    const l = ((badgeLayouts.badges as Record<string, RibbonLayout>)[id] ?? badgeLayouts.default) as RibbonLayout;
+    const entry = (badgeLayouts.badges as Record<string, RibbonLayout | { label: false }>)[id];
+    // `{ "label": false }` = art without a ribbon (v2 milestone badges): draw no name on it.
+    const l = (entry ?? badgeLayouts.default) as RibbonLayout | { label: false };
     const text = name.toUpperCase();
     return (
       <Svg width={size} height={size} viewBox="0 0 1024 1024" opacity={earned ? 1 : 0.45}>
         <SvgImage href={src} x={0} y={0} width={1024} height={1024} preserveAspectRatio="xMidYMid meet" />
-        <SvgText
+        {'label' in l ? null : <SvgText
           x={l.x}
           y={l.y}
           fontSize={fitSize(text, l.maxWidth, l.maxFontSize)}
@@ -199,7 +201,7 @@ export function Badge({ id, name, sim, earned = true, size = 72 }: { id: string;
           alignmentBaseline="middle"
           letterSpacing={2}>
           {text}
-        </SvgText>
+        </SvgText>}
       </Svg>
     );
   }

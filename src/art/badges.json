@@ -1,5 +1,5 @@
 {
-  "_readme": "Ribbon label layout per badge PNG (1024 canvas), measured from the art by Claude. The app writes the badge name on the blank ribbon. `default` is used for badges not listed.",
+  "_readme": "Ribbon label layout per badge PNG (1024 canvas), measured from the art by Claude. The app writes the badge name on the blank ribbon. `default` is used for badges not listed. Set a badge to { \"label\": false } once its art is regenerated in the v2 ribbon-less style (assets/_prompts/badges/badges.md).",
   "default": {
     "x": 512,
     "y": 698,

@@ -1,19 +1,39 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
-import { Collectible, CourseScene, Tree } from '@/art/components';
+import { courseHeroKeys, firstArt } from '@/art';
+import { Collectible, CourseScene } from '@/art/components';
 import { Icon } from '@/components/icons';
+import { Animated, enterItem, popIn, Tap } from '@/components/motion';
 import { RoundRow } from '@/components/round-card';
-import { Empty, ListRow, SectionHeader } from '@/components/ui';
+import { Avatar } from '@/components/social';
+import { Button, Empty, Group, IconButton, SectionHeader, StatStrip } from '@/components/ui';
 import { TIERS } from '@/data/config/game';
 import { formatToPar } from '@/domain/stats';
+import { roundOwner } from '@/domain/types';
 import { ACCESS_LABEL } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
-import { Animated, enterItem, Tap } from '@/components/motion';
-import { ZoomIn } from 'react-native-reanimated';
+import { colors, fonts, shadow, space, type } from '@/theme';
+
+/** Painting fades into the cream page so the title sits on a clean surface. */
+function HeroFade() {
+  return (
+    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      <Svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1 1">
+        <Defs>
+          <LinearGradient id="courseFade" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0.62" stopColor={colors.cream} stopOpacity="0" />
+            <Stop offset="1" stopColor={colors.cream} stopOpacity="1" />
+          </LinearGradient>
+        </Defs>
+        <Rect x="0" y="0" width="1" height="1" fill="url(#courseFade)" />
+      </Svg>
+    </View>
+  );
+}
 
 export default function CourseDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -28,67 +48,106 @@ export default function CourseDetail() {
   const best = rounds.map((r) => data.summaries.get(r.id)).filter((s) => s?.isFull18).sort((a, b) => a!.strokes - b!.strokes)[0];
   const par = course.holes.reduce((s, h) => s + h.par, 0);
   const tierName = col?.tier ? TIERS.find((t) => t.tier === col.tier!.tier)?.name : null;
+  // Shared regional painting (not a depiction of this course) unless a course-specific override exists.
+  const regional = !firstArt(courseHeroKeys(course))?.key.startsWith('courses/');
+  // Best 18 here for you and each friend who has played it.
+  const board = [data.me, ...data.friends]
+    .map((p) => {
+      const pd = data.playerData(p.id);
+      const scores = (pd?.rounds ?? [])
+        .filter((r) => r.kind === 'course' && r.courseId === course.id && roundOwner(r) === p.id)
+        .map((r) => data.summaries.get(r.id))
+        .filter((s) => s?.isFull18);
+      const top = scores.sort((a, b) => a!.strokes - b!.strokes)[0];
+      return top ? { p, best: top, rounds: scores.length } : null;
+    })
+    .filter((x) => !!x)
+    .sort((a, b) => a!.best!.strokes - b!.best!.strokes);
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={{ paddingBottom: space.xxl * 2 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: space.xxl * 3 }}>
         <View style={styles.hero}>
           <CourseScene course={course} style={StyleSheet.absoluteFill} />
-          <View style={[styles.heroButtons, { top: insets.top + space.sm }]}>
-            <RoundButton icon="chevron-left" label="Back" onPress={() => router.back()} />
-            <RoundButton icon={saved ? 'bookmark-filled' : 'bookmark'} pop={saved} label={saved ? 'Remove from wishlist' : 'Add to wishlist'} onPress={() => data.toggleWishlist(course.id)} />
+          <HeroFade />
+          <View style={[styles.heroButtons, { top: insets.top + space.xs }]}>
+            <IconButton name="chevron-left" label="Back" onArt onPress={() => router.back()} />
+            <SaveButton saved={saved} onPress={() => data.toggleWishlist(course.id)} />
           </View>
+          {regional ? <Text style={styles.artNote}>Regional illustration</Text> : null}
         </View>
 
-        <View style={styles.sheet}>
-          <View style={styles.titleRow}>
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text style={styles.title}>{course.name}</Text>
-              <View style={styles.inline}>
-                <Icon name="pin" size={15} color={colors.inkMuted} />
-                <Text style={styles.meta}>{course.city}, {course.state} · {ACCESS_LABEL[course.access]}</Text>
-              </View>
+        <View style={styles.body}>
+          <View style={{ gap: space.sm }}>
+            <Text style={styles.title}>{course.name}</Text>
+            <View style={styles.inline}>
+              <Icon name="pin" size={15} color={colors.inkMuted} />
+              <Text style={styles.meta}>{course.city}, {course.state}  ·  {ACCESS_LABEL[course.access]}{course.architect ? `  ·  ${course.architect}` : ''}</Text>
             </View>
-            <Tree size={64} />
-          </View>
-          <Text style={styles.description}>{course.description}</Text>
-
-          <View style={styles.facts}>
-            <Fact label="Par" value={String(par)} />
-            <Fact label="Tees" value={String(course.tees.length)} />
-            <Fact label="Played" value={String(rounds.length)} />
-            <Fact label="Best" value={best ? `${best.strokes}` : '—'} sub={best ? formatToPar(best.toPar) : undefined} />
+            <Text style={styles.description}>{course.description}</Text>
           </View>
 
-          <View>
-            <ListRow icon="flag" label="Log a Round" onPress={() => router.push(`/round/new?courseId=${course.id}`)} />
-            <ListRow icon="book" label="View Scorecards" onPress={() => router.navigate(`/rounds?courseId=${course.id}`)} />
+          <StatStrip
+            compact
+            items={[
+              { label: 'Par', value: String(par) },
+              { label: 'Tees', value: String(course.tees.length) },
+              { label: 'Played', value: String(rounds.length) },
+              { label: 'Best', value: best ? String(best.strokes) : '—', sub: best ? formatToPar(best.toPar) : undefined },
+            ]}
+          />
+
+          <View style={styles.actions}>
+            <Button label="Log a Round" icon="flag" onPress={() => router.push(`/round/new?courseId=${course.id}`)} style={{ flex: 1.2 }} />
+            <Button label="Scorecards" variant="secondary" onPress={() => router.navigate(`/stats?view=rounds&courseId=${course.id}`)} style={{ flex: 1 }} />
           </View>
 
-          <SectionHeader title="Course Collectibles" action={tierName ? `Ball marker: ${tierName}` : undefined} />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.md, paddingVertical: space.xs }}>
-            {(col?.items ?? []).map(({ def, earned }) => (
-              <Tap key={def.id} scaleTo={0.92} onPress={() => router.push(`/collectible/${course.id}/${def.id}`)} style={styles.collectible} accessibilityRole="button" accessibilityLabel={`${def.name}${earned ? ', earned' : ', locked'}`}>
-                <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={col?.tier?.tier} label={shortCourseName(course.name)} size={78} dim={!earned} />
-                <Text style={styles.collectibleLabel} numberOfLines={2}>{def.name}</Text>
-              </Tap>
-            ))}
-          </ScrollView>
-          <Text style={styles.collectNote}>{col?.earnedCount ?? 0} of {col?.items.length ?? 0} collected</Text>
+          <View style={{ gap: space.md }}>
+            <SectionHeader title="Collectibles" count={`${col?.earnedCount ?? 0}/${col?.items.length ?? 0}`} action={tierName ? `${tierName} marker` : undefined} />
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.collectRow} style={styles.collectScroll}>
+              {(col?.items ?? []).map(({ def, earned }) => (
+                <Tap key={def.id} scaleTo={0.94} onPress={() => router.push(`/collectible/${course.id}/${def.id}`)} style={styles.collectible} accessibilityRole="button" accessibilityLabel={`${def.name}${earned ? ', earned' : ', not yet earned'}`}>
+                  <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={col?.tier?.tier} label={shortCourseName(course.name)} size={80} dim={!earned} />
+                  <Text style={styles.collectibleLabel} numberOfLines={1}>{def.name}</Text>
+                  <Text style={styles.collectibleState}>{earned ? 'Collected' : def.howToEarn}</Text>
+                </Tap>
+              ))}
+            </ScrollView>
+          </View>
+
+          {board.length ? (
+            <View style={{ gap: space.md }}>
+              <SectionHeader title="Leaderboard" action="Best 18 · you & friends" />
+              <Group>
+                {board.map((row, i) => (
+                  <Tap key={row!.p.id} scaleTo={0.985} onPress={() => (row!.p.id === data.me.id ? router.push(`/round/${row!.best!.roundId}`) : router.push(`/player/${row!.p.id}`))} accessibilityRole="button" accessibilityLabel={`${i + 1}. ${row!.p.name}, ${row!.best!.strokes}`} style={styles.boardRow}>
+                    <Text style={styles.boardPos}>{i + 1}</Text>
+                    <Avatar player={row!.p} size={34} />
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.boardName}>{row!.p.id === data.me.id ? 'You' : row!.p.name}</Text>
+                      <Text style={styles.boardMeta}>{row!.rounds} {row!.rounds === 1 ? 'round' : 'rounds'} here</Text>
+                    </View>
+                    <Text style={styles.boardScore}>{row!.best!.strokes}</Text>
+                    <Text style={styles.boardToPar}>{formatToPar(row!.best!.toPar)}</Text>
+                  </Tap>
+                ))}
+              </Group>
+            </View>
+          ) : null}
 
           {rounds.length > 0 ? (
-            <>
-              <SectionHeader title="Your Rounds Here" />
-              {rounds.slice(0, 3).map((r, i) => (
-                <Animated.View key={r.id} entering={enterItem(i)}>
-                  <RoundRow round={r} summary={data.summaries.get(r.id)} name={course.name} />
-                </Animated.View>
-              ))}
-            </>
+            <View style={{ gap: space.md }}>
+              <SectionHeader title="Your Rounds Here" action={rounds.length > 3 ? 'See All' : undefined} onAction={rounds.length > 3 ? () => router.navigate(`/stats?view=rounds&courseId=${course.id}`) : undefined} />
+              <Animated.View entering={enterItem(0)}>
+                <Group inset={space.md}>
+                  {rounds.slice(0, 3).map((r) => <RoundRow key={r.id} round={r} summary={data.summaries.get(r.id)} name={course.name} />)}
+                </Group>
+              </Animated.View>
+            </View>
           ) : null}
 
           <Text style={styles.source}>
-            Data: {course.verification.sources.map((s) => s.name).join(' · ')} · {course.verification.status}
+            Course data: {course.verification.sources.map((s) => s.name).join(' · ')} · {course.verification.status}
           </Text>
         </View>
       </ScrollView>
@@ -96,44 +155,39 @@ export default function CourseDetail() {
   );
 }
 
-function RoundButton({ icon, label, onPress, pop }: { icon: 'chevron-left' | 'bookmark' | 'bookmark-filled'; label: string; onPress: () => void; pop?: boolean }) {
+function SaveButton({ saved, onPress }: { saved: boolean; onPress: () => void }) {
   return (
-    <Tap onPress={onPress} scaleTo={0.86} haptic={pop === undefined ? 'tap' : 'press'} accessibilityRole="button" accessibilityLabel={label} style={styles.roundButton}>
-      {/* Remount on toggle so the icon springs in */}
-      <Animated.View key={String(pop)} entering={pop === undefined ? undefined : ZoomIn.springify().damping(12)}>
-        <Icon name={icon} size={20} color={colors.cream} />
+    <Tap onPress={onPress} scaleTo={0.9} haptic="press" accessibilityRole="button" accessibilityLabel={saved ? 'Remove from wishlist' : 'Add to wishlist'} accessibilityState={{ selected: saved }} style={styles.saveButton}>
+      {/* Remount on toggle so the icon eases in */}
+      <Animated.View key={String(saved)} entering={popIn(0, { from: 0.7, duration: 220 })}>
+        <Icon name={saved ? 'bookmark-filled' : 'bookmark'} size={20} color={colors.fairway} strokeWidth={1.8} />
       </Animated.View>
     </Tap>
   );
 }
 
-function Fact({ label, value, sub }: { label: string; value: string; sub?: string }) {
-  return (
-    <View style={styles.fact}>
-      <Text style={styles.factValue}>{value}{sub ? <Text style={styles.factSub}> {sub}</Text> : null}</Text>
-      <Text style={styles.factLabel}>{label}</Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
-  hero: { height: 280, backgroundColor: colors.fairway },
+  hero: { height: 300, backgroundColor: colors.paper },
   heroButtons: { position: 'absolute', left: space.lg, right: space.lg, flexDirection: 'row', justifyContent: 'space-between' },
-  roundButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: 'rgba(31,61,47,0.7)', alignItems: 'center', justifyContent: 'center' },
-  sheet: { marginTop: -24, backgroundColor: colors.cream, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: space.lg, gap: space.lg },
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
-  title: { ...type.displayL, color: colors.ink },
+  saveButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(252,248,241,0.92)', alignItems: 'center', justifyContent: 'center', ...shadow.control },
+  artNote: { position: 'absolute', right: space.lg, bottom: space.lg, fontFamily: fonts.body, fontSize: 10, color: colors.inkMuted },
+  body: { paddingHorizontal: space.lg, gap: space.xl, marginTop: -space.lg },
+  title: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 38, color: colors.fairway },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  meta: { ...type.caption, fontSize: 13, color: colors.inkMuted },
-  description: { ...type.body, color: colors.ink },
-  facts: { flexDirection: 'row', backgroundColor: colors.creamLight, borderRadius: radius.md, paddingVertical: space.md, ...shadow.card },
-  fact: { flex: 1, alignItems: 'center', gap: 2 },
-  factValue: { fontFamily: fonts.bodySemibold, fontSize: 18, color: colors.ink },
-  factSub: { fontFamily: fonts.body, fontSize: 12, color: colors.inkMuted },
-  factLabel: { ...type.caption, color: colors.inkMuted },
-  collectible: { alignItems: 'center', gap: 4, width: 86 },
-  collectibleLabel: { ...type.caption, color: colors.ink, textAlign: 'center' },
-  collectNote: { ...type.caption, color: colors.inkMuted, marginTop: -space.sm },
-  source: { ...type.caption, fontSize: 10, color: colors.inkMuted, textAlign: 'center' },
+  meta: { ...type.caption, fontSize: 13, color: colors.inkMuted, flexShrink: 1 },
+  description: { ...type.body, fontSize: 16, lineHeight: 24, color: colors.ink, marginTop: space.xs },
+  actions: { flexDirection: 'row', gap: space.md },
+  collectScroll: { marginHorizontal: -space.lg },
+  collectRow: { gap: space.md, paddingHorizontal: space.lg, paddingVertical: space.xs },
+  collectible: { alignItems: 'center', gap: 2, width: 92 },
+  collectibleLabel: { fontFamily: fonts.bodySemibold, fontSize: 12, color: colors.ink, textAlign: 'center', marginTop: 4 },
+  collectibleState: { ...type.caption, fontSize: 11, color: colors.inkMuted, textAlign: 'center' },
+  source: { ...type.caption, fontSize: 11, color: colors.inkMuted, textAlign: 'center' },
+  boardRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: 12, paddingHorizontal: space.lg },
+  boardPos: { width: 16, fontFamily: fonts.displayBold, fontSize: 15, color: colors.gold, textAlign: 'center' },
+  boardName: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
+  boardMeta: { ...type.caption, color: colors.inkMuted },
+  boardScore: { fontFamily: fonts.displayBold, fontSize: 22, color: colors.ink },
+  boardToPar: { ...type.caption, color: colors.inkMuted, width: 28, textAlign: 'right', fontVariant: ['tabular-nums'] },
 });

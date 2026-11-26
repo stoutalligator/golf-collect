@@ -101,6 +101,10 @@ export interface Player {
   homeState?: string;
   isMe?: boolean;
   memberSince?: ISODate;
+  /** Home course id (real course). */
+  homeCourseId?: string;
+  /** Short bio line shown on profiles. */
+  tagline?: string;
 }
 
 // ── Collection ─────────────────────────────────────────────────────────────
@@ -128,6 +132,8 @@ export type RoundStatus = 'active' | 'complete';
 
 export interface Round {
   id: string;
+  /** Whose round this is (the player whose scorecard it is). Omitted = the signed-in user ("me"). */
+  ownerId?: string;
   kind: RoundKind;
   /** Course id when kind === 'course'; SimCourse id when kind === 'sim'. */
   courseId: string;
@@ -142,4 +148,30 @@ export interface Round {
   competitionId?: string;
   createdAt: ISODateTime;
   completedAt?: ISODateTime;
+}
+
+/** Owner of a round ("me" when omitted). */
+export const roundOwner = (r: Round): string => r.ownerId ?? 'me';
+
+// ── Social ─────────────────────────────────────────────────────────────────
+
+export const REACTIONS = ['👏', '🔥', '⛳', '😂'] as const;
+export type ReactionEmoji = (typeof REACTIONS)[number];
+
+export interface Reaction {
+  playerId: string;
+  emoji: ReactionEmoji;
+}
+
+export interface Comment {
+  id: string;
+  playerId: string;
+  text: string;
+  at: ISODateTime;
+}
+
+/** Reactions and comments, keyed by round id (each completed round is one feed post). */
+export interface SocialState {
+  reactions: Record<string, Reaction[]>;
+  comments: Record<string, Comment[]>;
 }

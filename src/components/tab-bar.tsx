@@ -2,17 +2,17 @@ import { router } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated';
+import { Easing, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icons';
-import { Animated, SPRING, Tap } from '@/components/motion';
+import { Animated, Tap } from '@/components/motion';
 import { colors, fonts } from '@/theme';
 
 const TAB_ICONS: Record<string, IconName> = {
   index: 'home',
-  rounds: 'flag',
   courses: 'pin',
+  stats: 'chart',
   collection: 'layers',
 };
 
@@ -20,18 +20,22 @@ const TAB_ICONS: Record<string, IconName> = {
 function TabIcon({ name, focused }: { name: IconName; focused: boolean }) {
   const lift = useSharedValue(0);
   useEffect(() => {
-    if (focused) lift.value = withSequence(withSpring(1, { damping: 10, stiffness: 400 }), withSpring(0, SPRING));
+    if (focused)
+      lift.value = withSequence(
+        withTiming(1, { duration: 140, easing: Easing.out(Easing.cubic) }),
+        withTiming(0, { duration: 220, easing: Easing.inOut(Easing.cubic) }),
+      );
   }, [focused, lift]);
-  const style = useAnimatedStyle(() => ({ transform: [{ translateY: -3 * lift.value }, { scale: 1 + 0.12 * lift.value }] }));
-  const tint = focused ? colors.cream : 'rgba(242,230,207,0.6)';
+  const style = useAnimatedStyle(() => ({ transform: [{ translateY: -3 * lift.value }, { scale: 1 + 0.08 * lift.value }] }));
+  const tint = focused ? colors.fairway : colors.inkMuted;
   return (
     <Animated.View style={style}>
-      <Icon name={name} color={tint} size={23} strokeWidth={focused ? 1.9 : 1.6} />
+      <Icon name={name} color={tint} size={24} strokeWidth={focused ? 2.1 : 1.6} />
     </Animated.View>
   );
 }
 
-/** Fairway tab bar: Home · Rounds · (+) · Courses · Collection. The center + starts a round. */
+/** Fairway tab bar: Home · Courses · (+) · Stats · Collection. The center + starts a round. */
 export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const routes = state.routes.filter((r) => r.name in TAB_ICONS);
@@ -42,7 +46,7 @@ export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTab
     const focused = state.index === index;
     const { options } = descriptors[route.key];
     const label = options.title ?? route.name;
-    const tint = focused ? colors.cream : 'rgba(242,230,207,0.6)';
+    const tint = focused ? colors.fairway : colors.inkMuted;
     return (
       <Tap
         key={route.key}
@@ -58,7 +62,6 @@ export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTab
         style={styles.tab}>
         <TabIcon name={TAB_ICONS[route.name]} focused={focused} />
         <Text style={[styles.label, { color: tint, fontFamily: focused ? fonts.bodySemibold : fonts.bodyMedium }]}>{label}</Text>
-        <View style={[styles.dot, focused && styles.dotOn]} />
       </Tap>
     );
   };
@@ -74,7 +77,7 @@ export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTab
           scaleTo={0.86}
           onPress={() => router.push('/round/new')}
           style={styles.plus}>
-          <Icon name="plus" color={colors.fairway} size={26} strokeWidth={2.2} />
+          <Icon name="plus" color={colors.cream} size={28} strokeWidth={2.2} />
         </Tap>
       </View>
       {routes.slice(half).map(renderTab)}
@@ -85,30 +88,33 @@ export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTab
 const styles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
-    backgroundColor: colors.fairway,
+    backgroundColor: colors.creamLight,
     paddingTop: 10,
     paddingHorizontal: 6,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(201,163,90,0.35)',
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+    shadowColor: '#6B5530',
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: -4 },
+    elevation: 8,
   },
-  tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 },
-  label: { fontSize: 11, letterSpacing: 0.2 },
-  dot: { width: 4, height: 4, borderRadius: 2, marginTop: 1, backgroundColor: 'transparent' },
-  dotOn: { backgroundColor: colors.gold },
+  tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 4, minHeight: 48 },
+  label: { fontSize: 11, letterSpacing: 0.1 },
   plus: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.cream,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: colors.fairway,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -6,
-    borderWidth: 2,
+    marginTop: -14,
+    borderWidth: 3,
     borderColor: colors.gold,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
+    shadowColor: colors.fairwayDeep,
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
     elevation: 6,
   },
 });

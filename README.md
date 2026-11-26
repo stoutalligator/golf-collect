@@ -6,7 +6,7 @@ An iOS golf app for tracking your game, discovering courses, **collecting the pl
 
 It covers the same everyday ground as apps like 18Birdies and Golf GameBook (scorecards, stats, friends, leagues). What sets it apart is the **golf journey**: every course you play earns a unique digital keepsake, milestones become badges, and your profile shows both *how* you play and *where* you've played.
 
-**Status:** early concept / product design. No app code yet.
+**Status:** clickable iOS mock with local sample data (Expo). See the [build plan](docs/plan/mock-build-plan.md) for what's done and what's next.
 
 ---
 

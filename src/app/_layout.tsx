@@ -37,8 +37,8 @@ export default function RootLayout() {
   return (
     <AppDataProvider>
       <WebPhoneFrame>
-      <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.fairway } }}>
+      <StatusBar style="dark" />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.cream } }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="round/new" options={{ presentation: 'modal' }} />
         <Stack.Screen name="round/play/[id]" options={{ gestureEnabled: false }} />

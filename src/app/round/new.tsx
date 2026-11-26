@@ -3,11 +3,13 @@ import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CourseScene, SceneImage } from '@/art/components';
+import { Collectible, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
+import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, SearchField } from '@/components/ui';
 import type { Round, RoundKind } from '@/domain/types';
 import { todayISO } from '@/lib/format';
+import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { Tap } from '@/components/motion';
@@ -23,6 +25,8 @@ export default function NewRound() {
   const [teeId, setTeeId] = useState<string | undefined>();
   const [holes, setHoles] = useState<Holes>('18');
   const [query, setQuery] = useState('');
+  const [withIds, setWithIds] = useState<string[]>([]);
+  const toggleWith = (id: string) => setWithIds((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
 
   const options = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -50,7 +54,7 @@ export default function NewRound() {
       date: todayISO(),
       status: 'active',
       holeNumbers,
-      playerIds: [data.me.id],
+      playerIds: [data.me.id, ...withIds],
       scores: { [data.me.id]: holeNumbers.map(() => null) },
       createdAt: now,
     };
@@ -62,7 +66,7 @@ export default function NewRound() {
     <View style={[styles.root, { paddingTop: insets.top || space.lg }]}>
       <View style={styles.header}>
         <Text style={styles.title}>Log a Round</Text>
-        <IconButton name="x" label="Close" color={colors.fairway} onPress={() => router.back()} />
+        <IconButton name="x" label="Close" onPress={() => router.back()} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -75,7 +79,9 @@ export default function NewRound() {
 
         {layout ? (
           <Tap haptic="select" scaleTo={0.98} style={styles.selected} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
-            {course ? <CourseScene course={course} style={styles.selectedThumb} /> : <SceneImage seed={layout.id} style={styles.selectedThumb} />}
+            {course ? (
+              <Collectible courseId={course.id} region={course.region} kind="ball-marker" tier={data.collections.get(course.id)?.tier?.tier} label={shortCourseName(course.name)} size={52} />
+            ) : <SceneImage seed={layout.id} style={styles.selectedThumb} />}
             <View style={{ flex: 1 }}>
               <Text style={styles.selectedName}>{layout.name}</Text>
               <Text style={styles.sub}>Par {layout.holes.reduce((s, h) => s + h.par, 0)} · tap to change</Text>
@@ -118,6 +124,21 @@ export default function NewRound() {
           <>
             <Text style={styles.label}>Holes</Text>
             <Chips value={holes} onChange={setHoles} options={[{ value: '18', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]} />
+
+            <Text style={styles.label}>Playing with</Text>
+            <View style={styles.friends}>
+              {data.friends.map((f) => {
+                const on = withIds.includes(f.id);
+                return (
+                  <Tap key={f.id} haptic="select" scaleTo={0.94} onPress={() => toggleWith(f.id)} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={f.name} style={[styles.friend, on && styles.friendOn]}>
+                    <Avatar player={f} size={26} />
+                    <Text style={[styles.friendName, on && { color: colors.cream }]}>{f.name.split(' ')[0]}</Text>
+                    {on ? <Icon name="check" size={14} color={colors.cream} strokeWidth={2.4} /> : null}
+                  </Tap>
+                );
+              })}
+            </View>
+            <Text style={styles.note}>Tagged friends see the round in their feed. You keep score for yourself.</Text>
           </>
         ) : null}
       </ScrollView>
@@ -147,6 +168,10 @@ const styles = StyleSheet.create({
   teeActive: { backgroundColor: colors.fairway },
   teeName: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway },
   teeYards: { ...type.caption, color: colors.inkMuted },
+  friends: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+  friend: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 4, paddingRight: 12, height: 36, borderRadius: radius.pill, borderWidth: 1.5, borderColor: colors.rule, backgroundColor: colors.creamLight },
+  friendOn: { backgroundColor: colors.fairway, borderColor: colors.fairway },
+  friendName: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
   startButton: { backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
   startText: { fontFamily: fonts.bodySemibold, fontSize: 17, color: colors.cream },

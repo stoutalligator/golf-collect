@@ -50,6 +50,14 @@ Like the collectible frames (crafted keepsake object), but each badge holds a sm
 Hand-painted gouache rendering of crafted keepsake achievement badges with visible brushwork and subtle paper texture, warm soft studio light, heritage palette of deep forest green (#1F3D2F), warm cream (#F2E6CF), antique gold (#BB8B2B), slate blue (#486E8B) and sage (#748056). Premium, crafted, collectible feel, like cherished enamel-and-gold souvenirs. Each badge holds a small, simple painted scene inside its shield; outside the badges there is no landscape or sky, only the flat background.
 ```
 
+## Milestone badge (achievement badges, 2026-11-26 direction)
+
+Replaces the shield-and-ribbon template above. Each badge depicts its own milestone as a small physical golf keepsake; families share a material, not a silhouette. No words: the app shows the badge name beneath the art.
+
+```block MILESTONE_BADGE
+Hand-painted gouache illustration of a single small golf keepsake object that depicts a real golf milestone, visible controlled brushwork and subtle paper texture, warm soft studio light, restrained heritage palette of deep forest green (#173D32), warm cream (#EAE3D3), muted gold (#B49A65), slate blue (#526B78) and sage (#829977). Feels like a cherished physical souvenir from a golf bag or a scorebook, quiet and well made, not a game icon. No shield, no ribbon or banner, no laurels, no stars, no crossed clubs, no wings, no glow or sparkle effects. No words or letters anywhere; numerals only where the description asks for them.
+```
+
 ## Badge background (single badges)
 
 ```block BADGE_BG
