@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
 import { LocalRepository, type AppSnapshot, type Repository } from '@/data/repository';
@@ -9,7 +9,7 @@ import { evaluateAchievements, type AchievementState } from '@/domain/achievemen
 import { handicapIndex, scoreDifferential } from '@/domain/analytics';
 import { courseCollection, type CourseCollection, type ItemState } from '@/domain/collection';
 import { careerStats, summarizeRound, type CareerStats, type HoleLayout, type RoundSummary } from '@/domain/stats';
-import { roundOwner, type Comment, type Course, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
+import { roundOwner, type Comment, type Course, type CourseSummary, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
 
 /** Everything derived for one player (you or a friend) from their rounds. */
 export interface PlayerData {
@@ -71,7 +71,12 @@ export interface AppData extends AppSnapshot {
   roundById(id: string): Round | undefined;
   earnedInRound(round: Round): RoundEarnings;
   layoutFor(round: Round): HoleLayout | undefined;
+  /** Full scorecard when loaded (see `useCourse` / `loadCourses`). */
   courseById(id: string): Course | undefined;
+  /** Lightweight listing for any course in the database. */
+  courseSummary(id: string): CourseSummary | undefined;
+  /** Load full scorecards for these courses (no-op for ones already loaded). */
+  loadCourses(ids: string[]): Promise<void>;
   simCourseById(id: string): SimCourse | undefined;
   /** Display name for a round's course (real or sim). */
   roundCourseName(round: Round): string;
@@ -95,7 +100,7 @@ const Ctx = createContext<AppData | null>(null);
 
 const EMPTY: AppSnapshot = {
   me: { id: 'me', name: '', initials: '', isMe: true }, friends: [], others: [], requests: { incoming: [], outgoing: [] },
-  courses: [], simCourses: [], rounds: [], friendRounds: [], wishlist: [], social: { reactions: {}, comments: {} },
+  courseIndex: [], courses: [], simCourses: [], rounds: [], friendRounds: [], wishlist: [], social: { reactions: {}, comments: {} },
 };
 
 const byNewest = (a: Round, b: Round) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt);
@@ -136,6 +141,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const derived = useMemo(() => {
     const courseMap = new Map(snap.courses.map((c) => [c.id, c]));
+    const indexMap = new Map(snap.courseIndex.map((c) => [c.id, c]));
     const simMap = new Map(snap.simCourses.map((c) => [c.id, c]));
     const players = new Map([snap.me, ...snap.friends, ...snap.others].map((p) => [p.id, p]));
     const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) : courseMap.get(r.courseId));
@@ -219,8 +225,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       earnedInRound,
       layoutFor,
       courseById: (id: string) => courseMap.get(id),
+      courseSummary: (id: string) => indexMap.get(id),
       simCourseById: (id: string) => simMap.get(id),
-      roundCourseName: (r: Round) => (r.kind === 'sim' ? simMap.get(r.courseId)?.name : courseMap.get(r.courseId)?.name) ?? 'Unknown course',
+      roundCourseName: (r: Round) => (r.kind === 'sim' ? simMap.get(r.courseId)?.name : (courseMap.get(r.courseId) ?? indexMap.get(r.courseId))?.name) ?? 'Unknown course',
     };
   }, [snap]);
 
@@ -242,6 +249,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     resetToSample: repo?.resetToSample ? async () => { await repo.resetToSample!(); await reload(); } : undefined,
     clearRounds: async () => { await repo!.clearRounds(); await reload(); },
     refresh: () => reload(true),
+    loadCourses: async (ids) => { await repo!.loadCourses(ids); await reload(); },
     searchPlayers: (q) => repo!.searchPlayers(q),
     sendFriendRequest: async (id) => { await repo!.sendFriendRequest(id); await reload(); },
     respondToRequest: async (id, accept) => { await repo!.respondToRequest(id, accept); await reload(); },
@@ -255,4 +263,22 @@ export function useAppData(): AppData {
   const v = useContext(Ctx);
   if (!v) throw new Error('useAppData must be used inside AppDataProvider');
   return v;
+}
+
+/**
+ * Full scorecard for a course, loading it on demand the first time it's needed.
+ * `loading` is true while fetching; `missing` when the id isn't a known course.
+ */
+export function useCourse(id: string | undefined): { course: Course | undefined; loading: boolean; missing: boolean } {
+  const data = useAppData();
+  const course = id ? data.courseById(id) : undefined;
+  const known = !!id && (!!course || !!data.courseSummary(id));
+  const [failed, setFailed] = useState<string | null>(null);
+  const requested = useRef<string | null>(null);
+  useEffect(() => {
+    if (!id || course || !known || requested.current === id) return;
+    requested.current = id;
+    data.loadCourses([id]).catch(() => setFailed(id));
+  }, [id, course, known, data]);
+  return { course, loading: !!id && !course && known && failed !== id, missing: !!id && data.ready && !known };
 }

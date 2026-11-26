@@ -56,7 +56,7 @@ function AppStack() {
   }, [auth.ready]);
 
   if (!auth.ready) return null;
-  if (auth.signedIn && data.error && !data.rounds.length && !data.courses.length) {
+  if (auth.signedIn && data.error && !data.rounds.length && !data.courseIndex.length) {
     return <LoadError message={data.error} onRetry={data.refresh} />;
   }
 

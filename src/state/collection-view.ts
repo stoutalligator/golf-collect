@@ -37,11 +37,11 @@ export const shelfTitle = (kind: string) => SHELF_ORDER.find((s) => s.kind === k
 
 /** One shelf per collectible kind, built from a player's course collections. */
 export function useShelves(pd: PlayerData): Shelf[] {
-  const { courses } = useAppData();
+  const { courses, wishlist } = useAppData();
   return useMemo(() => {
     const entries: ShelfEntry[] = courses.flatMap((course) => {
       const col = pd.collections.get(course.id);
-      if (!col) return [];
+      if (!col || !(col.played || (pd.player.isMe && wishlist.includes(course.id)))) return [];
       return col.items.map((state) => ({ course, def: state.def, state, tier: col.tier?.tier, played: col.played }));
     });
     const progress = (e: ShelfEntry) => (e.state.progress ? e.state.progress.current / e.state.progress.target : 0);
@@ -56,5 +56,5 @@ export function useShelves(pd: PlayerData): Shelf[] {
         total: mine.length,
       };
     });
-  }, [courses, pd]);
+  }, [courses, wishlist, pd]);
 }

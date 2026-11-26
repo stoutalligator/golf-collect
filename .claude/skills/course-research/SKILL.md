@@ -26,7 +26,20 @@ Greens Keeper only ships **researched** course facts. Every number traces to a s
 | `src/data/seed/SOURCES.md` | Human-readable method + per-course table and extra sources. Update it by hand after every rebuild. |
 | `src/data/config/regions.json` | State → art region. A new state must already be in a region. |
 
-The pipeline is Connecticut-only today. For another state, generalize the builder (state code and config file as arguments, e.g. `scripts/courses/<st>-courses.json` → `src/data/seed/courses.<st>.json`) and load the extra seed in `src/data/repository.ts`. Keep course ids globally unique.
+### Two tiers of course data
+
+| Tier | What | Where | Verification |
+|---|---|---|---|
+| **Curated** | Hand-researched courses (this procedure, steps 1–11) | `scripts/courses/<st>-courses.json` → `build-ct-seed.mjs` → `src/data/seed/courses.<st>.json` (also the offline demo) | `cross-checked` or `official` |
+| **Bulk** | Every course in a state that passes the automated checks | `node scripts/courses/build-seed.mjs --region new-england` (or `--state MA`) → `data/courses/<st>.json` + `<st>.excluded.json` | `single-source` |
+
+**Bulk import rules** (`scripts/courses/lib.mjs`): a course is included only if the API detail has 18 holes with par 3–6 each, a stroke index that is exactly 1–18, a total par of 54–76, a town, a known access type, and at least one tee with yardage. Anything else goes to `<st>.excluded.json` with the reason — never patched into shape. Hole yardages are dropped when they're >1.5% off the tee total. Access comes from the OpenGolfAPI listing and is noted as unconfirmed. Curated courses for the state are carried into the bulk file unchanged. The fetcher caches every response and paces requests (one at a time, backs off on HTTP 429); be polite and don't raise the concurrency.
+
+**Getting it into the app (no app build):** `npm run db:import-courses` upserts every `data/courses/<st>.json` into Supabase. The app downloads a lightweight course index at launch and loads full scorecards on demand, so new courses show up on the next launch.
+
+**Promoting a bulk course to curated:** add it to `<st>-courses.json` with its `ogapi` name and cross-check/override (steps 5–7), rebuild the curated seed, then rebuild the state and re-import. Course ids must stay stable once rounds reference them.
+
+**Not imported yet:** 9-hole courses and courses with broken hole data (see the `.excluded.json` files). Supporting 9-hole layouts needs app changes (hole counts, nines, handicap differentials) before they can come in.
 
 ## Procedure (per course)
 
@@ -86,6 +99,6 @@ The pipeline is Connecticut-only today. For another state, generalize the builde
 
 Finish with a short table per course: id, status, what was cross-checked against what, any dropped or overridden data, and open questions (e.g. "Red tee hole yardages unavailable", "access type unconfirmed"). Flag courses that need a human to look at a scorecard image or call the pro shop.
 
-## When the database exists
+## The database
 
-Course facts will move to Supabase (`courses`, `course_tees`, `course_holes`, `course_sources`; see `docs/plan/database.md`). The research output stays the same, and the seed JSON becomes the import file for those tables, so keep doing this procedure through the config and build script, not by editing rows directly.
+Course facts live in Supabase (`courses`, `course_tees`, `course_holes`, `course_sources`; see `docs/plan/database.md`). Research output stays in the repo (`data/courses/`, `src/data/seed/`) and is pushed with `npm run db:import-courses`. Never edit course rows directly in the database: change the config or rebuild, then re-import, so the repo stays the source of truth.

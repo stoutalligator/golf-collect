@@ -4,13 +4,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Collectible } from '@/art/components';
 import { Icon } from '@/components/icons';
-import { Card, Empty, IconButton, ProgressBar } from '@/components/ui';
+import { Card, Empty, IconButton, Loading, ProgressBar } from '@/components/ui';
 import { collectiblesForCourse, TIERS } from '@/data/config/game';
 import { tierRank } from '@/domain/collection';
 import type { CollectibleItem } from '@/domain/types';
 import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
-import { useAppData } from '@/state/app-data';
+import { useAppData, useCourse } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { Animated, popIn } from '@/components/motion';
 
@@ -22,10 +22,11 @@ export default function CollectibleDetail() {
   const { courseId, item } = useLocalSearchParams<{ courseId: string; item: string }>();
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const course = data.courseById(courseId);
+  const { course, loading } = useCourse(courseId);
   const col = course ? data.collections.get(course.id) : undefined;
   const state = col?.items.find((i) => i.def.id === item);
   const def = state?.def ?? (course ? collectiblesForCourse(course.id).find((d) => d.id === item) : undefined);
+  if (loading) return <Loading />;
   if (!course || !def) return <Empty title="Collectible not found" body="" />;
 
   const tier = col?.tier;

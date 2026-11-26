@@ -83,6 +83,28 @@ export interface Course {
   tags?: string[];
 }
 
+/**
+ * Lightweight course listing (no holes or tees). The app downloads the index of every course and loads full
+ * `Course` scorecards on demand, so new courses in the database appear without an app update.
+ */
+export interface CourseSummary {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  county?: string;
+  region: string;
+  access: CourseAccess;
+  location: { lat: number; lng: number };
+  par: number;
+  holeCount: number;
+}
+
+export const summarizeCourse = (c: Course): CourseSummary => ({
+  id: c.id, name: c.name, city: c.city, state: c.state, county: c.county, region: c.region, access: c.access,
+  location: c.location, par: c.holes.reduce((s, h) => s + h.par, 0), holeCount: c.holes.length,
+});
+
 // ── Simulator ──────────────────────────────────────────────────────────────
 
 export interface SimCourse {

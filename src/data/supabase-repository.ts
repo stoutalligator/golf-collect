@@ -8,7 +8,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type {
-  Comment, Course, CourseAccess, FairwayResult, HoleScore, Player, Reaction, ReactionEmoji, Round, SimCourse, SocialState, Tee,
+  Comment, Course, CourseAccess, CourseSummary, FairwayResult, HoleScore, Player, Reaction, ReactionEmoji, Round, SimCourse, SocialState, Tee,
 } from '@/domain/types';
 
 import type { AppSnapshot, Repository } from './repository';
@@ -136,12 +136,25 @@ function toCourse(c: CourseRow): Course {
   };
 }
 
+type IndexRow = {
+  id: string; name: string; city: string; state: string; county: string | null; region: string; access: CourseAccess;
+  lat: number; lng: number; par: number | null; hole_count: number | null;
+};
+
+const toSummary = (c: IndexRow): CourseSummary => ({
+  id: c.id, name: c.name, city: c.city, state: c.state, county: c.county ?? undefined, region: c.region, access: c.access,
+  location: { lat: c.lat, lng: c.lng }, par: c.par ?? 0, holeCount: c.hole_count ?? 18,
+});
+
 /** Strip characters that would break a PostgREST `or=` filter. */
 const safeQuery = (q: string) => q.replace(/[^\p{L}\p{N} _.'-]/gu, '').trim().slice(0, 40);
 
 export class SupabaseRepository implements Repository {
   private snap: AppSnapshot | null = null;
-  private static coursesCache: { courses: Course[]; simCourses: SimCourse[] } | null = null;
+  /** Course index + sim courses: shared reference data, fetched once per app session. */
+  private static reference: { index: CourseSummary[]; simCourses: SimCourse[] } | null = null;
+  /** Full scorecards fetched so far (shared across users in this session). */
+  private static fullCourses = new Map<string, Course>();
   /** round id → the owner's round_players id (needed to write hole scores). */
   private ownerSlot = new Map<string, string>();
 
@@ -159,18 +172,50 @@ export class SupabaseRepository implements Repository {
     return data;
   }
 
+  /** Lightweight index of every course (paged; PostgREST returns at most 1000 rows per request). */
   private async referenceData() {
-    if (SupabaseRepository.coursesCache) return SupabaseRepository.coursesCache;
-    const [courses, sims] = await Promise.all([
-      this.must(this.db.from('courses').select('*, course_holes(number, par, handicap), course_tees(*), course_sources(name, url, license, checked_on)'), 'courses'),
-      this.must(this.db.from('sim_courses').select('id, name, platform, holes'), 'sim courses'),
-    ]);
-    SupabaseRepository.coursesCache = {
-      courses: (courses as CourseRow[]).map(toCourse).sort((a, b) => a.name.localeCompare(b.name)),
+    if (SupabaseRepository.reference) return SupabaseRepository.reference;
+    const index: CourseSummary[] = [];
+    for (let from = 0; ; from += 1000) {
+      const page = (await this.must(
+        this.db.from('courses').select('id, name, city, state, county, region, access, lat, lng, par, hole_count').order('id').range(from, from + 999),
+        'course index',
+      )) as IndexRow[];
+      index.push(...page.map(toSummary));
+      if (page.length < 1000) break;
+    }
+    const sims = await this.must(this.db.from('sim_courses').select('id, name, platform, holes'), 'sim courses');
+    SupabaseRepository.reference = {
+      index: index.sort((a, b) => a.name.localeCompare(b.name)),
       simCourses: (sims as { id: string; name: string; platform: string | null; holes: SimCourse['holes'] }[])
         .map((s) => ({ id: s.id, name: s.name, platform: s.platform ?? undefined, holes: s.holes })),
     };
-    return SupabaseRepository.coursesCache;
+    return SupabaseRepository.reference;
+  }
+
+  /** Fetch full scorecards (holes, tees, sources) for any of these ids not cached yet. */
+  private async fetchCourses(ids: string[]) {
+    const cache = SupabaseRepository.fullCourses;
+    const missing = [...new Set(ids)].filter((id) => id && !cache.has(id));
+    for (let i = 0; i < missing.length; i += 100) {
+      const rows = (await this.must(
+        this.db.from('courses')
+          .select('*, course_holes(number, par, handicap), course_tees(*), course_sources(name, url, license, checked_on)')
+          .in('id', missing.slice(i, i + 100)),
+        'courses',
+      )) as CourseRow[];
+      for (const r of rows) cache.set(r.id, toCourse(r));
+    }
+  }
+
+  private loadedCourses(): Course[] {
+    return [...SupabaseRepository.fullCourses.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  async loadCourses(ids: string[]) {
+    const before = SupabaseRepository.fullCourses.size;
+    await this.fetchCourses(ids);
+    if (this.snap && SupabaseRepository.fullCourses.size !== before) this.patch({ courses: this.loadedCourses() });
   }
 
   async load(force = false): Promise<AppSnapshot> {
@@ -217,17 +262,22 @@ export class SupabaseRepository implements Repository {
       (social.comments[c.round_id] ??= []).push({ id: c.id, playerId: c.user_id, text: c.body, at: c.created_at });
     }
 
+    const wishlist = (wish as { course_id: string }[]).map((w) => w.course_id);
+    // Full scorecards only for courses that stats, feed and collections need right away.
+    await this.fetchCourses([...rounds.filter((r) => r.kind === 'course').map((r) => r.courseId), ...wishlist]);
+
     const pick = (list: string[]) => list.map((id) => byId.get(id)).filter((p): p is Player => !!p);
     this.snap = {
       me: mine,
       friends: pick(friendIds),
       others: pick(taggedIds.filter((id) => id !== me && !friendIds.includes(id))),
       requests: { incoming: pick(incomingIds), outgoing: pick(outgoingIds) },
-      courses: ref.courses,
+      courseIndex: ref.index,
+      courses: this.loadedCourses(),
       simCourses: ref.simCourses,
       rounds: rounds.filter((r) => r.ownerId === me),
       friendRounds: rounds.filter((r) => r.ownerId !== me),
-      wishlist: (wish as { course_id: string }[]).map((w) => w.course_id),
+      wishlist,
       social,
     };
     return this.snap;

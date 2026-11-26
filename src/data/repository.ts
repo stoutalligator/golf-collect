@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import type { Comment, Course, Player, ReactionEmoji, Round, SimCourse, SocialState } from '@/domain/types';
+import { summarizeCourse, type Comment, type Course, type CourseSummary, type Player, type ReactionEmoji, type Round, type SimCourse, type SocialState } from '@/domain/types';
 
 import { FRIENDS, generateFriendRounds, generateSampleRounds, ME } from './sample/generate';
 import { generateSocial } from './sample/social';
@@ -14,6 +14,9 @@ export interface AppSnapshot {
   /** People who appear on rounds you can see but aren't your friends (e.g. tagged by a friend). */
   others: Player[];
   requests: { incoming: Player[]; outgoing: Player[] };
+  /** Every course, lightweight (browse + search). */
+  courseIndex: CourseSummary[];
+  /** Full scorecards loaded so far: courses in visible rounds, your wishlist, and any opened on demand. */
   courses: Course[];
   simCourses: SimCourse[];
   /** The signed-in user's rounds. */
@@ -27,6 +30,8 @@ export interface AppSnapshot {
 export interface Repository {
   /** Cached after the first call; `force` refetches. */
   load(force?: boolean): Promise<AppSnapshot>;
+  /** Make sure full scorecards for these course ids are in the snapshot (no-op when already loaded). */
+  loadCourses(ids: string[]): Promise<void>;
   saveRound(round: Round): Promise<void>;
   deleteRound(id: string): Promise<void>;
   setWishlist(courseIds: string[]): Promise<void>;
@@ -99,8 +104,12 @@ export class LocalRepository implements Repository {
     const s = await this.read();
     return {
       me: ME, friends: FRIENDS, others: [], requests: { incoming: [], outgoing: [] },
-      courses, simCourses: SIM_COURSES, rounds: s.rounds, friendRounds: s.friendRounds, wishlist: s.wishlist, social: s.social,
+      courseIndex: courses.map(summarizeCourse), courses, simCourses: SIM_COURSES, rounds: s.rounds, friendRounds: s.friendRounds, wishlist: s.wishlist, social: s.social,
     };
+  }
+
+  async loadCourses() {
+    // Offline demo: every bundled course is already loaded.
   }
 
   async saveRound(round: Round) {

@@ -9,13 +9,13 @@ import { Icon } from '@/components/icons';
 import { Animated, enterItem, popIn, Tap } from '@/components/motion';
 import { RoundRow } from '@/components/round-card';
 import { Avatar } from '@/components/social';
-import { Button, Empty, Group, IconButton, SectionHeader, StatStrip } from '@/components/ui';
+import { Button, Empty, Group, IconButton, Loading, SectionHeader, StatStrip } from '@/components/ui';
 import { TIERS } from '@/data/config/game';
 import { formatToPar } from '@/domain/stats';
 import { roundOwner } from '@/domain/types';
 import { ACCESS_LABEL } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
-import { useAppData } from '@/state/app-data';
+import { useAppData, useCourse } from '@/state/app-data';
 import { colors, fonts, shadow, space, type } from '@/theme';
 
 /** Painting fades into the cream page so the title sits on a clean surface. */
@@ -39,8 +39,9 @@ export default function CourseDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const course = data.courseById(id);
-  if (!course) return <Empty title="Course not found" body="It may have been removed from the sample data." />;
+  const { course, loading } = useCourse(id);
+  if (loading) return <Loading label="Loading course…" />;
+  if (!course) return <Empty title="Course not found" body="It may have been removed." />;
 
   const col = data.collections.get(course.id);
   const saved = data.wishlist.includes(course.id);

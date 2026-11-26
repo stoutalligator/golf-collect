@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Children, Fragment, isValidElement, useEffect, useState, type ReactNode } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -290,6 +290,16 @@ export function LockMark({ size = 20 }: { size?: number }) {
   );
 }
 
+/** Centered spinner with an optional line of text (used while a course scorecard loads). */
+export function Loading({ label }: { label?: string }) {
+  return (
+    <View style={styles.loading} accessibilityLiveRegion="polite">
+      <ActivityIndicator color={colors.fairway} />
+      {label ? <Text style={[type.caption, { color: colors.inkMuted }]}>{label}</Text> : null}
+    </View>
+  );
+}
+
 export function Empty({ title, body }: { title: string; body: string }) {
   return (
     <View style={styles.empty}>
@@ -349,4 +359,5 @@ const styles = StyleSheet.create({
   checkOn: { backgroundColor: colors.fairway, borderColor: colors.fairway },
   lock: { backgroundColor: colors.inkMuted, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.creamLight },
   empty: { padding: space.xl, gap: space.sm, alignItems: 'center' },
+  loading: { flex: 1, minHeight: 200, alignItems: 'center', justifyContent: 'center', gap: space.sm, backgroundColor: colors.cream },
 });

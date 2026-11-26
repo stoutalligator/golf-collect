@@ -1,11 +1,13 @@
-// Imports researched course data (src/data/seed/courses.*.json) and the sim courses into Supabase.
-// Idempotent: upserts by primary key, so re-run it after every `build-ct-seed` rebuild.
+// Imports researched course data and the sim courses into Supabase. Idempotent (upserts by primary key):
+// re-run after rebuilding course data. New courses appear in the app on next launch; no app build needed.
 //
-//   npm run db:import-courses
+//   npm run db:import-courses                 # every state file in data/courses/
+//   npm run db:import-courses -- --state RI   # just these states
 //
-// Needs EXPO_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env. The service-role key bypasses
-// row-level security, so this runs only on your machine and never ships in the app.
-import { readdirSync, readFileSync } from 'node:fs';
+// Reads data/courses/<st>.json (built by scripts/courses/build-seed.mjs). If that folder is empty it falls back
+// to the curated seeds in src/data/seed/. Needs EXPO_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env;
+// the service-role key bypasses row-level security, so this runs only on your machine and never ships in the app.
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { createClient } from '@supabase/supabase-js';
@@ -28,43 +30,57 @@ type SeedCourse = {
   verification: { status: string; sources: { name: string; url: string; checked: string; license?: string }[]; notes: string[] };
 };
 
-const seedDir = join(import.meta.dirname, '..', '..', 'src', 'data', 'seed');
-const files = readdirSync(seedDir).filter((f) => /^courses\..+\.json$/.test(f));
-const courses: SeedCourse[] = files.flatMap((f) => JSON.parse(readFileSync(join(seedDir, f), 'utf8')).courses);
+const root = join(import.meta.dirname, '..', '..');
+const args = process.argv.slice(2);
+const only = new Set(args.flatMap((a, i) => (a === '--state' ? [args[i + 1].toLowerCase()] : [])));
+const dataDir = join(root, 'data', 'courses');
+const stateFiles = existsSync(dataDir)
+  ? readdirSync(dataDir).filter((f) => /^[a-z]{2}\.json$/.test(f) && (!only.size || only.has(f.slice(0, 2)))).map((f) => join(dataDir, f))
+  : [];
+const seedDir = join(root, 'src', 'data', 'seed');
+const files = stateFiles.length ? stateFiles : readdirSync(seedDir).filter((f) => /^courses\..+\.json$/.test(f)).map((f) => join(seedDir, f));
+const courses: SeedCourse[] = files.flatMap((f) => JSON.parse(readFileSync(f, 'utf8')).courses);
 
-async function run<T>(label: string, p: PromiseLike<{ error: { message: string } | null; data?: T }>) {
+async function run(label: string, p: PromiseLike<{ error: { message: string } | null }>) {
   const { error } = await p;
   if (error) throw new Error(`${label}: ${error.message}`);
+}
+async function inChunks<T>(label: string, rows: T[], size: number, write: (chunk: T[]) => PromiseLike<{ error: { message: string } | null }>) {
+  for (let i = 0; i < rows.length; i += size) await run(`${label} ${i}`, write(rows.slice(i, i + size)));
 }
 
 const checkedOn = (c: SeedCourse) => c.verification.sources.map((s) => s.checked).sort().at(-1)!;
 
-await run('courses', db.from('courses').upsert(courses.map((c) => ({
+await inChunks('courses', courses.map((c) => ({
   id: c.id, name: c.name, city: c.city, state: c.state, county: c.county ?? null, region: c.region,
   biome: c.biome ?? null, biome_source: c.biomeSource ?? null, access: c.access,
   lat: c.location.lat, lng: c.location.lng, website: c.website ?? null, architect: c.architect ?? null,
   year_opened: c.yearOpened ?? null, description: c.description,
   verification_status: c.verification.status, verification_notes: c.verification.notes,
   checked_on: checkedOn(c), tags: c.tags ?? [],
-}))));
+  par: c.holes.reduce((s, h) => s + h.par, 0), hole_count: c.holes.length,
+})), 500, (chunk) => db.from('courses').upsert(chunk));
 
-await run('course_holes', db.from('course_holes').upsert(courses.flatMap((c) =>
-  c.holes.map((h) => ({ course_id: c.id, number: h.number, par: h.par, handicap: h.handicap })))));
+await inChunks('course_holes', courses.flatMap((c) =>
+  c.holes.map((h) => ({ course_id: c.id, number: h.number, par: h.par, handicap: h.handicap }))), 1000, (chunk) => db.from('course_holes').upsert(chunk));
 
-await run('course_tees', db.from('course_tees').upsert(courses.flatMap((c) => c.tees.map((t, i) => ({
+await inChunks('course_tees', courses.flatMap((c) => c.tees.map((t, i) => ({
   course_id: c.id, id: t.id, name: t.name, par: t.par, total_yards: t.totalYards, hole_yardages: t.yardages,
   rating_men: t.ratings.men?.rating ?? null, slope_men: t.ratings.men?.slope ?? null,
   rating_women: t.ratings.women?.rating ?? null, slope_women: t.ratings.women?.slope ?? null, sort_order: i,
-})))));
+}))), 1000, (chunk) => db.from('course_tees').upsert(chunk));
 
 // Sources have no natural key: replace each imported course's set.
 const ids = courses.map((c) => c.id);
-await run('course_sources (clear)', db.from('course_sources').delete().in('course_id', ids));
-await run('course_sources', db.from('course_sources').insert(courses.flatMap((c) =>
-  c.verification.sources.map((s) => ({ course_id: c.id, name: s.name, url: s.url, license: s.license ?? null, checked_on: s.checked })))));
+await inChunks('course_sources (clear)', ids, 200, (chunk) => db.from('course_sources').delete().in('course_id', chunk));
+await inChunks('course_sources', courses.flatMap((c) =>
+  c.verification.sources.map((s) => ({ course_id: c.id, name: s.name, url: s.url, license: s.license ?? null, checked_on: s.checked }))), 1000,
+(chunk) => db.from('course_sources').insert(chunk));
 
 await run('sim_courses', db.from('sim_courses').upsert(SIM_COURSES.map((s) => ({ id: s.id, name: s.name, platform: s.platform ?? null, holes: s.holes }))));
 
 const holes = courses.reduce((n, c) => n + c.holes.length, 0);
 const tees = courses.reduce((n, c) => n + c.tees.length, 0);
-console.log(`Imported ${courses.length} courses (${holes} holes, ${tees} tees) from ${files.join(', ')} and ${SIM_COURSES.length} sim courses.`);
+const byState = Object.entries(courses.reduce<Record<string, number>>((m, c) => ({ ...m, [c.state]: (m[c.state] ?? 0) + 1 }), {}))
+  .map(([s, n]) => `${s} ${n}`).join(' · ');
+console.log(`Imported ${courses.length} courses (${holes} holes, ${tees} tees): ${byState}; plus ${SIM_COURSES.length} sim courses.`);

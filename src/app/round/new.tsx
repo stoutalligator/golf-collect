@@ -6,12 +6,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Collectible, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
 import { Avatar } from '@/components/social';
-import { Button, Chips, IconButton, SearchField } from '@/components/ui';
+import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
 import type { Round, RoundKind } from '@/domain/types';
 import { todayISO } from '@/lib/format';
 import { uuid } from '@/lib/ids';
 import { shortCourseName } from '@/lib/names';
-import { useAppData } from '@/state/app-data';
+import { useAppData, useCourse } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { Tap } from '@/components/motion';
 
@@ -32,12 +32,13 @@ export default function NewRound() {
   const options = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = kind === 'course'
-      ? data.courses.map((c) => ({ id: c.id, name: c.name, sub: `${c.city}, ${c.state}` }))
+      ? data.courseIndex.map((c) => ({ id: c.id, name: c.name, sub: `${c.city}, ${c.state}` }))
       : data.simCourses.map((c) => ({ id: c.id, name: c.name, sub: c.platform ?? 'Simulator' }));
     return list.filter((o) => !q || o.name.toLowerCase().includes(q) || o.sub.toLowerCase().includes(q));
-  }, [kind, data.courses, data.simCourses, query]);
+  }, [kind, data.courseIndex, data.simCourses, query]);
 
-  const course = kind === 'course' && courseId ? data.courseById(courseId) : undefined;
+  const { course: loaded, loading: courseLoading } = useCourse(kind === 'course' ? courseId : undefined);
+  const course = kind === 'course' ? loaded : undefined;
   const sim = kind === 'sim' && courseId ? data.simCourseById(courseId) : undefined;
   const layout = course ?? sim;
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
@@ -89,10 +90,13 @@ export default function NewRound() {
             </View>
             <Icon name="check" size={20} color={colors.fairway} />
           </Tap>
+        ) : courseLoading ? (
+          <Loading label="Loading scorecard…" />
         ) : (
           <>
-            <SearchField value={query} onChange={setQuery} placeholder={kind === 'course' ? 'Search courses...' : 'Search sim courses...'} />
-            {options.map((o) => (
+            <SearchField value={query} onChange={setQuery} placeholder={kind === 'course' ? 'Search courses or towns...' : 'Search sim courses...'} />
+            {options.length > 50 ? <Text style={styles.note}>Showing 50 of {options.length.toLocaleString('en-US')}. Type to narrow it down.</Text> : null}
+            {options.slice(0, 50).map((o) => (
               <Tap key={o.id} haptic="select" scaleTo={0.985} dim onPress={() => setCourseId(o.id)} style={styles.option} accessibilityRole="button">
                 <View style={{ flex: 1 }}>
                   <Text style={styles.optionName}>{o.name}</Text>
