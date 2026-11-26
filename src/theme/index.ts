@@ -14,26 +14,26 @@ export type Scheme = 'light' | 'dark';
 const light = {
   // Brand palette (2026-11-26 refresh: calmer, warmer; see docs/brand/brand-guidelines.md)
   fairway: '#173D32', // forest — brand anchor, primary actions, active tab, titles
-  cream: '#F6EFE3', // page background (and text on fairway fills)
+  cream: '#FFFFFF', // page background (and text on fairway fills); white since 2026-11-26
   gold: '#B39556', // muted gold — small accents, earned tiers, the + ring
   slate: '#526B78',
   sage: '#829977',
 
   // Supporting neutrals
-  paper: '#F1E8D8', // scorecard paper, inset fills (score boxes, segmented track, icon buttons)
+  paper: '#F4EFE6', // scorecard paper, inset fills (score boxes, segmented track, icon buttons)
   ink: '#343A34', // charcoal — primary text
   inkMuted: '#6A6E64',
-  rule: '#D6CCB9', // warm line — table rules, dividers
+  rule: '#E2DACB', // warm line — table rules, dividers
   pennant: '#D9622B', // artwork only — never UI
 
   // Derived UI tones
   fairwayDeep: '#0F2A22', // always-dark surfaces (reveal, tooltips, scrims over art)
-  creamLight: '#FCF8F1', // raised surface (grouped lists, stat strips, cards)
+  creamLight: '#FFFFFF', // raised surface (grouped lists, stat strips, cards): white, set apart by its shadow
   goldSoft: '#E9DCBE',
   white: '#FFFFFF',
   success: '#4F7A3A',
   danger: '#9B2C1F',
-  hairline: '#E8DFCF',
+  hairline: '#EEE8DD',
   /** Text and icons on always-dark surfaces (fairwayDeep, scrims over art). The same in both schemes. */
   onDark: '#F6EFE3',
   onDarkMuted: 'rgba(246,239,227,0.72)',
@@ -43,7 +43,9 @@ const light = {
   /** Round buttons floating on paintings. */
   artButton: 'rgba(252,248,241,0.92)',
   /** The selected segment in a segmented control (lighter than its track in both schemes). */
-  segment: '#FCF8F1',
+  segment: '#FFFFFF',
+  /** The bottom tab bar: white in light (set apart by its shadow), a raised surface in dark. */
+  tabBar: '#FFFFFF',
 };
 
 /**
@@ -74,6 +76,7 @@ const dark: typeof light = {
   onFillRule: 'rgba(18,25,21,0.2)',
   artButton: 'rgba(18,25,21,0.82)',
   segment: '#3A4740',
+  tabBar: '#1B241F',
 };
 
 /**
@@ -111,7 +114,7 @@ const shadowFor = (s: Scheme) => ({
   /** Raised surfaces: soft, wide and warm (no hard edge). */
   card: {
     shadowColor: s === 'dark' ? '#000000' : '#6B5530',
-    shadowOpacity: s === 'dark' ? 0.32 : 0.09,
+    shadowOpacity: s === 'dark' ? 0.32 : 0.11,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,

@@ -88,13 +88,13 @@ export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTab
 const styles = themed(() => StyleSheet.create({
   bar: {
     flexDirection: 'row',
-    backgroundColor: colors.creamLight,
+    backgroundColor: colors.tabBar,
     paddingTop: 10,
     paddingHorizontal: 6,
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
     shadowColor: '#6B5530',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: -4 },
     elevation: 8,

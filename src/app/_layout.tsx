@@ -5,7 +5,7 @@ import {
   PlayfairDisplay_700Bold,
 } from '@expo-google-fonts/playfair-display';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { Fragment, useEffect } from 'react';
@@ -49,13 +49,23 @@ export default function RootLayout() {
 /** Everything that draws: re-renders with the scheme (status bar, frame, and the stack's own options). */
 function Themed() {
   const { scheme } = useAppearance();
+  // The navigator's own colors (behind screens, under the tab bar's rounded corners, during transitions) follow
+  // our palette, not the phone's setting, so a Light choice on a phone in Dark Mode never shows black edges.
+  const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const navTheme = {
+    ...base,
+    dark: scheme === 'dark',
+    colors: { ...base.colors, primary: colors.fairway, background: colors.cream, card: colors.tabBar, text: colors.ink, border: colors.rule },
+  };
   return (
-    <WebPhoneFrame>
-      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-      <AppStack />
-      <PushManager />
-      <LaunchOverlay />
-    </WebPhoneFrame>
+    <ThemeProvider value={navTheme}>
+      <WebPhoneFrame>
+        <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+        <AppStack />
+        <PushManager />
+        <LaunchOverlay />
+      </WebPhoneFrame>
+    </ThemeProvider>
   );
 }
 

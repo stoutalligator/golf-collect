@@ -35,23 +35,23 @@ Short, sincere sentences. No hype or exclamation marks.
 | Token | Hex | Primary use |
 | --- | --- | --- |
 | `fairway` (forest) | `#173D32` | Titles, wordmark, primary buttons, active tab, the + button |
-| `cream` | `#F6EFE3` | Page background on every screen, headers and tab bar |
-| `creamLight` | `#FCF8F1` | Raised surfaces: grouped lists, stat strips, feed cards, tab bar |
-| `paper` | `#F1E8D8` | Scorecard paper, inset fills (score boxes, segmented-control track, icon buttons) |
+| `cream` (page) | `#FFFFFF` | Page background on every screen, headers and tab bar (white since 2026-11-26; was `#F6EFE3`) |
+| `creamLight` (raised) | `#FFFFFF` | Raised surfaces: grouped lists, stat strips, feed cards, tab bar. White like the page, set apart by the soft warm shadow |
+| `paper` | `#F4EFE6` | Scorecard paper, inset fills (score boxes, segmented-control track, icon buttons) |
 | `gold` (muted) | `#B39556` | Thin accents only: stat-strip icons, the + ring, progress, tier details |
 | `slate` | `#526B78` | Secondary accent, sim track |
 | `sage` | `#829977` | Supporting accent |
 | `ink` (charcoal) | `#343A34` | Primary text |
 | `ink-muted` | `#6A6E64` | Secondary text, captions |
-| `rule` (warm line) | `#D6CCB9` | Hairlines, dividers, scorecard rules |
+| `rule` (warm line) | `#E2DACB` | Hairlines, dividers, scorecard rules |
 | `pennant` | `#D9622B` | The flag pennant in illustrations only. Never use it in UI. |
 
 The brief's suggested `cream` (`#EAE3D3`) read grey on screen next to the mockup, so the page uses the lighter `#F6EFE3` sampled from it; the brief's values are kept for the art prompts.
 
 ### Usage rules
 
-- Pages, headers and the tab bar are cream; forest is the anchor for titles and primary actions, not a full-screen fill; gold is a thin accent (icons, rims, the + ring, progress).
-- Three surface levels only: page (cream), raised (creamLight + soft shadow, no border), inset (paper). Don't nest raised surfaces.
+- Pages, headers and the tab bar are white (light mode); the warmth lives in the paper insets, gold accents and the paintings; forest is the anchor for titles and primary actions, not a full-screen fill; gold is a thin accent (icons, rims, the + ring, progress).
+- Three surface levels only: page (white), raised (white + soft warm shadow, no border), inset (paper). Don't nest raised surfaces.
 - Gold is never used for body text on cream.
 - The orange-red pennant is the only bright color and appears **only in artwork**.
 
