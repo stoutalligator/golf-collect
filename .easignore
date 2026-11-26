@@ -14,7 +14,7 @@ expo-env.d.ts
 
 # Not part of the app
 docs/
-data/
+/data/
 assets/_prompts/
 assets/_specs/
 scripts/courses/.cache/
