@@ -1,0 +1,27 @@
+# EAS build upload: everything in .gitignore, plus files the app never bundles.
+node_modules/
+.expo/
+dist/
+web-build/
+/ios
+/android
+*.log
+.env
+.env*.local
+expo-env.d.ts
+.vscode/
+.idea/
+
+# Not part of the app
+docs/
+assets/_prompts/
+assets/_specs/
+scripts/courses/.cache/
+
+# Never upload signing material
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
