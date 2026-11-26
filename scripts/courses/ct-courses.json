@@ -119,6 +119,50 @@
       "name": "Crestbrook Park Golf Course",
       "county": "Litchfield",
       "ogapi": "Crestbrook Park Golf Course"
+    },
+    {
+      "id": "norwich-golf-club",
+      "name": "Norwich Golf Club",
+      "county": "New London",
+      "ogapi": "Norwich Golf Club",
+      "override": "norwich-golf-club",
+      "access": "municipal",
+      "accessSource": {
+        "name": "City of Norwich: Golf Course Authority",
+        "url": "https://norwichct.gov/141/Golf-Course-Authority",
+        "note": "Owned by the City of Norwich and run by the city's Norwich Golf Course Authority"
+      }
+    },
+    {
+      "id": "cedar-knob-golf-course",
+      "name": "Cedar Knob Golf Course",
+      "county": "Tolland",
+      "ogapi": "Cedar Knob Golf Course",
+      "override": "cedar-knob-golf-course",
+      "access": "public",
+      "accessSource": {
+        "name": "Cedar Knob official site (rates)",
+        "url": "http://www.cedarknobgolfcourse.com/rates",
+        "note": "Daily green fees for 9 and 18 holes, plus optional memberships; ownership not stated"
+      }
+    },
+    {
+      "id": "chippanee-golf-club",
+      "name": "Chippanee Golf Club",
+      "county": "Hartford",
+      "ogapi": "Chippanee Golf Club",
+      "override": "chippanee-golf-club",
+      "access": "private",
+      "accessSource": {
+        "name": "Chippanee Country Club official site",
+        "url": "https://chippanee.com/",
+        "note": "Describes itself as a privately owned club with membership"
+      },
+      "crossCheck": {
+        "name": "GolfPass scorecard",
+        "url": "https://www.golfpass.com/courses/4322-chippanee-golf-club/scorecard-and-layout",
+        "matched": "par, men's stroke index, Blue and White hole yardages, Blue/White/Red ratings and slopes"
+      }
     }
   ],
   "overrides": {
@@ -258,6 +302,481 @@
             425,
             358,
             255
+          ]
+        }
+      ]
+    },
+    "norwich-golf-club": {
+      "source": {
+        "name": "GolfPass scorecard (hole pars and yardages)",
+        "url": "https://www.golfpass.com/courses/4403-norwich-golf-club/scorecard-and-layout"
+      },
+      "status": "cross-checked",
+      "note": "OpenGolfAPI's hole pars are garbled (mostly 5s), so hole pars and hole yardages come from the GolfPass card; its pars total 71 and its men's stroke index matches OpenGolfAPI hole for hole, and all four tee totals match. Ratings conflict (GolfPass Blue 69.4/125, White 67.3/122) and there's no readable official card (norwichgolf.com has an expired certificate), so OpenGolfAPI's ratings are kept. The 5,275-yard tee is 'Hybrid White' in OpenGolfAPI and 'Yellow'/'Gold' on GolfPass; the 5,040-yard tee is 'Red' (OpenGolfAPI, GolfPass card) or 'Green' (GolfPass tee table). Needs the club's current card.",
+      "par": [
+        4,
+        4,
+        4,
+        4,
+        5,
+        4,
+        4,
+        4,
+        3,
+        4,
+        4,
+        5,
+        3,
+        5,
+        3,
+        4,
+        4,
+        3
+      ],
+      "handicap": [
+        15,
+        11,
+        5,
+        1,
+        7,
+        13,
+        3,
+        9,
+        17,
+        6,
+        2,
+        8,
+        18,
+        4,
+        14,
+        10,
+        12,
+        16
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "ratings": {
+            "men": {
+              "rating": 70,
+              "slope": 131
+            }
+          },
+          "yardages": [
+            323,
+            330,
+            376,
+            410,
+            510,
+            341,
+            380,
+            340,
+            210,
+            365,
+            412,
+            510,
+            110,
+            560,
+            180,
+            365,
+            328,
+            178
+          ]
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "ratings": {
+            "men": {
+              "rating": 68,
+              "slope": 125
+            }
+          },
+          "yardages": [
+            303,
+            276,
+            366,
+            350,
+            487,
+            330,
+            370,
+            300,
+            170,
+            355,
+            388,
+            503,
+            105,
+            535,
+            165,
+            330,
+            303,
+            166
+          ]
+        },
+        {
+          "id": "hybrid-white",
+          "name": "Hybrid White",
+          "ratings": {
+            "men": {
+              "rating": 65.5,
+              "slope": 122
+            }
+          },
+          "yardages": [
+            303,
+            276,
+            208,
+            283,
+            386,
+            330,
+            370,
+            300,
+            170,
+            355,
+            367,
+            503,
+            105,
+            455,
+            165,
+            230,
+            303,
+            166
+          ]
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "ratings": {
+            "women": {
+              "rating": 70.3,
+              "slope": 122
+            }
+          },
+          "yardages": [
+            273,
+            264,
+            208,
+            283,
+            386,
+            330,
+            347,
+            293,
+            158,
+            298,
+            367,
+            486,
+            88,
+            455,
+            150,
+            230,
+            268,
+            156
+          ]
+        }
+      ]
+    },
+    "cedar-knob-golf-course": {
+      "source": {
+        "name": "GolfPass scorecard (hole pars and yardages)",
+        "url": "https://www.golfpass.com/courses/4426-cedar-knob-golf-course/scorecard-and-layout"
+      },
+      "status": "cross-checked",
+      "note": "OpenGolfAPI's hole pars are garbled (mostly 5s), so hole pars and hole yardages come from the GolfPass card; its pars total 72 and its men's stroke index matches OpenGolfAPI hole for hole. The course's own site (course details) confirms the Blue 6,734 (72.4/129), White 6,298 (70.3/125) and Red 5,784 (73.4/127) totals and ratings, which also match OpenGolfAPI; its hole-by-hole card is an image we didn't transcribe. Red is rated for women (women's par 74). Gold (5,920) has no published rating.",
+      "par": [
+        4,
+        3,
+        5,
+        4,
+        3,
+        4,
+        5,
+        4,
+        4,
+        5,
+        4,
+        4,
+        4,
+        3,
+        4,
+        3,
+        5,
+        4
+      ],
+      "handicap": [
+        5,
+        15,
+        11,
+        1,
+        7,
+        17,
+        3,
+        9,
+        13,
+        6,
+        10,
+        2,
+        14,
+        18,
+        12,
+        8,
+        16,
+        4
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "ratings": {
+            "men": {
+              "rating": 72.4,
+              "slope": 129
+            }
+          },
+          "yardages": [
+            399,
+            167,
+            515,
+            422,
+            248,
+            343,
+            512,
+            347,
+            360,
+            518,
+            393,
+            442,
+            373,
+            196,
+            379,
+            235,
+            480,
+            405
+          ]
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "ratings": {
+            "men": {
+              "rating": 70.3,
+              "slope": 125
+            }
+          },
+          "yardages": [
+            384,
+            154,
+            482,
+            397,
+            209,
+            319,
+            478,
+            327,
+            328,
+            490,
+            370,
+            410,
+            350,
+            170,
+            350,
+            210,
+            470,
+            400
+          ]
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "ratings": {},
+          "yardages": [
+            375,
+            145,
+            450,
+            375,
+            175,
+            300,
+            450,
+            315,
+            315,
+            460,
+            360,
+            400,
+            340,
+            150,
+            340,
+            170,
+            450,
+            350
+          ]
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "ratings": {
+            "women": {
+              "rating": 73.4,
+              "slope": 127
+            }
+          },
+          "yardages": [
+            372,
+            143,
+            453,
+            375,
+            173,
+            299,
+            448,
+            310,
+            306,
+            430,
+            355,
+            380,
+            330,
+            140,
+            330,
+            160,
+            440,
+            340
+          ]
+        }
+      ]
+    },
+    "chippanee-golf-club": {
+      "source": {
+        "name": "Chippanee Country Club official scorecard (chippanee.com, Golf page)",
+        "url": "https://chippanee.com/FACILITIES/Golf.aspx"
+      },
+      "status": "official",
+      "note": "OpenGolfAPI lists 20 holes; its first 18 match the official card's par and stroke index, the extra two are disregarded. The official Red hole 18 is 345 yards (OpenGolfAPI and GolfPass show 305, which is why their Red total is 5,588 vs. the card's 5,628). The card's White hole 18 reads '56', a typo for 356 (its White totals only add up with 356, which OpenGolfAPI and GolfPass also show). Ratings from the official card, matching GolfPass (OpenGolfAPI has older slopes: Blue 125, White 124, Red 71.3/118). Red is rated for women (women's par 73).",
+      "par": [
+        4,
+        4,
+        3,
+        5,
+        4,
+        4,
+        4,
+        3,
+        4,
+        4,
+        3,
+        4,
+        3,
+        5,
+        4,
+        4,
+        4,
+        4
+      ],
+      "handicap": [
+        10,
+        2,
+        16,
+        8,
+        4,
+        6,
+        12,
+        18,
+        14,
+        1,
+        17,
+        3,
+        15,
+        13,
+        5,
+        7,
+        11,
+        9
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "ratings": {
+            "men": {
+              "rating": 70.5,
+              "slope": 129
+            }
+          },
+          "yardages": [
+            384,
+            391,
+            178,
+            540,
+            419,
+            365,
+            366,
+            139,
+            338,
+            440,
+            166,
+            434,
+            180,
+            492,
+            407,
+            369,
+            336,
+            366
+          ]
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "ratings": {
+            "men": {
+              "rating": 69.6,
+              "slope": 126
+            }
+          },
+          "yardages": [
+            378,
+            381,
+            175,
+            527,
+            401,
+            339,
+            353,
+            129,
+            320,
+            431,
+            162,
+            428,
+            163,
+            456,
+            398,
+            366,
+            331,
+            356
+          ]
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "ratings": {
+            "women": {
+              "rating": 71.5,
+              "slope": 117
+            }
+          },
+          "yardages": [
+            366,
+            334,
+            144,
+            476,
+            394,
+            311,
+            331,
+            120,
+            293,
+            424,
+            120,
+            422,
+            155,
+            432,
+            335,
+            350,
+            276,
+            345
           ]
         }
       ]

@@ -39,6 +39,9 @@ ODbL requires **attribution** ("© OpenStreetMap contributors (ODbL 1.0) via Ope
 | Tashua Knolls Golf Course | Trumbull | Fairfield | municipal | 72 | **single-source** | 6 (4) | — |
 | H. Smith Richardson Golf Course | Fairfield | Fairfield | municipal | 72 | **single-source** | 3 (2) | Black: hole yardages sum to 6734 vs. stated 6704. |
 | Crestbrook Park Golf Course | Watertown | Litchfield | municipal | 71 | **single-source** | 5 (4) | — |
+| Norwich Golf Club | Norwich | New London | municipal | 71 | **cross-checked** | 4 (4) | OpenGolfAPI hole pars garbled; hole pars and yardages from GolfPass (pars total 71, stroke index matches OpenGolfAPI, all tee totals match). Ratings conflict (GolfPass Blue 69.4/125 vs. 70/131); OpenGolfAPI's kept. Club site unreachable (expired certificate): needs the current card. |
+| Cedar Knob Golf Course | Somers | Tolland | public | 72 | **cross-checked** | 4 (4) | OpenGolfAPI hole pars garbled; hole pars and yardages from GolfPass (stroke index matches OpenGolfAPI). Course site confirms Blue/White/Red totals and ratings. Gold has no rating. |
+| Chippanee Golf Club | Bristol | Hartford | private | 70 | **official** | 3 (3) | Official card on chippanee.com. OpenGolfAPI's 2 extra holes dropped; Red hole 18 is 345 (others show 305); card's White 18 '56' is a typo for 356. Ratings from the card (match GolfPass). |
 
 ### Extra sources
 
@@ -46,3 +49,6 @@ ODbL requires **attribution** ("© OpenStreetMap contributors (ODbL 1.0) via Ope
 - **Airways Golf Course**: [Airways Golf Course official scorecard (airwaysgolf.com/golf.html, scorecard images)](http://www.airwaysgolf.com/golf.html)
 - **Fox Hopyard Golf Club**: [Fox Hopyard official site](https://www.foxhopyard.com/)
 - **Shennecossett Golf Course**: [GolfPass scorecard](https://www.golfpass.com/courses/4366-shennecossett-golf-club/scorecard-and-layout)
+- **Norwich Golf Club**: [GolfPass scorecard](https://www.golfpass.com/courses/4403-norwich-golf-club/scorecard-and-layout) · [City of Norwich: Golf Course Authority](https://norwichct.gov/141/Golf-Course-Authority)
+- **Cedar Knob Golf Course**: [GolfPass scorecard](https://www.golfpass.com/courses/4426-cedar-knob-golf-course/scorecard-and-layout) · [Cedar Knob course details](http://www.cedarknobgolfcourse.com/course-details) · [rates](http://www.cedarknobgolfcourse.com/rates)
+- **Chippanee Golf Club**: [Chippanee official scorecard](https://chippanee.com/FACILITIES/Golf.aspx) · [GolfPass scorecard](https://www.golfpass.com/courses/4322-chippanee-golf-club/scorecard-and-layout)

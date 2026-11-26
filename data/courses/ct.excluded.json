@@ -38,13 +38,6 @@
       "reason": "hole data has 19 holes"
     },
     {
-      "ogapiId": "c02b06ec-ce58-4d47-a425-0026119a16f1",
-      "name": "Chippanee Golf Club",
-      "city": "Bristol",
-      "holes": 18,
-      "reason": "hole data has 20 holes"
-    },
-    {
       "ogapiId": "8f0386ae-9bdf-4612-a29c-4122cca60406",
       "name": "Yale Golf Course",
       "city": "New Haven",
@@ -108,25 +101,11 @@
       "reason": "implausible total par 45"
     },
     {
-      "ogapiId": "52bb8569-685a-4fc8-85e2-cd17916161d1",
-      "name": "Cedar Knob Golf Course",
-      "city": "Somers",
-      "holes": 18,
-      "reason": "implausible total par 81"
-    },
-    {
       "ogapiId": "da2b9730-4395-4ae6-9da1-753cc01cab03",
       "name": "Mill River Country Club",
       "city": "Stratford",
       "holes": 18,
       "reason": "implausible total par 82"
-    },
-    {
-      "ogapiId": "561da201-a47a-4a45-9932-d5e29e221f8f",
-      "name": "Norwich Golf Club",
-      "city": "Norwich",
-      "holes": 18,
-      "reason": "implausible total par 84"
     },
     {
       "ogapiId": "20b9156d-afa1-49b7-92fc-c56305f59740",

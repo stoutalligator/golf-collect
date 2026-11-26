@@ -3920,6 +3920,767 @@
         ],
         "notes": []
       }
+    },
+    {
+      "id": "norwich-golf-club",
+      "name": "Norwich Golf Club",
+      "city": "Norwich",
+      "state": "CT",
+      "county": "New London",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.501637,
+        "lng": -72.103481
+      },
+      "website": "http://www.norwichgolf.com/",
+      "architect": "Tull & Tull",
+      "yearOpened": 1925,
+      "description": "Municipal 18-hole course in Norwich, par 71, playing up to 6,228 yards, designed by Tull & Tull, dating to 1925.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 12,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 4
+        },
+        {
+          "number": 15,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 18,
+          "par": 3,
+          "handicap": 16
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 6228,
+          "yardages": [
+            323,
+            330,
+            376,
+            410,
+            510,
+            341,
+            380,
+            340,
+            210,
+            365,
+            412,
+            510,
+            110,
+            560,
+            180,
+            365,
+            328,
+            178
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70,
+              "slope": 131
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 5802,
+          "yardages": [
+            303,
+            276,
+            366,
+            350,
+            487,
+            330,
+            370,
+            300,
+            170,
+            355,
+            388,
+            503,
+            105,
+            535,
+            165,
+            330,
+            303,
+            166
+          ],
+          "ratings": {
+            "men": {
+              "rating": 68,
+              "slope": 125
+            }
+          }
+        },
+        {
+          "id": "hybrid-white",
+          "name": "Hybrid White",
+          "par": 71,
+          "totalYards": 5275,
+          "yardages": [
+            303,
+            276,
+            208,
+            283,
+            386,
+            330,
+            370,
+            300,
+            170,
+            355,
+            367,
+            503,
+            105,
+            455,
+            165,
+            230,
+            303,
+            166
+          ],
+          "ratings": {
+            "men": {
+              "rating": 65.5,
+              "slope": 122
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 5040,
+          "yardages": [
+            273,
+            264,
+            208,
+            283,
+            386,
+            330,
+            347,
+            293,
+            158,
+            298,
+            367,
+            486,
+            88,
+            455,
+            150,
+            230,
+            268,
+            156
+          ],
+          "ratings": {
+            "women": {
+              "rating": 70.3,
+              "slope": 122
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "cross-checked",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/561da201-a47a-4a45-9932-d5e29e221f8f",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "GolfPass scorecard (hole pars and yardages)",
+            "url": "https://www.golfpass.com/courses/4403-norwich-golf-club/scorecard-and-layout",
+            "checked": "2026-11-25"
+          },
+          {
+            "name": "City of Norwich: Golf Course Authority",
+            "url": "https://norwichct.gov/141/Golf-Course-Authority",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "OpenGolfAPI's hole pars are garbled (mostly 5s), so hole pars and hole yardages come from the GolfPass card; its pars total 71 and its men's stroke index matches OpenGolfAPI hole for hole, and all four tee totals match. Ratings conflict (GolfPass Blue 69.4/125, White 67.3/122) and there's no readable official card (norwichgolf.com has an expired certificate), so OpenGolfAPI's ratings are kept. The 5,275-yard tee is 'Hybrid White' in OpenGolfAPI and 'Yellow'/'Gold' on GolfPass; the 5,040-yard tee is 'Red' (OpenGolfAPI, GolfPass card) or 'Green' (GolfPass tee table). Needs the club's current card.",
+          "Owned by the City of Norwich and run by the city's Norwich Golf Course Authority."
+        ]
+      }
+    },
+    {
+      "id": "cedar-knob-golf-course",
+      "name": "Cedar Knob Golf Course",
+      "city": "Somers",
+      "state": "CT",
+      "county": "Tolland",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.9634202,
+        "lng": -72.4512019
+      },
+      "website": "http://www.cedarknobgolfcourse.com/",
+      "architect": "Geoffrey Cornish",
+      "yearOpened": 1963,
+      "description": "Public 18-hole course in Somers, par 72, playing up to 6,734 yards, designed by Geoffrey Cornish, dating to 1963.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 10,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 14,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 17,
+          "par": 5,
+          "handicap": 16
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 72,
+          "totalYards": 6734,
+          "yardages": [
+            399,
+            167,
+            515,
+            422,
+            248,
+            343,
+            512,
+            347,
+            360,
+            518,
+            393,
+            442,
+            373,
+            196,
+            379,
+            235,
+            480,
+            405
+          ],
+          "ratings": {
+            "men": {
+              "rating": 72.4,
+              "slope": 129
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 72,
+          "totalYards": 6298,
+          "yardages": [
+            384,
+            154,
+            482,
+            397,
+            209,
+            319,
+            478,
+            327,
+            328,
+            490,
+            370,
+            410,
+            350,
+            170,
+            350,
+            210,
+            470,
+            400
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.3,
+              "slope": 125
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 72,
+          "totalYards": 5920,
+          "yardages": [
+            375,
+            145,
+            450,
+            375,
+            175,
+            300,
+            450,
+            315,
+            315,
+            460,
+            360,
+            400,
+            340,
+            150,
+            340,
+            170,
+            450,
+            350
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 72,
+          "totalYards": 5784,
+          "yardages": [
+            372,
+            143,
+            453,
+            375,
+            173,
+            299,
+            448,
+            310,
+            306,
+            430,
+            355,
+            380,
+            330,
+            140,
+            330,
+            160,
+            440,
+            340
+          ],
+          "ratings": {
+            "women": {
+              "rating": 73.4,
+              "slope": 127
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "cross-checked",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/52bb8569-685a-4fc8-85e2-cd17916161d1",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "GolfPass scorecard (hole pars and yardages)",
+            "url": "https://www.golfpass.com/courses/4426-cedar-knob-golf-course/scorecard-and-layout",
+            "checked": "2026-11-25"
+          },
+          {
+            "name": "Cedar Knob official site (rates)",
+            "url": "http://www.cedarknobgolfcourse.com/rates",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "OpenGolfAPI's hole pars are garbled (mostly 5s), so hole pars and hole yardages come from the GolfPass card; its pars total 72 and its men's stroke index matches OpenGolfAPI hole for hole. The course's own site (course details) confirms the Blue 6,734 (72.4/129), White 6,298 (70.3/125) and Red 5,784 (73.4/127) totals and ratings, which also match OpenGolfAPI; its hole-by-hole card is an image we didn't transcribe. Red is rated for women (women's par 74). Gold (5,920) has no published rating.",
+          "Daily green fees for 9 and 18 holes, plus optional memberships; ownership not stated."
+        ]
+      }
+    },
+    {
+      "id": "chippanee-golf-club",
+      "name": "Chippanee Golf Club",
+      "city": "Bristol",
+      "state": "CT",
+      "county": "Hartford",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.7022705,
+        "lng": -72.980484
+      },
+      "website": "https://chippanee.com/",
+      "architect": "Herb Lagerblade",
+      "yearOpened": 1923,
+      "description": "Private 18-hole course in Bristol, par 70, playing up to 6,310 yards, designed by Herb Lagerblade, dating to 1923.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 13
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 70,
+          "totalYards": 6310,
+          "yardages": [
+            384,
+            391,
+            178,
+            540,
+            419,
+            365,
+            366,
+            139,
+            338,
+            440,
+            166,
+            434,
+            180,
+            492,
+            407,
+            369,
+            336,
+            366
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.5,
+              "slope": 129
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 70,
+          "totalYards": 6094,
+          "yardages": [
+            378,
+            381,
+            175,
+            527,
+            401,
+            339,
+            353,
+            129,
+            320,
+            431,
+            162,
+            428,
+            163,
+            456,
+            398,
+            366,
+            331,
+            356
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.6,
+              "slope": 126
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 70,
+          "totalYards": 5628,
+          "yardages": [
+            366,
+            334,
+            144,
+            476,
+            394,
+            311,
+            331,
+            120,
+            293,
+            424,
+            120,
+            422,
+            155,
+            432,
+            335,
+            350,
+            276,
+            345
+          ],
+          "ratings": {
+            "women": {
+              "rating": 71.5,
+              "slope": 117
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "official",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/c02b06ec-ce58-4d47-a425-0026119a16f1",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "Chippanee Country Club official scorecard (chippanee.com, Golf page)",
+            "url": "https://chippanee.com/FACILITIES/Golf.aspx",
+            "checked": "2026-11-25"
+          },
+          {
+            "name": "GolfPass scorecard",
+            "url": "https://www.golfpass.com/courses/4322-chippanee-golf-club/scorecard-and-layout",
+            "checked": "2026-11-25"
+          },
+          {
+            "name": "Chippanee Country Club official site",
+            "url": "https://chippanee.com/",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "OpenGolfAPI lists 20 holes; its first 18 match the official card's par and stroke index, the extra two are disregarded. The official Red hole 18 is 345 yards (OpenGolfAPI and GolfPass show 305, which is why their Red total is 5,588 vs. the card's 5,628). The card's White hole 18 reads '56', a typo for 356 (its White totals only add up with 356, which OpenGolfAPI and GolfPass also show). Ratings from the official card, matching GolfPass (OpenGolfAPI has older slopes: Blue 125, White 124, Red 71.3/118). Red is rated for women (women's par 73).",
+          "Cross-checked: par, men's stroke index, Blue and White hole yardages, Blue/White/Red ratings and slopes.",
+          "Describes itself as a privately owned club with membership."
+        ]
+      }
     }
   ]
 }
