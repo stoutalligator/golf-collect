@@ -17,8 +17,8 @@ import { avatarTones, chart, colors, fonts, radius, shadow, space, type } from '
 
 // ── Avatars ────────────────────────────────────────────────────────────────
 
-export function Avatar({ player, size = 40, ring = false }: { player: Pick<Player, 'id' | 'initials'>; size?: number; ring?: boolean }) {
-  const bg = player.id === 'me' ? colors.fairway : avatarTones[hashString(player.id) % avatarTones.length];
+export function Avatar({ player, size = 40, ring = false }: { player: Pick<Player, 'id' | 'initials' | 'isMe'>; size?: number; ring?: boolean }) {
+  const bg = player.isMe ? colors.fairway : avatarTones[hashString(player.id) % avatarTones.length];
   return (
     <View
       style={[

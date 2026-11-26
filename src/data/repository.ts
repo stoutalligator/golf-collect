@@ -7,10 +7,13 @@ import { generateSocial } from './sample/social';
 import { SIM_COURSES } from './sample/sim-courses';
 import seed from './seed/courses.ct.json';
 
-/** Everything the app reads. A remote backend implements the same interface later. */
+/** Everything the app reads. `SupabaseRepository` (signed in) and `LocalRepository` (offline demo) both produce it. */
 export interface AppSnapshot {
   me: Player;
   friends: Player[];
+  /** People who appear on rounds you can see but aren't your friends (e.g. tagged by a friend). */
+  others: Player[];
+  requests: { incoming: Player[]; outgoing: Player[] };
   courses: Course[];
   simCourses: SimCourse[];
   /** The signed-in user's rounds. */
@@ -22,15 +25,21 @@ export interface AppSnapshot {
 }
 
 export interface Repository {
-  load(): Promise<AppSnapshot>;
+  /** Cached after the first call; `force` refetches. */
+  load(force?: boolean): Promise<AppSnapshot>;
   saveRound(round: Round): Promise<void>;
   deleteRound(id: string): Promise<void>;
   setWishlist(courseIds: string[]): Promise<void>;
   /** Toggle my reaction on a round (same emoji again removes it). */
   react(roundId: string, emoji: ReactionEmoji): Promise<void>;
   addComment(roundId: string, text: string): Promise<void>;
-  resetToSample(): Promise<void>;
   clearRounds(): Promise<void>;
+  searchPlayers(query: string): Promise<Player[]>;
+  sendFriendRequest(playerId: string): Promise<void>;
+  respondToRequest(playerId: string, accept: boolean): Promise<void>;
+  removeFriend(playerId: string): Promise<void>;
+  /** Offline demo only: restore the generated sample data. */
+  resetToSample?(): Promise<void>;
 }
 
 export const COURSE_DATA_ATTRIBUTION = seed._attribution;
@@ -56,7 +65,10 @@ const sample = (): Stored => {
   };
 };
 
-/** Static course data + user data in AsyncStorage (seeded with sample rounds on first run). */
+/**
+ * Offline demo: bundled course seed + generated sample rounds in AsyncStorage. Used only when Supabase isn't
+ * configured (no EXPO_PUBLIC_SUPABASE_* env vars); sample data never goes to the database.
+ */
 export class LocalRepository implements Repository {
   private cache: Stored | null = null;
 
@@ -85,7 +97,10 @@ export class LocalRepository implements Repository {
 
   async load(): Promise<AppSnapshot> {
     const s = await this.read();
-    return { me: ME, friends: FRIENDS, courses, simCourses: SIM_COURSES, rounds: s.rounds, friendRounds: s.friendRounds, wishlist: s.wishlist, social: s.social };
+    return {
+      me: ME, friends: FRIENDS, others: [], requests: { incoming: [], outgoing: [] },
+      courses, simCourses: SIM_COURSES, rounds: s.rounds, friendRounds: s.friendRounds, wishlist: s.wishlist, social: s.social,
+    };
   }
 
   async saveRound(round: Round) {
@@ -119,12 +134,22 @@ export class LocalRepository implements Repository {
     await this.write({ ...s, social: { ...s.social, comments: { ...s.social.comments, [roundId]: [...list, comment] } } });
   }
 
-  async resetToSample() {
-    await this.write(sample());
-  }
-
   async clearRounds() {
     const s = await this.read();
     await this.write({ ...s, rounds: [] });
+  }
+
+  async searchPlayers(): Promise<Player[]> {
+    return [];
+  }
+
+  async sendFriendRequest() {}
+
+  async respondToRequest() {}
+
+  async removeFriend() {}
+
+  async resetToSample() {
+    await this.write(sample());
   }
 }

@@ -2,7 +2,12 @@
 
 *Drafted: November 26, 2026 · Target: Supabase (Postgres + Auth + row-level security)*
 
-**Status (2026-11-26):** both migrations applied to the Supabase project (13 tables, RLS on, explicit API grants, since new Supabase projects no longer auto-grant SQL-created tables). 16 CT courses + 3 sim courses imported with `npm run db:import-courses`. Verified with the public key: courses readable, rounds/profiles and writes refused.
+**Status (2026-11-26):** live. The app signs in with email and reads/writes Supabase (`src/data/supabase-repository.ts`); without the `EXPO_PUBLIC_SUPABASE_*` env vars it falls back to an offline demo on bundled sample data.
+
+- Migrations applied (in order): initial schema · explicit API grants (new Supabase projects don't auto-grant SQL-created tables) · rounds read policy fix (creating a round failed RLS because the policy looked the row up by id) · keep tags as guest names when an account is deleted (deleting a tagged user failed a check constraint).
+- `npm run db:import-courses`: researched courses + sim courses (service-role key, local only).
+- `npm run db:seed-test`: recreates the **test accounts** (all `@greenskeeper.test`): `golfer@` (you; password in `.env` as `TEST_ACCOUNT_PASSWORD`), four friends with rounds/reactions/comments, and Pat Green with a pending friend request. Sample data reaches the database only through these test accounts.
+- Verified live as the test account: load, saving a round hole by hole, untouched stats staying null, reactions, comments, delete, friend accept/remove, search, and that you can't create a round owned by someone else.
 
 The first migration is ready to run: [`supabase/migrations/20261126000000_initial_schema.sql`](../../supabase/migrations/20261126000000_initial_schema.sql). It was applied to a local Postgres 17 with Supabase's `auth` schema stubbed, and the access rules were tested with three users (see [Tested](#tested)).
 
@@ -148,5 +153,5 @@ Things that stay in app config for now: tier rules, collectible sets per course 
 1. **Default round visibility:** `friends` (current) or `private` until you share?
 2. **Usernames:** required at sign-up (for friend search), or optional with search by name/email?
 3. **Guests:** do we want guest players on the scorecard now, or only friends?
-4. **Account deletion:** deleting a user removes their rounds (cascade). Should rounds they were *tagged* on keep a "former member" placeholder instead? (Currently the tag is set to null.)
+4. ~~Account deletion~~ **Decided:** deleting a user removes their rounds; their tags on other people's rounds become guest names (migration `…000300`).
 5. **ODbL share-alike:** does serving OpenGolfAPI-derived course data from our database count as publishing a derived database? Decide before public launch.

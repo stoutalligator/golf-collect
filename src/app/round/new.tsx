@@ -9,6 +9,7 @@ import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, SearchField } from '@/components/ui';
 import type { Round, RoundKind } from '@/domain/types';
 import { todayISO } from '@/lib/format';
+import { uuid } from '@/lib/ids';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
@@ -47,7 +48,7 @@ export default function NewRound() {
     const holeNumbers = holes === '18' ? all : holes === 'front' ? all.slice(0, 9) : all.slice(9, 18);
     const now = new Date().toISOString();
     const round: Round = {
-      id: `r-${Date.now().toString(36)}`,
+      id: uuid(),
       kind,
       courseId: layout.id,
       teeId: selectedTee,

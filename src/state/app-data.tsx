@@ -2,6 +2,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
 import { LocalRepository, type AppSnapshot, type Repository } from '@/data/repository';
+import { SupabaseRepository } from '@/data/supabase-repository';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/state/auth';
 import { evaluateAchievements, type AchievementState } from '@/domain/achievements';
 import { handicapIndex, scoreDifferential } from '@/domain/analytics';
 import { courseCollection, type CourseCollection, type ItemState } from '@/domain/collection';
@@ -46,6 +49,10 @@ export interface FeedPost {
 
 export interface AppData extends AppSnapshot {
   ready: boolean;
+  /** Set when the last load failed (e.g. offline). */
+  error: string | null;
+  /** True when running on bundled sample data instead of Supabase. */
+  offline: boolean;
   /** Summary of every round (yours and friends'), for the round's owner. */
   summaries: Map<string, RoundSummary>;
   /** Your rounds, newest first. */
@@ -73,29 +80,56 @@ export interface AppData extends AppSnapshot {
   toggleWishlist(courseId: string): Promise<void>;
   react(roundId: string, emoji: ReactionEmoji): Promise<void>;
   addComment(roundId: string, text: string): Promise<void>;
-  resetToSample(): Promise<void>;
+  /** Offline demo only. */
+  resetToSample?(): Promise<void>;
   clearRounds(): Promise<void>;
+  /** Refetch everything from the server (pull to refresh). */
+  refresh(): Promise<void>;
+  searchPlayers(query: string): Promise<Player[]>;
+  sendFriendRequest(playerId: string): Promise<void>;
+  respondToRequest(playerId: string, accept: boolean): Promise<void>;
+  removeFriend(playerId: string): Promise<void>;
 }
 
 const Ctx = createContext<AppData | null>(null);
-const repo: Repository = new LocalRepository();
 
 const EMPTY: AppSnapshot = {
-  me: { id: 'me', name: '', initials: '' }, friends: [], courses: [], simCourses: [], rounds: [], friendRounds: [], wishlist: [],
-  social: { reactions: {}, comments: {} },
+  me: { id: 'me', name: '', initials: '', isMe: true }, friends: [], others: [], requests: { incoming: [], outgoing: [] },
+  courses: [], simCourses: [], rounds: [], friendRounds: [], wishlist: [], social: { reactions: {}, comments: {} },
 };
 
 const byNewest = (a: Round, b: Round) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt);
 
 export function AppDataProvider({ children }: { children: ReactNode }) {
+  const auth = useAuth();
+  // One repository per signed-in user: Supabase when configured, the local demo otherwise.
+  const repo = useMemo<Repository | null>(() => {
+    if (!auth.userId) return null;
+    return supabase ? new SupabaseRepository(supabase, auth.userId) : new LocalRepository();
+  }, [auth.userId]);
   const [snap, setSnap] = useState<AppSnapshot>(EMPTY);
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const reload = useCallback(async () => {
-    setSnap(await repo.load());
-    setReady(true);
-  }, []);
+  const reload = useCallback(async (force = false) => {
+    if (!repo) return;
+    try {
+      setSnap(await repo.load(force));
+      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setReady(true);
+    }
+  }, [repo]);
 
+  // New user (sign in / out): start from empty and load their data.
+  const [loadedFor, setLoadedFor] = useState<Repository | null>(null);
+  if (loadedFor !== repo) {
+    setLoadedFor(repo);
+    setSnap(EMPTY);
+    setReady(false);
+  }
   useEffect(() => {
     reload();
   }, [reload]);
@@ -103,7 +137,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const derived = useMemo(() => {
     const courseMap = new Map(snap.courses.map((c) => [c.id, c]));
     const simMap = new Map(snap.simCourses.map((c) => [c.id, c]));
-    const players = new Map([snap.me, ...snap.friends].map((p) => [p.id, p]));
+    const players = new Map([snap.me, ...snap.friends, ...snap.others].map((p) => [p.id, p]));
     const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) : courseMap.get(r.courseId));
     const allRounds = [...snap.rounds, ...snap.friendRounds];
     const roundMap = new Map(allRounds.map((r) => [r.id, r]));
@@ -194,18 +228,25 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     ...snap,
     ...derived,
     ready,
-    saveRound: async (r) => { await repo.saveRound(r); await reload(); },
-    deleteRound: async (id) => { await repo.deleteRound(id); await reload(); },
+    error,
+    offline: auth.offline,
+    saveRound: async (r) => { await repo!.saveRound(r); await reload(); },
+    deleteRound: async (id) => { await repo!.deleteRound(id); await reload(); },
     toggleWishlist: async (id) => {
       const next = snap.wishlist.includes(id) ? snap.wishlist.filter((x) => x !== id) : [...snap.wishlist, id];
-      await repo.setWishlist(next);
+      await repo!.setWishlist(next);
       await reload();
     },
-    react: async (roundId, emoji) => { await repo.react(roundId, emoji); await reload(); },
-    addComment: async (roundId, text) => { await repo.addComment(roundId, text); await reload(); },
-    resetToSample: async () => { await repo.resetToSample(); await reload(); },
-    clearRounds: async () => { await repo.clearRounds(); await reload(); },
-  }), [snap, derived, ready, reload]);
+    react: async (roundId, emoji) => { await repo!.react(roundId, emoji); await reload(); },
+    addComment: async (roundId, text) => { await repo!.addComment(roundId, text); await reload(); },
+    resetToSample: repo?.resetToSample ? async () => { await repo.resetToSample!(); await reload(); } : undefined,
+    clearRounds: async () => { await repo!.clearRounds(); await reload(); },
+    refresh: () => reload(true),
+    searchPlayers: (q) => repo!.searchPlayers(q),
+    sendFriendRequest: async (id) => { await repo!.sendFriendRequest(id); await reload(); },
+    respondToRequest: async (id, accept) => { await repo!.respondToRequest(id, accept); await reload(); },
+    removeFriend: async (id) => { await repo!.removeFriend(id); await reload(); },
+  }), [snap, derived, ready, error, auth.offline, repo, reload]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

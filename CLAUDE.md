@@ -13,7 +13,8 @@ An iOS golf app for tracking rounds, discovering courses, and **collecting the c
 ## Rules
 
 - **Theme tokens only.** Use colors, fonts and spacing from `src/theme`. No ad-hoc hex values in screens.
-- **Screens don't import seed JSON.** They go through `src/data` (repository layer), so a backend can replace local data later.
+- **Screens don't import seed JSON.** They go through `src/data` (repository layer). Signed in, that's `SupabaseRepository` (email auth, RLS); with no Supabase env vars, `LocalRepository` (offline demo).
+- **Sample data never goes to the database** except course facts. Test data lives only on the `@greenskeeper.test` accounts made by `npm run db:seed-test`. Schema changes are new files in `supabase/migrations/` (never edit an applied one).
 - **Domain logic stays pure** in `src/domain` (no React) and is unit-tested with Vitest.
 - **Course data is researched, never guessed.** Seed courses come from `scripts/courses/build-ct-seed.mjs` (OpenGolfAPI, ODbL, plus overrides), and every course carries its sources and verification status. Don't hand-edit `src/data/seed/courses.ct.json`; change `scripts/courses/ct-courses.json` and rebuild.
 - **Only ball markers are tiered** (by best score at the course). Patch, pitch marker, bag tag and pin are per-course achievements with no tiers.
@@ -47,7 +48,9 @@ node scripts/courses/build-ct-seed.mjs [--refresh]   # rebuild CT course seed
 npm run art:prompts       # create/compile art prompts (assets/_prompts/compiled)
 npm run art:sync          # register images in assets/art with the app
 npm run art:specs         # regenerate assets/_specs (after changing regions, frames or overrides)
-npm run screens           # phone-size screenshots → docs/screenshots (web preview must be running on :8099)
+npm run screens           # phone-size screenshots → docs/screenshots (web preview on :8099; signs in as the test account)
+npm run db:import-courses # push researched courses + sim courses to Supabase (service-role key)
+npm run db:seed-test      # recreate the @greenskeeper.test test accounts with generated rounds
 ```
 
 Requires Node >= 22.13 (Expo SDK 58).

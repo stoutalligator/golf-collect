@@ -54,7 +54,8 @@
     "art:sync": "node scripts/art/art.mjs sync",
     "screens": "node scripts/screens.mjs",
     "art:specs": "node scripts/art/art.mjs prompts && python scripts/art/gen-specs.py",
-    "db:import-courses": "node --env-file=.env scripts/db/import-courses.ts"
+    "db:import-courses": "node --env-file=.env scripts/db/import-courses.ts",
+    "db:seed-test": "node --env-file=.env --import ./scripts/db/register.mjs scripts/db/seed-test-accounts.ts"
   },
   "private": true
 }

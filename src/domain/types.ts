@@ -98,6 +98,7 @@ export interface Player {
   id: string;
   name: string;
   initials: string;
+  username?: string;
   homeState?: string;
   isMe?: boolean;
   memberSince?: ISODate;
