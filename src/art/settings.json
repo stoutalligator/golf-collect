@@ -1,0 +1,4 @@
+{
+  "_readme": "Art behaviour switches. splashSceneIncludesBranding: true when the splash painting already contains the emblem, wordmark and tagline, so the app does not draw its own on top.",
+  "splashSceneIncludesBranding": true
+}

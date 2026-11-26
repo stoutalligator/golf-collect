@@ -1,0 +1,87 @@
+{
+  "_readme": "Layout of each standard collectible frame on its 1024\u00d71024 canvas. The painted frame PNG must leave the `window` TRANSPARENT: the app draws the region vignette underneath it, then the course name on top in `label`. Shared by the app, the vector placeholders and `npm run art:specs`. Ball markers are poker chips: the course name runs around the ring (`label.type: ring`), top arc = name, bottom arc = town \u00b7 state.",
+  "canvas": 1024,
+  "frames": {
+    "ball-marker": {
+      "_measured": "2026-11-25 from the painted chips: hole radius 287-291, ring band 320-390 (inserts start at ~390)",
+      "window": {
+        "type": "circle",
+        "cx": 512,
+        "cy": 512,
+        "r": 292
+      },
+      "label": {
+        "type": "ring",
+        "cx": 512,
+        "cy": 512,
+        "rTop": 334,
+        "rBottom": 376,
+        "maxFontSize": 40,
+        "subMaxFontSize": 32,
+        "maxArc": 470,
+        "color": "#F2E6CF",
+        "colorByTier": {
+          "silver": "#1F3D2F",
+          "gold": "#1F3D2F",
+          "platinum": "#1F3D2F"
+        },
+        "font": "body"
+      }
+    },
+    "pitch-marker": {
+      "_measured": "2026-11-25 from the painted frame (hole traced)",
+      "window": {
+        "type": "path",
+        "d": "M500 155 L466 161 L447 167 L433 173 L422 179 L412 185 L404 191 L397 197 L390 203 L384 209 L379 215 L373 221 L368 227 L364 233 L360 239 L356 245 L353 251 L350 257 L347 263 L345 269 L343 275 L340 281 L338 287 L337 293 L336 299 L334 305 L334 311 L333 317 L332 323 L332 329 L332 335 L332 341 L333 347 L334 353 L334 359 L336 365 L336 371 L338 377 L340 383 L341 389 L344 395 L347 401 L349 407 L352 413 L355 419 L359 425 L362 431 L366 437 L371 443 L376 449 L381 455 L387 461 L393 467 L400 473 L408 479 L417 485 L427 491 L438 497 L455 503 L479 509 L488 511 L536 511 L545 509 L569 503 L585 497 L596 491 L605 485 L615 479 L623 473 L630 467 L637 461 L642 455 L647 449 L652 443 L657 437 L661 431 L665 425 L668 419 L671 413 L674 407 L677 401 L680 395 L682 389 L683 383 L685 377 L687 371 L688 365 L689 359 L690 353 L691 347 L691 341 L691 335 L691 329 L691 323 L691 317 L690 311 L689 305 L688 299 L687 293 L685 287 L683 281 L682 275 L679 269 L676 263 L673 257 L671 251 L667 245 L664 239 L660 233 L655 227 L650 221 L644 215 L639 209 L633 203 L626 197 L618 191 L610 185 L600 179 L589 173 L576 167 L557 161 L526 155 Z",
+        "box": [
+          332,
+          155,
+          691,
+          511
+        ]
+      },
+      "label": null
+    },
+    "patch": {
+      "_measured": "2026-11-25 from the painted frame (shield interior traced; banner measured)",
+      "window": {
+        "type": "path",
+        "d": "M512 152 L500 158 L488 164 L475 170 L462 176 L449 182 L435 188 L420 194 L404 200 L386 206 L371 212 L350 218 L330 224 L306 230 L279 236 L249 242 L211 248 L185 254 L182 260 L181 266 L181 272 L180 278 L180 284 L180 290 L180 296 L180 302 L179 308 L180 314 L179 320 L178 326 L179 332 L179 338 L179 344 L179 350 L179 356 L180 362 L180 368 L180 374 L180 380 L180 386 L180 392 L181 398 L182 404 L182 410 L183 416 L183 422 L184 428 L185 434 L185 440 L187 446 L187 452 L189 458 L189 464 L191 470 L192 476 L194 482 L194 488 L196 494 L198 500 L199 506 L201 512 L202 518 L204 524 L206 530 L207 536 L210 542 L211 548 L213 554 L215 560 L217 566 L220 572 L222 578 L225 584 L227 590 L230 596 L232 602 L235 608 L237 614 L242 620 L245 622 L787 622 L789 620 L793 614 L796 608 L799 602 L802 596 L805 590 L808 584 L811 578 L813 572 L815 566 L817 560 L820 554 L822 548 L824 542 L826 536 L828 530 L830 524 L831 518 L833 512 L835 506 L837 500 L839 494 L840 488 L841 482 L842 476 L843 470 L844 464 L846 458 L848 452 L848 446 L849 440 L849 434 L850 428 L851 422 L851 416 L853 410 L853 404 L853 398 L854 392 L854 386 L854 380 L855 374 L855 368 L855 362 L855 356 L855 350 L855 344 L855 338 L855 332 L855 326 L855 320 L855 314 L855 308 L855 302 L854 296 L853 290 L853 284 L853 278 L853 272 L852 266 L852 260 L849 254 L820 248 L785 242 L754 236 L724 230 L700 224 L680 218 L660 212 L644 206 L626 200 L609 194 L596 188 L582 182 L568 176 L555 170 L542 164 L530 158 L518 152 Z",
+        "box": [
+          178,
+          152,
+          855,
+          622
+        ]
+      },
+      "label": {
+        "x": 512,
+        "y": 688,
+        "maxWidth": 500,
+        "maxFontSize": 66,
+        "lines": 1,
+        "color": "#F2E6CF",
+        "font": "display"
+      }
+    },
+    "bag-tag": {
+      "_measured": "2026-11-25 from the painted frame (blank panel below the gold divider)",
+      "window": null,
+      "label": {
+        "x": 512,
+        "y": 767,
+        "maxWidth": 395,
+        "maxFontSize": 87,
+        "lines": 2,
+        "lineHeight": 109,
+        "color": "#E8C98A",
+        "font": "display"
+      }
+    },
+    "pin": {
+      "_measured": "2026-11-25",
+      "window": null,
+      "label": null
+    }
+  }
+}

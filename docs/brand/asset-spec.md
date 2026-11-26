@@ -5,6 +5,10 @@
 
 This guide keeps every generated or illustrated asset consistent with the Greens Keeper board. Use it alongside [brand-guidelines.md](brand-guidelines.md).
 
+> **Shared art model (2026-11-25):** heroes, engravings and collectible scenes are per **region**; collectibles are **standard frames** with the region vignette and the course name layered in by the app; destination courses can override. Sections 2, 5, 6 and 7 below describe the original per-course approach and are kept as style reference. The per-asset truth is in [`assets/_specs/`](../../assets/_specs/README.md).
+>
+> **Ready-to-use prompts live in [`assets/_prompts/`](../../assets/_prompts/README.md).** That folder has one editable file per asset, with save paths and a compile/sync workflow. The shared blocks in [`assets/_prompts/_style.md`](../../assets/_prompts/_style.md) are the canonical copy; the blocks below are for reference.
+
 **How to use it:** every image prompt is built from three parts:
 
 ```
@@ -84,19 +88,22 @@ isolated on a transparent background, object fills ~85% of the frame.
 
 ## 3. Tiers
 
-From the board: *"Earn higher-level versions based on your best round."* Tiers are shown on the **ball marker**.
+**Only the ball marker is tiered.** The ball marker is the "I played here" collectible; its rim shows your tier, set by your **best 18** at the course (config: `TIERS` in `src/data/config/game.ts`). Playing a round earns the **untiered** marker (plain pewter rim), even over 100. The patch, pitch marker, bag tag and pin are **per-course achievements with one fixed finish (no tiers)**.
 
-| Tier | Board rule (placeholder; lives in config) | Material line for prompts |
+| Tier | Earned by | Material line for prompts |
 | --- | --- | --- |
-| **Standard** | Play the course | `warm bronze-gold coin rim, matte enamel, light patina` |
-| **Silver** | Beat par *(a course-relative target to be defined)* | `polished silver coin rim, cool satin finish, silvered scene tones` |
-| **Gold** | Shoot 75 or better | `bright polished gold coin rim, glossy enamel, rich gold tones` |
+| *(untiered)* | Play a round | `plain brushed pewter coin rim, matte enamel` |
+| **Bronze** | Break 100 | `warm antique bronze coin rim, matte enamel, light patina` |
+| **Silver** | Break 90 | `polished sterling silver rim, fine engraved line border, cool satin finish` |
+| **Gold** | Break 80 | `bright polished gold double rim, fine engraved border, glossy enamel` |
+| **Platinum** | Even par or better | `brilliant platinum double rim, pearlescent sheen, engraved laurel border, small star` |
 
-- **The scene is identical across tiers.** Generate Standard first, then make Silver and Gold by editing it (img2img) so the scene doesn't drift.
-- Tiers must be told apart by more than hue. Add a finer rim engraving for Silver and a double rim for Gold, so the difference survives color blindness and small sizes.
-- The rules are placeholders. "Beat par" and "75 or better" need to be scaled for handicap and course difficulty before launch.
+- **The scene is identical across tiers.** Generate the untiered marker first, then make each tier by editing it (img2img) so the scene doesn't drift.
+- Tiers must be told apart without color: the engraved border (Silver), double rim (Gold), and star (Platinum) also survive color blindness and small sizes.
 
----
+### Per-course collectibles
+
+Each course has a collectible **set**: the ball marker (play the course, tiered) plus four achievements (pitch marker, bag tag, patch, pin), which a course can customize in `src/data/config/collectibles.json` by removing items, overriding an item's name or rule, or adding course-specific items (any of the five art shapes). `npm run art:prompts` adds prompt sections for added items automatically.
 
 ## 4. Achievement badges
 
@@ -183,22 +190,10 @@ Use fictional courses in public mockups and marketing. All of them fit the board
 
 ## 9. File & naming conventions
 
-```
-assets/
-  brand/            emblem, wordmark, app-icon/
-  collectibles/
-    <course-slug>/  bag-tag.png, ball-marker-{standard|silver|gold}.png,
-                    pitch-marker.png, patch.png, pin.png
-  badges/           <badge-slug>.png
-  courses/
-    <course-slug>/  hero.png, thumb.png, scorecard-engraving.png, emblem.png
-  _source/          prompts.md + raw generations (not shipped)
-```
+Finished art goes in **`assets/art/`**, at the exact path named in each prompt file's **Save as:** line. The full tree is in [assets/_prompts/README.md](../../assets/_prompts/README.md#where-files-go). After adding images, run `npm run art:sync` to register them with the app.
 
-- Slugs are kebab-case (`harbor-bluff-golf-links`, `break-80`).
-- Log every accepted asset's final prompt, model, seed (if available) and date in `assets/_source/prompts.md`.
-
----
+- Slugs are kebab-case (`keney-park`, `break-80`). Course ids match `src/data/seed/courses.ct.json`.
+- Record notable generations (tool, model, seed, and any prompt tweaks) in the relevant prompt file, so it can be regenerated.
 
 ## 10. Review checklist
 
@@ -208,4 +203,4 @@ assets/
 - [ ] It reads at the smallest export size.
 - [ ] Tier variants keep the same scene and differ by more than hue.
 - [ ] It's transparent, centered, with consistent padding where required.
-- [ ] The prompt is logged in `assets/_source/prompts.md`.
+- [ ] It's saved at its **Save as:** path and `npm run art:sync` was run.

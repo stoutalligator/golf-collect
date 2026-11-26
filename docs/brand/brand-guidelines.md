@@ -1,7 +1,7 @@
 # Brand Guidelines (v0.2)
 
 *Last updated: November 25, 2026*
-*Source board: [board-02-greens-keeper.png](boards/board-02-greens-keeper.png). This board is the **only** design reference.*
+*Source boards (Greens Keeper only): [board-02-greens-keeper.png](boards/board-02-greens-keeper.png) (brand, collectibles, tiers, badges) and [board-03-greens-keeper-screens.png](boards/board-03-greens-keeper-screens.png) (screen layouts). The real course names on the boards are visual reference only.*
 
 These guidelines turn the Greens Keeper board into fixed rules, so that every screen, mockup and generated asset looks like it comes from the same app. When the board and this document disagree, **this document wins**. Change this document on purpose. Design ideas that aren't on the board are marked *proposed*.
 
@@ -13,7 +13,7 @@ For how to generate and deliver assets, see [asset-spec.md](asset-spec.md).
 
 **Working name: Greens Keeper.** The repo name, *Golf Collect*, is a placeholder. The name isn't final until trademark and App Store checks are done; "greenskeeper" is a common word.
 
-**Tagline:** *Your game. Your courses. Your collection.*
+**Tagline:** **PLAY · TRACK · COLLECT** (adopted 2026-11-25 from the splash art). Set in Inter caps, widely letter-spaced, with gold rules either side. *(Previously: "Your game. Your courses. Your collection.")*
 
 Keep the app name in **one place** in code and config. Collectibles, badges and scorecards must not show the app name.
 
@@ -105,6 +105,21 @@ Paper grain, wear and engraving are for the **keepsake scorecard and collectible
 
 ---
 
+### Screen set (board 03)
+
+| Screen | Layout |
+| --- | --- |
+| **Splash** | Full-bleed painted coastal scene. Emblem, `GREENS KEEPER` wordmark and the tagline sit in the calm sky area. |
+| **Home** | Emblem + wordmark + bell header over the hero. Greeting. Three stat tiles: **Rounds · Courses · Collectibles**. Recent Rounds cards. |
+| **Course detail** | Hero, back + bookmark. Name + engraved tree, location, description. List rows: **Log a Round**, **View Scorecards**. A "Course Collectibles" carousel. |
+| **Scorecard** | Fairway header (back · "Scorecard"). A paper card with an engraving at the top and bottom, the course name in italic, Out/In grids, highlighted score cells, and "Total *76 (+4)*". |
+| **My Collection** | Search icon. Chips: All · Bag Tags · Markers · Patches · Pins. A two-column grid of items on cream tiles. |
+| **Collectible detail** | The item shown large on a fairway backdrop, a title like "Course Patch", "Course Collectible · Patch", a description, and **Your Tier** (Bronze · Silver · Gold · Platinum) on the **ball marker only**; achievement items (patch, pitch marker, bag tag, pin) show how they were earned, with no tiers. |
+| **Achievements** | Chips: All · Game · Courses · Collection. Rows: shield badge, title, rule, gold progress bar, x / y, and a check when earned. |
+| **Courses** | Search field. Chips: All · Played · Wishlist. Rows: landscape thumbnail, name, town, and a played check circle. |
+| **Rounds** | Chips (All · Scorecards · Stats on the board; we add a **Sim** chip for the separate sim track). Rows: thumbnail, course, date · score (+to-par). |
+| **Profile** | Hero with a circular emblem avatar, name, "Member Since", three stats, and a Recent Achievement card. |
+
 ## 5. Illustration
 
 There are two styles, both on the board:
@@ -120,11 +135,14 @@ There are two styles, both on the board:
 
 ## 6. Logo & app icon
 
-- **Emblem:** a flag on a pole rising from a sweeping curved green, drawn as a gold swoosh with a fairway shadow.
-- **App icon:** the emblem in gold/cream on a **fairway** rounded-square background, with no text.
-- **Wordmark:** `GREENS KEEPER` in Playfair Display caps, stacked in two lines when large, with the emblem above.
+**Emblem (adopted 2026-11-25, from the splash painting):** a heraldic **shield** with a golf flag on a rounded hill, two small pines and soft mountain outlines inside, flanked by **gold laurel branches**.
 
----
+- **Light-background version:** a forest-green shield with a cream inner field and gold laurels. Used on cream screens (Profile avatar) and the native splash.
+- **Dark-background version:** a cream shield with a gold border and gold laurels. Used in the Home header and the app icon.
+- **App icon:** the dark-background emblem centered on forest green, filling ~70%. No text.
+- **Wordmark:** "Greens Keeper" in Playfair Display. On the splash it's set large in forest green under the emblem, with the tagline **PLAY · TRACK · COLLECT** between gold rules.
+
+*(Superseded: the board's flag-and-swoosh emblem.)*
 
 ## 7. Real-course branding
 

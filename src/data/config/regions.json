@@ -1,0 +1,19 @@
+{
+  "_readme": "Regions drive shared course art (hero, scorecard engraving, collectible vignette). A course's region comes from its state. `scene` feeds the art prompts. Read by the app, the course seed builder and the art scripts.",
+  "regions": [
+    { "id": "new-england", "name": "New England", "states": ["CT", "MA", "RI", "VT", "NH", "ME"], "scene": "rolling New England parkland: fairways framed by tall maples, oaks and birches, stone walls, a white clapboard clubhouse in the distance, gentle hills" },
+    { "id": "mid-atlantic", "name": "Mid-Atlantic", "states": ["NY", "NJ", "PA", "DE", "MD", "DC"], "scene": "classic Mid-Atlantic parkland: broad tree-lined fairways, deep bunkers, mature oaks, a stone clubhouse on a rise" },
+    { "id": "southeast", "name": "Southeast", "states": ["VA", "WV", "NC", "SC", "GA", "KY", "TN", "AL", "MS"], "scene": "Southeastern golf: tall longleaf pines, pine-straw edges, sandy waste areas, warm humid light" },
+    { "id": "florida", "name": "Florida", "states": ["FL"], "scene": "Florida golf: palm trees, bright water hazards, white sand bunkers, wading birds, big cumulus clouds" },
+    { "id": "south-central", "name": "South Central", "states": ["TX", "OK", "LA", "AR"], "scene": "South Central golf: live oaks, open rolling terrain, wide skies, a creek crossing the fairway" },
+    { "id": "midwest", "name": "Midwest", "states": ["OH", "IN", "IL", "MI", "WI", "MN", "IA", "MO"], "scene": "Midwestern golf: lush parkland, lakes, hardwood forests, a white farmhouse and barn beyond the trees" },
+    { "id": "great-plains", "name": "Great Plains", "states": ["ND", "SD", "NE", "KS"], "scene": "Great Plains golf: windswept prairie grasses, sandhill dunes, endless open sky" },
+    { "id": "mountain-west", "name": "Mountain West", "states": ["MT", "ID", "WY", "CO", "UT"], "scene": "Mountain West golf: snow-capped peaks, dark pine forests, a clear alpine river, crisp light" },
+    { "id": "southwest", "name": "Southwest", "states": ["AZ", "NM", "NV"], "scene": "Southwestern desert golf: saguaro cactus, red rock mesas, desert scrub framing an emerald fairway" },
+    { "id": "pacific-northwest", "name": "Pacific Northwest", "states": ["WA", "OR"], "scene": "Pacific Northwest golf: towering Douglas firs, misty mountains, links-like dunes along a rugged coast" },
+    { "id": "california", "name": "California", "states": ["CA"], "scene": "California golf: coastal cliffs above the Pacific, windswept cypress trees, golden hills" },
+    { "id": "hawaii", "name": "Hawaii", "states": ["HI"], "scene": "Hawaiian golf: black lava rock, ocean surf, palms, a volcano on the horizon" },
+    { "id": "alaska", "name": "Alaska", "states": ["AK"], "scene": "Alaskan golf: glacier-topped mountains, spruce forest, a cold blue lake" }
+  ],
+  "biomes": ["parkland", "coastal", "links", "mountain", "desert", "lakeside", "prairie", "lowcountry"]
+}

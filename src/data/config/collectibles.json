@@ -1,0 +1,110 @@
+{
+  "_readme": "Course collectibles. The ball marker is the 'I played here' collectible and the ONLY tiered item (tier = best score at the course, see TIERS in game.ts). Patch, pitch marker, bag tag and pin are per-course achievements with no tiers. `default` is every course's set; `courses.<courseId>` customizes one course. Read by the app, `npm run art:prompts` and `npm run art:specs`. Rule types: roundsAtCourse{count}, birdieAtCourse, birdieOnHole{hole}, parOrBetterOnHole{hole}, parOrBetterOnHardestHole, birdieOnParFive, scoreBelowAtCourse{score}, tierAtCourse{tier}. Kinds (art shape): ball-marker, bag-tag, pitch-marker, patch, pin.",
+  "default": [
+    {
+      "id": "ball-marker",
+      "kind": "ball-marker",
+      "name": "Ball Marker",
+      "howToEarn": "Play a round here",
+      "rule": {
+        "type": "roundsAtCourse",
+        "count": 1
+      }
+    },
+    {
+      "id": "pitch-marker",
+      "kind": "pitch-marker",
+      "name": "Pitch Marker",
+      "howToEarn": "Make a birdie here",
+      "rule": {
+        "type": "birdieAtCourse"
+      }
+    },
+    {
+      "id": "bag-tag",
+      "kind": "bag-tag",
+      "name": "Bag Tag",
+      "howToEarn": "Play 3 rounds here",
+      "rule": {
+        "type": "roundsAtCourse",
+        "count": 3
+      }
+    },
+    {
+      "id": "patch",
+      "kind": "patch",
+      "name": "Patch",
+      "howToEarn": "Birdie a par 5 here",
+      "rule": {
+        "type": "birdieOnParFive"
+      }
+    },
+    {
+      "id": "pin",
+      "kind": "pin",
+      "name": "Pin",
+      "howToEarn": "Par or better on the #1 handicap hole",
+      "rule": {
+        "type": "parOrBetterOnHardestHole"
+      }
+    }
+  ],
+  "courses": {
+    "_example": {
+      "_note": "Template only (not a real course id). Copy into a real course id and edit.",
+      "remove": [
+        "bag-tag"
+      ],
+      "override": {
+        "pin": {
+          "name": "Island Green Pin",
+          "howToEarn": "Par or better on the 12th",
+          "rule": {
+            "type": "parOrBetterOnHole",
+            "hole": 12
+          }
+        }
+      },
+      "add": [
+        {
+          "id": "signature-patch",
+          "kind": "patch",
+          "name": "Signature Patch",
+          "howToEarn": "Birdie the 18th",
+          "rule": {
+            "type": "birdieOnHole",
+            "hole": 18
+          }
+        }
+      ]
+    },
+    "shennecossett": {
+      "_note": "Sample customization: hole 4 is the course's long par 3 (per the researched scorecard).",
+      "override": {
+        "pin": {
+          "name": "Fourth Hole Pin",
+          "howToEarn": "Par or better on the par-3 4th",
+          "rule": {
+            "type": "parOrBetterOnHole",
+            "hole": 4
+          }
+        }
+      }
+    },
+    "keney-park": {
+      "_note": "Sample customization: an extra course-specific collectible.",
+      "add": [
+        {
+          "id": "eighteenth-patch",
+          "kind": "patch",
+          "name": "18th Hole Patch",
+          "howToEarn": "Birdie the par-3 18th",
+          "rule": {
+            "type": "birdieOnHole",
+            "hole": 18
+          }
+        }
+      ]
+    }
+  }
+}

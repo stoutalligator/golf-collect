@@ -1,0 +1,11 @@
+{
+  "_readme": "Optional one-off art. By default every course uses its region's hero/engraving/vignette and the standard collectible frames with its name drawn in. List a course here to give it a destination hero and/or fully custom collectible images; `npm run art:prompts` then creates prompts for exactly these files. The app also picks up any of these files automatically if present.",
+  "courses": {
+    "_example": {
+      "_note": "Template only. Copy into a real course id.",
+      "hero": true,
+      "scorecardEngraving": true,
+      "collectibles": ["ball-marker", "signature-patch"]
+    }
+  }
+}

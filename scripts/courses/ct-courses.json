@@ -1,0 +1,266 @@
+{
+  "_comment": "Researched CT sample courses. `ogapi` = OpenGolfAPI course id. Display names/counties are ours; everything numeric comes from the build script + overrides.",
+  "checked": "2026-11-25",
+  "courses": [
+    {
+      "id": "keney-park",
+      "name": "Keney Park Golf Course",
+      "county": "Hartford",
+      "ogapi": "Keney Park Golf Club",
+      "crossCheck": {
+        "name": "GolfPass scorecard",
+        "url": "https://www.golfpass.com/travel-advisor/courses/341-keney-park-golf-club/scorecard-and-layout",
+        "matched": "par, stroke index, Gold & Blue hole yardages, all tee ratings"
+      }
+    },
+    {
+      "id": "wintonbury-hills",
+      "name": "Wintonbury Hills Golf Course",
+      "county": "Hartford",
+      "ogapi": "Wintonbury Hills Golf Course"
+    },
+    {
+      "id": "airways",
+      "name": "Airways Golf Course",
+      "county": "Hartford",
+      "ogapi": "Airways Golf Course Country Club",
+      "override": "airways"
+    },
+    {
+      "id": "simsbury-farms",
+      "name": "Simsbury Farms Golf Club",
+      "county": "Hartford",
+      "ogapi": "Simsbury Farms Golf Club"
+    },
+    {
+      "id": "timberlin",
+      "name": "Timberlin Golf Club",
+      "county": "Hartford",
+      "ogapi": "Timberlin Golf Club"
+    },
+    {
+      "id": "tpc-river-highlands",
+      "name": "TPC River Highlands",
+      "county": "Middlesex",
+      "ogapi": "Tpc River Highlands"
+    },
+    {
+      "id": "lyman-orchards-player",
+      "name": "Lyman Orchards (Player Course)",
+      "county": "Middlesex",
+      "ogapi": "Player At Lyman Orchards Golf Club"
+    },
+    {
+      "id": "lyman-orchards-jones",
+      "name": "Lyman Orchards (Jones Course)",
+      "county": "Middlesex",
+      "ogapi": "Jones At Lyman Orchards Golf Club"
+    },
+    {
+      "id": "fox-hopyard",
+      "name": "Fox Hopyard Golf Club",
+      "county": "Middlesex",
+      "ogapi": "Fox Hopyard Golf Club",
+      "accessSource": {
+        "name": "Fox Hopyard official site",
+        "url": "https://www.foxhopyard.com/",
+        "note": "Site describes itself as a private, membership club"
+      }
+    },
+    {
+      "id": "shennecossett",
+      "name": "Shennecossett Golf Course",
+      "county": "New London",
+      "ogapi": "Shennecossett Golf Club",
+      "crossCheck": {
+        "name": "GolfPass scorecard",
+        "url": "https://www.golfpass.com/courses/4366-shennecossett-golf-club/scorecard-and-layout",
+        "matched": "par, stroke index, Blue & White hole yardages, tee ratings"
+      },
+      "biome": "coastal",
+      "biomeSource": {
+        "name": "Wikipedia: Shennecossett Golf Course",
+        "url": "https://en.wikipedia.org/wiki/Shennecossett_Golf_Course",
+        "note": "Holes along the Thames River and Long Island Sound"
+      }
+    },
+    {
+      "id": "lake-of-isles-north",
+      "name": "Lake of Isles (North Course)",
+      "county": "New London",
+      "ogapi": "North Course At Lake Of Isles"
+    },
+    {
+      "id": "alling-memorial",
+      "name": "Alling Memorial Golf Course",
+      "county": "New Haven",
+      "ogapi": "Alling Memorial Golf Course"
+    },
+    {
+      "id": "richter-park",
+      "name": "Richter Park Golf Course",
+      "county": "Fairfield",
+      "ogapi": "Richter Park Golf Course"
+    },
+    {
+      "id": "tashua-knolls",
+      "name": "Tashua Knolls Golf Course",
+      "county": "Fairfield",
+      "ogapi": "Tashua Knolls Golf Club Tashua Knolls"
+    },
+    {
+      "id": "h-smith-richardson",
+      "name": "H. Smith Richardson Golf Course",
+      "county": "Fairfield",
+      "ogapi": "H Smith Richardson Golf Course"
+    },
+    {
+      "id": "crestbrook-park",
+      "name": "Crestbrook Park Golf Course",
+      "county": "Litchfield",
+      "ogapi": "Crestbrook Park Golf Course"
+    }
+  ],
+  "overrides": {
+    "airways": {
+      "source": {
+        "name": "Airways Golf Course official scorecard (airwaysgolf.com/golf.html, scorecard images)",
+        "url": "http://www.airwaysgolf.com/golf.html"
+      },
+      "status": "official",
+      "note": "OpenGolfAPI par and stroke index match the official card; its Blue hole yardages did not, so all hole yardages and ratings come from the official card. GolfPass shows an older par-69 layout and was disregarded.",
+      "par": [
+        4,
+        4,
+        4,
+        5,
+        4,
+        4,
+        3,
+        4,
+        4,
+        3,
+        5,
+        4,
+        3,
+        4,
+        3,
+        5,
+        4,
+        4
+      ],
+      "handicap": [
+        9,
+        5,
+        1,
+        3,
+        11,
+        13,
+        17,
+        7,
+        15,
+        18,
+        8,
+        10,
+        14,
+        6,
+        16,
+        4,
+        2,
+        12
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "ratings": {
+            "men": {
+              "rating": 66.0,
+              "slope": 106
+            }
+          },
+          "yardages": [
+            346,
+            372,
+            361,
+            497,
+            311,
+            312,
+            157,
+            341,
+            283,
+            163,
+            461,
+            385,
+            160,
+            366,
+            160,
+            481,
+            404,
+            285
+          ]
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "ratings": {
+            "men": {
+              "rating": 65.0,
+              "slope": 103
+            }
+          },
+          "yardages": [
+            336,
+            351,
+            351,
+            487,
+            301,
+            302,
+            147,
+            320,
+            273,
+            127,
+            451,
+            369,
+            133,
+            346,
+            147,
+            451,
+            388,
+            263
+          ]
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "ratings": {
+            "men": {
+              "rating": 65.0,
+              "slope": 103
+            }
+          },
+          "yardages": [
+            316,
+            331,
+            326,
+            462,
+            280,
+            273,
+            137,
+            302,
+            265,
+            112,
+            431,
+            329,
+            118,
+            301,
+            133,
+            425,
+            358,
+            255
+          ]
+        }
+      ]
+    }
+  }
+}

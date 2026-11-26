@@ -42,7 +42,7 @@ It covers the same everyday ground as apps like 18Birdies and Golf GameBook (sco
 
 ## Brand direction (working)
 
-A **premium, modern golf collection**: *Your game. Your courses. Your collection.* The interface stays clean and modern, and heritage character lives in the collectibles, scorecards, badges and painterly artwork.
+A **premium, modern golf collection**: *Play · Track · Collect.* The interface stays clean and modern, and heritage character lives in the collectibles, scorecards, badges and painterly artwork.
 
 | Token | Hex |
 | --- | --- |
@@ -64,11 +64,23 @@ Type: **Playfair Display** (headings and brand) + **Inter** (interface and data)
 
 ## Tech stack
 
-Not chosen yet. The target is **iOS first**. Decisions still open:
+**Expo (SDK 58) + React Native + TypeScript**, with Expo Router. iOS first; test on a phone with Expo Go.
 
-- App framework (native SwiftUI vs. React Native / Expo)
-- Backend, auth and sync (accounts, friends, live shared rounds)
-- Course-data provider (coverage, licensing, caching and cost must be verified first; see the vision doc)
+- Data: local sample data behind a repository layer. The backend and auth are chosen after the mock (see the [plan](docs/plan/mock-build-plan.md)).
+- Courses: 16 researched Connecticut courses ([sources](src/data/seed/SOURCES.md)). Course data © OpenStreetMap contributors (ODbL 1.0) via OpenGolfAPI.
+
+## Getting started
+
+Requires **Node ≥ 22.13**.
+
+```bash
+npm install
+npx expo start          # scan the QR code with Expo Go on your iPhone
+npx expo start --web    # or preview in the browser (renders in an iPhone-size frame)
+npm run screens         # phone-size screenshots of every screen → docs/screenshots
+```
+
+Art: prompts in [assets/_prompts](assets/_prompts/README.md), sizes and placement in [assets/_specs](assets/_specs/README.md).
 
 ## Next steps
 

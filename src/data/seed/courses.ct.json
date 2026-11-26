@@ -1,0 +1,3925 @@
+{
+  "_attribution": "© OpenStreetMap contributors (ODbL 1.0) via OpenGolfAPI — https://opengolfapi.org/attribution",
+  "generated": "2026-11-25",
+  "courses": [
+    {
+      "id": "keney-park",
+      "name": "Keney Park Golf Course",
+      "city": "Windsor",
+      "state": "CT",
+      "county": "Hartford",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.805466,
+        "lng": -72.671607
+      },
+      "website": "http://www.keneyparkgolfcourse.com/",
+      "architect": "Devereux Emmet",
+      "yearOpened": 1927,
+      "description": "Public 18-hole course in Windsor, par 70, playing up to 6,449 yards, designed by Devereux Emmet, dating to 1927.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 10,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 10
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 16
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 12
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 18,
+          "par": 3,
+          "handicap": 18
+        }
+      ],
+      "tees": [
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 70,
+          "totalYards": 6449,
+          "yardages": [
+            332,
+            509,
+            160,
+            383,
+            428,
+            152,
+            455,
+            407,
+            457,
+            533,
+            237,
+            323,
+            188,
+            513,
+            409,
+            397,
+            369,
+            197
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.6,
+              "slope": 127
+            }
+          }
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 70,
+          "totalYards": 6046,
+          "yardages": [
+            314,
+            491,
+            136,
+            369,
+            406,
+            127,
+            406,
+            380,
+            417,
+            506,
+            204,
+            301,
+            167,
+            500,
+            393,
+            383,
+            359,
+            187
+          ],
+          "ratings": {
+            "men": {
+              "rating": 68.6,
+              "slope": 124
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 70,
+          "totalYards": 5629,
+          "yardages": [
+            297,
+            480,
+            121,
+            349,
+            373,
+            115,
+            363,
+            344,
+            380,
+            475,
+            184,
+            295,
+            144,
+            467,
+            380,
+            350,
+            349,
+            163
+          ],
+          "ratings": {
+            "women": {
+              "rating": 72,
+              "slope": 124
+            },
+            "men": {
+              "rating": 66.5,
+              "slope": 121
+            }
+          }
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 70,
+          "totalYards": 4712,
+          "yardages": [
+            286,
+            423,
+            100,
+            261,
+            267,
+            93,
+            324,
+            304,
+            333,
+            444,
+            127,
+            242,
+            135,
+            405,
+            329,
+            236,
+            267,
+            136
+          ],
+          "ratings": {
+            "women": {
+              "rating": 66.9,
+              "slope": 113
+            },
+            "men": {
+              "rating": 63,
+              "slope": 109
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "cross-checked",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/64ac480a-5809-4f6a-8410-766a3e959b84",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "GolfPass scorecard",
+            "url": "https://www.golfpass.com/travel-advisor/courses/341-keney-park-golf-club/scorecard-and-layout",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "Cross-checked: par, stroke index, Gold & Blue hole yardages, all tee ratings."
+        ]
+      }
+    },
+    {
+      "id": "wintonbury-hills",
+      "name": "Wintonbury Hills Golf Course",
+      "city": "Bloomfield",
+      "state": "CT",
+      "county": "Hartford",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.8576639,
+        "lng": -72.7582139
+      },
+      "website": "https://www.wintonburyhillsgolf.com/",
+      "architect": "Pete Dye",
+      "yearOpened": 2005,
+      "description": "Municipal 18-hole course in Bloomfield, par 70, playing up to 6,711 yards, designed by Pete Dye, dating to 2005.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 13,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 5
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 70,
+          "totalYards": 6711,
+          "yardages": [
+            377,
+            365,
+            163,
+            526,
+            333,
+            430,
+            255,
+            564,
+            190,
+            412,
+            443,
+            168,
+            551,
+            455,
+            427,
+            408,
+            230,
+            414
+          ],
+          "ratings": {
+            "women": {
+              "rating": 78.4,
+              "slope": 141
+            },
+            "men": {
+              "rating": 72.3,
+              "slope": 130
+            }
+          }
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 70,
+          "totalYards": 6283,
+          "yardages": [
+            367,
+            365,
+            139,
+            512,
+            327,
+            400,
+            200,
+            543,
+            170,
+            402,
+            400,
+            162,
+            521,
+            415,
+            397,
+            368,
+            190,
+            405
+          ],
+          "ratings": {
+            "women": {
+              "rating": 75.9,
+              "slope": 134
+            },
+            "men": {
+              "rating": 70,
+              "slope": 128
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 70,
+          "totalYards": 5678,
+          "yardages": [
+            330,
+            357,
+            125,
+            467,
+            320,
+            355,
+            152,
+            489,
+            143,
+            360,
+            359,
+            148,
+            470,
+            370,
+            364,
+            348,
+            150,
+            371
+          ],
+          "ratings": {
+            "men": {
+              "rating": 67.3,
+              "slope": 122
+            },
+            "women": {
+              "rating": 72.5,
+              "slope": 123
+            }
+          }
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "par": 70,
+          "totalYards": 5005,
+          "yardages": [
+            315,
+            295,
+            107,
+            413,
+            302,
+            325,
+            108,
+            418,
+            110,
+            335,
+            290,
+            134,
+            440,
+            320,
+            314,
+            312,
+            125,
+            342
+          ],
+          "ratings": {
+            "men": {
+              "rating": 66.7,
+              "slope": 113
+            },
+            "women": {
+              "rating": 68.6,
+              "slope": 111
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/8edf76ec-a6b4-4d48-bfb0-121dfaa2e9d4",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "id": "airways",
+      "name": "Airways Golf Course",
+      "city": "West Suffield",
+      "state": "CT",
+      "county": "Hartford",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.9620094,
+        "lng": -72.7097396
+      },
+      "website": "http://www.airwaysgolf.com/",
+      "yearOpened": 1996,
+      "description": "Public 18-hole course in West Suffield, par 71, playing up to 5,845 yards, dating to 1996.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 10,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 11,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 15,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 16,
+          "par": 5,
+          "handicap": 4
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 12
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 5845,
+          "yardages": [
+            346,
+            372,
+            361,
+            497,
+            311,
+            312,
+            157,
+            341,
+            283,
+            163,
+            461,
+            385,
+            160,
+            366,
+            160,
+            481,
+            404,
+            285
+          ],
+          "ratings": {
+            "men": {
+              "rating": 66,
+              "slope": 106
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 5543,
+          "yardages": [
+            336,
+            351,
+            351,
+            487,
+            301,
+            302,
+            147,
+            320,
+            273,
+            127,
+            451,
+            369,
+            133,
+            346,
+            147,
+            451,
+            388,
+            263
+          ],
+          "ratings": {
+            "men": {
+              "rating": 65,
+              "slope": 103
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 5154,
+          "yardages": [
+            316,
+            331,
+            326,
+            462,
+            280,
+            273,
+            137,
+            302,
+            265,
+            112,
+            431,
+            329,
+            118,
+            301,
+            133,
+            425,
+            358,
+            255
+          ],
+          "ratings": {
+            "men": {
+              "rating": 65,
+              "slope": 103
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "official",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/fc48cfb3-e5ca-4749-873b-1b3e3cb3f634",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "Airways Golf Course official scorecard (airwaysgolf.com/golf.html, scorecard images)",
+            "url": "http://www.airwaysgolf.com/golf.html",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "OpenGolfAPI par and stroke index match the official card; its Blue hole yardages did not, so all hole yardages and ratings come from the official card. GolfPass shows an older par-69 layout and was disregarded."
+        ]
+      }
+    },
+    {
+      "id": "simsbury-farms",
+      "name": "Simsbury Farms Golf Club",
+      "city": "Simsbury",
+      "state": "CT",
+      "county": "Hartford",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.881207,
+        "lng": -72.844301
+      },
+      "website": "http://www.simsburyfarms.com/",
+      "architect": "Geoff Cornish",
+      "yearOpened": 1971,
+      "description": "Public 18-hole course in Simsbury, par 72, playing up to 6,509 yards, designed by Geoff Cornish, dating to 1971.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 16
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 12,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 12
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 18
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 72,
+          "totalYards": 6509,
+          "yardages": [
+            373,
+            400,
+            402,
+            180,
+            505,
+            385,
+            551,
+            300,
+            195,
+            375,
+            374,
+            565,
+            185,
+            475,
+            337,
+            233,
+            340,
+            422
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.2,
+              "slope": 129
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 72,
+          "totalYards": 6119,
+          "yardages": [
+            341,
+            381,
+            361,
+            160,
+            487,
+            361,
+            535,
+            279,
+            178,
+            360,
+            335,
+            533,
+            169,
+            465,
+            325,
+            200,
+            322,
+            386
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.2,
+              "slope": 126
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 72,
+          "totalYards": 5800,
+          "yardages": [
+            335,
+            360,
+            335,
+            145,
+            475,
+            310,
+            513,
+            270,
+            157,
+            338,
+            327,
+            474,
+            153,
+            440,
+            299,
+            196,
+            282,
+            372
+          ],
+          "ratings": {
+            "men": {
+              "rating": 67.8,
+              "slope": 124
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 72,
+          "totalYards": 5400,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 70.8,
+              "slope": 122
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/f1bed326-d383-45cf-a51c-0a0e1e9ec465",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Blue: hole yardages sum to 6597 vs. stated 6509.",
+          "White: hole yardages sum to 6178 vs. stated 6119.",
+          "Gold: hole yardages sum to 5781 vs. stated 5800.",
+          "Red: hole yardages sum to 4655 vs. stated 5400; hole breakdown omitted."
+        ]
+      }
+    },
+    {
+      "id": "timberlin",
+      "name": "Timberlin Golf Club",
+      "city": "Berlin",
+      "state": "CT",
+      "county": "Hartford",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.6055088,
+        "lng": -72.8085934
+      },
+      "website": "http://www.timberlingolf.com/",
+      "architect": "Al Zikorus",
+      "yearOpened": 1970,
+      "description": "Municipal 18-hole course in Berlin, par 72, playing up to 6,858 yards, designed by Al Zikorus, dating to 1970.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 10,
+          "par": 5,
+          "handicap": 10
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 13,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 8
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 72,
+          "totalYards": 6858,
+          "yardages": [
+            581,
+            384,
+            375,
+            183,
+            392,
+            574,
+            180,
+            358,
+            386,
+            508,
+            383,
+            185,
+            520,
+            424,
+            440,
+            174,
+            410,
+            401
+          ],
+          "ratings": {
+            "men": {
+              "rating": 72.9,
+              "slope": 130
+            }
+          }
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 72,
+          "totalYards": 6500,
+          "yardages": [
+            550,
+            360,
+            365,
+            170,
+            364,
+            540,
+            170,
+            335,
+            377,
+            498,
+            367,
+            167,
+            487,
+            385,
+            410,
+            170,
+            395,
+            390
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.3,
+              "slope": 129
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 72,
+          "totalYards": 6113,
+          "yardages": [
+            534,
+            333,
+            347,
+            156,
+            346,
+            510,
+            160,
+            310,
+            368,
+            481,
+            347,
+            145,
+            467,
+            343,
+            384,
+            161,
+            360,
+            361
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.4,
+              "slope": 128
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 72,
+          "totalYards": 5607,
+          "yardages": [
+            463,
+            268,
+            340,
+            144,
+            335,
+            470,
+            150,
+            301,
+            299,
+            472,
+            335,
+            143,
+            452,
+            299,
+            360,
+            152,
+            335,
+            289
+          ],
+          "ratings": {
+            "men": {
+              "rating": 67.3,
+              "slope": 120
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 72,
+          "totalYards": 5402,
+          "yardages": [
+            457,
+            264,
+            325,
+            132,
+            330,
+            464,
+            138,
+            282,
+            288,
+            462,
+            319,
+            135,
+            407,
+            296,
+            355,
+            147,
+            316,
+            285
+          ],
+          "ratings": {
+            "women": {
+              "rating": 71.8,
+              "slope": 119
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/450d81d6-c550-46a6-a9b9-4bcec5bab70d",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "id": "tpc-river-highlands",
+      "name": "TPC River Highlands",
+      "city": "Cromwell",
+      "state": "CT",
+      "county": "Middlesex",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.6323854224,
+        "lng": -72.6397132874
+      },
+      "website": "http://tpc.com/riverhighlands",
+      "yearOpened": 1928,
+      "description": "Private 18-hole course in Cromwell, par 70, playing up to 6,841 yards, dating to 1928.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 13,
+          "par": 5,
+          "handicap": 4
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 16
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 6
+        }
+      ],
+      "tees": [
+        {
+          "id": "tournament",
+          "name": "Tournament",
+          "par": 70,
+          "totalYards": 6841,
+          "yardages": [
+            434,
+            341,
+            431,
+            481,
+            223,
+            574,
+            443,
+            202,
+            406,
+            462,
+            158,
+            411,
+            523,
+            421,
+            296,
+            171,
+            431,
+            444
+          ],
+          "ratings": {
+            "men": {
+              "rating": 73,
+              "slope": 131
+            }
+          }
+        },
+        {
+          "id": "championship",
+          "name": "Championship",
+          "par": 70,
+          "totalYards": 6518,
+          "yardages": [
+            418,
+            311,
+            421,
+            444,
+            212,
+            549,
+            424,
+            194,
+            393,
+            435,
+            149,
+            398,
+            503,
+            413,
+            278,
+            164,
+            407,
+            405
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.5,
+              "slope": 127
+            }
+          }
+        },
+        {
+          "id": "club",
+          "name": "Club",
+          "par": 70,
+          "totalYards": 6146,
+          "yardages": [
+            418,
+            311,
+            380,
+            398,
+            179,
+            549,
+            385,
+            167,
+            393,
+            383,
+            149,
+            398,
+            503,
+            384,
+            278,
+            164,
+            334,
+            373
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.6,
+              "slope": 126
+            }
+          }
+        },
+        {
+          "id": "tpc",
+          "name": "TPC",
+          "par": 70,
+          "totalYards": 5873,
+          "yardages": [
+            406,
+            263,
+            380,
+            398,
+            179,
+            523,
+            385,
+            167,
+            357,
+            383,
+            126,
+            358,
+            470,
+            384,
+            247,
+            140,
+            334,
+            373
+          ],
+          "ratings": {
+            "women": {
+              "rating": 74.7,
+              "slope": 137
+            },
+            "men": {
+              "rating": 68.7,
+              "slope": 124
+            }
+          }
+        },
+        {
+          "id": "players",
+          "name": "Players",
+          "par": 70,
+          "totalYards": 4871,
+          "yardages": [
+            280,
+            213,
+            284,
+            344,
+            123,
+            482,
+            322,
+            116,
+            329,
+            338,
+            103,
+            319,
+            431,
+            305,
+            226,
+            86,
+            249,
+            321
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.6,
+              "slope": 122
+            }
+          }
+        },
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 70,
+          "totalYards": 3226,
+          "yardages": [
+            216,
+            116,
+            200,
+            203,
+            123,
+            250,
+            227,
+            105,
+            202,
+            193,
+            97,
+            215,
+            266,
+            150,
+            151,
+            80,
+            214,
+            218
+          ],
+          "ratings": {
+            "men": {
+              "rating": 56.2,
+              "slope": 94
+            },
+            "women": {
+              "rating": 59.2,
+              "slope": 102
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/903f3700-f0c6-447e-a024-9f2085a13521",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Tournament: hole yardages sum to 6852 vs. stated 6841."
+        ]
+      }
+    },
+    {
+      "id": "lyman-orchards-player",
+      "name": "Lyman Orchards (Player Course)",
+      "city": "Middlefield",
+      "state": "CT",
+      "county": "Middlesex",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4911075,
+        "lng": -72.7111939
+      },
+      "website": "https://lymangolf.com/",
+      "architect": "Gary Player",
+      "yearOpened": 1994,
+      "description": "Public 18-hole course in Middlefield, par 71, playing up to 6,725 yards, designed by Gary Player, dating to 1994.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 12
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 17,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 18,
+          "par": 5,
+          "handicap": 6
+        }
+      ],
+      "tees": [
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 71,
+          "totalYards": 6725,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 72.7,
+              "slope": 133
+            }
+          }
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 6325,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 71,
+              "slope": 130
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 5890,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 68.9,
+              "slope": 129
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 4900,
+          "yardages": null,
+          "ratings": {
+            "women": {
+              "rating": 68.3,
+              "slope": 113
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/1a3060ff-561b-48b2-bf42-296412cb90c8",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Gold: hole yardages sum to 4698 vs. stated 6725; hole breakdown omitted.",
+          "Blue: hole yardages sum to 6115 vs. stated 6325; hole breakdown omitted.",
+          "White: hole yardages sum to 5633 vs. stated 5890; hole breakdown omitted.",
+          "Red: hole yardages sum to 3744 vs. stated 4900; hole breakdown omitted."
+        ]
+      }
+    },
+    {
+      "id": "lyman-orchards-jones",
+      "name": "Lyman Orchards (Jones Course)",
+      "city": "Middlefield",
+      "state": "CT",
+      "county": "Middlesex",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4911075,
+        "lng": -72.7111939
+      },
+      "website": "https://lymangolf.com/",
+      "architect": "Robert Trent Jones",
+      "yearOpened": 1969,
+      "description": "Public 18-hole course in Middlefield, par 72, playing up to 7,011 yards, designed by Robert Trent Jones, dating to 1969.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 12,
+          "par": 5,
+          "handicap": 14
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 18,
+          "par": 5,
+          "handicap": 12
+        }
+      ],
+      "tees": [
+        {
+          "id": "black-macoun",
+          "name": "Black/Macoun",
+          "par": 72,
+          "totalYards": 7011,
+          "yardages": [
+            435,
+            195,
+            408,
+            571,
+            407,
+            366,
+            197,
+            391,
+            572,
+            412,
+            167,
+            516,
+            390,
+            407,
+            402,
+            428,
+            180,
+            567
+          ],
+          "ratings": {
+            "men": {
+              "rating": 73.3,
+              "slope": 132
+            }
+          }
+        },
+        {
+          "id": "blue-empire",
+          "name": "Blue/Empire",
+          "par": 72,
+          "totalYards": 6614,
+          "yardages": [
+            416,
+            175,
+            374,
+            552,
+            390,
+            350,
+            175,
+            373,
+            548,
+            399,
+            152,
+            490,
+            370,
+            388,
+            382,
+            403,
+            162,
+            515
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.5,
+              "slope": 131
+            }
+          }
+        },
+        {
+          "id": "white-mcintosh",
+          "name": "White/McIntosh",
+          "par": 72,
+          "totalYards": 6200,
+          "yardages": [
+            397,
+            154,
+            361,
+            518,
+            372,
+            334,
+            153,
+            355,
+            514,
+            369,
+            138,
+            462,
+            350,
+            369,
+            361,
+            380,
+            144,
+            469
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.6,
+              "slope": 128
+            }
+          }
+        },
+        {
+          "id": "red-cortland",
+          "name": "Red/Cortland",
+          "par": 72,
+          "totalYards": 5812,
+          "yardages": [
+            379,
+            134,
+            338,
+            491,
+            354,
+            317,
+            131,
+            336,
+            483,
+            346,
+            124,
+            435,
+            329,
+            350,
+            340,
+            356,
+            126,
+            443
+          ],
+          "ratings": {
+            "women": {
+              "rating": 72,
+              "slope": 124
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/71c7efdc-fa11-45e2-aae5-bef6dc712643",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "id": "fox-hopyard",
+      "name": "Fox Hopyard Golf Club",
+      "city": "East Haddam",
+      "state": "CT",
+      "county": "Middlesex",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.4409623,
+        "lng": -72.3430083
+      },
+      "website": "https://www.foxhopyard.com/",
+      "architect": "Roger Rulewich",
+      "yearOpened": 2001,
+      "description": "Private 18-hole course in East Haddam, par 71, playing up to 6,912 yards, designed by Roger Rulewich, dating to 2001.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 14,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 15,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 18,
+          "par": 5,
+          "handicap": 10
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 71,
+          "totalYards": 6912,
+          "yardages": [
+            390,
+            409,
+            517,
+            202,
+            506,
+            384,
+            395,
+            180,
+            412,
+            412,
+            192,
+            415,
+            450,
+            224,
+            567,
+            249,
+            457,
+            551
+          ],
+          "ratings": {
+            "men": {
+              "rating": 74.1,
+              "slope": 136
+            }
+          }
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 6512,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 72.6,
+              "slope": 131
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 6109,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 70.7,
+              "slope": 124
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 71,
+          "totalYards": 5657,
+          "yardages": null,
+          "ratings": {
+            "women": {
+              "rating": 73.9,
+              "slope": 139
+            },
+            "men": {
+              "rating": 68.5,
+              "slope": 119
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 5111,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 70.9,
+              "slope": 127
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/2aa504c0-e572-430f-9572-d36e816d3a9b",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "Fox Hopyard official site",
+            "url": "https://www.foxhopyard.com/",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "Blue: hole yardages sum to 6382 vs. stated 6512; hole breakdown omitted.",
+          "White: hole yardages sum to 5920 vs. stated 6109; hole breakdown omitted.",
+          "Gold: hole yardages sum to 5399 vs. stated 5657; hole breakdown omitted.",
+          "Red: hole yardages sum to 4775 vs. stated 5111; hole breakdown omitted.",
+          "Site describes itself as a private, membership club."
+        ]
+      }
+    },
+    {
+      "id": "shennecossett",
+      "name": "Shennecossett Golf Course",
+      "city": "Groton",
+      "state": "CT",
+      "county": "New London",
+      "region": "new-england",
+      "biome": "coastal",
+      "biomeSource": {
+        "name": "Wikipedia: Shennecossett Golf Course",
+        "url": "https://en.wikipedia.org/wiki/Shennecossett_Golf_Course",
+        "note": "Holes along the Thames River and Long Island Sound"
+      },
+      "access": "municipal",
+      "location": {
+        "lat": 41.3266146184,
+        "lng": -72.0704049444
+      },
+      "website": "http://www.shennygolf.com",
+      "architect": "Donald Ross",
+      "yearOpened": 1898,
+      "description": "Municipal 18-hole course in Groton, par 71, playing up to 6,562 yards, designed by Donald Ross, dating to 1898.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 11
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 15,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 18,
+          "par": 5,
+          "handicap": 14
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 6562,
+          "yardages": [
+            345,
+            384,
+            397,
+            208,
+            565,
+            421,
+            431,
+            490,
+            175,
+            425,
+            385,
+            125,
+            353,
+            418,
+            195,
+            400,
+            345,
+            500
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.7,
+              "slope": 124
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 6062,
+          "yardages": [
+            335,
+            374,
+            367,
+            180,
+            530,
+            411,
+            400,
+            475,
+            155,
+            360,
+            290,
+            120,
+            330,
+            380,
+            170,
+            375,
+            330,
+            480
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.3,
+              "slope": 123
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 5351,
+          "yardages": null,
+          "ratings": {
+            "women": {
+              "rating": 70.9,
+              "slope": 123
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "cross-checked",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/efbb1e62-7ba6-4e4d-a292-d54a93b94d83",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "GolfPass scorecard",
+            "url": "https://www.golfpass.com/courses/4366-shennecossett-golf-club/scorecard-and-layout",
+            "checked": "2026-11-25"
+          }
+        ],
+        "notes": [
+          "Cross-checked: par, stroke index, Blue & White hole yardages, tee ratings."
+        ]
+      }
+    },
+    {
+      "id": "lake-of-isles-north",
+      "name": "Lake of Isles (North Course)",
+      "city": "North Stonington",
+      "state": "CT",
+      "county": "New London",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4838118,
+        "lng": -71.950374
+      },
+      "website": "http://www.lakeofisles.com/",
+      "architect": "Rees Jones",
+      "yearOpened": 2005,
+      "description": "Public 18-hole course in North Stonington, par 72, playing up to 7,279 yards, designed by Rees Jones, dating to 2005.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 18
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 12
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 12,
+          "par": 5,
+          "handicap": 15
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 15,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 3
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 72,
+          "totalYards": 7279,
+          "yardages": [
+            593,
+            216,
+            356,
+            457,
+            530,
+            496,
+            204,
+            369,
+            459,
+            429,
+            196,
+            525,
+            370,
+            462,
+            574,
+            200,
+            384,
+            459
+          ],
+          "ratings": {
+            "men": {
+              "rating": 76.7,
+              "slope": 147
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 72,
+          "totalYards": 6757,
+          "yardages": [
+            575,
+            184,
+            334,
+            428,
+            481,
+            460,
+            196,
+            349,
+            435,
+            416,
+            178,
+            507,
+            357,
+            415,
+            523,
+            181,
+            375,
+            363
+          ],
+          "ratings": {
+            "men": {
+              "rating": 73.4,
+              "slope": 138
+            }
+          }
+        },
+        {
+          "id": "silver",
+          "name": "Silver",
+          "par": 72,
+          "totalYards": 6005,
+          "yardages": [
+            550,
+            144,
+            308,
+            372,
+            457,
+            369,
+            129,
+            325,
+            389,
+            369,
+            154,
+            469,
+            331,
+            368,
+            474,
+            166,
+            286,
+            345
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.2,
+              "slope": 132
+            }
+          }
+        },
+        {
+          "id": "copper",
+          "name": "Copper",
+          "par": 72,
+          "totalYards": 5387,
+          "yardages": [
+            462,
+            127,
+            290,
+            350,
+            423,
+            289,
+            113,
+            294,
+            330,
+            364,
+            138,
+            427,
+            303,
+            360,
+            453,
+            136,
+            221,
+            307
+          ],
+          "ratings": {
+            "men": {
+              "rating": 67.3,
+              "slope": 124
+            },
+            "women": {
+              "rating": 72.4,
+              "slope": 135
+            }
+          }
+        },
+        {
+          "id": "jade",
+          "name": "Jade",
+          "par": 72,
+          "totalYards": 4895,
+          "yardages": [
+            415,
+            122,
+            202,
+            347,
+            396,
+            280,
+            109,
+            257,
+            320,
+            270,
+            130,
+            370,
+            283,
+            345,
+            445,
+            106,
+            216,
+            282
+          ],
+          "ratings": {
+            "women": {
+              "rating": 68.9,
+              "slope": 126
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d5df28c8-30dd-4866-acf0-ffa97fee0e01",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "id": "alling-memorial",
+      "name": "Alling Memorial Golf Course",
+      "city": "New Haven",
+      "state": "CT",
+      "county": "New Haven",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.3082642,
+        "lng": -72.8730164
+      },
+      "website": "http://www.allinggolfclub.com/",
+      "architect": "Robert D. Pryde",
+      "yearOpened": 1930,
+      "description": "Municipal 18-hole course in New Haven, par 72, playing up to 6,248 yards, designed by Robert D. Pryde, dating to 1930.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 10,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 11,
+          "par": 5,
+          "handicap": 12
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 15,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "handicap": 10
+        },
+        {
+          "number": 18,
+          "par": 5,
+          "handicap": 6
+        }
+      ],
+      "tees": [
+        {
+          "id": "back",
+          "name": "Back",
+          "par": 72,
+          "totalYards": 6248,
+          "yardages": [
+            401,
+            332,
+            185,
+            495,
+            256,
+            361,
+            386,
+            295,
+            325,
+            175,
+            490,
+            204,
+            356,
+            430,
+            507,
+            353,
+            211,
+            486
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.2,
+              "slope": 132
+            }
+          }
+        },
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 72,
+          "totalYards": 5877,
+          "yardages": [
+            380,
+            313,
+            168,
+            474,
+            231,
+            344,
+            366,
+            274,
+            305,
+            158,
+            475,
+            160,
+            337,
+            408,
+            493,
+            331,
+            189,
+            471
+          ],
+          "ratings": {
+            "men": {
+              "rating": 69.3,
+              "slope": 120
+            }
+          }
+        },
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 72,
+          "totalYards": 5191,
+          "yardages": [
+            325,
+            297,
+            149,
+            415,
+            211,
+            316,
+            350,
+            254,
+            286,
+            140,
+            338,
+            150,
+            248,
+            368,
+            439,
+            331,
+            179,
+            395
+          ],
+          "ratings": {
+            "men": {
+              "rating": 65.5,
+              "slope": 121
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/66fd0495-64da-430f-b931-53d4276d764a",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "id": "richter-park",
+      "name": "Richter Park Golf Course",
+      "city": "Danbury",
+      "state": "CT",
+      "county": "Fairfield",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4136111,
+        "lng": -73.52
+      },
+      "website": "http://www.richterpark.com/",
+      "architect": "Edward Ryder",
+      "yearOpened": 1970,
+      "description": "Public 18-hole course in Danbury, par 71, playing up to 6,744 yards, designed by Edward Ryder, dating to 1970.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 10,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 12,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 16,
+          "par": 5,
+          "handicap": 4
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 2
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 72,
+          "totalYards": 6744,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 73.6,
+              "slope": 139
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 72,
+          "totalYards": 6304,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 71.6,
+              "slope": 136
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 72,
+          "totalYards": 5531,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 72.9,
+              "slope": 129
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 72,
+          "totalYards": 5114,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 70.7,
+              "slope": 124
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/29dbba01-6064-4fc7-a900-067860445267",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Blue: hole yardages sum to 6547 vs. stated 6744; hole breakdown omitted.",
+          "White: hole yardages sum to 6119 vs. stated 6304; hole breakdown omitted.",
+          "Gold: hole yardages sum to 5335 vs. stated 5531; hole breakdown omitted.",
+          "Red: hole yardages sum to 4922 vs. stated 5114; hole breakdown omitted."
+        ]
+      }
+    },
+    {
+      "id": "tashua-knolls",
+      "name": "Tashua Knolls Golf Course",
+      "city": "Trumbull",
+      "state": "CT",
+      "county": "Fairfield",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.2894133,
+        "lng": -73.2493296
+      },
+      "website": "https://tashuaknollsbanquets.com/",
+      "yearOpened": 1976,
+      "description": "Municipal 18-hole course in Trumbull, par 72, playing up to 6,540 yards, dating to 1976.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 16,
+          "par": 5,
+          "handicap": 4
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 8
+        }
+      ],
+      "tees": [
+        {
+          "id": "championship",
+          "name": "Championship",
+          "par": 72,
+          "totalYards": 6540,
+          "yardages": [
+            561,
+            375,
+            167,
+            391,
+            370,
+            211,
+            501,
+            366,
+            378,
+            373,
+            385,
+            163,
+            303,
+            506,
+            394,
+            527,
+            162,
+            407
+          ],
+          "ratings": {
+            "men": {
+              "rating": 72.4,
+              "slope": 133
+            }
+          }
+        },
+        {
+          "id": "back",
+          "name": "Back",
+          "par": 72,
+          "totalYards": 6119,
+          "yardages": [
+            532,
+            317,
+            151,
+            342,
+            353,
+            192,
+            480,
+            354,
+            356,
+            349,
+            367,
+            154,
+            262,
+            495,
+            373,
+            506,
+            145,
+            391
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.3,
+              "slope": 128
+            }
+          }
+        },
+        {
+          "id": "back-white",
+          "name": "Back/White",
+          "par": 72,
+          "totalYards": 5656,
+          "yardages": [
+            495,
+            302,
+            146,
+            325,
+            330,
+            155,
+            445,
+            324,
+            307,
+            333,
+            327,
+            146,
+            250,
+            487,
+            330,
+            469,
+            140,
+            345
+          ],
+          "ratings": {
+            "women": {
+              "rating": 73.8,
+              "slope": 127
+            }
+          }
+        },
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 72,
+          "totalYards": 5653,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 67.9,
+              "slope": 124
+            }
+          }
+        },
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 72,
+          "totalYards": 5454,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 65.1,
+              "slope": 119
+            }
+          }
+        },
+        {
+          "id": "forward-green",
+          "name": "Forward/Green",
+          "par": 72,
+          "totalYards": 5050,
+          "yardages": [
+            420,
+            270,
+            115,
+            280,
+            316,
+            120,
+            395,
+            308,
+            307,
+            286,
+            304,
+            142,
+            243,
+            404,
+            280,
+            415,
+            110,
+            335
+          ],
+          "ratings": {
+            "women": {
+              "rating": 70.3,
+              "slope": 121
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/47c7ad7f-f935-44ed-a437-cd986ac644d8",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "id": "h-smith-richardson",
+      "name": "H. Smith Richardson Golf Course",
+      "city": "Fairfield",
+      "state": "CT",
+      "county": "Fairfield",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.2158333,
+        "lng": -73.2688889
+      },
+      "website": "http://www.hsrgolf.com/",
+      "yearOpened": 1972,
+      "description": "Municipal 18-hole course in Fairfield, par 72, playing up to 6,704 yards, dating to 1972.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 11
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 13,
+          "par": 5,
+          "handicap": 16
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 18,
+          "par": 5,
+          "handicap": 8
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 72,
+          "totalYards": 6704,
+          "yardages": [
+            402,
+            320,
+            180,
+            359,
+            410,
+            517,
+            398,
+            202,
+            500,
+            397,
+            368,
+            200,
+            550,
+            426,
+            410,
+            168,
+            391,
+            536
+          ],
+          "ratings": {
+            "men": {
+              "rating": 72.1,
+              "slope": 126
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 72,
+          "totalYards": 6378,
+          "yardages": [
+            375,
+            310,
+            171,
+            340,
+            400,
+            505,
+            383,
+            180,
+            490,
+            389,
+            355,
+            175,
+            505,
+            405,
+            355,
+            150,
+            370,
+            520
+          ],
+          "ratings": {
+            "men": {
+              "rating": 71.2,
+              "slope": 125
+            },
+            "women": {
+              "rating": 76.1,
+              "slope": 139
+            }
+          }
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 73,
+          "totalYards": 5723,
+          "yardages": null,
+          "ratings": {
+            "women": {
+              "rating": 74,
+              "slope": 136
+            },
+            "men": {
+              "rating": 68.7,
+              "slope": 119
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/04a154c1-787b-4ced-91c0-e1b54e61b0c1",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 6734 vs. stated 6704."
+        ]
+      }
+    },
+    {
+      "id": "crestbrook-park",
+      "name": "Crestbrook Park Golf Course",
+      "city": "Watertown",
+      "state": "CT",
+      "county": "Litchfield",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.6348457,
+        "lng": -73.1119995
+      },
+      "website": "http://crestbrookpark.com/",
+      "architect": "Geoffrey S. Cornish, ASGCA",
+      "yearOpened": 1962,
+      "description": "Municipal 18-hole course in Watertown, par 71, playing up to 6,930 yards, designed by Geoffrey S. Cornish, ASGCA, dating to 1962.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 11,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 12,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 13,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 15,
+          "par": 5,
+          "handicap": 8
+        },
+        {
+          "number": 16,
+          "par": 3,
+          "handicap": 10
+        },
+        {
+          "number": 17,
+          "par": 4,
+          "handicap": 16
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 2
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 6930,
+          "yardages": [
+            396,
+            470,
+            435,
+            542,
+            191,
+            408,
+            437,
+            217,
+            559,
+            400,
+            442,
+            183,
+            362,
+            374,
+            527,
+            228,
+            330,
+            429
+          ],
+          "ratings": {
+            "men": {
+              "rating": 74.2,
+              "slope": 132
+            }
+          }
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 71,
+          "totalYards": 6492,
+          "yardages": [
+            380,
+            448,
+            415,
+            515,
+            156,
+            391,
+            394,
+            202,
+            541,
+            376,
+            415,
+            174,
+            344,
+            348,
+            475,
+            210,
+            304,
+            404
+          ],
+          "ratings": {
+            "men": {
+              "rating": 72,
+              "slope": 126
+            },
+            "women": {
+              "rating": 77.9,
+              "slope": 136
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 6098,
+          "yardages": [
+            360,
+            404,
+            401,
+            460,
+            142,
+            376,
+            359,
+            181,
+            521,
+            362,
+            395,
+            146,
+            330,
+            337,
+            446,
+            201,
+            294,
+            383
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.3,
+              "slope": 122
+            },
+            "women": {
+              "rating": 76.4,
+              "slope": 134
+            }
+          }
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 75,
+          "totalYards": 5696,
+          "yardages": [
+            328,
+            390,
+            387,
+            433,
+            129,
+            359,
+            345,
+            171,
+            451,
+            324,
+            365,
+            134,
+            318,
+            292,
+            427,
+            192,
+            286,
+            365
+          ],
+          "ratings": {
+            "women": {
+              "rating": 74.8,
+              "slope": 132
+            },
+            "men": {
+              "rating": 68.6,
+              "slope": 118
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 4232,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 61.6,
+              "slope": 110
+            },
+            "women": {
+              "rating": 63.6,
+              "slope": 122
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/e9b4d159-dd0c-4966-8486-4e7510ff1d7a",
+            "checked": "2026-11-25",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": []
+      }
+    }
+  ]
+}

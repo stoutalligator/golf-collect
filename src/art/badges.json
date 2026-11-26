@@ -1,0 +1,103 @@
+{
+  "_readme": "Ribbon label layout per badge PNG (1024 canvas), measured from the art by Claude. The app writes the badge name on the blank ribbon. `default` is used for badges not listed.",
+  "default": {
+    "x": 512,
+    "y": 698,
+    "maxWidth": 520,
+    "maxFontSize": 64,
+    "color": "#F2E6CF"
+  },
+  "badges": {
+    "break-100": {
+      "x": 512,
+      "y": 696,
+      "maxWidth": 500,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "break-90": {
+      "x": 512,
+      "y": 698,
+      "maxWidth": 503,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "break-80": {
+      "x": 512,
+      "y": 701,
+      "maxWidth": 505,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "first-birdie": {
+      "x": 512,
+      "y": 696,
+      "maxWidth": 487,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "100-birdies": {
+      "x": 512,
+      "y": 699,
+      "maxWidth": 488,
+      "maxFontSize": 62,
+      "color": "#F2E6CF"
+    },
+    "course-explorer": {
+      "x": 512,
+      "y": 699,
+      "maxWidth": 500,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "state-traveler": {
+      "x": 512,
+      "y": 699,
+      "maxWidth": 507,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "golf-traveler": {
+      "x": 512,
+      "y": 699,
+      "maxWidth": 508,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "parks-and-links": {
+      "x": 512,
+      "y": 698,
+      "maxWidth": 498,
+      "maxFontSize": 64,
+      "color": "#F2E6CF"
+    },
+    "course-collector": {
+      "x": 512,
+      "y": 698,
+      "maxWidth": 504,
+      "maxFontSize": 64,
+      "color": "#F2E6CF"
+    },
+    "keepsake-50": {
+      "x": 512,
+      "y": 699,
+      "maxWidth": 505,
+      "maxFontSize": 63,
+      "color": "#F2E6CF"
+    },
+    "sim-break-80": {
+      "x": 512,
+      "y": 717,
+      "maxWidth": 471,
+      "maxFontSize": 59,
+      "color": "#F2E6CF"
+    },
+    "sim-explorer": {
+      "x": 512,
+      "y": 717,
+      "maxWidth": 468,
+      "maxFontSize": 59,
+      "color": "#F2E6CF"
+    }
+  }
+}
