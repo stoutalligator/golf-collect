@@ -16,7 +16,13 @@ def load(*p):
     return json.loads(root.joinpath(*p).read_text(encoding='utf-8'))
 
 
-courses = load('src', 'data', 'seed', 'courses.ct.json')['courses']
+# Every imported course (data/courses/<st>.json, which already includes the curated ones), else the curated seed.
+_by_id = {c['id']: c for c in load('src', 'data', 'seed', 'courses.ct.json')['courses']}
+for _f in sorted((root / 'data' / 'courses').glob('*.json')) if (root / 'data' / 'courses').exists() else []:
+    if not _f.name.endswith('.excluded.json'):
+        for _c in json.loads(_f.read_text(encoding='utf-8')).get('courses', []):
+            _by_id[_c['id']] = _c
+courses = list(_by_id.values())
 REGIONS = load('src', 'data', 'config', 'regions.json')['regions']
 FRAMES = load('src', 'art', 'frames.json')['frames']
 OVERRIDES = {k: v for k, v in load('src', 'data', 'config', 'art-overrides.json')['courses'].items() if not k.startswith('_')}

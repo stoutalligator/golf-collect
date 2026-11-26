@@ -39,7 +39,7 @@ A low horizon across the full width; leave the top ~25% empty (it sits just unde
 
 ## Files & prompts
 
-- [ ] `assets/art/regions/new-england/scorecard-engraving.png`  (New England: used by 16 course(s))
+- [ ] `assets/art/regions/new-england/scorecard-engraving.png`  (New England: used by 231 course(s))
 
   ```text
   Hand-drawn minimalist ink illustration in a loose vintage field-journal sketch style. Drawn with expressive, slightly imperfect forest-green ink strokes on a warm cream paper background. Organic outlines, varied line weight with occasional rough or broken edges, sparse directional hatching, subtle ink grain, and minimal shading. Simple, recognizable silhouettes with very little detail, casually hand-sketched with confident but imperfect strokes. Deep forest green (#1F3D2F) for the primary linework, warm cream (#F2E6CF) for the background, and a restrained muted orange (#BB8B2B) for one small accent. Centered composition with generous negative space. Minimalist, understated, nostalgic and handcrafted, like an illustration from a vintage golf field guide, not a painting or detailed landscape.

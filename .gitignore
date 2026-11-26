@@ -46,3 +46,6 @@ assets/_prompts/compiled/
 
 # Local signing/API keys (never committed)
 .secrets/
+
+# Reference photos for course art (usually not ours to publish; see assets/_prompts/overrides/README.md)
+assets/_refs/

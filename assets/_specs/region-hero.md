@@ -40,7 +40,7 @@ One image represents **every** course in the region, so evoke the region, not on
 
 ## Files & prompts
 
-- [ ] `assets/art/regions/new-england/hero.png`  (New England: used by 16 course(s))
+- [ ] `assets/art/regions/new-england/hero.png`  (New England: used by 231 course(s))
 
   ```text
   Hand-painted gouache illustration with visible brushwork and subtle paper texture, bright warm daylight, soft blue sky with drifting clouds, heritage palette of deep forest green (#1F3D2F), warm cream (#F2E6CF), antique gold (#BB8B2B), slate blue (#486E8B) and sage (#748056). Golf scenery with windswept trees and wildflowers in orange, pink and yellow. A small orange flag pennant is the only bright accent. Premium, crafted, collectible feel.

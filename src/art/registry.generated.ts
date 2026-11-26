@@ -29,6 +29,7 @@ export const ART_REGISTRY = {
   'collectibles/frames/patch': require('../../assets/art/collectibles/frames/patch.png'),
   'collectibles/frames/pin': require('../../assets/art/collectibles/frames/pin.png'),
   'collectibles/frames/pitch-marker': require('../../assets/art/collectibles/frames/pitch-marker.png'),
+  'courses/connecticut-national-golf-club/hero': require('../../assets/art/courses/connecticut-national-golf-club/hero.png'),
   'home/hero-autumn': require('../../assets/art/home/hero-autumn.png'),
   'home/hero-spring': require('../../assets/art/home/hero-spring.png'),
   'home/hero-summer': require('../../assets/art/home/hero-summer.png'),

@@ -129,6 +129,8 @@ I can't produce the painterly gouache art from the board. That comes from image 
 
 Each asset sits behind one component (`<Collectible item tier course />`, `<Badge />`, `<CourseHero />`). When real PNGs exist, we swap the component internals and leave the screens alone.
 
+**Course-specific heroes** (2026-11-26) are painted from a course photo with [course-hero-from-photo.md](../brand/course-hero-from-photo.md) and are **bundled for now** (first one: Connecticut National). They'll move to server storage before there are many: see [course-art-storage.md](course-art-storage.md).
+
 ---
 
 ## 7. Build phases

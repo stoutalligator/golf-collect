@@ -42,6 +42,18 @@ function parseVars(text) {
   return vars;
 }
 
+/**
+ * Every imported course (data/courses/<st>.json, which already carries the curated ones), falling back to the
+ * curated seed when no state file exists yet. Course art overrides can name any of them.
+ */
+function loadCourses() {
+  const dir = join(root, 'data', 'courses');
+  const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.json') && !f.endsWith('.excluded.json')) : [];
+  const byId = new Map(readJson('src', 'data', 'seed', 'courses.ct.json').courses.map((c) => [c.id, c]));
+  for (const f of files) for (const c of JSON.parse(readFileSync(join(dir, f), 'utf8')).courses ?? []) byId.set(c.id, c);
+  return [...byId.values()];
+}
+
 const promptFiles = () =>
   walk(promptsDir, (p) => p.endsWith('.md'))
     .filter((p) => !p.startsWith(compiledDir) && !/(_style|_template|README)\.md$/.test(p));
@@ -75,6 +87,31 @@ const KIND_PROMPTS = {
 
 const section = (title, path, size, body) =>
   ['', `## ${title}`, '', `- **Save as:** \`${path}\``, `- **Size:** ${size}`, '', '```prompt', ...body, '{{NEGATIVE}}', '```', ''].join('\n');
+
+/**
+ * Course hero painted from a reference photo of the real course (see assets/_prompts/overrides/README.md).
+ * The photo guides layout and landmarks only; the region hero is attached as the style reference.
+ */
+const heroSection = (c, path) =>
+  [
+    '',
+    '## Course hero',
+    '',
+    `- **Save as:** \`${path}\``,
+    '- **Size:** 1290×860 PNG (3:2), opaque. Top third calm (the status bar and back/save buttons sit over it), subject in the middle band, nothing important in the bottom ~15% (it fades into the page).',
+    `- **Reference images (attach both):** 1) the course photo from \`assets/_refs/courses/${c.id}/\` (layout and landmarks); 2) the region hero \`assets/art/regions/${c.region}/hero.png\` (brushwork, palette, light).`,
+    '',
+    '```prompt',
+    '{{PAINTERLY}}',
+    'Match the brushwork, palette and light of the second reference image (the painted region hero).',
+    'A wide landscape painting of {{COURSE_NAME}}, based on the first reference image (a photo of the real course): {{HERO_VIEW}}.',
+    'Keep the real place recognizable: the same hole shape, terrain, tree lines, water, bunkers and buildings as the photo, in roughly the same arrangement. Repaint everything in the gouache style; do not trace or copy the photo, and simplify fine detail into broad painted shapes.',
+    'Eye-level view from the tee or fairway, a green with a flagstick and a small orange pennant in the middle distance, generous open sky in the upper third.',
+    'Leave out everything in the photo that is not landscape: people, golf carts, cars, signs, text, logos, flags with writing, yardage markers, tee markers, power lines, fences with signage.',
+    '{{NEGATIVE}}',
+    '```',
+    '',
+  ].join('\n');
 
 /** One prompt file per region that has courses. Never overwrites edits. */
 function createRegionFiles(courses) {
@@ -121,7 +158,7 @@ function createOverrideFiles(courses) {
     const add = (path, sec) => { if (!text.includes(path)) text = text.trimEnd() + '\n' + sec; };
     if (o.hero) {
       const p = `assets/art/courses/${c.id}/hero.png`;
-      add(p, section('Destination hero', p, '1290×860 PNG (3:2); top third calm, subject in the middle band', ['{{PAINTERLY}}', 'Wide landscape of {{SCENE}}. Eye-level view, generous open sky in the upper third.']));
+      add(p, heroSection(c, p));
     }
     if (o.scorecardEngraving) {
       const p = `assets/art/courses/${c.id}/scorecard-engraving.png`;
@@ -146,7 +183,7 @@ function createOverrideFiles(courses) {
 }
 
 function compile() {
-  const courses = readJson('src', 'data', 'seed', 'courses.ct.json').courses;
+  const courses = loadCourses();
   const regions = createRegionFiles(courses);
   const overrides = createOverrideFiles(courses);
   const blocks = fencedBlocks(readFileSync(join(promptsDir, '_style.md'), 'utf8'), 'block');
@@ -157,6 +194,7 @@ function compile() {
     const fill = (s) => s.replace(/\{\{(\w+)\}\}/g, (m, k) => blocks[k] ?? vars[k] ?? m);
     const out = src.replace(/```prompt\r?\n([\s\S]*?)\r?\n```/g, (_, body) => '```text\n' + fill(fill(body)).trim() + '\n```');
     for (const m of out.matchAll(/```text\n[\s\S]*?\{\{(\w+)\}\}[\s\S]*?```/g)) problems.push(`${posix(relative(root, f))}: unresolved {{${m[1]}}}`);
+    if (/describe (the view in the reference photo|this course's signature view) here/.test(out)) problems.push(`${posix(relative(root, f))}: fill in HERO_VIEW / SCENE before using this prompt`);
     const dest = join(compiledDir, relative(promptsDir, f));
     mkdirSync(dirname(dest), { recursive: true });
     writeFileSync(dest, out);

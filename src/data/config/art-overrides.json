@@ -5,7 +5,13 @@
       "_note": "Template only. Copy into a real course id.",
       "hero": true,
       "scorecardEngraving": true,
-      "collectibles": ["ball-marker", "signature-patch"]
+      "collectibles": [
+        "ball-marker",
+        "signature-patch"
+      ]
+    },
+    "connecticut-national-golf-club": {
+      "hero": true
     }
   }
 }

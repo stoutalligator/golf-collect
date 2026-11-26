@@ -147,6 +147,7 @@ Things that stay in app config for now: tier rules, collectible sets per course 
 | Live rounds | Supabase Realtime on `hole_scores` for rounds marked live |
 | Course search near me | PostGIS `geography(point)` column + distance index |
 | Photos & avatars | Supabase Storage buckets with matching RLS |
+| Course-specific art | Public `course-art` Storage bucket + `course_art (course_id, kind, path, version, …)` table, so new course heroes ship without an app build. Plan: [course-art-storage.md](course-art-storage.md) |
 | Course data from a licensed provider | Same course tables; `course_sources` records the provider and license |
 
 ---
