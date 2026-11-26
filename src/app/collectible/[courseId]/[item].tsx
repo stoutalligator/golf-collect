@@ -12,6 +12,8 @@ import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
+import { Animated } from '@/components/motion';
+import { ZoomIn } from 'react-native-reanimated';
 
 const KIND_LABEL: Record<CollectibleItem, string> = {
   'ball-marker': 'Ball Marker', 'bag-tag': 'Bag Tag', 'pitch-marker': 'Pitch Marker', patch: 'Patch', pin: 'Pin',
@@ -39,9 +41,9 @@ export default function CollectibleDetail() {
           <IconButton name="chevron-left" label="Back" onPress={() => router.back()} />
         </View>
         <View style={styles.glow} />
-        <View style={styles.hero}>
+        <Animated.View style={styles.hero} entering={ZoomIn.springify().damping(14).stiffness(160)}>
           <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={tier?.tier} label={short} size={230} dim={!state?.earned} />
-        </View>
+        </Animated.View>
       </View>
 
       <ScrollView style={styles.sheet} contentContainerStyle={styles.sheetContent}>

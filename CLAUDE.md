@@ -21,6 +21,14 @@ An iOS golf app for tracking rounds, discovering courses, and **collecting the c
 - **Sim rounds are a separate track.** They never count toward real-course visits, collectibles or real-course achievements.
 - **Score entry:** only `strokes` is required; an unentered stat is `undefined`, never `0`.
 - **Art is shared, not per course.** Region art (`regions.json`, course region comes from its state), standard collectible frames with layouts in `src/art/frames.json` (the app layers the region vignette and course name), and optional overrides in `src/data/config/art-overrides.json`. Components get images through `getArt()`/`firstArt()` in `src/art` and must render an SVG placeholder when nothing is found. The user makes the art from `assets/_prompts/`. Never hand-edit `src/art/registry.generated.ts`; run `npm run art:sync`.
+- **Motion & haptics:** every tappable element uses `<Tap>` from `src/components/motion.tsx` (spring press + haptic), never a raw `Pressable`. Use the haptic vocabulary in `src/lib/haptics.ts`:
+  - `select`: changing a selection
+  - `tap`: ordinary buttons, cards and rows
+  - `press`: primary actions
+  - `success`: accomplishments
+  - `warning`: destructive confirms
+
+  Use `Button` (primary/secondary) from `ui.tsx` for actions, `enterItem(i)` for list entrances, `CountUp` for headline numbers, and `ProgressBar` (animated). Keep motion quick and springy; no wobble.
 - Keep the app name in `app.json` only (it will be rebranded).
 
 ## Commands

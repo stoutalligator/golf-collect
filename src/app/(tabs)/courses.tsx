@@ -8,6 +8,7 @@ import { COURSE_DATA_ATTRIBUTION } from '@/data/repository';
 import { ACCESS_LABEL } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
+import { Animated, enterItem } from '@/components/motion';
 
 type Filter = 'all' | 'played' | 'wishlist';
 
@@ -36,10 +37,11 @@ export default function Courses() {
       {list.length === 0 ? (
         <Empty title="Nothing here yet" body={filter === 'wishlist' ? 'Bookmark a course to add it to your wishlist.' : 'No courses match your search.'} />
       ) : (
-        list.map((c) => {
+        list.map((c, i) => {
           const played = !!data.collections.get(c.id)?.played;
           return (
-            <Card key={c.id} onPress={() => router.push(`/course/${c.id}`)} style={styles.row}>
+            <Animated.View key={c.id} entering={enterItem(i)}>
+            <Card onPress={() => router.push(`/course/${c.id}`)} style={styles.row}>
               <CourseScene course={c} style={styles.thumb} />
               <View style={{ flex: 1, gap: 2 }}>
                 <Text style={styles.name} numberOfLines={1}>{c.name}</Text>
@@ -47,6 +49,7 @@ export default function Courses() {
               </View>
               <CheckCircle checked={played} />
             </Card>
+            </Animated.View>
           );
         })
       )}

@@ -1,15 +1,16 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CourseScene, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
-import { Chips, IconButton, SearchField } from '@/components/ui';
+import { Button, Chips, IconButton, SearchField } from '@/components/ui';
 import type { Round, RoundKind } from '@/domain/types';
 import { todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
+import { Tap } from '@/components/motion';
 
 type Holes = '18' | 'front' | 'back';
 
@@ -73,25 +74,25 @@ export default function NewRound() {
         {kind === 'sim' ? <Text style={styles.note}>Sim rounds count toward sim stats and sim badges only, never real-course collectibles.</Text> : null}
 
         {layout ? (
-          <Pressable style={styles.selected} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
+          <Tap haptic="select" scaleTo={0.98} style={styles.selected} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
             {course ? <CourseScene course={course} style={styles.selectedThumb} /> : <SceneImage seed={layout.id} style={styles.selectedThumb} />}
             <View style={{ flex: 1 }}>
               <Text style={styles.selectedName}>{layout.name}</Text>
               <Text style={styles.sub}>Par {layout.holes.reduce((s, h) => s + h.par, 0)} · tap to change</Text>
             </View>
             <Icon name="check" size={20} color={colors.fairway} />
-          </Pressable>
+          </Tap>
         ) : (
           <>
             <SearchField value={query} onChange={setQuery} placeholder={kind === 'course' ? 'Search courses...' : 'Search sim courses...'} />
             {options.map((o) => (
-              <Pressable key={o.id} onPress={() => setCourseId(o.id)} style={({ pressed }) => [styles.option, pressed && { backgroundColor: colors.paper }]} accessibilityRole="button">
+              <Tap key={o.id} haptic="select" scaleTo={0.985} dim onPress={() => setCourseId(o.id)} style={styles.option} accessibilityRole="button">
                 <View style={{ flex: 1 }}>
                   <Text style={styles.optionName}>{o.name}</Text>
                   <Text style={styles.sub}>{o.sub}</Text>
                 </View>
                 <Icon name="chevron-right" size={16} color={colors.inkMuted} />
-              </Pressable>
+              </Tap>
             ))}
           </>
         )}
@@ -103,10 +104,10 @@ export default function NewRound() {
               {course.tees.map((t) => {
                 const active = t.id === selectedTee;
                 return (
-                  <Pressable key={t.id} onPress={() => setTeeId(t.id)} style={[styles.tee, active && styles.teeActive]} accessibilityRole="button" accessibilityState={{ selected: active }}>
+                  <Tap key={t.id} haptic={active ? 'none' : 'select'} scaleTo={0.94} onPress={() => setTeeId(t.id)} style={[styles.tee, active && styles.teeActive]} accessibilityRole="button" accessibilityState={{ selected: active }}>
                     <Text style={[styles.teeName, active && { color: colors.cream }]}>{t.name}</Text>
                     <Text style={[styles.teeYards, active && { color: colors.goldSoft }]}>{t.totalYards.toLocaleString('en-US')}</Text>
-                  </Pressable>
+                  </Tap>
                 );
               })}
             </View>
@@ -122,9 +123,7 @@ export default function NewRound() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
-        <Pressable onPress={start} disabled={!layout} accessibilityRole="button" style={[styles.startButton, !layout && { opacity: 0.4 }]}>
-          <Text style={styles.startText}>Tee Off</Text>
-        </Pressable>
+        <Button label="Tee Off" icon="flag" onPress={start} disabled={!layout} />
       </View>
     </View>
   );

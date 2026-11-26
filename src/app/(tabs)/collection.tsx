@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { Collectible } from '@/art/components';
 import { Chips, Empty, IconButton, SearchField, SheetScreen } from '@/components/ui';
@@ -9,6 +9,7 @@ import type { CollectibleCategory } from '@/domain/types';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { Animated, enterItem, Tap } from '@/components/motion';
 
 type Filter = 'all' | CollectibleCategory;
 
@@ -62,17 +63,19 @@ export default function Collection() {
         <Empty title="Nothing collected yet" body="Play a course to earn its ball marker. Bag tags, pitch markers, patches and pins follow." />
       ) : (
         <View style={styles.grid}>
-          {earned.map(({ course, state, def, tier }) => (
-            <Pressable
-              key={`${course.id}-${def.id}`}
+          {earned.map(({ course, state, def, tier }, i) => (
+            <Animated.View key={`${course.id}-${def.id}`} entering={enterItem(i)} style={styles.tileWrap}>
+            <Tap
+              scaleTo={0.95}
               onPress={() => router.push(`/collectible/${course.id}/${def.id}`)}
               accessibilityRole="button"
               accessibilityLabel={`${shortCourseName(course.name)} ${def.name}`}
-              style={({ pressed }) => [styles.tile, pressed && { transform: [{ scale: 0.97 }] }]}>
+              style={styles.tile}>
               <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={tier} label={shortCourseName(course.name)} size={118} />
               <Text style={styles.tileName} numberOfLines={1}>{shortCourseName(course.name)}</Text>
               <Text style={styles.tileMeta}>{def.name}</Text>
-            </Pressable>
+            </Tap>
+            </Animated.View>
           ))}
         </View>
       )}
@@ -83,7 +86,8 @@ export default function Collection() {
 const styles = StyleSheet.create({
   summary: { ...type.caption, color: colors.inkMuted, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: space.md },
-  tile: { width: '48%', backgroundColor: colors.creamLight, borderRadius: radius.lg, alignItems: 'center', paddingVertical: space.lg, paddingHorizontal: space.sm, gap: 4, borderWidth: 1, borderColor: colors.rule, ...shadow.card },
+  tileWrap: { width: '48%' },
+  tile: { width: '100%', backgroundColor: colors.creamLight, borderRadius: radius.lg, alignItems: 'center', paddingVertical: space.lg, paddingHorizontal: space.sm, gap: 4, borderWidth: 1, borderColor: colors.rule, ...shadow.card },
   tileName: { fontFamily: fonts.display, fontSize: 15, color: colors.ink },
   tileMeta: { ...type.caption, color: colors.inkMuted },
 });

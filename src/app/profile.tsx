@@ -1,12 +1,12 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { homeHeroKeys } from '@/art';
 import { Badge, Emblem, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
-import { Card, IconButton, SectionHeader, StatTile } from '@/components/ui';
+import { Button, Card, IconButton, SectionHeader, StatTile } from '@/components/ui';
 import { formatToPar } from '@/domain/stats';
 import { formatDate, formatMonthYear, oneDecimal, pct } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
@@ -96,11 +96,7 @@ function Row({ label, value, last }: { label: string; value: string; last?: bool
 }
 
 function DevButton({ label, onPress }: { label: string; onPress: () => void }) {
-  return (
-    <Pressable onPress={onPress} accessibilityRole="button" style={({ pressed }) => [styles.devButton, pressed && { opacity: 0.6 }]}>
-      <Text style={styles.devButtonText}>{label}</Text>
-    </Pressable>
-  );
+  return <Button variant="secondary" label={label} onPress={onPress} />;
 }
 
 const styles = StyleSheet.create({

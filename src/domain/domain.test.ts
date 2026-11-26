@@ -143,6 +143,13 @@ describe('achievements', () => {
     expect(states.find((s) => s.def.id === 'break-80')!.earned).toBe(false);
     expect(states.find((s) => s.def.id === 'sim-break-80')!.earned).toBe(true);
   });
+
+  it('records which round earned an achievement', () => {
+    const a = sum(makeRound({ id: 'a', date: '2026-05-01', strokes: keney.holes.map((h) => h.par + 2) })); // 106
+    const b = sum(makeRound({ id: 'b', date: '2026-06-01', strokes: keney.holes.map((h, i) => h.par + (i < 15 ? 1 : 0)) })); // 85
+    const states = evaluateAchievements(ACHIEVEMENTS, [a, b], ctx);
+    expect(states.find((s) => s.def.id === 'break-90')!.earnedRoundId).toBe('b');
+  });
 });
 
 describe('sample data', () => {

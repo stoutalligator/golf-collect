@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
 import { RoundRow } from '@/components/round-card';
@@ -9,6 +9,7 @@ import { formatToPar, type CareerStats } from '@/domain/stats';
 import { oneDecimal, pct } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
+import { Animated, enterItem, Tap } from '@/components/motion';
 
 type Filter = 'all' | 'course' | 'sim' | 'stats';
 
@@ -37,21 +38,22 @@ export default function Rounds() {
       ) : (
         <>
           {courseFilter ? (
-            <Pressable style={styles.filterPill} onPress={() => router.setParams({ courseId: undefined })} accessibilityRole="button" accessibilityLabel="Clear course filter">
+            <Tap scaleTo={0.94} style={styles.filterPill} onPress={() => router.setParams({ courseId: undefined })} accessibilityRole="button" accessibilityLabel="Clear course filter">
               <Text style={styles.filterText} numberOfLines={1}>{courseFilter.name}</Text>
               <Icon name="x" size={14} color={colors.cream} />
-            </Pressable>
+            </Tap>
           ) : null}
           {rounds.length === 0 ? (
             <Empty title="No rounds" body={filter === 'sim' ? 'Sim rounds you log will show up here.' : 'Tap + to log a round.'} />
           ) : (
-            rounds.map((r) => (
+            rounds.map((r, i) => (
+              <Animated.View key={r.id} entering={enterItem(i)}>
               <RoundRow
-                key={r.id}
                 round={r}
                 summary={data.summaries.get(r.id)}
                 name={r.status === 'active' ? `${data.roundCourseName(r)} · in progress` : data.roundCourseName(r)}
               />
+              </Animated.View>
             ))
           )}
         </>

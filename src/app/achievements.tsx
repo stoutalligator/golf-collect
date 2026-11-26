@@ -8,6 +8,7 @@ import type { AchievementCategory } from '@/domain/achievements';
 import { formatDate } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, space, type } from '@/theme';
+import { Animated, enterItem } from '@/components/motion';
 
 type Filter = 'all' | AchievementCategory;
 
@@ -35,8 +36,8 @@ export default function Achievements() {
         ]}
       />
       <Text style={styles.summary}>{earnedCount} of {data.achievements.length} earned</Text>
-      {list.map((a) => (
-        <View key={a.def.id} style={styles.row}>
+      {list.map((a, i) => (
+        <Animated.View key={a.def.id} entering={enterItem(i)} style={styles.row}>
           <Badge id={a.def.id} name={a.def.name} sim={a.def.track === 'sim'} earned={a.earned} size={64} />
           <View style={{ flex: 1, gap: 4 }}>
             <View style={styles.titleRow}>
@@ -52,7 +53,7 @@ export default function Achievements() {
             </View>
             {a.earned && a.earnedOn ? <Text style={styles.earnedOn}>Earned {formatDate(a.earnedOn)}</Text> : null}
           </View>
-        </View>
+        </Animated.View>
       ))}
     </SheetScreen>
   );

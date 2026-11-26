@@ -1,19 +1,16 @@
-import * as Haptics from 'expo-haptics';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
-import { Empty, IconButton } from '@/components/ui';
+import { Button, Empty, IconButton } from '@/components/ui';
 import { deriveGir, formatToPar } from '@/domain/stats';
 import type { FairwayResult, HoleScore, Round } from '@/domain/types';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
-
-const tick = () => {
-  if (Platform.OS !== 'web') Haptics.selectionAsync().catch(() => {});
-};
+import { Tap } from '@/components/motion';
+import { haptics } from '@/lib/haptics';
 
 /** Hole-by-hole entry. Only strokes are required; every other stat can stay blank. */
 export default function PlayRound() {
@@ -46,7 +43,6 @@ export default function PlayRound() {
   const gir = deriveGir(current, hole.par);
 
   const patch = (p: Partial<HoleScore>) => {
-    tick();
     const next = { ...current, ...p };
     (Object.keys(next) as (keyof HoleScore)[]).forEach((k) => next[k] === undefined && delete next[k]);
     const nextScores = scores.slice();
@@ -78,7 +74,8 @@ export default function PlayRound() {
       return;
     }
     await data.saveRound({ ...next, status: 'complete', completedAt: new Date().toISOString() });
-    router.replace(`/round/${next.id}`);
+    haptics.success();
+    router.replace(`/round/${next.id}?celebrate=1`);
   };
 
   const runningToPar = scores.reduce((acc, s, i) => {
@@ -101,10 +98,10 @@ export default function PlayRound() {
             const h = layout.holes.find((x) => x.number === n)!;
             const active = i === index;
             return (
-              <Pressable key={n} onPress={() => go(i)} style={[styles.stripCell, active && styles.stripActive]} accessibilityRole="button" accessibilityLabel={`Hole ${n}`}>
+              <Tap key={n} haptic={active ? 'none' : 'select'} scaleTo={0.88} onPress={() => go(i)} style={[styles.stripCell, active && styles.stripActive]} accessibilityRole="button" accessibilityLabel={`Hole ${n}`}>
                 <Text style={[styles.stripHole, active && { color: colors.fairway }]}>{n}</Text>
                 <Text style={[styles.stripScore, active && { color: colors.fairway }, s && s.strokes < h.par && { color: colors.gold }]}>{s ? s.strokes : '·'}</Text>
-              </Pressable>
+              </Tap>
             );
           })}
         </ScrollView>
@@ -155,13 +152,8 @@ export default function PlayRound() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
-        <Pressable onPress={() => index > 0 && go(index - 1)} disabled={index === 0} style={[styles.navButton, index === 0 && { opacity: 0.35 }]} accessibilityRole="button">
-          <Icon name="chevron-left" size={18} color={colors.fairway} />
-          <Text style={styles.navText}>Prev</Text>
-        </Pressable>
-        <Pressable onPress={() => (isLast ? finish() : go(index + 1))} style={styles.nextButton} accessibilityRole="button">
-          <Text style={styles.nextText}>{isLast ? 'Finish Round' : `Next · Hole ${round.holeNumbers[index + 1]}`}</Text>
-        </Pressable>
+        <Button variant="secondary" label="Prev" icon="chevron-left" onPress={() => index > 0 && go(index - 1)} disabled={index === 0} haptic="tap" />
+        <Button style={{ flex: 1 }} label={isLast ? 'Finish Round' : `Next · Hole ${round.holeNumbers[index + 1]}`} onPress={() => (isLast ? finish() : go(index + 1))} />
       </View>
     </View>
   );
@@ -169,9 +161,9 @@ export default function PlayRound() {
 
 function StepButton({ icon, label, onPress }: { icon: 'plus' | 'minus'; label: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => [styles.stepButton, pressed && { transform: [{ scale: 0.94 }] }]}>
+    <Tap onPress={onPress} haptic="select" scaleTo={0.88} accessibilityRole="button" accessibilityLabel={label} style={styles.stepButton}>
       <Icon name={icon} size={30} color={colors.cream} strokeWidth={2.4} />
-    </Pressable>
+    </Tap>
   );
 }
 
@@ -191,9 +183,9 @@ function ChoiceRow<T extends string | number>({ options, value, onChange }: { op
       {options.map((o) => {
         const active = o.value === value;
         return (
-          <Pressable key={String(o.value)} onPress={() => onChange(active ? undefined : o.value)} style={[styles.choice, active && styles.choiceActive]} accessibilityRole="button" accessibilityState={{ selected: active }}>
+          <Tap key={String(o.value)} haptic="select" scaleTo={0.94} onPress={() => onChange(active ? undefined : o.value)} style={[styles.choice, active && styles.choiceActive]} accessibilityRole="button" accessibilityState={{ selected: active }}>
             <Text style={[styles.choiceText, active && { color: colors.cream }]}>{o.label}</Text>
-          </Pressable>
+          </Tap>
         );
       })}
     </View>
@@ -205,13 +197,13 @@ function SmallStepper({ label, value, onChange }: { label: string; value: number
     <View style={styles.small}>
       <Text style={styles.smallLabel}>{label}</Text>
       <View style={styles.smallControls}>
-        <Pressable onPress={() => onChange(value === undefined || value <= 0 ? undefined : value - 1)} hitSlop={6} accessibilityLabel={`Fewer ${label}`} style={styles.smallBtn}>
+        <Tap haptic="select" scaleTo={0.85} onPress={() => onChange(value === undefined || value <= 0 ? undefined : value - 1)} hitSlop={6} accessibilityLabel={`Fewer ${label}`} style={styles.smallBtn}>
           <Icon name="minus" size={16} color={colors.fairway} />
-        </Pressable>
+        </Tap>
         <Text style={styles.smallValue}>{value ?? '–'}</Text>
-        <Pressable onPress={() => onChange((value ?? 0) + 1)} hitSlop={6} accessibilityLabel={`More ${label}`} style={styles.smallBtn}>
+        <Tap haptic="select" scaleTo={0.85} onPress={() => onChange((value ?? 0) + 1)} hitSlop={6} accessibilityLabel={`More ${label}`} style={styles.smallBtn}>
           <Icon name="plus" size={16} color={colors.fairway} />
-        </Pressable>
+        </Tap>
       </View>
     </View>
   );

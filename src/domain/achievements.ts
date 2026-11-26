@@ -30,6 +30,8 @@ export interface AchievementState {
   target: number;
   earned: boolean;
   earnedOn?: string;
+  /** The round that completed it. */
+  earnedRoundId?: string;
 }
 
 export interface AchievementContext {
@@ -81,12 +83,13 @@ export function evaluateAchievements(defs: AchievementDef[], summaries: RoundSum
     const final = progress(def.rule, rounds, ctx);
     const earned = final.current >= final.target;
     let earnedOn: string | undefined;
+    let earnedRoundId: string | undefined;
     if (earned) {
       for (let i = 0; i < rounds.length; i++) {
         const p = progress(def.rule, rounds.slice(0, i + 1), ctx);
-        if (p.current >= p.target) { earnedOn = rounds[i].date; break; }
+        if (p.current >= p.target) { earnedOn = rounds[i].date; earnedRoundId = rounds[i].roundId; break; }
       }
     }
-    return { def, current: Math.min(final.current, final.target), target: final.target, earned, earnedOn };
+    return { def, current: Math.min(final.current, final.target), target: final.target, earned, earnedOn, earnedRoundId };
   });
 }

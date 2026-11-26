@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { ScorecardEngraving, Tree } from '@/art/components';
 import { Empty, SheetScreen } from '@/components/ui';
@@ -9,9 +9,11 @@ import type { Hole } from '@/domain/types';
 import { formatDate, oneDecimal, pct } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
+import { EarnedThisRound } from '@/components/earned-this-round';
+import { Tap } from '@/components/motion';
 
 export default function Scorecard() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, celebrate } = useLocalSearchParams<{ id: string; celebrate?: string }>();
   const data = useAppData();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const round = data.rounds.find((r) => r.id === id);
@@ -33,9 +35,9 @@ export default function Scorecard() {
       title="Scorecard"
       back
       right={round.status === 'active' ? (
-        <Pressable onPress={() => router.replace(`/round/play/${round.id}`)} accessibilityRole="button" hitSlop={8}>
+        <Tap haptic="press" scaleTo={0.92} onPress={() => router.replace(`/round/play/${round.id}`)} accessibilityRole="button" hitSlop={8}>
           <Text style={styles.headerAction}>Resume</Text>
-        </Pressable>
+        </Tap>
       ) : undefined}>
       <View style={styles.paper}>
         <View style={styles.paperTop}>
@@ -58,6 +60,8 @@ export default function Scorecard() {
         {course ? <ScorecardEngraving course={course} /> : null}
       </View>
 
+      <EarnedThisRound round={round} celebrate={celebrate === '1'} />
+
       <View style={styles.legend}>
         <Legend mark="circle" label="Birdie or better" />
         <Legend mark="square" label="Bogey or worse" />
@@ -73,7 +77,9 @@ export default function Scorecard() {
         <Text style={styles.note}>Stats use the {summary.putts.entered} {summary.putts.entered === 1 ? 'hole' : 'holes'} where they were entered ({oneDecimal(summary.putts.total / summary.putts.entered)} putts/hole).</Text>
       ) : null}
 
-      <Pressable
+      <Tap
+        haptic={confirmDelete ? 'warning' : 'tap'}
+        scaleTo={0.95}
         onPress={async () => {
           if (!confirmDelete) return setConfirmDelete(true);
           await data.deleteRound(round.id);
@@ -82,7 +88,7 @@ export default function Scorecard() {
         accessibilityRole="button"
         style={styles.delete}>
         <Text style={[styles.deleteText, confirmDelete && { color: '#9B2C1F' }]}>{confirmDelete ? 'Tap again to delete this round' : 'Delete round'}</Text>
-      </Pressable>
+      </Tap>
     </SheetScreen>
   );
 }

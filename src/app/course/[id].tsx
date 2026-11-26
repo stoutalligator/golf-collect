@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Collectible, CourseScene, Tree } from '@/art/components';
@@ -12,6 +12,8 @@ import { ACCESS_LABEL } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { Animated, enterItem, Tap } from '@/components/motion';
+import { ZoomIn } from 'react-native-reanimated';
 
 export default function CourseDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -34,7 +36,7 @@ export default function CourseDetail() {
           <CourseScene course={course} style={StyleSheet.absoluteFill} />
           <View style={[styles.heroButtons, { top: insets.top + space.sm }]}>
             <RoundButton icon="chevron-left" label="Back" onPress={() => router.back()} />
-            <RoundButton icon={saved ? 'bookmark-filled' : 'bookmark'} label={saved ? 'Remove from wishlist' : 'Add to wishlist'} onPress={() => data.toggleWishlist(course.id)} />
+            <RoundButton icon={saved ? 'bookmark-filled' : 'bookmark'} pop={saved} label={saved ? 'Remove from wishlist' : 'Add to wishlist'} onPress={() => data.toggleWishlist(course.id)} />
           </View>
         </View>
 
@@ -66,10 +68,10 @@ export default function CourseDetail() {
           <SectionHeader title="Course Collectibles" action={tierName ? `Ball marker: ${tierName}` : undefined} />
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.md, paddingVertical: space.xs }}>
             {(col?.items ?? []).map(({ def, earned }) => (
-              <Pressable key={def.id} onPress={() => router.push(`/collectible/${course.id}/${def.id}`)} style={styles.collectible} accessibilityRole="button" accessibilityLabel={`${def.name}${earned ? ', earned' : ', locked'}`}>
+              <Tap key={def.id} scaleTo={0.92} onPress={() => router.push(`/collectible/${course.id}/${def.id}`)} style={styles.collectible} accessibilityRole="button" accessibilityLabel={`${def.name}${earned ? ', earned' : ', locked'}`}>
                 <Collectible courseId={course.id} region={course.region} sublabel={`${course.city} · ${course.state}`} kind={def.kind} id={def.id} tier={col?.tier?.tier} label={shortCourseName(course.name)} size={78} dim={!earned} />
                 <Text style={styles.collectibleLabel} numberOfLines={2}>{def.name}</Text>
-              </Pressable>
+              </Tap>
             ))}
           </ScrollView>
           <Text style={styles.collectNote}>{col?.earnedCount ?? 0} of {col?.items.length ?? 0} collected</Text>
@@ -77,7 +79,11 @@ export default function CourseDetail() {
           {rounds.length > 0 ? (
             <>
               <SectionHeader title="Your Rounds Here" />
-              {rounds.slice(0, 3).map((r) => <RoundRow key={r.id} round={r} summary={data.summaries.get(r.id)} name={course.name} />)}
+              {rounds.slice(0, 3).map((r, i) => (
+                <Animated.View key={r.id} entering={enterItem(i)}>
+                  <RoundRow round={r} summary={data.summaries.get(r.id)} name={course.name} />
+                </Animated.View>
+              ))}
             </>
           ) : null}
 
@@ -90,11 +96,14 @@ export default function CourseDetail() {
   );
 }
 
-function RoundButton({ icon, label, onPress }: { icon: 'chevron-left' | 'bookmark' | 'bookmark-filled'; label: string; onPress: () => void }) {
+function RoundButton({ icon, label, onPress, pop }: { icon: 'chevron-left' | 'bookmark' | 'bookmark-filled'; label: string; onPress: () => void; pop?: boolean }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={styles.roundButton}>
-      <Icon name={icon} size={20} color={colors.cream} />
-    </Pressable>
+    <Tap onPress={onPress} scaleTo={0.86} haptic={pop === undefined ? 'tap' : 'press'} accessibilityRole="button" accessibilityLabel={label} style={styles.roundButton}>
+      {/* Remount on toggle so the icon springs in */}
+      <Animated.View key={String(pop)} entering={pop === undefined ? undefined : ZoomIn.springify().damping(12)}>
+        <Icon name={icon} size={20} color={colors.cream} />
+      </Animated.View>
+    </Tap>
   );
 }
 

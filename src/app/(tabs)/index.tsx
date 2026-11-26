@@ -10,6 +10,7 @@ import { Empty, IconButton, SectionHeader, StatTile } from '@/components/ui';
 import { greeting } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, space, type } from '@/theme';
+import { Animated, enterItem } from '@/components/motion';
 
 /** Soft fade from transparent to deep fairway along the bottom of the hero, so the greeting reads. */
 function BottomFade() {
@@ -65,7 +66,11 @@ export default function Home() {
           {recent.length === 0 ? (
             <Empty title="No rounds yet" body="Tap + to log your first round." />
           ) : (
-            recent.map((r) => <RoundCardLarge key={r.id} round={r} summary={data.summaries.get(r.id)} name={data.roundCourseName(r)} />)
+            recent.map((r, i) => (
+              <Animated.View key={r.id} entering={enterItem(i + 1)}>
+                <RoundCardLarge round={r} summary={data.summaries.get(r.id)} name={data.roundCourseName(r)} />
+              </Animated.View>
+            ))
           )}
         </View>
       </ScrollView>
