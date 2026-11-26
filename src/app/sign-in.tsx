@@ -7,7 +7,7 @@ import { Emblem, SceneImage } from '@/art/components';
 import { Tap } from '@/components/motion';
 import { Button, Chips } from '@/components/ui';
 import { useAuth } from '@/state/auth';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 type Mode = 'sign-in' | 'sign-up';
 /** Steps after the main form: request a reset code, enter it with a new password, or confirm a new account. */
@@ -181,7 +181,7 @@ function Field({ label, value, onChange, placeholder, secure, keyboardType, auto
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   content: { paddingHorizontal: space.lg, gap: space.xl },
   brand: { alignItems: 'center', gap: 4 },
@@ -196,4 +196,4 @@ const styles = StyleSheet.create({
   flowTitle: { fontFamily: fonts.display, fontSize: 22, color: colors.fairway },
   links: { flexDirection: 'row', justifyContent: 'center', gap: space.xl },
   link: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway, textDecorationLine: 'underline' },
-});
+}));

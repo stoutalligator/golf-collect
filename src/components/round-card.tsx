@@ -11,7 +11,7 @@ import type { Round } from '@/domain/types';
 import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 /**
  * Small course painting. Courses share their region's painting, so each course gets its own fixed crop
@@ -71,11 +71,11 @@ export function RoundRow({ round, summary, name }: { round: Round; summary?: Rou
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   thumb: { width: 76, height: 54, borderRadius: radius.md, overflow: 'hidden', backgroundColor: colors.paper },
   row: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.md, paddingHorizontal: space.md },
   name: { fontFamily: fonts.display, fontSize: 17, color: colors.ink },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   meta: { ...type.caption, fontSize: 13, color: colors.inkMuted, flexShrink: 1 },
   simTag: { fontFamily: fonts.bodySemibold, fontSize: 9, letterSpacing: 0.8, color: colors.slate, borderWidth: 1, borderColor: colors.slate, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 1 },
-});
+}));

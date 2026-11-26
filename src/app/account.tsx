@@ -7,7 +7,7 @@ import { Tap } from '@/components/motion';
 import { Button, Card, IconButton, SearchField, SheetScreen } from '@/components/ui';
 import { useAppData } from '@/state/app-data';
 import { useAuth } from '@/state/auth';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 const USERNAME = /^[a-z0-9_]{3,20}$/;
 
@@ -137,6 +137,8 @@ export default function Account() {
             <Button variant="secondary" label={pwBusy ? 'Updating…' : 'Change password'} onPress={changePassword} disabled={password.length < 6 || pwBusy} />
           </Card>
         )}
+
+        {auth.offline ? null : <Button variant="secondary" label="Sign out" icon="lock" haptic="warning" onPress={auth.signOut} />}
       </SheetScreen>
     </KeyboardAvoidingView>
   );
@@ -172,7 +174,7 @@ function Field({ label, value, onChange, placeholder, prefix, max, hint, hintErr
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   card: { padding: space.lg, gap: space.lg },
   section: { fontFamily: fonts.display, fontSize: 20, color: colors.fairway },
   label: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
@@ -187,4 +189,4 @@ const styles = StyleSheet.create({
   link: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway },
   message: { ...type.body, fontSize: 14, color: colors.fairway },
   error: { color: colors.danger },
-});
+}));

@@ -11,7 +11,7 @@ import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { useShelves, type ShelfEntry } from '@/state/collection-view';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 type Filter = 'all' | 'earned' | 'locked';
 
@@ -93,7 +93,7 @@ function Cell({ entry, kind }: { entry: ShelfEntry; kind: CollectibleItem }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   summary: { gap: space.sm },
   summaryTop: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
   count: { fontFamily: fonts.displayBold, fontSize: 32, color: colors.fairway },
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   meta: { ...type.caption, fontSize: 10, lineHeight: 13, color: colors.inkMuted, textAlign: 'center' },
   progress: { alignSelf: 'stretch', gap: 3, paddingHorizontal: 4 },
   lock: { position: 'absolute', right: 0, bottom: 0 },
-});
+}));

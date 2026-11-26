@@ -11,7 +11,7 @@ import type { CollectibleItem } from '@/domain/types';
 import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Animated, popIn } from '@/components/motion';
 
 const KIND_LABEL: Record<CollectibleItem, string> = {
@@ -99,7 +99,7 @@ export default function CollectibleDetail() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   stage: { height: 340, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center' },
   topRow: { position: 'absolute', left: space.lg, right: space.lg, flexDirection: 'row', zIndex: 2 },
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   tierName: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   tierRule: { ...type.caption, fontSize: 10, color: colors.inkMuted, textAlign: 'center' },
   tierNote: { ...type.caption, color: colors.inkMuted, textAlign: 'center' },
-});
+}));

@@ -13,7 +13,7 @@ import { REACTIONS, type Player, type Reaction, type ReactionEmoji } from '@/dom
 import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, type FeedPost } from '@/state/app-data';
-import { avatarTones, chart, colors, fonts, radius, shadow, space, type } from '@/theme';
+import { avatarTones, chart, colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 // ── Avatars ────────────────────────────────────────────────────────────────
 
@@ -229,7 +229,7 @@ export function FeedCard({ post }: { post: FeedPost }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   avatar: { alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: fonts.bodySemibold, color: colors.cream, letterSpacing: 0.5 },
   stripLegend: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
@@ -270,4 +270,4 @@ const styles = StyleSheet.create({
   commentWho: { fontFamily: fonts.bodySemibold, color: colors.ink },
   commentText: { ...type.caption, fontSize: 13, color: colors.ink },
   moreComments: { ...type.caption, color: colors.inkMuted },
-});
+}));

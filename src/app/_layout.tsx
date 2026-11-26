@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { LaunchOverlay } from '@/components/launch-overlay';
@@ -16,8 +16,9 @@ import { PushManager } from '@/components/push-manager';
 import { Button } from '@/components/ui';
 import { WebPhoneFrame } from '@/components/web-phone-frame';
 import { AppDataProvider, useAppData } from '@/state/app-data';
+import { AppearanceProvider, useAppearance } from '@/state/appearance';
 import { AuthProvider, useAuth } from '@/state/auth';
-import { colors, fonts, space, type } from '@/theme';
+import { colors, fonts, space, themed, type } from '@/theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,16 +36,26 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <AuthProvider>
-      <AppDataProvider>
-        <WebPhoneFrame>
-          <StatusBar style="dark" />
-          <AppStack />
-          <PushManager />
-          <LaunchOverlay />
-        </WebPhoneFrame>
-      </AppDataProvider>
-    </AuthProvider>
+    <AppearanceProvider>
+      <AuthProvider>
+        <AppDataProvider>
+          <Themed />
+        </AppDataProvider>
+      </AuthProvider>
+    </AppearanceProvider>
+  );
+}
+
+/** Everything that draws: re-renders with the scheme (status bar, frame, and the stack's own options). */
+function Themed() {
+  const { scheme } = useAppearance();
+  return (
+    <WebPhoneFrame>
+      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      <AppStack />
+      <PushManager />
+      <LaunchOverlay />
+    </WebPhoneFrame>
   );
 }
 
@@ -52,6 +63,7 @@ export default function RootLayout() {
 function AppStack() {
   const auth = useAuth();
   const data = useAppData();
+  const { scheme } = useAppearance();
 
   useEffect(() => {
     if (auth.ready) SplashScreen.hideAsync();
@@ -63,7 +75,11 @@ function AppStack() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.cream } }}>
+    <Stack
+      screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.cream } }}
+      // Screens don't re-render on their own when the scheme flips, so remount each screen's content for the new
+      // palette. The navigation stack (and the selected tab) lives in navigator state and survives.
+      screenLayout={({ children }) => <Fragment key={scheme}>{children}</Fragment>}>
       <Stack.Protected guard={auth.signedIn}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="round/new" options={{ presentation: 'modal' }} />
@@ -103,9 +119,9 @@ function LoadError({ message, onRetry }: { message: string; onRetry: () => void 
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   error: { flex: 1, backgroundColor: colors.cream, justifyContent: 'center', padding: space.xl, gap: space.md },
   errorTitle: { fontFamily: fonts.display, fontSize: 26, color: colors.fairway, textAlign: 'center' },
   errorBody: { ...type.body, color: colors.ink, textAlign: 'center' },
   errorDetail: { ...type.caption, color: colors.inkMuted, textAlign: 'center' },
-});
+}));

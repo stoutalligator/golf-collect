@@ -10,7 +10,7 @@ import { formatDay, formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { useAuth } from '@/state/auth';
 import { useEventLists } from '@/state/events';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 const KIND_ORDER: EventKind[] = ['league', 'tournament', 'outing'];
 const SECTION: Record<EventKind, string> = { league: 'Leagues', tournament: 'Tournaments', outing: 'Scheduled rounds' };
@@ -143,7 +143,7 @@ function EventRow({ event }: { event: CompetitionEvent }) {
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={styles.name} numberOfLines={1}>{event.name}</Text>
         <Text style={styles.meta} numberOfLines={1}>
-          {event.kind === 'outing' ? formatDay(event.startsOn) : `${FORMAT_LABEL(event.format)} · ${played}/${rounds.length} rounds`} · {players} {players === 1 ? 'player' : 'players'}
+          {event.kind === 'outing' ? formatDay(event.startsOn) : `${FORMAT_LABEL(event.format)} · ${rounds.length ? `${played}/${rounds.length} rounds` : 'no rounds yet'}`} · {players} {players === 1 ? 'player' : 'players'}
         </Text>
       </View>
       <Icon name="chevron-right" size={16} color={colors.inkMuted} />
@@ -159,7 +159,7 @@ function Small({ label, onPress, busy, quiet, disabled }: { label: string; onPre
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   section: { gap: space.md },
   note: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   error: { ...type.body, fontSize: 14, color: colors.danger },
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
   smallQuiet: { backgroundColor: colors.paper },
   smallText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },
   smallTextQuiet: { color: colors.ink },
-});
+}));

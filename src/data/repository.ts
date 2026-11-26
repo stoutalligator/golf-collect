@@ -38,9 +38,13 @@ export interface NewEvent {
   kind: EventKind;
   name: string;
   format: EventFormat;
+  /** May be empty: a league starts with no schedule and the organizer adds rounds as they're set. */
   rounds: Omit<EventRound, 'id' | 'eventId' | 'seq'>[];
   inviteIds: string[];
 }
+
+export type NewEventRound = Omit<EventRound, 'id' | 'eventId' | 'seq'>;
+export type EventRoundChanges = Partial<Pick<EventRound, 'name' | 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>;
 
 export interface Repository {
   /** Cached after the first call; `force` refetches. */
@@ -71,8 +75,12 @@ export interface Repository {
   setPairings(eventRoundId: string, pairs: [string, string][]): Promise<void>;
   /** Organizer: rename the event or change its format settings (e.g. a scheduled round's note or group size). */
   updateEvent(eventId: string, changes: { name?: string; format?: EventFormat }): Promise<void>;
-  /** Organizer: move an event round (date, tee time, course, tee, holes). */
-  updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>): Promise<void>;
+  /** Organizer: add a one-off round to a league or tournament schedule (named and numbered next in line). */
+  addEventRound(eventId: string, round: NewEventRound): Promise<void>;
+  /** Organizer: take a round off the schedule (rounds logged for it stay, just unlinked). */
+  deleteEventRound(eventRoundId: string): Promise<void>;
+  /** Organizer: move an event round (date, tee time, course, tee, holes) or rename it. */
+  updateEventRound(eventRoundId: string, changes: EventRoundChanges): Promise<void>;
   /** Edit your own profile. Throws a readable message (e.g. username taken). */
   updateProfile(changes: ProfileChanges): Promise<void>;
   /** Offline demo only: restore the generated sample data. */
@@ -224,6 +232,10 @@ export class LocalRepository implements Repository {
   async updateEvent() { this.needsAccount(); }
 
   async updateEventRound() { this.needsAccount(); }
+
+  async addEventRound() { this.needsAccount(); }
+
+  async deleteEventRound() { this.needsAccount(); }
 
   async updateProfile(): Promise<void> {
     throw new Error('Profiles need an account (this is the offline demo).');

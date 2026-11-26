@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
-import { colors, fonts } from '@/theme';
+import { colors, fonts, themed } from '@/theme';
 
 export const PHONE = { width: 393, height: 852, insets: { top: 54, bottom: 34, left: 0, right: 0 } };
 
@@ -53,7 +53,7 @@ function StatusBarMock() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   backdrop: { flex: 1, minHeight: '100%' as never, backgroundColor: '#1b1f1c', alignItems: 'center', justifyContent: 'center', paddingVertical: 24, gap: 12 },
   device: { padding: 12, borderRadius: 64, backgroundColor: '#0b0d0c', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 30 },
   screen: { width: PHONE.width, height: PHONE.height, borderRadius: 52, overflow: 'hidden', backgroundColor: colors.cream },
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   bar: { width: 3, borderRadius: 1, backgroundColor: colors.ink },
   battery: { width: 24, height: 12, borderRadius: 3, borderWidth: 1.2, borderColor: colors.ink, padding: 1.5 },
   batteryFill: { flex: 1, borderRadius: 1.5, backgroundColor: colors.ink },
-});
+}));

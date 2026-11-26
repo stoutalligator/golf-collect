@@ -12,7 +12,7 @@ import { formatToPar, type RoundSummary } from '@/domain/stats';
 import { formatDate, oneDecimal, pct } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { chart, colors, fonts, radius, shadow, space, type } from '@/theme';
+import { chart, colors, currentScheme, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 type View_ = 'overview' | 'rounds' | 'sim';
 type Range = 10 | 20 | 'all';
@@ -153,7 +153,7 @@ function Overview({ track, range, setRange }: { track: 'course' | 'sim'; range: 
               segments={[
                 { key: 'left', label: 'Left', value: a.driving.left, color: chart.bogey, ink: colors.white },
                 { key: 'hit', label: 'Fairway', value: a.driving.hit, color: chart.line, ink: colors.cream },
-                { key: 'right', label: 'Right', value: a.driving.right, color: chart.double, ink: colors.white },
+                { key: 'right', label: 'Right', value: a.driving.right, color: chart.double, ink: currentScheme() === 'dark' ? colors.cream : colors.white },
                 { key: 'short', label: 'Short', value: a.driving.short, color: chart.par, ink: colors.ink },
               ]}
             />
@@ -206,7 +206,7 @@ function ScoringBar({ a }: { a: Analytics }) {
         { key: 'birdie', label: 'Birdie', value: s.birdies, color: chart.birdie, ink: colors.ink },
         { key: 'par', label: 'Par', value: s.pars, color: chart.par, ink: colors.ink },
         { key: 'bogey', label: 'Bogey', value: s.bogeys, color: chart.bogey, ink: colors.white },
-        { key: 'double', label: 'Double+', value: s.doublesPlus, color: chart.double, ink: colors.white },
+        { key: 'double', label: 'Double+', value: s.doublesPlus, color: chart.double, ink: currentScheme() === 'dark' ? colors.cream : colors.white },
       ]}
     />
   );
@@ -296,7 +296,7 @@ function RoundsList({ courseId }: { courseId?: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   rangeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: -space.xs },
   rangeLabel: { ...type.caption, color: colors.inkMuted },
   rangeChips: { flexDirection: 'row', gap: 4 },
@@ -308,12 +308,12 @@ const styles = StyleSheet.create({
   heroMain: { flex: 1.25, justifyContent: 'center' },
   heroLabel: { ...type.label, fontSize: 10, color: colors.goldSoft },
   heroValue: { fontFamily: fonts.displayBold, fontSize: 56, lineHeight: 64, color: colors.cream },
-  heroNote: { ...type.caption, fontSize: 11, color: 'rgba(246,239,227,0.72)' },
-  heroSide: { flex: 1, gap: space.sm, justifyContent: 'center', borderLeftWidth: StyleSheet.hairlineWidth, borderLeftColor: 'rgba(246,239,227,0.25)', paddingLeft: space.lg },
+  heroNote: { ...type.caption, fontSize: 11, color: colors.onFillMuted },
+  heroSide: { flex: 1, gap: space.sm, justifyContent: 'center', borderLeftWidth: StyleSheet.hairlineWidth, borderLeftColor: colors.onFillRule, paddingLeft: space.lg },
   sideStat: { gap: 0 },
-  sideLabel: { ...type.caption, fontSize: 11, color: 'rgba(246,239,227,0.72)' },
+  sideLabel: { ...type.caption, fontSize: 11, color: colors.onFillMuted },
   sideValue: { fontFamily: fonts.displayBold, fontSize: 20, color: colors.cream },
-  sideSub: { fontFamily: fonts.body, fontSize: 12, color: 'rgba(246,239,227,0.72)' },
+  sideSub: { fontFamily: fonts.body, fontSize: 12, color: colors.onFillMuted },
   inline: { flexDirection: 'row', alignItems: 'center', gap: space.sm, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule, paddingTop: space.md },
   inlineLabel: { ...type.caption, color: colors.inkMuted, flex: 1 },
   inlineValue: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink, fontVariant: ['tabular-nums'] },
@@ -335,4 +335,4 @@ const styles = StyleSheet.create({
   courseBest: { ...type.caption, color: colors.inkMuted, minWidth: 48, textAlign: 'right' },
   filterPill: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 6, paddingHorizontal: 12, maxWidth: '100%' },
   filterText: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.cream, flexShrink: 1 },
-});
+}));

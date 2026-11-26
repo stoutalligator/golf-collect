@@ -4,16 +4,18 @@ import { StyleSheet, Text } from 'react-native';
 
 import { ProfileLink, ProfileView } from '@/components/profile-view';
 import { AvatarStack } from '@/components/social';
-import { Button, Card, Group, IconButton } from '@/components/ui';
+import { Button, Card, Chips, Group } from '@/components/ui';
 import { pushEnabled, pushSupported, setPushEnabled } from '@/lib/push';
 import { useAppData } from '@/state/app-data';
+import { useAppearance, type AppearancePref } from '@/state/appearance';
 import { useAuth } from '@/state/auth';
-import { colors, fonts, space, type } from '@/theme';
+import { colors, fonts, space, themed, type } from '@/theme';
 
 export default function Profile() {
   const data = useAppData();
   const auth = useAuth();
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const appearance = useAppearance();
+  const [signingOut, setSigningOut] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [notify, setNotify] = useState<boolean | null>(null);
   const [notifyNote, setNotifyNote] = useState<string | null>(null);
@@ -29,7 +31,7 @@ export default function Profile() {
   const pending = data.requests.incoming.length;
 
   return (
-    <ProfileView pd={data.meData} headerRight={<IconButton name="settings" label="Settings" onPress={() => setSettingsOpen((o) => !o)} />}>
+    <ProfileView pd={data.meData}>
       <Group inset={space.lg}>
         {auth.offline ? null : (
           <ProfileLink icon="user" label="Edit profile" sub={data.me.username ? `@${data.me.username}` : 'Name, username, home course, password'} onPress={() => router.push('/account')} />
@@ -46,9 +48,15 @@ export default function Profile() {
         <ProfileLink icon="trophy" label="Badges" sub={`${data.achievements.filter((a) => a.earned).length} of ${data.achievements.length} earned`} onPress={() => router.push('/achievements')} />
       </Group>
 
-      {settingsOpen ? (
-        <Card style={styles.settings}>
+      <Card style={styles.settings}>
           <Text style={styles.title}>Settings</Text>
+          <Text style={styles.label}>Appearance</Text>
+          <Chips<AppearancePref>
+            value={appearance.pref}
+            onChange={appearance.setPref}
+            options={[{ value: 'system', label: 'System' }, { value: 'light', label: 'Light' }, { value: 'dark', label: 'Dark' }]}
+          />
+          <Text style={styles.note}>System follows your iPhone’s Light/Dark setting.</Text>
           {pushSupported && notify !== null ? (
             <>
               <Button variant="secondary" label={notify ? 'Notifications: on' : 'Notifications: off'} icon="bell" onPress={toggleNotify} />
@@ -74,15 +82,26 @@ export default function Profile() {
               await data.clearRounds();
             }}
           />
-          {auth.offline ? null : <Button label="Sign out" onPress={auth.signOut} />}
+          {auth.offline ? null : (
+            <Button
+              label={signingOut ? 'Signing out…' : 'Sign out'}
+              icon="lock"
+              haptic="warning"
+              disabled={signingOut}
+              onPress={async () => {
+                setSigningOut(true);
+                await auth.signOut();
+              }}
+            />
+          )}
         </Card>
-      ) : null}
     </ProfileView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   settings: { padding: space.lg, gap: space.md },
   title: { fontFamily: fonts.display, fontSize: 20, color: colors.fairway },
+  label: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   note: { ...type.caption, fontSize: 13, color: colors.inkMuted },
-});
+}));

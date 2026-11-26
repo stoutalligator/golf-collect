@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
-import { LocalRepository, type AppSnapshot, type NewEvent, type ProfileChanges, type Repository } from '@/data/repository';
-import type { EventFormat, EventRound } from '@/domain/competition';
+import { LocalRepository, type AppSnapshot, type EventRoundChanges, type NewEvent, type NewEventRound, type ProfileChanges, type Repository } from '@/data/repository';
+import type { EventFormat } from '@/domain/competition';
 import { SupabaseRepository } from '@/data/supabase-repository';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/state/auth';
@@ -107,7 +107,9 @@ export interface AppData extends AppSnapshot {
   deleteEvent(eventId: string): Promise<void>;
   setPairings(eventRoundId: string, pairs: [string, string][]): Promise<void>;
   updateEvent(eventId: string, changes: { name?: string; format?: EventFormat }): Promise<void>;
-  updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>): Promise<void>;
+  updateEventRound(eventRoundId: string, changes: EventRoundChanges): Promise<void>;
+  addEventRound(eventId: string, round: NewEventRound): Promise<void>;
+  deleteEventRound(eventRoundId: string): Promise<void>;
 }
 
 const Ctx = createContext<AppData | null>(null);
@@ -284,6 +286,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     setPairings: async (id, pairs) => { await repo!.setPairings(id, pairs); await reload(); },
     updateEvent: async (id, changes) => { await repo!.updateEvent(id, changes); await reload(); },
     updateEventRound: async (id, changes) => { await repo!.updateEventRound(id, changes); await reload(); },
+    addEventRound: async (id, round) => { await repo!.addEventRound(id, round); await reload(); },
+    deleteEventRound: async (id) => { await repo!.deleteEventRound(id); await reload(); },
   }), [snap, derived, ready, error, auth.offline, repo, reload]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

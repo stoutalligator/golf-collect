@@ -11,7 +11,7 @@ import { FORMAT_LABEL, KIND_LABEL, positionLabel } from '@/domain/competition';
 import { formatDay, formatTeeTime } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { useEvent, type EventView } from '@/state/events';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 type Tab = 'standings' | 'schedule' | 'players';
 
@@ -19,10 +19,15 @@ export default function EventScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const data = useAppData();
   const view = useEvent(id);
-  const [tab, setTab] = useState<Tab>('standings');
+  const [picked, setTab] = useState<Tab | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  // A brand-new league has nothing to stand on yet: open on its (empty) schedule. Decided once, so adding the
+  // first round doesn't switch tabs under you.
+  if (view && picked === null) setTab(view.rounds.length ? 'standings' : 'schedule');
+  const tab: Tab = picked ?? 'standings';
 
   if (!view) return <SheetScreen title="Event" back><Empty title="Event not found" body="It may have been deleted, or you left it." /></SheetScreen>;
   if (view.event.kind === 'outing') return <OutingView view={view} />;
@@ -49,7 +54,7 @@ export default function EventScreen() {
       <Card style={styles.hero}>
         <Text style={styles.name}>{event.name}</Text>
         <Text style={styles.meta}>
-          {event.kind === 'outing' ? formatDay(event.startsOn) : `${FORMAT_LABEL(event.format)} · ${formatDay(event.startsOn)}${event.endsOn && event.endsOn !== event.startsOn ? ` – ${formatDay(event.endsOn)}` : ''}`}
+          {event.kind === 'outing' ? formatDay(event.startsOn) : !view.rounds.length ? `${FORMAT_LABEL(event.format)} · no rounds scheduled yet` : `${FORMAT_LABEL(event.format)} · ${formatDay(event.startsOn)}${event.endsOn && event.endsOn !== event.startsOn ? ` – ${formatDay(event.endsOn)}` : ''}`}
         </Text>
         <Text style={styles.meta}>Organized by {view.isOrganizer ? 'you' : view.organizer?.name ?? 'a friend'} · {view.joined.length} {view.joined.length === 1 ? 'player' : 'players'}</Text>
         <Tap onPress={share} scaleTo={0.97} accessibilityRole="button" accessibilityLabel={`Join code ${event.joinCode}, share`} style={styles.code}>
@@ -143,7 +148,7 @@ function Standings({ view }: { view: EventView }) {
   return (
     <View style={styles.section}>
       <Text style={styles.meta}>
-        After {played} of {view.rounds.length} {view.rounds.length === 1 ? 'round' : 'rounds'}
+        {view.rounds.length ? `After ${played} of ${view.rounds.length} ${view.rounds.length === 1 ? 'round' : 'rounds'}` : 'No rounds scheduled yet'}
         {view.noHandicap.length ? ` · no handicap yet for ${view.noHandicap.map((p) => p.name.split(' ')[0]).join(', ')} (counted as scratch)` : ''}
       </Text>
       {view.season ? (
@@ -202,7 +207,22 @@ function Row({ pos, id, cols, bold }: { pos: string; id: string; cols: string[];
 
 function Schedule({ view }: { view: EventView }) {
   const data = useAppData();
+  const add = view.isOrganizer ? (
+    <Button label="Schedule a round" icon="calendar" onPress={() => router.push(`/schedule?into=${view.event.id}`)} />
+  ) : null;
+  if (!view.rounds.length) {
+    return (
+      <View style={styles.section}>
+        <Empty
+          title="No rounds yet"
+          body={view.isOrganizer ? 'Schedule a round whenever the group has a date. Each one counts toward the standings.' : 'The organizer hasn’t scheduled a round yet. You’ll get a notification when they do.'}
+        />
+        {add}
+      </View>
+    );
+  }
   return (
+    <View style={styles.section}>
     <Group>
       {view.rounds.map((r) => {
         const posted = [...r.linked.values()].filter((x) => x.status === 'complete').length;
@@ -224,6 +244,8 @@ function Schedule({ view }: { view: EventView }) {
         );
       })}
     </Group>
+    {add}
+    </View>
   );
 }
 
@@ -260,7 +282,7 @@ function Players({ view, busy, act }: { view: EventView; busy: string | null; ac
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   section: { gap: space.md },
   hero: { padding: space.lg, gap: 4 },
   name: { fontFamily: fonts.displayBold, fontSize: 26, lineHeight: 32, color: colors.fairway },
@@ -295,4 +317,4 @@ const styles = StyleSheet.create({
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   friend: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 4, paddingRight: 12, height: 36, borderRadius: radius.pill, backgroundColor: colors.paper },
   friendText: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.ink },
-});
+}));

@@ -13,9 +13,12 @@ import type { Round } from '@/domain/types';
 import { haptics } from '@/lib/haptics';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { fonts, palettes, radius, space, themed, type } from '@/theme';
 import { FadeIn } from 'react-native-reanimated';
 
+
+/** The reveal is an always-dark celebration: it looks the same in light and dark mode. */
+const colors = palettes.light;
 type Step =
   | { kind: 'score' }
   | { kind: 'tier'; tier: (typeof TIERS)[number] }
@@ -223,7 +226,7 @@ function Fact({ label, value }: { label: string; value: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.fairwayDeep, paddingHorizontal: space.lg },
   scroll: { flexGrow: 1, gap: space.lg },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 32 },
@@ -257,4 +260,4 @@ const styles = StyleSheet.create({
   primaryText: { fontFamily: fonts.bodySemibold, fontSize: 16, color: colors.fairway },
   secondary: { minHeight: 46, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
   secondaryText: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.goldSoft },
-});
+}));

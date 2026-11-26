@@ -15,7 +15,7 @@ import type { Player } from '@/domain/types';
 import { formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import type { EventView } from '@/state/events';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 export function OutingView({ view }: { view: EventView }) {
   const data = useAppData();
@@ -180,7 +180,7 @@ function Action({ icon, label, onPress, primary }: { icon: IconName; label: stri
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   section: { gap: space.md },
   help: { ...type.caption, fontSize: 12, color: colors.inkMuted },
   error: { ...type.body, fontSize: 14, color: colors.danger },
@@ -217,4 +217,4 @@ const styles = StyleSheet.create({
   stateIn: { fontFamily: fonts.bodySemibold, color: colors.fairway },
   cancel: { alignSelf: 'center', paddingVertical: space.sm, paddingHorizontal: space.lg },
   cancelText: { ...type.caption, fontSize: 13, color: colors.danger, textDecorationLine: 'underline' },
-});
+}));

@@ -14,7 +14,7 @@ import { recentRounds } from '@/domain/analytics';
 import { formatDay, formatTeeTime, greeting, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { useEventLists } from '@/state/events';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 /** Left-to-right fade so the greeting reads over the painting without darkening the whole scene. */
 function GreetingFade() {
@@ -149,20 +149,20 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingHorizontal: space.lg, paddingBottom: space.md },
   wordmark: { fontFamily: fonts.displayBold, fontSize: 26, color: colors.fairway, marginLeft: 2 },
   body: { paddingHorizontal: space.lg, gap: space.xl },
   hero: { height: 230, borderRadius: radius.xl, overflow: 'hidden', backgroundColor: colors.fairway, justifyContent: 'center', paddingHorizontal: space.xl, paddingBottom: 40 },
-  kicker: { fontFamily: fonts.bodySemibold, fontSize: 13, letterSpacing: 2, color: colors.cream, textShadowColor: 'rgba(0,0,0,0.35)', textShadowRadius: 6 },
-  greeting: { fontFamily: fonts.displayItalic, fontSize: 54, lineHeight: 64, color: colors.cream, textShadowColor: 'rgba(0,0,0,0.3)', textShadowRadius: 8 },
+  kicker: { fontFamily: fonts.bodySemibold, fontSize: 13, letterSpacing: 2, color: colors.onDark, textShadowColor: 'rgba(0,0,0,0.35)', textShadowRadius: 6 },
+  greeting: { fontFamily: fonts.displayItalic, fontSize: 54, lineHeight: 64, color: colors.onDark, textShadowColor: 'rgba(0,0,0,0.3)', textShadowRadius: 8 },
   swash: { width: 64, height: 3, borderRadius: 2, backgroundColor: colors.gold, marginTop: 2, transform: [{ rotate: '-4deg' }] },
   kpis: { marginTop: -44, marginHorizontal: space.sm },
   active: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.fairway, borderRadius: radius.xl, padding: space.lg, ...shadow.card },
   liveDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.gold },
   activeTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.cream },
-  activeSub: { ...type.caption, color: 'rgba(246,239,227,0.75)' },
+  activeSub: { ...type.caption, color: colors.onFillMuted },
   quick: { flexDirection: 'row', gap: space.sm, marginTop: -space.sm },
   quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.paper },
   quickText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway },
@@ -172,4 +172,4 @@ const styles = StyleSheet.create({
   upNextSub: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   upNextInvite: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, marginTop: 2 },
   activeCta: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.cream },
-});
+}));

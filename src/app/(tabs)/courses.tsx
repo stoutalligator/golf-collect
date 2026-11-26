@@ -11,7 +11,7 @@ import { TIERS } from '@/data/config/game';
 import { COURSE_DATA_ATTRIBUTION } from '@/data/repository';
 import { ACCESS_LABEL } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 type Filter = 'all' | 'played' | 'wishlist';
 const PAGE = 40;
@@ -103,7 +103,7 @@ export default function Courses() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   statesScroll: { marginHorizontal: -space.lg, marginTop: -space.md },
   states: { gap: space.sm, paddingHorizontal: space.lg },
   statePill: { paddingHorizontal: 14, minHeight: 34, justifyContent: 'center', borderRadius: radius.pill, backgroundColor: colors.paper },
@@ -119,4 +119,4 @@ const styles = StyleSheet.create({
   played: { fontFamily: fonts.bodyMedium, fontSize: 12, color: colors.fairway },
   quiet: { ...type.caption, color: colors.inkMuted },
   attribution: { ...type.caption, fontSize: 10, color: colors.inkMuted, textAlign: 'center' },
-});
+}));

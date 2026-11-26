@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon, type IconName } from '@/components/icons';
 import { Animated, CountUp, SPRING, Tap, useFill } from '@/components/motion';
 import type { HapticKind } from '@/lib/haptics';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 // ── Screen chrome ──────────────────────────────────────────────────────────
 
@@ -309,7 +309,7 @@ export function Empty({ title, body }: { title: string; body: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { paddingHorizontal: space.lg, paddingBottom: space.sm, gap: space.md, backgroundColor: colors.cream },
   headerRow: { flexDirection: 'row', alignItems: 'center', minHeight: 48 },
@@ -317,9 +317,9 @@ const styles = StyleSheet.create({
   headerRight: { flexDirection: 'row', gap: space.sm },
   content: { paddingHorizontal: space.lg, paddingTop: space.sm, gap: space.xl, paddingBottom: space.xxl * 3 },
   iconButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
-  iconButtonOnArt: { backgroundColor: 'rgba(252,248,241,0.92)', ...shadow.control },
+  iconButtonOnArt: { backgroundColor: colors.artButton, ...shadow.control },
   chips: { flexDirection: 'row', backgroundColor: colors.paper, borderRadius: radius.md, padding: 3, position: 'relative' },
-  chipPill: { position: 'absolute', top: 3, bottom: 3, left: 0, borderRadius: 10, backgroundColor: colors.creamLight, ...shadow.control },
+  chipPill: { position: 'absolute', top: 3, bottom: 3, left: 0, borderRadius: 10, backgroundColor: colors.segment, ...shadow.control },
   chip: { flexGrow: 1, flexShrink: 1, flexBasis: 0, paddingVertical: 8, paddingHorizontal: 8, alignItems: 'center' },
   chipText: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.inkMuted },
   chipTextActive: { color: colors.fairway, fontFamily: fonts.bodySemibold },
@@ -360,4 +360,4 @@ const styles = StyleSheet.create({
   lock: { backgroundColor: colors.inkMuted, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.creamLight },
   empty: { padding: space.xl, gap: space.sm, alignItems: 'center' },
   loading: { flex: 1, minHeight: 200, alignItems: 'center', justifyContent: 'center', gap: space.sm, backgroundColor: colors.cream },
-});
+}));

@@ -7,7 +7,7 @@ import { Animated, enterItem, Tap } from '@/components/motion';
 import { ProgressBar, SheetScreen } from '@/components/ui';
 import type { AchievementCategory, AchievementState } from '@/domain/achievements';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 const SECTIONS: { id: AchievementCategory; title: string; blurb: string }[] = [
   { id: 'game', title: 'Scoring', blurb: 'Milestones for how you play.' },
@@ -91,7 +91,7 @@ function BadgeCell({ a }: { a: AchievementState }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   summary: { gap: space.sm },
   summaryValue: { fontFamily: fonts.bodySemibold, fontSize: 28, color: colors.ink },
   summaryOf: { fontFamily: fonts.body, fontSize: 15, color: colors.inkMuted },
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   cellName: { fontFamily: fonts.bodySemibold, fontSize: 12, color: colors.ink, textAlign: 'center' },
   cellProgress: { width: 64 },
   check: { position: 'absolute', right: 4, bottom: 4, width: 20, height: 20, borderRadius: 10, backgroundColor: colors.success, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.cream },
-});
+}));

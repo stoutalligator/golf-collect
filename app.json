@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "greenskeeper",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.stoutalligator.golf",
@@ -35,14 +35,17 @@
         {
           "backgroundColor": "#F2E6CF",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200
+          "imageWidth": 200,
+          "dark": {
+            "backgroundColor": "#121915",
+            "image": "./assets/images/splash-icon.png"
+          }
         }
       ],
       [
         "expo-notifications",
         {
-          "color": "#173D32",
-          "enableRemoteNotifications": false
+          "color": "#173D32"
         }
       ]
     ],

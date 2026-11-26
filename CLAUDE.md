@@ -13,6 +13,7 @@ An iOS golf app for tracking rounds, discovering courses, and **collecting the c
 ## Rules
 
 - **Theme tokens only.** Use colors, fonts and spacing from `src/theme`. No ad-hoc hex values in screens.
+- **Light and dark mode.** Tokens are scheme-aware: read `colors.x` / `chart.x` / `shadow.x` at render time, and build module-level styles with `const styles = themed(() => StyleSheet.create({...}))` (never a bare `StyleSheet.create` or a module-level constant holding a color). In dark, fairway and cream swap jobs (pale-green buttons with dark text), so "cream on fairway" pairings work in both. Text over paintings or on always-dark surfaces uses `onDark`/`onDarkMuted`; secondary text on a fairway fill uses `onFillMuted`. The rewards reveal uses `palettes.light` and looks the same in both. The player's choice (System/Light/Dark) is in Profile → Settings (`src/state/appearance.tsx`).
 - **Screens don't import seed JSON.** They go through `src/data` (repository layer). Signed in, that's `SupabaseRepository` (email auth, RLS); with no Supabase env vars, `LocalRepository` (offline demo).
 - **Sample data never goes to the database** except course facts. Test data lives only on the `@greenskeeper.test` accounts made by `npm run db:seed-test`. Schema changes are new files in `supabase/migrations/` (never edit an applied one).
 - **Domain logic stays pure** in `src/domain` (no React) and is unit-tested with Vitest.

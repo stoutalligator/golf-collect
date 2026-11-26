@@ -10,7 +10,7 @@ import type { CollectibleItem } from '@/domain/types';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { useShelves, type ShelfEntry } from '@/state/collection-view';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 /** Trophy Room: one shelf per collectible type plus a badge shelf; each opens its full case. */
 export default function Collection() {
@@ -96,7 +96,7 @@ function ShelfItem({ entry, kind, locked }: { entry: ShelfEntry; kind: Collectib
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   summary: { backgroundColor: colors.creamLight, borderRadius: radius.xl, padding: space.lg, gap: space.sm, ...shadow.card },
   summaryTop: { flexDirection: 'row', alignItems: 'baseline' },
   summaryValue: { fontFamily: fonts.displayBold, fontSize: 36, lineHeight: 42, color: colors.fairway },
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   itemName: { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 15, color: colors.ink, textAlign: 'center', marginTop: 4 },
   itemTier: { ...type.caption, fontSize: 11, color: colors.inkMuted },
   lock: { position: 'absolute', right: 2, bottom: 2 },
-});
+}));

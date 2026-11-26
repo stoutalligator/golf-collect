@@ -9,7 +9,7 @@ import { roundOwner } from '@/domain/types';
 import { oneDecimal } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, type PlayerData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 /** A friend's profile, with a head-to-head comparison against you. */
 export default function Player() {
@@ -89,7 +89,7 @@ function Row({ label, a, b, aNum, bNum, lowerWins = false }: { label: string; a:
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   card: { padding: space.lg, gap: space.sm },
   head: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: space.xs },
   side: { alignItems: 'center', gap: 4, width: 64 },
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   sharedRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: 4 },
   sharedScore: { width: 34, fontFamily: fonts.bodyMedium, fontSize: 15, color: colors.inkMuted, textAlign: 'center', fontVariant: ['tabular-nums'] },
   sharedCourse: { flex: 1, fontFamily: fonts.display, fontSize: 14, color: colors.ink, textAlign: 'center' },
-});
+}));

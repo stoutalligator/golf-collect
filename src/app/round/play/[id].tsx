@@ -10,7 +10,7 @@ import { realHoleNumber } from '@/domain/layout';
 import { deriveGir, formatToPar } from '@/domain/stats';
 import type { FairwayResult, HoleScore, Round } from '@/domain/types';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
 import { haptics } from '@/lib/haptics';
 
@@ -271,7 +271,7 @@ function SmallStepper({ label, value, onChange }: { label: string; value: number
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { backgroundColor: colors.cream, paddingHorizontal: space.lg, paddingBottom: space.sm, gap: space.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.rule },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
@@ -316,4 +316,4 @@ const styles = StyleSheet.create({
   navText: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.fairway },
   nextButton: { flex: 1, backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
   nextText: { fontFamily: fonts.bodySemibold, fontSize: 16, color: colors.cream },
-});
+}));

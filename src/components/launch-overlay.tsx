@@ -5,7 +5,7 @@ import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import { Emblem, SceneImage } from '@/art/components';
 import { artKeys, getArt, homeHeroKeys } from '@/art';
 import artSettings from '@/art/settings.json';
-import { colors, fonts } from '@/theme';
+import { colors, fonts, themed } from '@/theme';
 
 /** Web dev aid: `?splash=hold` keeps the splash up (design review / screenshots). */
 const hold = Platform.OS === 'web' && typeof window !== 'undefined' && /[?&]splash=hold(&|$)/.test(window.location.search);
@@ -43,10 +43,10 @@ export function LaunchOverlay() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { backgroundColor: colors.cream },
   sky: { ...StyleSheet.absoluteFill, bottom: '45%', backgroundColor: colors.cream, opacity: 0.82 },
   brand: { position: 'absolute', top: '12%', left: 0, right: 0, alignItems: 'center', gap: 10 },
   word: { fontFamily: fonts.displayBold, fontSize: 46, lineHeight: 50, letterSpacing: 2, color: colors.fairway, textAlign: 'center' },
   tag: { fontFamily: fonts.bodySemibold, fontSize: 12, letterSpacing: 2.4, color: colors.fairway, textAlign: 'center', lineHeight: 20 },
-});
+}));

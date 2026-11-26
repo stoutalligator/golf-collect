@@ -14,7 +14,7 @@ import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
 import { linkableEventRounds } from '@/state/events';
 import { isNineHole, playLayout } from '@/domain/layout';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
 
 type Holes = '18' | 'front' | 'back';
@@ -227,7 +227,7 @@ export default function NewRound() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.lg, paddingVertical: space.md },
   title: { ...type.displayL, color: colors.fairway },
@@ -252,4 +252,4 @@ const styles = StyleSheet.create({
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
   startButton: { backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
   startText: { fontFamily: fonts.bodySemibold, fontSize: 17, color: colors.cream },
-});
+}));

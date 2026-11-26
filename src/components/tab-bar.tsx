@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icons';
 import { Animated, Tap } from '@/components/motion';
-import { colors, fonts } from '@/theme';
+import { colors, fonts, themed } from '@/theme';
 
 const TAB_ICONS: Record<string, IconName> = {
   index: 'home',
@@ -85,7 +85,7 @@ export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTab
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   bar: {
     flexDirection: 'row',
     backgroundColor: colors.creamLight,
@@ -117,4 +117,4 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     elevation: 6,
   },
-});
+}));

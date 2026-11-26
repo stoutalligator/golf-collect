@@ -1,6 +1,9 @@
 /**
  * Schedule a round with friends (or edit one with ?event=<id>). A focused flow: live invitation preview, a date
  * strip, tee-time presets, group size, invites and a note. Saved as an "outing" event with one event round.
+ *
+ * League mode: ?into=<eventId> adds a one-off round to a league's (or tournament's) schedule, and ?round=<id> edits
+ * or removes one. The league's members are the players, so there's no group size, invites or note.
  */
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
@@ -17,7 +20,7 @@ import { isNineHole } from '@/domain/layout';
 import type { Player } from '@/domain/types';
 import { addDaysISO, formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData, useCourse } from '@/state/app-data';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 type Holes = EventRound['holes'];
 const PRESETS = ['06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '17:30'];
@@ -50,18 +53,29 @@ const nextSaturday = () => {
 export default function Schedule() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const params = useLocalSearchParams<{ courseId?: string; event?: string }>();
+  const params = useLocalSearchParams<{ courseId?: string; event?: string; into?: string; round?: string }>();
+
+  // League mode: add a round to a league's schedule (?into) or edit one of its rounds (?round).
+  const leagueRound = params.round ? data.eventRounds.find((r) => r.id === params.round) : undefined;
+  const league = data.events.find((e) => e.id === (params.into ?? leagueRound?.eventId) && e.kind !== 'outing');
+  const leagueRounds = league ? data.eventRounds.filter((r) => r.eventId === league.id) : [];
+  // A new league round starts from the last one: same course, tee, holes and tee time, a week later.
+  const last = leagueRound ? undefined : leagueRounds.reduce<EventRound | undefined>((a, r) => (!a || r.scheduledOn > a.scheduledOn ? r : a), undefined);
+  const lastPlus7 = last ? addDaysISO(last.scheduledOn, 7) : undefined;
 
   // Edit mode: start from the existing scheduled round.
   const editing = params.event ? data.events.find((e) => e.id === params.event && e.kind === 'outing') : undefined;
-  const editRound = editing ? data.eventRounds.find((r) => r.eventId === editing.id) : undefined;
+  const editRound = leagueRound ?? (editing ? data.eventRounds.find((r) => r.eventId === editing.id) : undefined);
+  const start = editRound ?? last;
   const alreadyIn = new Set(editing ? data.eventMembers.filter((m) => m.eventId === editing.id).map((m) => m.playerId) : []);
 
-  const [courseId, setCourseId] = useState<string | undefined>(editRound?.courseId ?? params.courseId);
-  const [teeId, setTeeId] = useState<string | undefined>(editRound?.teeId);
-  const [holes, setHoles] = useState<Holes>(editRound?.holes ?? 'all');
-  const [date, setDate] = useState(editRound?.scheduledOn ?? nextSaturday());
-  const [teeTime, setTeeTime] = useState<string | undefined>(editRound ? editRound.teeTime : '08:00');
+  const [courseId, setCourseId] = useState<string | undefined>(start?.courseId ?? params.courseId);
+  const [teeId, setTeeId] = useState<string | undefined>(start?.teeId);
+  const [holes, setHoles] = useState<Holes>(start?.holes ?? 'all');
+  const [date, setDate] = useState(editRound?.scheduledOn ?? (lastPlus7 && lastPlus7 >= todayISO() ? lastPlus7 : nextSaturday()));
+  const [teeTime, setTeeTime] = useState<string | undefined>(start ? start.teeTime : '08:00');
+  const [roundName, setRoundName] = useState(leagueRound?.name ?? '');
+  const [confirmRemove, setConfirmRemove] = useState(false);
   const [spots, setSpots] = useState<string>(String(editing?.format.spots ?? 4));
   const [invite, setInvite] = useState<string[]>([]);
   const [note, setNote] = useState(editing?.format.note ?? '');
@@ -77,14 +91,24 @@ export default function Schedule() {
     const q = query.trim().toLowerCase();
     return q.length < 2 ? [] : data.courseIndex.filter((c) => c.name.toLowerCase().includes(q) || c.city.toLowerCase().includes(q)).slice(0, 8);
   }, [query, data.courseIndex]);
-  const days = useMemo(() => Array.from({ length: 35 }, (_, i) => addDaysISO(todayISO(), i)), []);
+  // Leagues plan further out; an edited round that's already past keeps its own date in the strip.
+  const firstDay = editRound && editRound.scheduledOn < todayISO() ? editRound.scheduledOn : todayISO();
+  const days = useMemo(() => {
+    const back = Math.round((Date.parse(`${todayISO()}T12:00:00`) - Date.parse(`${firstDay}T12:00:00`)) / 86400000);
+    return Array.from({ length: back + (league ? 120 : 35) }, (_, i) => addDaysISO(firstDay, i));
+  }, [league, firstDay]);
 
   const parts = dateParts(date);
   const shortCourse = (course?.name ?? '').replace(/\s+(Golf Course|Golf Club|Country Club|Golf & Country Club|Club)\b.*$/i, '') || 'the course';
   const autoName = `${parts.weekday} at ${shortCourse}`;
   const limit = Number(spots) || 0;
   const invitedPlayers = data.friends.filter((f) => invite.includes(f.id));
-  const groupPlayers: Player[] = [data.me, ...data.friends.filter((f) => alreadyIn.has(f.id)), ...invitedPlayers];
+  const leaguePlayers = league
+    ? data.eventMembers.filter((m) => m.eventId === league.id && m.status === 'joined').map((m) => data.playerById(m.playerId)).filter((x): x is Player => !!x)
+    : [];
+  const groupPlayers: Player[] = league ? leaguePlayers : [data.me, ...data.friends.filter((f) => alreadyIn.has(f.id)), ...invitedPlayers];
+  const autoRoundName = `Round ${leagueRound?.seq ?? leagueRounds.length + 1}`;
+  const finalHoles: Holes = course && isNineHole(course) && holes === 'back' ? 'front' : holes;
   const over = limit > 0 && groupPlayers.length > limit;
 
   const save = async () => {
@@ -93,7 +117,13 @@ export default function Schedule() {
     setError(null);
     const format = { ...defaultFormat('outing'), spots: limit || undefined, note: note.trim() || undefined };
     try {
-      if (editing && editRound) {
+      if (league) {
+        const round = { name: roundName.trim() || autoRoundName, scheduledOn: date, teeTime, courseId, teeId: tee, holes: finalHoles };
+        if (leagueRound) await data.updateEventRound(leagueRound.id, round);
+        else await data.addEventRound(league.id, round);
+        if (router.canGoBack()) router.back();
+        else router.replace(leagueRound ? `/event/${league.id}/round/${leagueRound.id}` : `/event/${league.id}`);
+      } else if (editing && editRound) {
         await data.updateEvent(editing.id, { name: name.trim() || autoName, format: { ...editing.format, ...format } });
         await data.updateEventRound(editRound.id, { scheduledOn: date, teeTime, courseId, teeId: tee, holes: course && isNineHole(course) && holes === 'back' ? 'front' : holes });
         if (invite.length) await data.inviteToEvent(editing.id, invite);
@@ -115,10 +145,23 @@ export default function Schedule() {
     }
   };
 
+  const remove = async () => {
+    if (!league || !leagueRound || busy) return;
+    if (!confirmRemove) return setConfirmRemove(true);
+    setBusy(true);
+    try {
+      await data.deleteEventRound(leagueRound.id);
+      router.dismissTo(`/event/${league.id}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not remove the round.');
+      setBusy(false);
+    }
+  };
+
   return (
     <View style={[styles.root, { paddingTop: insets.top || space.lg }]}>
       <View style={styles.header}>
-        <Text style={styles.title}>{editing ? 'Edit round' : 'Schedule a round'}</Text>
+        <Text style={styles.title}>{editing || leagueRound ? 'Edit round' : 'Schedule a round'}</Text>
         <IconButton name="x" label="Close" onPress={() => router.back()} />
       </View>
 
@@ -134,7 +177,7 @@ export default function Schedule() {
             </View>
           </View>
           <View style={styles.ticketBody}>
-            <Text style={styles.ticketName} numberOfLines={1}>{name.trim() || autoName}</Text>
+            <Text style={styles.ticketName} numberOfLines={1}>{league ? `${league.name} · ${roundName.trim() || autoRoundName}` : name.trim() || autoName}</Text>
             <Text style={styles.ticketCourse} numberOfLines={1}>{course?.name ?? 'Pick a course'}</Text>
             <Text style={styles.ticketMeta}>
               {teeTime ? formatTeeTime(teeTime) : 'Tee time TBD'}
@@ -142,7 +185,7 @@ export default function Schedule() {
               {course && isNineHole(course) ? (holes === 'all' ? ' · 18 holes (twice around)' : ' · 9 holes') : holes !== 'all' ? ` · ${holes === 'front' ? 'Front' : 'Back'} 9` : ' · 18 holes'}
             </Text>
             <View style={styles.slots}>
-              {Array.from({ length: Math.max(limit || groupPlayers.length, groupPlayers.length) }, (_, i) => {
+              {Array.from({ length: league ? Math.min(groupPlayers.length, 6) : Math.max(limit || groupPlayers.length, groupPlayers.length) }, (_, i) => {
                 const p = groupPlayers[i];
                 return p ? (
                   <View key={p.id} style={styles.slotFilled}><Avatar player={p} size={34} /></View>
@@ -151,10 +194,12 @@ export default function Schedule() {
                 );
               })}
               <Text style={styles.slotText}>
-                {limit ? `${Math.max(0, limit - groupPlayers.length)} ${limit - groupPlayers.length === 1 ? 'spot' : 'spots'} open` : `${groupPlayers.length} invited`}
+                {league
+                  ? `${groupPlayers.length} ${groupPlayers.length === 1 ? 'player' : 'players'} in the ${league.kind}`
+                  : limit ? `${Math.max(0, limit - groupPlayers.length)} ${limit - groupPlayers.length === 1 ? 'spot' : 'spots'} open` : `${groupPlayers.length} invited`}
               </Text>
             </View>
-            {note.trim() ? <Text style={styles.ticketNote} numberOfLines={3}>“{note.trim()}”</Text> : null}
+            {!league && note.trim() ? <Text style={styles.ticketNote} numberOfLines={3}>“{note.trim()}”</Text> : null}
           </View>
         </Animated.View>
 
@@ -257,6 +302,16 @@ export default function Schedule() {
           </View>
         </Section>
 
+        {league ? (
+          <Section title="Details">
+            <TextInput value={roundName} onChangeText={setRoundName} placeholder={autoRoundName} placeholderTextColor={colors.inkMuted} maxLength={40} style={styles.input} accessibilityLabel="Round name" />
+            <Text style={styles.help}>Everyone in {league.name} gets a notification, and it counts toward the standings.</Text>
+            {leagueRound ? (
+              <Button variant="secondary" haptic="warning" label={confirmRemove ? 'Tap again to remove this round' : 'Remove from schedule'} onPress={remove} disabled={busy} />
+            ) : null}
+          </Section>
+        ) : (
+        <>
         {/* Group */}
         <Section title="Who">
           <Chips value={spots} onChange={setSpots} options={GROUPS.map((g) => ({ value: g.value, label: g.label }))} />
@@ -299,13 +354,15 @@ export default function Schedule() {
           />
           <TextInput value={name} onChangeText={setName} placeholder={autoName} placeholderTextColor={colors.inkMuted} maxLength={60} style={styles.input} accessibilityLabel="Name" />
         </Section>
+        </>
+        )}
         {error ? <Text style={styles.error}>{error}</Text> : null}
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
         <Button
-          label={busy ? 'Saving…' : editing ? 'Save changes' : invite.length ? `Send ${invite.length} ${invite.length === 1 ? 'invite' : 'invites'}` : 'Schedule round'}
-          icon={editing ? undefined : 'calendar'}
+          label={busy ? 'Saving…' : editing || leagueRound ? 'Save changes' : league ? `Add to ${league.kind}` : invite.length ? `Send ${invite.length} ${invite.length === 1 ? 'invite' : 'invites'}` : 'Schedule round'}
+          icon={editing || leagueRound ? undefined : 'calendar'}
           onPress={save}
           disabled={!courseId || busy}
         />
@@ -323,7 +380,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.lg, paddingVertical: space.md },
   title: { fontFamily: fonts.display, fontSize: 30, color: colors.fairway },
@@ -386,4 +443,4 @@ const styles = StyleSheet.create({
   input: { minHeight: 48, borderRadius: radius.md, backgroundColor: colors.paper, paddingHorizontal: space.md, fontFamily: fonts.body, fontSize: 16, color: colors.ink, outlineStyle: 'none' } as never,
   noteInput: { minHeight: 76, paddingTop: 12, textAlignVertical: 'top' },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule, backgroundColor: colors.cream },
-});
+}));

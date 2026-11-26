@@ -9,7 +9,7 @@ import { Avatar } from '@/components/social';
 import { Card, Empty, IconButton, ProgressBar } from '@/components/ui';
 import { formatDate } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 const CATEGORY = { game: 'Scoring', courses: 'Travel', collection: 'Collecting', sim: 'Simulator' } as const;
 
@@ -77,7 +77,7 @@ export default function AchievementDetail() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   stage: { height: 320, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center' },
   topRow: { position: 'absolute', left: space.lg, right: space.lg, flexDirection: 'row', zIndex: 2 },
@@ -100,4 +100,4 @@ const styles = StyleSheet.create({
   friendName: { flex: 1, ...type.body, color: colors.ink },
   friendHave: { ...type.caption, color: colors.fairway, fontFamily: fonts.bodySemibold },
   friendProgress: { ...type.caption, color: colors.inkMuted, fontVariant: ['tabular-nums'] },
-});
+}));

@@ -10,7 +10,7 @@ import type { Player } from '@/domain/types';
 import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 export default function Friends() {
   const data = useAppData();
@@ -140,7 +140,7 @@ function SmallButton({ label, onPress, busy, quiet }: { label: string; onPress: 
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   section: { gap: space.md },
   note: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   empty: { ...type.body, color: colors.inkMuted, textAlign: 'center', paddingVertical: space.lg },
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
   smallQuiet: { backgroundColor: colors.paper },
   smallText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },
   smallTextQuiet: { color: colors.ink },
-});
+}));

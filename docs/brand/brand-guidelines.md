@@ -55,6 +55,25 @@ The brief's suggested `cream` (`#EAE3D3`) read grey on screen next to the mockup
 - Gold is never used for body text on cream.
 - The orange-red pennant is the only bright color and appears **only in artwork**.
 
+### Dark mode (2026-11-26)
+
+A night-course palette. Same token names, same three surface levels; the app follows the phone unless the player picks Light or Dark in Settings.
+
+| Token | Dark hex | Note |
+| --- | --- | --- |
+| `cream` (page) | `#121915` | Deep green-black, not pure black |
+| `creamLight` (raised) | `#1B241F` | Cards, grouped lists, tab bar |
+| `paper` (inset) | `#25302A` | Tracks, score boxes, icon buttons |
+| `fairway` | `#D3E4CC` | Pale green: titles, primary buttons, active states. Text on it is dark (`cream`) |
+| `ink` / `ink-muted` | `#ECE6DA` / `#A3A89C` | |
+| `gold` | `#CDB073` | Slightly brighter so thin accents still read |
+| `rule` | `#3A453E` | |
+
+- Forest and cream swap jobs: a primary button is a pale-green pill with dark text.
+- Paintings and the illustrated collectibles are unchanged. Text over a painting is always `onDark` (cream) with a soft shadow.
+- The rewards reveal is an always-dark forest screen in both modes.
+- Charts keep the diverging to-par scale; in dark the arms get lighter, not darker, away from par.
+
 ---
 
 ## 3. Typography

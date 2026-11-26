@@ -14,7 +14,8 @@ import type {
 import type { CompetitionEvent, EventFormat, EventMember, EventRound } from '@/domain/competition';
 import { makeJoinCode } from '@/domain/competition';
 
-import type { AppSnapshot, NewEvent, ProfileChanges, Repository } from './repository';
+import { todayISO } from '@/lib/format';
+import type { AppSnapshot, EventRoundChanges, NewEvent, NewEventRound, ProfileChanges, Repository } from './repository';
 
 // ── Row shapes (only the columns we read) ───────────────────────────────────
 
@@ -497,7 +498,7 @@ export class SupabaseRepository implements Repository {
     for (let attempt = 0; attempt < 3 && !event; attempt++) {
       const { data, error } = await this.db.from('events').insert({
         kind: input.kind, name: input.name.trim(), organizer_id: this.userId, format: input.format, join_code: makeJoinCode(),
-        starts_on: dates[0], ends_on: dates[dates.length - 1] ?? null,
+        starts_on: dates[0] ?? todayISO(), ends_on: dates[dates.length - 1] ?? null,
       }).select('id').single();
       if (error && !/join_code/.test(error.message)) throw new Error(`create event: ${error.message}`);
       event = data as { id: string } | null; // retry only on a join-code collision
@@ -553,23 +554,42 @@ export class SupabaseRepository implements Repository {
     await this.load(true);
   }
 
-  async updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>) {
+  async updateEventRound(eventRoundId: string, changes: EventRoundChanges) {
     const row: Record<string, unknown> = {};
+    if (changes.name !== undefined) row.name = changes.name.trim();
     if (changes.scheduledOn !== undefined) row.scheduled_on = changes.scheduledOn;
     if ('teeTime' in changes) row.tee_time = changes.teeTime ?? null;
     if (changes.courseId !== undefined) row.course_id = changes.courseId;
     if ('teeId' in changes) row.tee_id = changes.teeId ?? null;
     if (changes.holes !== undefined) row.holes = changes.holes;
     await this.must(this.db.from('event_rounds').update(row).eq('id', eventRoundId), 'update event round');
-    // Keep the event's date range in step with a single-round event.
-    if (changes.scheduledOn) {
-      const er = this.snap?.eventRounds.find((r) => r.id === eventRoundId);
-      const siblings = this.snap?.eventRounds.filter((r) => r.eventId === er?.eventId) ?? [];
-      if (er && siblings.length === 1) {
-        await this.must(this.db.from('events').update({ starts_on: changes.scheduledOn, ends_on: changes.scheduledOn }).eq('id', er.eventId), 'update event dates');
-      }
-    }
+    const eventId = this.snap?.eventRounds.find((r) => r.id === eventRoundId)?.eventId;
+    if (changes.scheduledOn && eventId) await this.syncEventDates(eventId);
     await this.load(true);
+  }
+
+  async addEventRound(eventId: string, round: NewEventRound) {
+    const seq = Math.max(0, ...(this.snap?.eventRounds.filter((r) => r.eventId === eventId).map((r) => r.seq) ?? [])) + 1;
+    await this.must(this.db.from('event_rounds').insert({
+      event_id: eventId, seq, name: round.name.trim(), course_id: round.courseId, tee_id: round.teeId ?? null,
+      scheduled_on: round.scheduledOn, tee_time: round.teeTime ?? null, holes: round.holes,
+    }), 'add round');
+    await this.syncEventDates(eventId);
+    await this.load(true);
+  }
+
+  async deleteEventRound(eventRoundId: string) {
+    const eventId = this.snap?.eventRounds.find((r) => r.id === eventRoundId)?.eventId;
+    await this.must(this.db.from('event_rounds').delete().eq('id', eventRoundId), 'remove round');
+    if (eventId) await this.syncEventDates(eventId);
+    await this.load(true);
+  }
+
+  /** Keep an event's date range spanning its schedule (an empty schedule keeps the start date it has). */
+  private async syncEventDates(eventId: string) {
+    const { data, error } = await this.db.from('event_rounds').select('scheduled_on').eq('event_id', eventId).order('scheduled_on');
+    if (error || !data?.length) return;
+    await this.must(this.db.from('events').update({ starts_on: data[0].scheduled_on, ends_on: data[data.length - 1].scheduled_on }).eq('id', eventId), 'update event dates');
   }
 
   async setPairings(eventRoundId: string, pairs: [string, string][]) {

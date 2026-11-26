@@ -11,7 +11,7 @@ import { defaultFormat, FORMAT_LABEL, type Basis, type EventKind, type EventRoun
 import { isNineHole } from '@/domain/layout';
 import { addDaysISO, formatDay, formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData, useCourse } from '@/state/app-data';
-import { colors, fonts, radius, space, type } from '@/theme';
+import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 type Holes = EventRound['holes'];
 
@@ -27,8 +27,8 @@ export default function NewEvent() {
   const [scoring, setScoring] = useState<Scoring>('stroke');
   const [basis, setBasis] = useState<Basis>('net');
   const [start, setStart] = useState(addDaysISO(todayISO(), 7));
-  const [count, setCount] = useState(startKind === 'league' ? 8 : startKind === 'tournament' ? 2 : 1);
-  const [teeTime, setTeeTime] = useState<string | undefined>(startKind === 'league' ? '17:30' : '08:00');
+  const [count, setCount] = useState(startKind === 'tournament' ? 2 : 1);
+  const [teeTime, setTeeTime] = useState<string | undefined>('08:00');
   const [courseId, setCourseId] = useState<string | undefined>(params.courseId);
   const [teeId, setTeeId] = useState<string | undefined>();
   const [holes, setHoles] = useState<Holes>('all');
@@ -44,22 +44,23 @@ export default function NewEvent() {
     return q.length < 2 ? [] : data.courseIndex.filter((c) => c.name.toLowerCase().includes(q) || c.city.toLowerCase().includes(q)).slice(0, 8);
   }, [query, data.courseIndex]);
 
-  const rounds = Math.max(1, kind === 'outing' ? 1 : count);
+  // A league starts with no schedule: the organizer adds rounds to it one at a time, whenever they're set.
+  const league = kind === 'league';
+  const rounds = league ? 0 : Math.max(1, kind === 'outing' ? 1 : count);
   const schedule = Array.from({ length: rounds }, (_, i) => ({
-    name: kind === 'league' ? `Week ${i + 1}` : kind === 'tournament' ? `Round ${i + 1}` : 'Round',
-    scheduledOn: addDaysISO(start, kind === 'league' ? i * 7 : i),
+    name: kind === 'tournament' ? `Round ${i + 1}` : 'Round',
+    scheduledOn: addDaysISO(start, i),
   }));
   const format = { ...defaultFormat(kind, scoring, basis) };
   const finalName = name.trim() || DEFAULT_NAME[kind];
 
   const changeKind = (k: EventKind) => {
     setKind(k);
-    setCount(k === 'league' ? 8 : k === 'tournament' ? 2 : 1);
-    setTeeTime(k === 'league' ? '17:30' : '08:00');
+    setCount(k === 'tournament' ? 2 : 1);
   };
 
   const create = async () => {
-    if (!courseId || busy) return;
+    if ((!league && !courseId) || busy) return;
     setBusy(true);
     setError(null);
     try {
@@ -68,7 +69,7 @@ export default function NewEvent() {
         name: finalName,
         format,
         inviteIds: invite,
-        rounds: schedule.map((s) => ({ ...s, courseId, teeId: tee, teeTime, holes })),
+        rounds: courseId ? schedule.map((s) => ({ ...s, courseId, teeId: tee, teeTime, holes })) : [],
       });
       router.replace(`/event/${id}`);
     } catch (e) {
@@ -87,7 +88,7 @@ export default function NewEvent() {
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Chips value={kind} onChange={changeKind} options={[{ value: 'league', label: 'League' }, { value: 'tournament', label: 'Tournament' }]} />
         <Text style={styles.help}>
-          {kind === 'league' ? 'A season of weekly rounds with a points table.' : kind === 'tournament' ? 'One to four rounds and a single leaderboard.' : 'Plan a round with friends. No scoring, just who’s in.'}
+          {kind === 'league' ? 'A season with a points table. Once it’s set up, schedule rounds into it whenever you play.' : kind === 'tournament' ? 'One to four rounds and a single leaderboard.' : 'Plan a round with friends. No scoring, just who’s in.'}
         </Text>
 
         <Label>Name</Label>
@@ -100,12 +101,14 @@ export default function NewEvent() {
             <Chips value={basis} onChange={setBasis} options={[{ value: 'net', label: 'Net (handicaps)' }, { value: 'gross', label: 'Gross' }]} />
             <Text style={styles.help}>
               {FORMAT_LABEL(format)}{basis === 'net' ? ` · ${format.allowance}% handicap allowance` : ''}
-              {kind === 'league' && scoring !== 'match' ? ' · season points 25-18-15-12-10… by finish each week' : ''}
+              {kind === 'league' && scoring !== 'match' ? ' · season points 25-18-15-12-10… by finish each round' : ''}
               {scoring === 'match' ? ' · pairings set per round' : ''}
             </Text>
           </>
         ) : null}
 
+        {league ? null : (
+        <>
         <Label>Course</Label>
         {courseId ? (
           loading ? <Loading label="Loading scorecard…" /> : (
@@ -151,7 +154,7 @@ export default function NewEvent() {
           </>
         ) : null}
 
-        <Label>{kind === 'outing' ? 'When' : kind === 'league' ? 'First week' : 'First round'}</Label>
+        <Label>{kind === 'outing' ? 'When' : 'First round'}</Label>
         <Stepper
           value={formatDay(start)}
           onMinus={() => setStart((d) => (addDaysISO(d, -1) >= todayISO() ? addDaysISO(d, -1) : d))}
@@ -167,15 +170,17 @@ export default function NewEvent() {
         {kind !== 'outing' ? (
           <>
             <Stepper
-              value={`${count} ${kind === 'league' ? (count === 1 ? 'week' : 'weeks') : count === 1 ? 'round' : 'rounds'}`}
+              value={`${count} ${count === 1 ? 'round' : 'rounds'}`}
               onMinus={() => setCount((c) => Math.max(1, c - 1))}
-              onPlus={() => setCount((c) => Math.min(kind === 'league' ? 26 : 4, c + 1))}
+              onPlus={() => setCount((c) => Math.min(4, c + 1))}
             />
             <Text style={styles.help}>
-              {kind === 'league' ? `Weekly, ${formatDay(schedule[0].scheduledOn)} – ${formatDay(schedule[schedule.length - 1].scheduledOn)}` : `Consecutive days from ${formatDay(start)}`}. You can play at the course on that date; each player logs their own round.
+              Consecutive days from {formatDay(start)}. You can play at the course on that date; each player logs their own round.
             </Text>
           </>
         ) : null}
+        </>
+        )}
 
         <Label>Invite friends</Label>
         <View style={styles.wrap}>
@@ -195,7 +200,7 @@ export default function NewEvent() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
-        <Button label={busy ? 'Creating…' : `Create ${kind === 'outing' ? 'round' : kind}`} onPress={create} disabled={!courseId || busy} />
+        <Button label={busy ? 'Creating…' : `Create ${kind === 'outing' ? 'round' : kind}`} onPress={create} disabled={(!league && !courseId) || busy} />
       </View>
     </View>
   );
@@ -230,7 +235,7 @@ function Stepper({ value, onMinus, onPlus, extra }: { value: string; onMinus: ()
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.lg, paddingVertical: space.md },
   title: { fontFamily: fonts.display, fontSize: 30, color: colors.fairway },
@@ -254,4 +259,4 @@ const styles = StyleSheet.create({
   stepValue: { minWidth: 120, textAlign: 'center', fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
   stepExtra: { paddingHorizontal: 12, minHeight: 34, borderRadius: radius.pill, backgroundColor: colors.paper, justifyContent: 'center' },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
-});
+}));

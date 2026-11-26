@@ -7,7 +7,7 @@ import { TIERS } from '@/data/config/game';
 import type { Round } from '@/domain/types';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 /**
  * Everything a round earned: new collectibles, a ball-marker tier upgrade and achievements.
@@ -64,7 +64,7 @@ export function EarnedThisRound({ round, celebrate = false }: { round: Round; ce
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   wrap: { backgroundColor: colors.creamLight, borderRadius: radius.xl, padding: space.lg, gap: space.md, ...shadow.card },
   kicker: { fontFamily: fonts.display, fontSize: 20, color: colors.fairway, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: space.md },
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   tap: { alignItems: 'center', gap: 2 },
   name: { fontFamily: fonts.bodySemibold, fontSize: 12, color: colors.ink, textAlign: 'center' },
   sub: { ...type.caption, fontSize: 10, color: colors.inkMuted, textAlign: 'center' },
-});
+}));

@@ -141,7 +141,7 @@ Things that stay in app config for now: tier rules, collectible sets per course 
 
 | Feature | Likely shape |
 |---|---|
-| ~~Leagues & tournaments~~ | **Done (2026-11-26):** `events`, `event_members`, `event_rounds`, `event_matches`, `rounds.event_round_id`; members of an event see each other's linked rounds; join by code via `join_event()` |
+| ~~Leagues & tournaments~~ | **Done (2026-11-26):** `events`, `event_members`, `event_rounds`, `event_matches`, `rounds.event_round_id`; members of an event see each other's linked rounds; join by code via `join_event()`. Leagues start with an empty schedule; the organizer inserts/edits/deletes `event_rounds` as rounds are set (push on insert) |
 | Server-side earned items | `earned_items (profile_id, course_id, item_id, tier, round_id, earned_on)`, written by an Edge Function when a round completes; powers notifications and cheap Trophy Rooms |
 | Notifications | `notifications (recipient_id, kind, payload, read_at)` + Expo push tokens table |
 | Live rounds | Supabase Realtime on `hole_scores` for rounds marked live |

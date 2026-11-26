@@ -10,7 +10,7 @@ import { formatToPar, type HoleResult } from '@/domain/stats';
 import { roundOwner, type Hole, type Round } from '@/domain/types';
 import { formatDate, oneDecimal, pct } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 import { EarnedThisRound } from '@/components/earned-this-round';
 import { Tap } from '@/components/motion';
 
@@ -233,9 +233,9 @@ function Legend({ mark, label }: { mark: 'circle' | 'square'; label: string }) {
   );
 }
 
-const CELL = { flex: 1, textAlign: 'center' as const, fontFamily: fonts.body, fontSize: 12, color: colors.ink, fontVariant: ['tabular-nums' as const], paddingVertical: 5 };
+const CELL = () => ({ flex: 1, textAlign: 'center' as const, fontFamily: fonts.body, fontSize: 12, color: colors.ink, fontVariant: ['tabular-nums' as const], paddingVertical: 5 });
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   headerAction: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.fairway, paddingHorizontal: space.md, paddingVertical: 10, backgroundColor: colors.paper, borderRadius: radius.pill, overflow: 'hidden' },
   paper: { backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.rule, paddingTop: space.lg, paddingBottom: space.sm, gap: space.md, overflow: 'hidden', ...shadow.card },
   engraving: { paddingHorizontal: space.xl, opacity: 0.85 },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   teeLine: { ...type.caption, color: colors.inkMuted },
   grid: { marginHorizontal: space.sm, borderWidth: 1, borderColor: colors.rule, backgroundColor: colors.creamLight },
   row: { flexDirection: 'row', alignItems: 'center', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.rule },
-  cell: CELL,
+  cell: CELL(),
   cellBox: { flex: 1, alignItems: 'center', paddingVertical: 2 },
   head: { flex: 1.5, textAlign: 'left', paddingLeft: 6, fontFamily: fonts.bodySemibold, fontSize: 11 },
   end: { flex: 1.3, borderLeftWidth: StyleSheet.hairlineWidth, borderLeftColor: colors.rule },
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   input: { flex: 1, height: 40, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.rule, backgroundColor: colors.cream, paddingHorizontal: space.lg, fontFamily: fonts.body, fontSize: 14, color: colors.ink, outlineStyle: 'none' } as never,
   send: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
   deleteText: { ...type.caption, color: colors.inkMuted, textDecorationLine: 'underline' },
-});
+}));
 
 /** "Counts toward Thursday Night League · Week 3" link on an event-linked scorecard. */
 function EventChip({ eventRoundId }: { eventRoundId: string }) {
@@ -296,7 +296,7 @@ function EventChip({ eventRoundId }: { eventRoundId: string }) {
   );
 }
 
-const eventChip = StyleSheet.create({
+const eventChip = themed(() => StyleSheet.create({
   chip: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', paddingHorizontal: 12, minHeight: 32, borderRadius: radius.pill, backgroundColor: colors.paper },
   text: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, flexShrink: 1 },
-});
+}));

@@ -8,7 +8,7 @@ import { StyleSheet, Text, View, type GestureResponderEvent, type LayoutChangeEv
 import Svg, { Circle, Line, Path, Rect } from 'react-native-svg';
 
 import { haptics } from '@/lib/haptics';
-import { chart, colors, fonts, radius, shadow, space, type } from '@/theme';
+import { chart, colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 function useWidth(): [number, (e: LayoutChangeEvent) => void] {
   const [w, setW] = useState(0);
@@ -303,14 +303,14 @@ export function ChartCard({ title, subtitle, right, children }: { title: string;
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   emptyChart: { ...type.caption, color: colors.inkMuted, paddingVertical: space.lg, textAlign: 'center' },
   tick: { position: 'absolute', textAlign: 'right', fontFamily: fonts.body, fontSize: 10, color: colors.inkMuted, fontVariant: ['tabular-nums'] },
   endLabel: { position: 'absolute', fontFamily: fonts.bodySemibold, fontSize: 12, color: colors.ink, fontVariant: ['tabular-nums'] },
   tooltip: { position: 'absolute', width: 148, backgroundColor: colors.fairwayDeep, borderRadius: radius.sm, paddingVertical: 6, paddingHorizontal: 8 },
-  tipValue: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.cream },
-  tipAvg: { fontFamily: fonts.body, fontSize: 12, color: 'rgba(242,230,207,0.8)' },
-  tipLabel: { fontFamily: fonts.body, fontSize: 11, color: 'rgba(242,230,207,0.8)' },
+  tipValue: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.onDark },
+  tipAvg: { fontFamily: fonts.body, fontSize: 12, color: colors.onDarkMuted },
+  tipLabel: { fontFamily: fonts.body, fontSize: 11, color: colors.onDarkMuted },
   segText: { fontFamily: fonts.bodySemibold, fontSize: 11 },
   legend: { flexDirection: 'row', flexWrap: 'wrap', columnGap: space.md, rowGap: 6 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 5 },
@@ -332,4 +332,4 @@ const styles = StyleSheet.create({
   cardHead: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm },
   cardTitle: { fontFamily: fonts.display, fontSize: 20, color: colors.fairway },
   cardSub: { ...type.caption, color: colors.inkMuted, marginTop: 2 },
-});
+}));

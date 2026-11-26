@@ -5,12 +5,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Tap } from '@/components/motion';
 import { OutingView } from '@/components/outing-view';
 import { Avatar } from '@/components/social';
-import { Button, Card, Empty, Group, SectionHeader, SheetScreen } from '@/components/ui';
+import { Button, Card, Empty, Group, IconButton, SectionHeader, SheetScreen } from '@/components/ui';
 import { FORMAT_LABEL, positionLabel, roundRobin } from '@/domain/competition';
 import { formatDay, formatTeeTime } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { useEvent } from '@/state/events';
-import { colors, fonts, space, type } from '@/theme';
+import { colors, fonts, space, themed, type } from '@/theme';
 
 export default function EventRoundScreen() {
   const { id, roundId } = useLocalSearchParams<{ id: string; roundId: string }>();
@@ -45,7 +45,10 @@ export default function EventRoundScreen() {
   };
 
   return (
-    <SheetScreen title={r.round.name} back>
+    <SheetScreen
+      title={r.round.name}
+      back
+      right={view.isOrganizer ? <IconButton name="calendar" label="Edit round" onPress={() => router.push(`/schedule?round=${r.round.id}`)} /> : undefined}>
       <Card style={styles.hero}>
         <Text style={styles.event}>{view.event.name}</Text>
         <Text style={styles.course}>{r.courseName}</Text>
@@ -123,7 +126,7 @@ export default function EventRoundScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   section: { gap: space.md },
   hero: { padding: space.lg, gap: 2 },
   event: { fontFamily: fonts.bodySemibold, fontSize: 12, letterSpacing: 0.6, color: colors.gold },
@@ -139,4 +142,4 @@ const styles = StyleSheet.create({
   result: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink, textAlign: 'center', minWidth: 92 },
   score: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink, fontVariant: ['tabular-nums'] },
   status: { ...type.caption, color: colors.inkMuted },
-});
+}));

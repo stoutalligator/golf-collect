@@ -16,7 +16,7 @@ import { roundOwner } from '@/domain/types';
 import { ACCESS_LABEL } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
-import { colors, fonts, shadow, space, type } from '@/theme';
+import { colors, fonts, shadow, space, themed, type } from '@/theme';
 
 /** Painting fades into the cream page so the title sits on a clean surface. */
 function HeroFade() {
@@ -168,11 +168,11 @@ function SaveButton({ saved, onPress }: { saved: boolean; onPress: () => void })
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   hero: { height: 300, backgroundColor: colors.paper },
   heroButtons: { position: 'absolute', left: space.lg, right: space.lg, flexDirection: 'row', justifyContent: 'space-between' },
-  saveButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(252,248,241,0.92)', alignItems: 'center', justifyContent: 'center', ...shadow.control },
+  saveButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.artButton, alignItems: 'center', justifyContent: 'center', ...shadow.control },
   artNote: { position: 'absolute', right: space.lg, bottom: space.lg, fontFamily: fonts.body, fontSize: 10, color: colors.inkMuted },
   body: { paddingHorizontal: space.lg, gap: space.xl, marginTop: -space.lg },
   title: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 38, color: colors.fairway },
@@ -192,4 +192,4 @@ const styles = StyleSheet.create({
   boardMeta: { ...type.caption, color: colors.inkMuted },
   boardScore: { fontFamily: fonts.displayBold, fontSize: 22, color: colors.ink },
   boardToPar: { ...type.caption, color: colors.inkMuted, width: 28, textAlign: 'right', fontVariant: ['tabular-nums'] },
-});
+}));

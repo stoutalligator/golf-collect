@@ -14,7 +14,7 @@ import { tierRank } from '@/domain/collection';
 import { formatMonthYear, oneDecimal } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, type PlayerData } from '@/state/app-data';
-import { colors, fonts, radius, shadow, space, type } from '@/theme';
+import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 /** Profile layout shared by your own profile and a friend's. */
 export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; headerRight?: ReactNode; children?: ReactNode }) {
@@ -120,7 +120,7 @@ export function ProfileLink({ icon, label, sub, onPress, right }: { icon: IconNa
   return <ListRow icon={icon} label={label} sub={sub} onPress={onPress} right={right} />;
 }
 
-const styles = StyleSheet.create({
+const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.lg, paddingBottom: space.md },
   headerTitle: { fontFamily: fonts.display, fontSize: 20, color: colors.fairway },
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
   caseEmpty: { ...type.caption, fontSize: 13, color: colors.inkMuted, textAlign: 'center', paddingVertical: space.sm },
   badgeCell: { alignItems: 'center', width: 72, gap: 2 },
   badgeName: { ...type.caption, fontSize: 11, color: colors.ink, textAlign: 'center' },
-});
+}));
