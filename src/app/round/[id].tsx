@@ -33,14 +33,19 @@ export default function Scorecard() {
   const owner = data.playerById(roundOwner(round));
   const isMine = roundOwner(round) === data.me.id;
   const others = round.playerIds.filter((p) => p !== roundOwner(round)).map((p) => data.playerById(p)).filter((p) => !!p);
+  // Resume: your own active round, or the group round you're scoring this friend's round from.
+  const resumeId = round.status !== 'active' ? undefined
+    : isMine ? round.id
+      : round.scoredBy === data.me.id && round.groupId ? data.rounds.find((r) => r.groupId === round.groupId && r.status === 'active')?.id : undefined;
+  const scorer = round.scoredBy && round.scoredBy !== roundOwner(round) ? data.playerById(round.scoredBy) : undefined;
   const nines = [layout.holes.slice(0, 9), layout.holes.slice(9, 18)].filter((n) => n.some((h) => round.holeNumbers.includes(h.number)));
 
   return (
     <SheetScreen
       title="Scorecard"
       back
-      right={round.status === 'active' ? (
-        <Tap haptic="press" scaleTo={0.92} onPress={() => router.replace(`/round/play/${round.id}`)} accessibilityRole="button" hitSlop={8}>
+      right={resumeId ? (
+        <Tap haptic="press" scaleTo={0.92} onPress={() => router.replace(`/round/play/${resumeId}`)} accessibilityRole="button" hitSlop={8}>
           <Text style={styles.headerAction}>Resume</Text>
         </Tap>
       ) : undefined}>
@@ -55,6 +60,11 @@ export default function Scorecard() {
         </Tap>
       ) : null}
       {round.eventRoundId ? <EventChip eventRoundId={round.eventRoundId} /> : null}
+      {scorer ? (
+        <Text style={styles.note}>
+          Scored by {scorer.id === data.me.id ? 'you' : scorer.name}{round.status === 'active' ? ' · in progress' : ''}
+        </Text>
+      ) : null}
       <View style={styles.paper}>
         <View style={styles.paperTop}>
           <Tree size={52} />

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
-import { LocalRepository, type AppSnapshot, type NewEvent, type Repository } from '@/data/repository';
+import { LocalRepository, type AppSnapshot, type NewEvent, type ProfileChanges, type Repository } from '@/data/repository';
 import type { EventFormat, EventRound } from '@/domain/competition';
 import { SupabaseRepository } from '@/data/supabase-repository';
 import { supabase } from '@/lib/supabase';
@@ -83,7 +83,10 @@ export interface AppData extends AppSnapshot {
   /** Display name for a round's course (real or sim). */
   roundCourseName(round: Round): string;
   saveRound(round: Round): Promise<void>;
+  /** Save several rounds at once (a group on one phone), then refresh once. */
+  saveRounds(rounds: Round[]): Promise<void>;
   deleteRound(id: string): Promise<void>;
+  updateProfile(changes: ProfileChanges): Promise<void>;
   toggleWishlist(courseId: string): Promise<void>;
   react(roundId: string, emoji: ReactionEmoji): Promise<void>;
   addComment(roundId: string, text: string): Promise<void>;
@@ -254,6 +257,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     error,
     offline: auth.offline,
     saveRound: async (r) => { await repo!.saveRound(r); await reload(); },
+    saveRounds: async (rs) => { await Promise.all(rs.map((r) => repo!.saveRound(r))); await reload(); },
+    updateProfile: async (changes) => { await repo!.updateProfile(changes); await reload(); },
     deleteRound: async (id) => { await repo!.deleteRound(id); await reload(); },
     toggleWishlist: async (id) => {
       const next = snap.wishlist.includes(id) ? snap.wishlist.filter((x) => x !== id) : [...snap.wishlist, id];

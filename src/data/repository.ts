@@ -47,6 +47,7 @@ export interface Repository {
   load(force?: boolean): Promise<AppSnapshot>;
   /** Make sure full scorecards for these course ids are in the snapshot (no-op when already loaded). */
   loadCourses(ids: string[]): Promise<void>;
+  /** Save a round you own, or one you're keeping score for (group scoring; `ownerId` is the friend). */
   saveRound(round: Round): Promise<void>;
   deleteRound(id: string): Promise<void>;
   setWishlist(courseIds: string[]): Promise<void>;
@@ -72,8 +73,18 @@ export interface Repository {
   updateEvent(eventId: string, changes: { name?: string; format?: EventFormat }): Promise<void>;
   /** Organizer: move an event round (date, tee time, course, tee, holes). */
   updateEventRound(eventRoundId: string, changes: Partial<Pick<EventRound, 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>): Promise<void>;
+  /** Edit your own profile. Throws a readable message (e.g. username taken). */
+  updateProfile(changes: ProfileChanges): Promise<void>;
   /** Offline demo only: restore the generated sample data. */
   resetToSample?(): Promise<void>;
+}
+
+export interface ProfileChanges {
+  name?: string;
+  /** Lowercase letters, numbers and underscores, 3–20; null clears it. */
+  username?: string | null;
+  tagline?: string | null;
+  homeCourseId?: string | null;
 }
 
 export const COURSE_DATA_ATTRIBUTION = seed._attribution;
@@ -144,12 +155,16 @@ export class LocalRepository implements Repository {
 
   async saveRound(round: Round) {
     const s = await this.read();
+    if (round.ownerId && round.ownerId !== ME.id) {
+      await this.write({ ...s, friendRounds: [...s.friendRounds.filter((r) => r.id !== round.id), round] });
+      return;
+    }
     await this.write({ ...s, rounds: [...s.rounds.filter((r) => r.id !== round.id), round] });
   }
 
   async deleteRound(id: string) {
     const s = await this.read();
-    await this.write({ ...s, rounds: s.rounds.filter((r) => r.id !== id) });
+    await this.write({ ...s, rounds: s.rounds.filter((r) => r.id !== id), friendRounds: s.friendRounds.filter((r) => r.id !== id) });
   }
 
   async setWishlist(courseIds: string[]) {
@@ -209,6 +224,10 @@ export class LocalRepository implements Repository {
   async updateEvent() { this.needsAccount(); }
 
   async updateEventRound() { this.needsAccount(); }
+
+  async updateProfile(): Promise<void> {
+    throw new Error('Profiles need an account (this is the offline demo).');
+  }
 
   async resetToSample() {
     await this.write(sample());

@@ -14,7 +14,7 @@ import type {
 import type { CompetitionEvent, EventFormat, EventMember, EventRound } from '@/domain/competition';
 import { makeJoinCode } from '@/domain/competition';
 
-import type { AppSnapshot, NewEvent, Repository } from './repository';
+import type { AppSnapshot, NewEvent, ProfileChanges, Repository } from './repository';
 
 // ── Row shapes (only the columns we read) ───────────────────────────────────
 
@@ -30,7 +30,7 @@ type RoundPlayerRow = { id: string; profile_id: string | null; guest_name: strin
 type RoundRow = {
   id: string; owner_id: string; kind: 'course' | 'sim'; course_id: string | null; sim_course_id: string | null; tee_id: string | null;
   played_on: string; status: 'active' | 'complete'; hole_numbers: number[]; created_at: string; completed_at: string | null;
-  event_round_id: string | null;
+  event_round_id: string | null; scored_by: string | null; group_id: string | null;
   round_players: RoundPlayerRow[];
 };
 
@@ -87,6 +87,8 @@ function toRound(r: RoundRow): Round {
     createdAt: r.created_at,
     completedAt: r.completed_at ?? undefined,
     eventRoundId: r.event_round_id ?? undefined,
+    scoredBy: r.scored_by ?? undefined,
+    groupId: r.group_id ?? undefined,
   };
 }
 
@@ -247,7 +249,7 @@ export class SupabaseRepository implements Repository {
       this.must(this.db.from('friendships').select('requester_id, addressee_id, status'), 'friendships'),
       this.must(
         this.db.from('rounds')
-          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
+          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
           .order('played_on', { ascending: false })
           .limit(500),
         'rounds',
@@ -273,7 +275,7 @@ export class SupabaseRepository implements Repository {
 
     const rounds = (roundRows as RoundRow[]).map((r) => {
       const owner = r.round_players.find((p) => p.is_owner && p.profile_id === r.owner_id);
-      if (owner && r.owner_id === me) this.ownerSlot.set(r.id, owner.id);
+      if (owner && (r.owner_id === me || r.scored_by === me)) this.ownerSlot.set(r.id, owner.id);
       return toRound(r);
     });
     const taggedIds = [...rounds.flatMap((r) => r.playerIds), ...eventMembers.map((m) => m.playerId), ...events.map((e) => e.organizerId)];
@@ -322,18 +324,24 @@ export class SupabaseRepository implements Repository {
 
   async saveRound(round: Round) {
     const me = this.userId;
+    const owner = round.ownerId ?? me;
+    // Keeping score for a friend: the round stays 'active' until its scores are written (the scorekeeper can only
+    // write to active rounds), then it's marked complete in a final update.
+    const keeper = owner !== me;
     await this.must(this.db.from('rounds').upsert({
       id: round.id,
-      owner_id: me,
+      owner_id: owner,
+      scored_by: keeper ? me : round.scoredBy ?? null,
+      group_id: round.groupId ?? null,
       kind: round.kind,
       course_id: round.kind === 'course' ? round.courseId : null,
       sim_course_id: round.kind === 'sim' ? round.courseId : null,
       tee_id: round.kind === 'course' ? round.teeId ?? null : null,
       played_on: round.date,
-      status: round.status,
+      status: keeper ? 'active' : round.status,
       hole_numbers: round.holeNumbers,
       created_at: round.createdAt,
-      completed_at: round.completedAt ?? null,
+      completed_at: keeper ? null : round.completedAt ?? null,
       event_round_id: round.eventRoundId ?? null,
     }), 'save round');
 
@@ -344,12 +352,12 @@ export class SupabaseRepository implements Repository {
     if (!slot) {
       slot = existing.find((p) => p.is_owner)?.id;
       if (!slot) {
-        const created = (await this.must(this.db.from('round_players').insert({ round_id: round.id, profile_id: me, is_owner: true }).select('id').single(), 'add owner')) as { id: string };
+        const created = (await this.must(this.db.from('round_players').insert({ round_id: round.id, profile_id: owner, is_owner: true }).select('id').single(), 'add owner')) as { id: string };
         slot = created.id;
       }
       this.ownerSlot.set(round.id, slot);
     }
-    const tagged = round.playerIds.filter((id) => id !== me);
+    const tagged = round.playerIds.filter((id) => id !== owner);
     const have = existing.filter((p) => !p.is_owner && p.profile_id).map((p) => p.profile_id!);
     const add = tagged.filter((id) => !have.includes(id));
     const drop = have.filter((id) => !tagged.includes(id));
@@ -357,7 +365,7 @@ export class SupabaseRepository implements Repository {
     if (drop.length) await this.must(this.db.from('round_players').delete().eq('round_id', round.id).in('profile_id', drop), 'untag players');
 
     // Scores: write entered holes (unentered stats as null, never 0); remove holes cleared back to empty.
-    const scores = round.scores[me] ?? round.scores[round.playerIds[0]] ?? [];
+    const scores = round.scores[owner] ?? round.scores[round.playerIds[0]] ?? [];
     const rows = round.holeNumbers.flatMap((n, i) => {
       const s = scores[i];
       return s ? [{
@@ -369,14 +377,40 @@ export class SupabaseRepository implements Repository {
     const empty = round.holeNumbers.filter((_, i) => !scores[i]);
     if (empty.length) await this.must(this.db.from('hole_scores').delete().eq('round_player_id', slot).in('hole_number', empty), 'clear scores');
 
-    const stored: Round = { ...round, ownerId: me, scores: { [me]: scores } };
-    if (this.snap) this.patch({ rounds: [...this.snap.rounds.filter((r) => r.id !== round.id), stored] });
+    if (keeper && round.status === 'complete') {
+      await this.must(this.db.from('rounds').update({ status: 'complete', completed_at: round.completedAt ?? new Date().toISOString() }).eq('id', round.id), 'finish round');
+    }
+
+    const stored: Round = { ...round, ownerId: owner, ...(keeper ? { scoredBy: me } : {}), scores: { [owner]: scores } };
+    if (this.snap) {
+      this.patch(keeper
+        ? { friendRounds: [...this.snap.friendRounds.filter((r) => r.id !== round.id), stored] }
+        : { rounds: [...this.snap.rounds.filter((r) => r.id !== round.id), stored] });
+    }
   }
 
   async deleteRound(id: string) {
     await this.must(this.db.from('rounds').delete().eq('id', id), 'delete round');
     this.ownerSlot.delete(id);
-    if (this.snap) this.patch({ rounds: this.snap.rounds.filter((r) => r.id !== id) });
+    if (this.snap) this.patch({ rounds: this.snap.rounds.filter((r) => r.id !== id), friendRounds: this.snap.friendRounds.filter((r) => r.id !== id) });
+  }
+
+  async updateProfile(changes: ProfileChanges) {
+    const row: Record<string, unknown> = {};
+    if (changes.name !== undefined) row.display_name = changes.name.trim();
+    if (changes.username !== undefined) row.username = changes.username ? changes.username.trim().toLowerCase() : null;
+    if (changes.tagline !== undefined) row.tagline = changes.tagline?.trim() || null;
+    if (changes.homeCourseId !== undefined) {
+      row.home_course_id = changes.homeCourseId;
+      row.home_state = changes.homeCourseId ? this.snap?.courseIndex.find((c) => c.id === changes.homeCourseId)?.state ?? null : null;
+    }
+    const { error } = await this.db.from('profiles').update(row).eq('id', this.userId);
+    if (error) {
+      if (error.code === '23505' || /username/.test(error.message) && /duplicate|unique/i.test(error.message)) throw new Error('That username is taken.');
+      if (/username_check/.test(error.message)) throw new Error('Usernames are 3–20 lowercase letters, numbers or underscores.');
+      throw new Error(error.message);
+    }
+    await this.load(true);
   }
 
   async clearRounds() {

@@ -76,6 +76,8 @@ erDiagram
 | `round_players` | id, round_id, profile_id **or** guest_name, is_owner | Replaces `Round.playerIds`. Friends are tagged by profile; non-users by name. |
 | `hole_scores` | (`round_player_id`, `hole_number`), **strokes (required)**, putts, fairway, gir, penalties, chips, sand_shots | Every optional stat is `null` when not entered, never 0. Keyed by player, so multi-player score entry is already supported. |
 
+**Group scoring** (migration `…000900_group_scoring.sql`): one phone keeps score for the group, but each player still gets **their own round** (`owner_id` = that player), so stats, handicap, collectibles and event results need no special cases. `rounds.scored_by` is the scorekeeper and `rounds.group_id` ties the group's rounds together. A scorekeeper can create a round only for an accepted friend, and can edit it (and its players and scores) **only while it's active**; once finished it belongs to the owner alone. The owner gets a push when someone starts keeping their score and when the round is finished.
+
 ---
 
 ## 3. Who can see what (row-level security)
@@ -127,8 +129,9 @@ Things that stay in app config for now: tier rules, collectible sets per course 
 1. **Create the project** at supabase.com (US East is closest to CT). Save the database password in your password manager.
 2. **Run the migration:** paste the migration file into SQL Editor → Run, or with the CLI: `npx supabase link --project-ref <ref>` then `npx supabase db push`.
 3. **Auth:** **email sign-in only** (decided 2026-11-26; no Apple or Google). It's on by default in Supabase. While testing, consider turning off **Confirm email** (Authentication → Sign In / Providers → Email) so new test accounts work without clicking a link; turn it back on before launch. Note: App Store rules only require Sign in with Apple when an app offers *third-party* social logins, so email-only is fine.
-4. **Keys:** `.env` (gitignored) holds `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (bundled into the app), plus `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_DB_PASSWORD` (local scripts only; never `EXPO_PUBLIC_`).
-5. **Tell me when it's up.** I'll then write the course import script, the `SupabaseRepository`, sign-in screens and friend requests.
+4. **Emails (before real users):** the app confirms sign-ups and resets passwords with a **code typed into the app**, not a link (links would need deep-link setup and break when the email is opened on a computer). In Authentication → Emails → Templates, make **Confirm signup** and **Reset password** show `{{ .Token }}` (e.g. "Your Greens Keeper code is {{ .Token }}"). Also set up **custom SMTP** (Authentication → Emails → SMTP, e.g. Resend with a verified domain): Supabase's built-in sender only delivers to your team's addresses and is rate-limited.
+5. **Keys:** `.env` (gitignored) holds `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (bundled into the app), plus `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_DB_PASSWORD` (local scripts only; never `EXPO_PUBLIC_`).
+6. **Tell me when it's up.** I'll then write the course import script, the `SupabaseRepository`, sign-in screens and friend requests.
 
 `@supabase/supabase-js` is already in `package.json`. `@supabase/ssr` is for server-rendered web apps and isn't needed for Expo. Before wiring the client, check Supabase's current Expo quickstart for the session-storage setup (AsyncStorage) it recommends.
 

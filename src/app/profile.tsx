@@ -31,6 +31,9 @@ export default function Profile() {
   return (
     <ProfileView pd={data.meData} headerRight={<IconButton name="settings" label="Settings" onPress={() => setSettingsOpen((o) => !o)} />}>
       <Group inset={space.lg}>
+        {auth.offline ? null : (
+          <ProfileLink icon="user" label="Edit profile" sub={data.me.username ? `@${data.me.username}` : 'Name, username, home course, password'} onPress={() => router.push('/account')} />
+        )}
         <ProfileLink
           icon="users"
           label="Friends"

@@ -20,6 +20,17 @@ export interface Auth {
   signIn(email: string, password: string): Promise<string | null>;
   /** Returns an error message, `'confirm'` when Supabase is waiting for email confirmation, or null when signed in. */
   signUp(name: string, email: string, password: string): Promise<string | null | 'confirm'>;
+  /** Email a password-reset code. Returns an error message or null. */
+  requestPasswordReset(email: string): Promise<string | null>;
+  /**
+   * Check a code from an email and sign in: `recovery` (password reset, then sets `newPassword`) or `signup`
+   * (confirms a new account). Returns an error message or null.
+   */
+  verifyCode(email: string, code: string, kind: 'recovery' | 'signup', newPassword?: string): Promise<string | null>;
+  /** Resend the sign-up confirmation email. */
+  resendConfirmation(email: string): Promise<string | null>;
+  /** Signed in: change your password. Returns an error message or null. */
+  updatePassword(password: string): Promise<string | null>;
   signOut(): Promise<void>;
 }
 
@@ -29,7 +40,10 @@ const friendly = (message: string) =>
   /invalid login credentials/i.test(message) ? 'That email and password don’t match.'
     : /already registered/i.test(message) ? 'There’s already an account with that email. Try signing in.'
       : /password/i.test(message) && /6/.test(message) ? 'Use a password with at least 6 characters.'
-        : message;
+        : /expired|invalid.*(otp|token)|token.*(expired|invalid)/i.test(message) ? 'That code didn’t work or has expired. Request a new one.'
+          : /rate limit|too many|security purposes/i.test(message) ? 'Too many emails just now. Wait a minute and try again.'
+            : /same.*password|different from the old/i.test(message) ? 'Choose a password you haven’t used here before.'
+              : message;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -65,6 +79,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (error) return friendly(error.message);
       return data.session ? null : 'confirm';
+    },
+    requestPasswordReset: async (email) => {
+      if (!supabase) return null;
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim());
+      return error ? friendly(error.message) : null;
+    },
+    verifyCode: async (email, code, kind, newPassword) => {
+      if (!supabase) return null;
+      const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token: code.replace(/\s/g, ''), type: kind });
+      if (error) return friendly(error.message);
+      if (kind === 'recovery' && newPassword) {
+        const { error: pwError } = await supabase.auth.updateUser({ password: newPassword });
+        if (pwError) return friendly(pwError.message);
+      }
+      return null;
+    },
+    resendConfirmation: async (email) => {
+      if (!supabase) return null;
+      const { error } = await supabase.auth.resend({ type: 'signup', email: email.trim() });
+      return error ? friendly(error.message) : null;
+    },
+    updatePassword: async (password) => {
+      if (!supabase) return null;
+      const { error } = await supabase.auth.updateUser({ password });
+      return error ? friendly(error.message) : null;
     },
     signOut: async () => {
       await forgetDevice().catch(() => {}); // this phone stops receiving this account's notifications

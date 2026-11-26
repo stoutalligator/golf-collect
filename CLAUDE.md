@@ -32,7 +32,7 @@ An iOS golf app for tracking rounds, discovering courses, and **collecting the c
   Use `Button` (primary/secondary) from `ui.tsx` for actions, `enterItem(i)` for list entrances, `CountUp` for headline numbers, and `ProgressBar` (animated). Keep motion quick and settled: springs are critically damped (no overshoot), and badge/collectible entrances use `popIn()`, never `ZoomIn.springify()`.
 - **Chrome & surfaces:** cream pages, headers and tab bar (see the brand guidelines' 2026-11-26 tokens). Use `SheetScreen` for standard screens, `IconButton` (round) for header actions, `Group` + rows for lists, `StatStrip` for headline numbers, `SectionHeader` (with pill action), `Chips` (segmented). Don't nest raised surfaces.
 - **Navigation:** tabs are Home/Feed · Courses · (+) · Stats · Collection. Profile (`/profile`) opens from the avatar on Home; friends are `/friends` and `/player/[id]`.
-- **Rounds have owners.** `Round.ownerId` (omitted = you); use `roundOwner(r)`. `data.roundsByDate`/`courseStats`/`collections`/`achievements` are yours; anyone's derived data comes from `data.playerData(id)`. Friends' rounds are read-only.
+- **Rounds have owners.** `Round.ownerId` (omitted = you); use `roundOwner(r)`. `data.roundsByDate`/`courseStats`/`collections`/`achievements` are yours; anyone's derived data comes from `data.playerData(id)`. Friends' rounds are read-only, except ones you're keeping score for (`scoredBy` = you, `groupId` set) while they're active.
 - **Charts** use `src/components/charts.tsx` and `chart` tokens in `src/theme` (diverging to-par scale). Text never takes a series color.
 - Keep the app name in `app.json` only (it will be rebranded).
 

@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
+import { Avatar } from '@/components/social';
 import { Button, Empty, IconButton } from '@/components/ui';
 import { realHoleNumber } from '@/domain/layout';
 import { deriveGir, formatToPar } from '@/domain/stats';
@@ -29,6 +30,13 @@ export default function PlayRound() {
     if (!round && stored) setRound(stored);
   }, [round, stored]);
 
+  // Group scoring: friends' rounds you're keeping score for (same group, still in progress).
+  // Taken once when the round is available (adjusting state during render, not in an effect).
+  const [group, setGroup] = useState<Round[] | null>(null);
+  if (group === null && stored) {
+    setGroup(stored.groupId ? data.friendRounds.filter((r) => r.groupId === stored.groupId && r.scoredBy === data.me.id && r.status === 'active') : []);
+  }
+
   const layout = round ? data.layoutFor(round) : undefined;
   if (!round || !layout) return <Empty title="Round not found" body="" />;
 
@@ -40,6 +48,9 @@ export default function PlayRound() {
   const yards = course ? tee?.yardages?.[realHoleNumber(course, holeNo) - 1] : undefined;
   const scores = round.scores[me];
   const current: HoleScore = scores[index] ?? { strokes: hole.par };
+  const friends = group ?? [];
+  const ownerOf = (r: Round) => r.ownerId ?? data.me.id;
+  const scoreOf = (r: Round) => r.scores[ownerOf(r)] ?? r.holeNumbers.map(() => null);
   const isLast = index === round.holeNumbers.length - 1;
   const gir = deriveGir(current, hole.par);
 
@@ -51,14 +62,26 @@ export default function PlayRound() {
     setRound({ ...round, scores: { ...round.scores, [me]: nextScores } });
   };
 
-  /** Commit the current hole (strokes default to par if untouched) and persist. */
+  const setFriendStrokes = (r: Round, strokes: number) => {
+    const list = scoreOf(r).slice();
+    list[index] = { ...(list[index] ?? {}), strokes: Math.max(1, strokes) };
+    setGroup(friends.map((x) => (x.id === r.id ? { ...x, scores: { ...x.scores, [ownerOf(x)]: list } } : x)));
+  };
+
+  /** Commit the current hole for everyone (strokes default to par if untouched) and persist. */
   const commit = async (extra?: Partial<Round>) => {
     const nextScores = scores.slice();
     nextScores[index] = current;
     const next = { ...round, scores: { ...round.scores, [me]: nextScores }, ...extra };
+    const nextGroup = friends.map((r) => {
+      const list = scoreOf(r).slice();
+      list[index] = list[index] ?? { strokes: hole.par };
+      return { ...r, scores: { ...r.scores, [ownerOf(r)]: list }, ...extra };
+    });
     setRound(next);
-    await data.saveRound(next);
-    return next;
+    setGroup(nextGroup);
+    await data.saveRounds([next, ...nextGroup]);
+    return { next, nextGroup };
   };
 
   const go = async (i: number) => {
@@ -67,16 +90,20 @@ export default function PlayRound() {
   };
 
   const finish = async () => {
-    const next = await commit();
-    const allScored = next.scores[me].every(Boolean);
-    if (!allScored) {
-      const missing = next.scores[me].findIndex((s) => !s);
+    const { next, nextGroup } = await commit();
+    // First hole anyone in the group is missing.
+    const missing = [next.scores[me], ...nextGroup.map(scoreOf)]
+      .map((list) => list.findIndex((s) => !s))
+      .filter((i) => i >= 0)
+      .sort((a, b) => a - b)[0];
+    if (missing !== undefined) {
       setIndex(missing);
       return;
     }
-    await data.saveRound({ ...next, status: 'complete', completedAt: new Date().toISOString() });
+    const completedAt = new Date().toISOString();
+    await data.saveRounds([next, ...nextGroup].map((r) => ({ ...r, status: 'complete' as const, completedAt })));
     haptics.success();
-    router.replace(`/round/${next.id}?celebrate=1`);
+    router.replace(`/round/reveal/${next.id}`);
   };
 
   const runningToPar = scores.reduce((acc, s, i) => {
@@ -114,7 +141,8 @@ export default function PlayRound() {
           <Text style={styles.holeMeta}>Par {hole.par}{yards ? `  ·  ${yards} yds` : ''}  ·  HCP {hole.handicap}</Text>
         </View>
 
-        <View style={styles.stepper}>
+        {friends.length ? <Text style={styles.whose}>You</Text> : null}
+        <View style={[styles.stepper, friends.length ? { marginTop: -space.lg } : null]}>
           <StepButton icon="minus" label="One fewer stroke" onPress={() => patch({ strokes: Math.max(1, current.strokes - 1) })} />
           <View style={{ alignItems: 'center', minWidth: 110 }}>
             <Text style={styles.strokes}>{current.strokes}</Text>
@@ -122,6 +150,39 @@ export default function PlayRound() {
           </View>
           <StepButton icon="plus" label="One more stroke" onPress={() => patch({ strokes: current.strokes + 1 })} />
         </View>
+
+        {friends.length ? (
+          <View style={styles.group}>
+            {friends.map((r) => {
+              const p = data.playerById(ownerOf(r));
+              const list = scoreOf(r);
+              const s = list[index];
+              const strokes = s?.strokes ?? hole.par;
+              const toPar = list.reduce((acc, x, i) => {
+                const h = layout.holes.find((y) => y.number === r.holeNumbers[i]);
+                return x && h ? acc + x.strokes - h.par : acc;
+              }, 0);
+              const thruFriend = list.filter(Boolean).length;
+              const first = p?.name.split(' ')[0] ?? 'Friend';
+              return (
+                <View key={r.id} style={styles.groupRow}>
+                  {p ? <Avatar player={p} size={34} /> : null}
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.groupName} numberOfLines={1}>{first}</Text>
+                    <Text style={styles.groupSub}>{thruFriend ? `${formatToPar(toPar)} thru ${thruFriend}` : 'Not started'}</Text>
+                  </View>
+                  <Tap haptic="select" scaleTo={0.85} onPress={() => setFriendStrokes(r, strokes - 1)} hitSlop={6} accessibilityRole="button" accessibilityLabel={`One fewer stroke for ${first}`} style={styles.groupBtn}>
+                    <Icon name="minus" size={18} color={colors.fairway} strokeWidth={2.2} />
+                  </Tap>
+                  <Text style={[styles.groupStrokes, !s && styles.groupStrokesUnset]} accessibilityLabel={`${first}: ${strokes}${s ? '' : ', par, not entered'}`}>{strokes}</Text>
+                  <Tap haptic="select" scaleTo={0.85} onPress={() => setFriendStrokes(r, strokes + 1)} hitSlop={6} accessibilityRole="button" accessibilityLabel={`One more stroke for ${first}`} style={styles.groupBtn}>
+                    <Icon name="plus" size={18} color={colors.fairway} strokeWidth={2.2} />
+                  </Tap>
+                </View>
+              );
+            })}
+          </View>
+        ) : null}
 
         <Field label="Putts">
           <ChoiceRow
@@ -242,6 +303,14 @@ const styles = StyleSheet.create({
   smallBtn: { width: 30, height: 30, borderRadius: 15, borderWidth: 1.2, borderColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
   smallValue: { fontFamily: fonts.bodySemibold, fontSize: 17, color: colors.ink, minWidth: 16, textAlign: 'center' },
   gir: { ...type.caption, color: colors.inkMuted, textAlign: 'center' },
+  whose: { ...type.label, color: colors.inkMuted, textAlign: 'center' },
+  group: { backgroundColor: colors.creamLight, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.rule, paddingHorizontal: space.md },
+  groupRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm, minHeight: 56 },
+  groupName: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
+  groupSub: { ...type.caption, color: colors.inkMuted },
+  groupBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, borderColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
+  groupStrokes: { fontFamily: fonts.bodyBold, fontSize: 24, color: colors.ink, minWidth: 34, textAlign: 'center', fontVariant: ['tabular-nums'] },
+  groupStrokesUnset: { color: colors.inkMuted },
   footer: { flexDirection: 'row', gap: space.md, paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule, backgroundColor: colors.cream },
   navButton: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: space.lg, borderRadius: radius.pill, borderWidth: 1.5, borderColor: colors.fairway },
   navText: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.fairway },

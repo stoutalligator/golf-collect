@@ -41,6 +41,9 @@ export default function NewRound() {
   }
   const [query, setQuery] = useState('');
   const [withIds, setWithIds] = useState<string[]>([]);
+  // With friends along: keep everyone's card on this phone (each player gets their own round) or just yours.
+  const [scoring, setScoring] = useState<'group' | 'me'>('group');
+  const [starting, setStarting] = useState(false);
   const toggleWith = (id: string) => setWithIds((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
 
   const options = useMemo(() => {
@@ -59,12 +62,18 @@ export default function NewRound() {
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
 
   const start = async () => {
-    if (!layout) return;
+    if (!layout || starting) return;
     const all = playLayout(layout).holes.map((h) => h.number); // 9-hole courses: 18 = twice around
     const effective = isNineHole(layout) && holes === 'back' ? 'front' : holes;
     const holeNumbers = effective === '18' ? all : effective === 'front' ? all.slice(0, 9) : all.slice(9, 18);
     const now = new Date().toISOString();
-    const round: Round = {
+    const group = scoring === 'group' && withIds.length > 0;
+    const groupId = group ? uuid() : undefined;
+    const linkTo = kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? eventRoundId : undefined;
+    const linkEvent = linkTo ? data.eventRounds.find((r) => r.id === linkTo)?.eventId : undefined;
+    const inEvent = (id: string) => !!linkEvent && data.eventMembers.some((m) => m.eventId === linkEvent && m.playerId === id && m.status === 'joined');
+    const everyone = [data.me.id, ...withIds];
+    const roundFor = (owner: string): Round => ({
       id: uuid(),
       kind,
       courseId: layout.id,
@@ -72,13 +81,22 @@ export default function NewRound() {
       date: todayISO(),
       status: 'active',
       holeNumbers,
-      playerIds: [data.me.id, ...withIds],
-      scores: { [data.me.id]: holeNumbers.map(() => null) },
+      playerIds: [owner, ...everyone.filter((p) => p !== owner)],
+      scores: { [owner]: holeNumbers.map(() => null) },
       createdAt: now,
-      ...(kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? { eventRoundId } : {}),
-    };
-    await data.saveRound(round);
-    router.replace(`/round/play/${round.id}`);
+      ...(owner === data.me.id ? {} : { ownerId: owner, scoredBy: data.me.id }),
+      ...(groupId ? { groupId } : {}),
+      // A friend's round counts toward the event only if they're in it too.
+      ...(linkTo && (owner === data.me.id || inEvent(owner)) ? { eventRoundId: linkTo } : {}),
+    });
+    const mine = roundFor(data.me.id);
+    setStarting(true);
+    try {
+      await data.saveRounds(group ? [mine, ...withIds.map(roundFor)] : [mine]);
+      router.replace(`/round/play/${mine.id}`);
+    } finally {
+      setStarting(false);
+    }
   };
 
   return (
@@ -182,13 +200,28 @@ export default function NewRound() {
                 );
               })}
             </View>
-            <Text style={styles.note}>Tagged friends see the round in their feed. You keep score for yourself.</Text>
+            {withIds.length ? (
+              <>
+                <Chips
+                  value={scoring}
+                  onChange={setScoring}
+                  options={[{ value: 'group', label: 'Keep everyone’s score' }, { value: 'me', label: 'Just mine' }]}
+                />
+                <Text style={styles.note}>
+                  {scoring === 'group'
+                    ? `You’ll enter strokes for the whole group. ${withIds.length === 1 ? 'Your friend gets their' : 'Each friend gets their own'} round, stats and collectibles, and a notification.`
+                    : 'Tagged friends see the round in their feed. You keep score for yourself.'}
+                </Text>
+              </>
+            ) : (
+              <Text style={styles.note}>Add friends to keep the whole group’s score on this phone.</Text>
+            )}
           </>
         ) : null}
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
-        <Button label="Tee Off" icon="flag" onPress={start} disabled={!layout} />
+        <Button label={starting ? 'Setting up…' : 'Tee Off'} icon="flag" onPress={start} disabled={!layout || starting} />
       </View>
     </View>
   );

@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { homeHeroKeys } from '@/art';
 import { Badge, Collectible, SceneImage } from '@/art/components';
 import { Animated, enterItem, Tap } from '@/components/motion';
+import type { IconName } from '@/components/icons';
 import { RoundRow } from '@/components/round-card';
 import { Avatar } from '@/components/social';
 import { Group, IconButton, ListRow, SectionHeader, StatStrip } from '@/components/ui';
@@ -21,7 +22,7 @@ export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; hea
   const data = useAppData();
   const p = pd.player;
   const isMe = p.id === data.me.id;
-  const home = p.homeCourseId ? data.courseById(p.homeCourseId) : undefined;
+  const home = p.homeCourseId ? data.courseById(p.homeCourseId) ?? data.courseSummary(p.homeCourseId) : undefined;
 
   const markers = data.courses
     .map((c) => ({ c, col: pd.collections.get(c.id) }))
@@ -52,6 +53,7 @@ export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; hea
 
           <View style={styles.identity}>
             <Text style={styles.name}>{p.name}</Text>
+            {p.username ? <Text style={styles.since}>@{p.username}</Text> : null}
             {p.tagline ? <Text style={styles.tagline}>{p.tagline}</Text> : null}
             <Text style={styles.since}>
               {p.memberSince ? `Member since ${formatMonthYear(p.memberSince)}` : ''}
@@ -114,7 +116,7 @@ export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; hea
 }
 
 /** Row for profile links (friends, stats, badges); kept as a named export for existing callers. */
-export function ProfileLink({ icon, label, sub, onPress, right }: { icon: 'users' | 'chart' | 'settings' | 'trophy' | 'calendar'; label: string; sub?: string; onPress: () => void; right?: ReactNode }) {
+export function ProfileLink({ icon, label, sub, onPress, right }: { icon: IconName; label: string; sub?: string; onPress: () => void; right?: ReactNode }) {
   return <ListRow icon={icon} label={label} sub={sub} onPress={onPress} right={right} />;
 }
 

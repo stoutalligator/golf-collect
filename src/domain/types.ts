@@ -173,6 +173,10 @@ export interface Round {
   competitionId?: string;
   /** League/tournament/scheduled round this round counts toward (see domain/competition). */
   eventRoundId?: string;
+  /** Someone else keeping this round's score from their phone (group scoring). Omitted = the owner. */
+  scoredBy?: string;
+  /** Rounds scored together on one phone share a group id. */
+  groupId?: string;
   createdAt: ISODateTime;
   completedAt?: ISODateTime;
 }
