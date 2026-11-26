@@ -22,7 +22,7 @@ if (!url || !key) {
 }
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
-type SeedTee = { id: string; name: string; par: number; totalYards: number; yardages: number[] | null; ratings: { men?: { rating: number; slope: number }; women?: { rating: number; slope: number } } };
+type SeedTee = { id: string; name: string; par: number; totalYards: number; yardages: number[] | null; ratedHoles?: 9 | 18; ratings: { men?: { rating: number; slope: number }; women?: { rating: number; slope: number } } };
 type SeedCourse = {
   id: string; name: string; city: string; state: string; county?: string; region: string; biome?: string; biomeSource?: unknown;
   access: string; location: { lat: number; lng: number }; website?: string; architect?: string; yearOpened?: number; description: string;
@@ -68,6 +68,7 @@ await inChunks('course_tees', courses.flatMap((c) => c.tees.map((t, i) => ({
   course_id: c.id, id: t.id, name: t.name, par: t.par, total_yards: t.totalYards, hole_yardages: t.yardages,
   rating_men: t.ratings.men?.rating ?? null, slope_men: t.ratings.men?.slope ?? null,
   rating_women: t.ratings.women?.rating ?? null, slope_women: t.ratings.women?.slope ?? null, sort_order: i,
+  rated_holes: t.ratedHoles ?? 18,
 }))), 1000, (chunk) => db.from('course_tees').upsert(chunk));
 
 // Sources have no natural key: replace each imported course's set.

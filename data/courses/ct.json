@@ -669,6 +669,160 @@
       }
     },
     {
+      "id": "birchwood-country-club",
+      "name": "Birchwood Country Club",
+      "city": "Westport",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.1289556,
+        "lng": -73.3750833
+      },
+      "website": "http://www.birchwoodcc.org/",
+      "architect": "Orrin Smith",
+      "yearOpened": 1946,
+      "description": "Private 9-hole course in Westport, par 36, playing up to 3,332 yards (play it twice for 18), designed by Orrin Smith, dating to 1946.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3332,
+          "yardages": [
+            399,
+            535,
+            353,
+            158,
+            392,
+            412,
+            199,
+            376,
+            506
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3181,
+          "yardages": [
+            377,
+            506,
+            332,
+            137,
+            377,
+            412,
+            176,
+            376,
+            489
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 3147,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2835,
+          "yardages": [
+            366,
+            459,
+            238,
+            129,
+            312,
+            368,
+            164,
+            330,
+            467
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "par": 36,
+          "totalYards": 2834,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/24be7de5-c8f8-4bde-ac5b-9a9d6f03c9a3",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 15 hole entries; only the first 9 have data and were used.",
+          "Black: hole yardages sum to 3330 vs. stated 3332.",
+          "Blue: hole yardages sum to 3182 vs. stated 3181.",
+          "Red: hole yardages sum to 2833 vs. stated 2835.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "black-birch-golf-club",
       "name": "Black Birch Golf Club",
       "city": "Moodus",
@@ -1921,6 +2075,282 @@
       }
     },
     {
+      "id": "blue-fox-run-golf-club-red-nine",
+      "name": "Blue Fox Run Golf Club Red Nine",
+      "city": "Avon",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.8085784,
+        "lng": -72.8202652
+      },
+      "website": "http://www.bluefoxent.com/",
+      "yearOpened": 1970,
+      "description": "Public 9-hole course in Avon, par 34, playing up to 2,723 yards (play it twice for 18), dating to 1970.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 1
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 34,
+          "totalYards": 2723,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 34,
+          "totalYards": 2650,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 34,
+          "totalYards": 2423,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 34,
+          "totalYards": 2110,
+          "yardages": [
+            308,
+            230,
+            130,
+            284,
+            87,
+            271,
+            139,
+            434,
+            218
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/b05f8116-ed6c-4a2a-a773-892cc3b97850",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 2669 vs. stated 2723; hole breakdown omitted.",
+          "Blue: hole yardages sum to 2510 vs. stated 2650; hole breakdown omitted.",
+          "White: hole yardages sum to 2363 vs. stated 2423; hole breakdown omitted.",
+          "Red: hole yardages sum to 2101 vs. stated 2110.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "blue-fox-run-golf-club-white-nine",
+      "name": "Blue Fox Run Golf Club White Nine",
+      "city": "Avon",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.8085784,
+        "lng": -72.8202652
+      },
+      "website": "http://www.bluefoxent.com/",
+      "yearOpened": 1970,
+      "description": "Public 9-hole course in Avon, par 36, playing up to 3,482 yards (play it twice for 18), dating to 1970.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 4
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 18
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 16
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 6
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3482,
+          "yardages": [
+            487,
+            226,
+            303,
+            393,
+            512,
+            326,
+            400,
+            642,
+            193
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3360,
+          "yardages": [
+            460,
+            210,
+            303,
+            383,
+            512,
+            320,
+            390,
+            600,
+            182
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2974,
+          "yardages": [
+            375,
+            197,
+            275,
+            350,
+            465,
+            305,
+            341,
+            512,
+            154
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2593,
+          "yardages": [
+            291,
+            184,
+            247,
+            312,
+            435,
+            292,
+            275,
+            422,
+            135
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/cab9361b-22ea-4bdf-adc7-a4b539268b88",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "brooklawn-country-club",
       "name": "Brooklawn Country Club",
       "city": "Fairfield",
@@ -2471,6 +2901,122 @@
       }
     },
     {
+      "id": "buena-vista-golf-course",
+      "name": "Buena Vista Golf Course",
+      "city": "West Hartford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.7480359,
+        "lng": -72.7675474
+      },
+      "website": "https://www.westhartfordct.gov/town-departments/leisure-services/buena-vista-golf-course",
+      "yearOpened": 2026,
+      "description": "Public 9-hole course in West Hartford, par 31, playing up to 1,999 yards (play it twice for 18), dating to 2026.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "back",
+          "name": "Back",
+          "par": 31,
+          "totalYards": 1999,
+          "yardages": [
+            250,
+            369,
+            293,
+            180,
+            121,
+            109,
+            220,
+            210,
+            247
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 31,
+          "totalYards": 1174,
+          "yardages": [
+            122,
+            233,
+            175,
+            106,
+            61,
+            45,
+            162,
+            125,
+            145
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/5f793174-376f-41bc-87d5-1eb5e82df2f7",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Middle: tee par 30 doesn't match the card (par 31); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "bulls-bridge-golf-club",
       "name": "Bulls Bridge Golf Club",
       "city": "South Kent",
@@ -2986,6 +3532,301 @@
       }
     },
     {
+      "id": "candlewood-golf-club",
+      "name": "Candlewood Golf Club",
+      "city": "New Milford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.52821,
+        "lng": -73.421866
+      },
+      "website": "http://www.candlewoodvalleygolf.com/",
+      "yearOpened": 1933,
+      "description": "Public 9-hole course in New Milford, par 32, playing up to 2,075 yards (play it twice for 18), dating to 1933.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 32,
+          "totalYards": 2075,
+          "yardages": [
+            350,
+            350,
+            120,
+            130,
+            135,
+            235,
+            290,
+            285,
+            180
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/a4315a32-9ac3-4fe4-8975-6a3e37aef592",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "candlewood-lake-club",
+      "name": "Candlewood Lake Club",
+      "city": "New Milford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.4972737,
+        "lng": -73.4415038
+      },
+      "website": "https://www.candlewoodlakeclub.com/",
+      "yearOpened": 1931,
+      "description": "Private 9-hole course in New Milford, par 30, playing up to 1,775 yards (play it twice for 18), dating to 1931.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 30,
+          "totalYards": 1775,
+          "yardages": [
+            205,
+            136,
+            109,
+            249,
+            369,
+            91,
+            275,
+            158,
+            204
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/28d127e0-3bab-412f-b073-f22ef50422b2",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 1796 vs. stated 1775.",
+          "Red: tee par 32 doesn't match the card (par 30); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "candlewood-lake-club-brookfield",
+      "name": "Candlewood Lake Club",
+      "city": "Brookfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.4951746,
+        "lng": -73.4381103516
+      },
+      "website": "http://candlewoodlakeclub.com",
+      "yearOpened": 1931,
+      "description": "Private 9-hole course in Brookfield, par 30, playing up to 1,775 yards (play it twice for 18), dating to 1931.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 30,
+          "totalYards": 1775,
+          "yardages": [
+            205,
+            136,
+            109,
+            249,
+            369,
+            91,
+            275,
+            158,
+            204
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/090ad6c8-0006-46bf-8dd3-a506dd7903a6",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 1796 vs. stated 1775.",
+          "Red: tee par 32 doesn't match the card (par 30); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "candlewood-valley-country-club",
       "name": "Candlewood Valley Country Club",
       "city": "New Milford",
@@ -3184,6 +4025,122 @@
           "Blue: hole yardages sum to 6388 vs. stated 6441.",
           "White: hole yardages sum to 6032 vs. stated 6033.",
           "Red: hole yardages sum to 4758 vs. stated 5080; hole breakdown omitted.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "carl-dickman-par-3-golf-course",
+      "name": "Carl Dickman Par 3 Golf Course",
+      "city": "Fairfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.1244384,
+        "lng": -73.2672781
+      },
+      "website": "https://hsrgolf.com/carl-dickman-par-3/",
+      "yearOpened": 1968,
+      "description": "Municipal 9-hole course in Fairfield, par 27, playing up to 1,240 yards (play it twice for 18), dating to 1968.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 1240,
+          "yardages": [
+            142,
+            144,
+            120,
+            165,
+            152,
+            117,
+            123,
+            187,
+            90
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 27,
+          "totalYards": 1073,
+          "yardages": [
+            121,
+            125,
+            100,
+            143,
+            127,
+            102,
+            104,
+            173,
+            78
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d576c90d-df75-41af-bc15-1e2f9b54bd31",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 10 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -4032,6 +4989,159 @@
           "Black: hole yardages sum to 6936 vs. stated 6935.",
           "Blue: hole yardages sum to 6275 vs. stated 6321.",
           "White: hole yardages sum to 5938 vs. stated 5913.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "copper-hill-golf-club",
+      "name": "Copper Hill Golf Club",
+      "city": "East Granby",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.9740447,
+        "lng": -72.7511367
+      },
+      "website": "http://www.copperhillgolf.com/",
+      "architect": "Allen Bissette",
+      "yearOpened": 1952,
+      "description": "Public 9-hole course in East Granby, par 36, playing up to 3,039 yards (play it twice for 18), designed by Allen Bissette, dating to 1952.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 17
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3039,
+          "yardages": [
+            343,
+            374,
+            176,
+            473,
+            265,
+            186,
+            361,
+            459,
+            402
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2737,
+          "yardages": [
+            337,
+            313,
+            135,
+            437,
+            241,
+            164,
+            308,
+            426,
+            376
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 36,
+          "totalYards": 2552,
+          "yardages": [
+            334,
+            312,
+            117,
+            423,
+            181,
+            135,
+            304,
+            396,
+            350
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2331,
+          "yardages": [
+            326,
+            195,
+            115,
+            421,
+            174,
+            124,
+            257,
+            370,
+            349
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/08fb556b-8b67-4fcd-ba1b-d92a5f5705a1",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 12 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -6715,6 +7825,139 @@
       }
     },
     {
+      "id": "eastwood-country-club",
+      "name": "Eastwood Country Club",
+      "city": "Torrington",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.8332082,
+        "lng": -73.0898795
+      },
+      "website": "https://www.eastwoodcountryclub.com/",
+      "yearOpened": 1962,
+      "description": "Public 9-hole course in Torrington, par 36, playing up to 2,933 yards (play it twice for 18), dating to 1962.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 1
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 2933,
+          "yardages": [
+            380,
+            325,
+            361,
+            427,
+            286,
+            140,
+            305,
+            147,
+            562
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2791,
+          "yardages": [
+            363,
+            309,
+            348,
+            411,
+            275,
+            131,
+            286,
+            137,
+            531
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2359,
+          "yardages": [
+            326,
+            245,
+            289,
+            356,
+            206,
+            122,
+            239,
+            104,
+            472
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/b18ec822-2cab-4782-8ac2-ee50076a0af1",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "ellington-ridge-country-club",
       "name": "Ellington Ridge Country Club",
       "city": "Ellington",
@@ -8606,6 +9849,106 @@
       }
     },
     {
+      "id": "gainfield-farms-golf-course",
+      "name": "Gainfield Farms Golf Course",
+      "city": "Southbury",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4778366,
+        "lng": -73.2231597
+      },
+      "website": "http://gainfieldgolf.com/",
+      "architect": "Albert Zikoris",
+      "yearOpened": 1994,
+      "description": "Public 9-hole course in Southbury, par 28, playing up to 1,384 yards (play it twice for 18), designed by Albert Zikoris, dating to 1994.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 13
+        }
+      ],
+      "tees": [
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 28,
+          "totalYards": 1384,
+          "yardages": [
+            155,
+            261,
+            188,
+            123,
+            113,
+            94,
+            195,
+            127,
+            128
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d93e7c3a-a552-477d-b222-3df5578668cf",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 10 hole entries; only the first 9 have data and were used.",
+          "Forward: tee par 27 doesn't match the card (par 28); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "gillette-ridge",
       "name": "Gillette Ridge",
       "city": "Bloomfield",
@@ -9042,6 +10385,456 @@
       }
     },
     {
+      "id": "golf-club-of-avon-blue-course",
+      "name": "Golf Club Of Avon (Blue Course)",
+      "city": "Avon",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.7923722,
+        "lng": -72.8499759
+      },
+      "website": "http://www.golfclubofavon.com/",
+      "architect": "Robert J. Ross",
+      "yearOpened": 1967,
+      "description": "Private 9-hole course in Avon, par 36, playing up to 3,370 yards (play it twice for 18), designed by Robert J. Ross, dating to 1967.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 3
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3370,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 36,
+          "totalYards": 3214,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "silver",
+          "name": "Silver",
+          "par": 36,
+          "totalYards": 2960,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "combo",
+          "name": "Combo",
+          "par": 36,
+          "totalYards": 2709,
+          "yardages": [
+            330,
+            410,
+            300,
+            343,
+            300,
+            136,
+            456,
+            142,
+            292
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "copper",
+          "name": "Copper",
+          "par": 36,
+          "totalYards": 2646,
+          "yardages": [
+            314,
+            410,
+            291,
+            343,
+            262,
+            136,
+            456,
+            142,
+            292
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d3790600-fc14-495d-8034-69c1e322769d",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 3251 vs. stated 3370; hole breakdown omitted.",
+          "Gold: hole yardages sum to 3094 vs. stated 3214; hole breakdown omitted.",
+          "Silver: hole yardages sum to 2823 vs. stated 2960; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "golf-club-of-avon-red-course",
+      "name": "Golf Club Of Avon (Red Course)",
+      "city": "Avon",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.7923722,
+        "lng": -72.8499759
+      },
+      "website": "http://www.golfclubofavon.com/",
+      "architect": "Robert J. Ross",
+      "yearOpened": 1926,
+      "description": "Private 9-hole course in Avon, par 36, playing up to 3,275 yards (play it twice for 18), designed by Robert J. Ross, dating to 1926.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 5
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3275,
+          "yardages": [
+            378,
+            216,
+            549,
+            190,
+            510,
+            163,
+            367,
+            398,
+            504
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 36,
+          "totalYards": 3110,
+          "yardages": [
+            375,
+            188,
+            520,
+            169,
+            483,
+            150,
+            353,
+            382,
+            490
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "silver",
+          "name": "Silver",
+          "par": 36,
+          "totalYards": 2880,
+          "yardages": [
+            347,
+            164,
+            496,
+            152,
+            454,
+            135,
+            322,
+            357,
+            453
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "combo",
+          "name": "Combo",
+          "par": 36,
+          "totalYards": 2720,
+          "yardages": [
+            347,
+            154,
+            412,
+            135,
+            405,
+            135,
+            322,
+            357,
+            453
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "copper",
+          "name": "Copper",
+          "par": 36,
+          "totalYards": 2511,
+          "yardages": [
+            305,
+            154,
+            412,
+            135,
+            405,
+            115,
+            270,
+            305,
+            410
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/a52bd1af-809c-48cc-9bbc-d9c8f4139990",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 30 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "golf-club-of-avon-white-course",
+      "name": "Golf Club Of Avon (White Course)",
+      "city": "Avon",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.7923722,
+        "lng": -72.8499759
+      },
+      "website": "http://www.golfclubofavon.com/",
+      "architect": "Robert J. Ross",
+      "yearOpened": 1929,
+      "description": "Private 9-hole course in Avon, par 35, playing up to 3,332 yards (play it twice for 18), designed by Robert J. Ross, dating to 1929.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 5
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 35,
+          "totalYards": 3332,
+          "yardages": [
+            439,
+            180,
+            403,
+            204,
+            418,
+            390,
+            504,
+            387,
+            407
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 35,
+          "totalYards": 3198,
+          "yardages": [
+            430,
+            165,
+            388,
+            177,
+            410,
+            377,
+            485,
+            375,
+            391
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "silver",
+          "name": "Silver",
+          "par": 35,
+          "totalYards": 2843,
+          "yardages": [
+            408,
+            152,
+            340,
+            150,
+            360,
+            360,
+            455,
+            305,
+            313
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/a0c59a2d-8deb-4e6a-9cbc-5c13b7a9c5b0",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Combo: tee par 36 doesn't match the card (par 35); tee left out.",
+          "Copper: tee par 36 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "goodwin-golf-course-goodwin-course",
       "name": "Goodwin Golf Course (Goodwin Course)",
       "city": "Hartford",
@@ -9237,6 +11030,200 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "goodwin-golf-course-the-north-course",
+      "name": "Goodwin Golf Course (The North Course)",
+      "city": "Hartford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.7262731,
+        "lng": -72.6904645
+      },
+      "website": "http://www.goodwinparkgolfcourse.com/",
+      "yearOpened": 1930,
+      "description": "Municipal 9-hole course in Hartford, par 35, playing up to 2,544 yards (play it twice for 18), dating to 1930.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 1
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 35,
+          "totalYards": 2544,
+          "yardages": [
+            329,
+            101,
+            303,
+            311,
+            300,
+            299,
+            270,
+            237,
+            394
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/1bc2f193-c9aa-413d-980b-a6162ab16ae8",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "grassmere-country-club",
+      "name": "Grassmere Country Club",
+      "city": "Enfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.9577844,
+        "lng": -72.5317152
+      },
+      "website": "http://www.grassmerecountryclub.com/",
+      "yearOpened": 1965,
+      "description": "Public 9-hole course in Enfield, par 35, playing up to 3,070 yards (play it twice for 18), dating to 1965.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 3070,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 35,
+          "totalYards": 2673,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/2d28bc8c-7299-4885-a333-e176e24f642a",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 2870 vs. stated 3070; hole breakdown omitted.",
+          "Red: hole yardages sum to 2333 vs. stated 2673; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -9949,6 +11936,112 @@
       }
     },
     {
+      "id": "green-woods-country-club",
+      "name": "Green Woods Country Club",
+      "city": "Winsted",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.885395,
+        "lng": -73.0663452
+      },
+      "website": "http://www.greenwoodscc.net/",
+      "yearOpened": 1902,
+      "description": "Private 9-hole course in Winsted, par 35, playing up to 2,854 yards (play it twice for 18), dating to 1902.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 15
+        }
+      ],
+      "tees": [
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 35,
+          "totalYards": 2854,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 35,
+          "totalYards": 2557,
+          "yardages": [
+            317,
+            452,
+            130,
+            313,
+            320,
+            340,
+            302,
+            113,
+            266
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/39c73610-6892-4ada-bafe-11db71bc1e74",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Forward: hole yardages sum to 2553 vs. stated 2557.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "griffith-e-harris-golf-course",
       "name": "Griffith E Harris Golf Course",
       "city": "Greenwich",
@@ -10206,6 +12299,140 @@
       }
     },
     {
+      "id": "guilford-lakes-golf-course",
+      "name": "Guilford Lakes Golf Course",
+      "city": "Guilford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.3288672,
+        "lng": -72.6870771
+      },
+      "website": "https://www.guilfordlakesgolf.com/",
+      "architect": "Al Zikorus",
+      "yearOpened": 1928,
+      "description": "Municipal 9-hole course in Guilford, par 27, playing up to 1,319 yards (play it twice for 18), designed by Al Zikorus, dating to 1928.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 27,
+          "totalYards": 1319,
+          "yardages": [
+            151,
+            123,
+            145,
+            140,
+            119,
+            220,
+            171,
+            88,
+            162
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 1165,
+          "yardages": [
+            135,
+            111,
+            130,
+            122,
+            105,
+            180,
+            155,
+            79,
+            148
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 27,
+          "totalYards": 739,
+          "yardages": [
+            101,
+            95,
+            93,
+            57,
+            79,
+            72,
+            70,
+            62,
+            110
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/867fbede-40fd-41fd-958d-d1b932249c8d",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "h-smith-richardson",
       "name": "H. Smith Richardson Golf Course",
       "city": "Fairfield",
@@ -10411,6 +12638,123 @@
         ],
         "notes": [
           "Black: hole yardages sum to 6734 vs. stated 6704."
+        ]
+      }
+    },
+    {
+      "id": "harrisville-golf-course",
+      "name": "Harrisville Golf Course",
+      "city": "Woodstock",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.9231491,
+        "lng": -71.9406738
+      },
+      "website": "http://www.harrisvillegolfcourse.com/",
+      "architect": "Aimee Salvas",
+      "yearOpened": 1929,
+      "description": "Public 9-hole course in Woodstock, par 36, playing up to 2,915 yards (play it twice for 18), designed by Aimee Salvas, dating to 1929.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 15
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 2915,
+          "yardages": [
+            305,
+            170,
+            520,
+            275,
+            430,
+            475,
+            300,
+            250,
+            190
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "par": 36,
+          "totalYards": 2725,
+          "yardages": [
+            290,
+            140,
+            520,
+            260,
+            410,
+            430,
+            285,
+            220,
+            170
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/5c949956-1402-4581-ade6-8f07a3cd8250",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: tee par 35 doesn't match the card (par 36); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
     },
@@ -11312,6 +13656,426 @@
       }
     },
     {
+      "id": "highland-golf-club",
+      "name": "Highland Golf Club",
+      "city": "Shelton",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.3162689,
+        "lng": -73.1029968
+      },
+      "website": "http://www.highlandgolfclub.com/",
+      "architect": "Frank G. Gates",
+      "yearOpened": 1900,
+      "description": "Private 9-hole course in Shelton, par 34, playing up to 2,620 yards (play it twice for 18), designed by Frank G. Gates, dating to 1900.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 13
+        }
+      ],
+      "tees": [
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 34,
+          "totalYards": 2620,
+          "yardages": [
+            280,
+            490,
+            400,
+            370,
+            225,
+            120,
+            290,
+            150,
+            260
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/743f034e-e801-4044-bdbd-619d75659f85",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Middle: hole yardages sum to 2585 vs. stated 2620.",
+          "Forward: tee par 38 doesn't match the card (par 34); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "highland-greens-golf-course",
+      "name": "Highland Greens Golf Course",
+      "city": "Prospect",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4843397,
+        "lng": -72.9582367
+      },
+      "website": "http://www.highlandgreens.com/",
+      "architect": "Al Zikoris",
+      "yearOpened": 1966,
+      "description": "Public 9-hole course in Prospect, par 27, playing up to 1,398 yards (play it twice for 18), designed by Al Zikoris, dating to 1966.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 1398,
+          "yardages": [
+            132,
+            192,
+            115,
+            135,
+            188,
+            185,
+            157,
+            128,
+            166
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 27,
+          "totalYards": 1322,
+          "yardages": [
+            127,
+            172,
+            110,
+            130,
+            178,
+            175,
+            147,
+            123,
+            160
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/ab9be91a-51aa-44e6-838f-59502e901e85",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "homewood-acres-golf-course",
+      "name": "Homewood Acres Golf Course",
+      "city": "Woodbridge",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.3163216,
+        "lng": -73.0243975
+      },
+      "website": "http://homewoodacres.com/",
+      "description": "Private 9-hole course in Woodbridge, par 33, playing up to 2,424 yards (play it twice for 18).",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 13
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 33,
+          "totalYards": 2424,
+          "yardages": [
+            301,
+            157,
+            370,
+            191,
+            265,
+            239,
+            309,
+            335,
+            257
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/602ff658-4590-468c-a3e1-e625b554fa44",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: tee par 35 doesn't match the card (par 33); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "hop-brook-golf-course",
+      "name": "Hop Brook Golf Course",
+      "city": "Naugatuck",
+      "state": "CT",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.504692,
+        "lng": -73.0585174
+      },
+      "website": "http://www.hopbrookgolf.com/",
+      "yearOpened": 1910,
+      "description": "Municipal 9-hole course in Naugatuck, par 36, playing up to 2,887 yards (play it twice for 18), dating to 1910.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 15
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2887,
+          "yardages": [
+            455,
+            344,
+            330,
+            307,
+            140,
+            478,
+            169,
+            381,
+            300
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2449,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/32163c94-03c3-4424-a3bc-5dce8658d109",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 2904 vs. stated 2887.",
+          "Red: hole yardages sum to 2235 vs. stated 2449; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "hop-meadow-country-club",
       "name": "Hop Meadow Country Club",
       "city": "Simsbury",
@@ -11592,6 +14356,96 @@
         ],
         "notes": [
           "Forward: hole yardages sum to 5338 vs. stated 5395.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "hotchkiss-school-golf-course",
+      "name": "Hotchkiss School Golf Course",
+      "city": "Lakeville",
+      "state": "CT",
+      "region": "new-england",
+      "access": "semi-private",
+      "location": {
+        "lat": 41.9455268021,
+        "lng": -73.444724679
+      },
+      "website": "http://hotchkiss.org/athletics/hotchkiss-golf-course",
+      "architect": "Seth Raynor",
+      "yearOpened": 1924,
+      "description": "Semi-private 9-hole course in Lakeville, par 35, playing up to 3,043 yards (play it twice for 18), designed by Seth Raynor, dating to 1924.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 3
+        }
+      ],
+      "tees": [
+        {
+          "id": "white-blue",
+          "name": "White/Blue",
+          "par": 35,
+          "totalYards": 3043,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/e49f6ee7-56b6-4a7b-8599-5a5e820c3228",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White/Blue: hole yardages sum to 2977 vs. stated 3043; hole breakdown omitted.",
+          "Red: tee par 38 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -12071,6 +14925,143 @@
           "Black: hole yardages sum to 6500 vs. stated 6513.",
           "Blue: hole yardages sum to 6052 vs. stated 6112.",
           "White: hole yardages sum to 5523 vs. stated 5867; hole breakdown omitted.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "indian-springs-golf-club",
+      "name": "Indian Springs Golf Club",
+      "city": "Middlefield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.5151672,
+        "lng": -72.7215957
+      },
+      "website": "http://www.indiansprings-golf.com/",
+      "architect": "Al Zikorus",
+      "yearOpened": 1964,
+      "description": "Public 9-hole course in Middlefield, par 36, playing up to 2,961 yards (play it twice for 18), designed by Al Zikorus, dating to 1964.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 2961,
+          "yardages": [
+            336,
+            453,
+            123,
+            359,
+            548,
+            292,
+            180,
+            353,
+            305
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2852,
+          "yardages": [
+            329,
+            436,
+            114,
+            351,
+            536,
+            285,
+            162,
+            340,
+            295
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 36,
+          "totalYards": 2775,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2616,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/25d343cc-1bdc-465b-80d0-d8e7f32472b6",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 12 hole entries; only the first 9 have data and were used.",
+          "Blue: hole yardages sum to 2949 vs. stated 2961.",
+          "White: hole yardages sum to 2848 vs. stated 2852.",
+          "Green: hole yardages sum to 2697 vs. stated 2775; hole breakdown omitted.",
+          "Red: hole yardages sum to 2564 vs. stated 2616; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -13199,6 +16190,104 @@
       }
     },
     {
+      "id": "lake-waramaug-country-club",
+      "name": "Lake Waramaug Country Club",
+      "city": "New Preston",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.6987405,
+        "lng": -73.3822128
+      },
+      "website": "http://www.lakewaramaugcc.com/",
+      "yearOpened": 1916,
+      "description": "Private 9-hole course in New Preston, par 35, playing up to 3,128 yards (play it twice for 18), dating to 1916.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 3128,
+          "yardages": [
+            394,
+            426,
+            438,
+            170,
+            500,
+            143,
+            383,
+            300,
+            374
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/ceb78a0f-b49a-4f19-a1b6-55dba5425c14",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: tee par 36 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "longshore-golf-course",
       "name": "Longshore Golf Course",
       "city": "Westport",
@@ -13855,6 +16944,124 @@
       }
     },
     {
+      "id": "lyman-orchards-golf-club-apple-nine-course",
+      "name": "Lyman Orchards Golf Club (Apple Nine Course)",
+      "city": "Middlefield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4911075,
+        "lng": -72.7111939
+      },
+      "website": "https://lymangolf.com/",
+      "architect": "Robert Trent Jones",
+      "yearOpened": 2012,
+      "description": "Public 9-hole course in Middlefield, par 29, playing up to 1,556 yards (play it twice for 18), designed by Robert Trent Jones, dating to 2012.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "back",
+          "name": "Back",
+          "par": 29,
+          "totalYards": 1556,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 29,
+          "totalYards": 1380,
+          "yardages": [
+            92,
+            279,
+            133,
+            120,
+            74,
+            157,
+            94,
+            145,
+            275
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "front",
+          "name": "Front",
+          "par": 29,
+          "totalYards": 1211,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/7f619d05-d5ef-49af-9d8c-81acc519a936",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 45 hole entries; only the first 9 have data and were used.",
+          "Back: hole yardages sum to 1524 vs. stated 1556; hole breakdown omitted.",
+          "Middle: hole yardages sum to 1369 vs. stated 1380.",
+          "Front: hole yardages sum to 1112 vs. stated 1211; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "manchester-country-club",
       "name": "Manchester Country Club",
       "city": "Manchester",
@@ -14054,6 +17261,120 @@
           "Blue: hole yardages sum to 6298 vs. stated 6339.",
           "White: hole yardages sum to 6021 vs. stated 6118; hole breakdown omitted.",
           "Red: hole yardages sum to 5476 vs. stated 5528.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "miner-hills-golf-course",
+      "name": "Miner Hills Golf Course",
+      "city": "Middletown",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.5781854,
+        "lng": -72.7127219
+      },
+      "website": "https://minorhillsgolf.com/",
+      "yearOpened": 1994,
+      "description": "Public 9-hole course in Middletown, par 30, playing up to 1,769 yards (play it twice for 18), dating to 1994.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 30,
+          "totalYards": 1769,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 30,
+          "totalYards": 1618,
+          "yardages": [
+            150,
+            138,
+            290,
+            220,
+            140,
+            195,
+            240,
+            115,
+            130
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 30,
+          "totalYards": 1302,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d3f49562-db9d-46ab-81e4-b4327d707fa9",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: hole yardages sum to 1252 vs. stated 1302; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -14589,6 +17910,227 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "norfolk-country-club",
+      "name": "Norfolk Country Club",
+      "city": "Norfolk",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.982923,
+        "lng": -73.219353
+      },
+      "website": "http://norfolkcountryclub.com/",
+      "yearOpened": 1912,
+      "description": "Private 9-hole course in Norfolk, par 36, playing up to 2,755 yards (play it twice for 18), dating to 1912.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 17
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2755,
+          "yardages": [
+            490,
+            165,
+            230,
+            350,
+            425,
+            345,
+            350,
+            150,
+            250
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2535,
+          "yardages": [
+            425,
+            160,
+            225,
+            340,
+            415,
+            340,
+            250,
+            130,
+            250
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/376c1161-9a39-49df-9031-d811a0591a6c",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "north-ridge-golf-club",
+      "name": "North Ridge Golf Club",
+      "city": "Southington",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.6329136,
+        "lng": -72.91153
+      },
+      "yearOpened": 1960,
+      "description": "Public 9-hole course in Southington, par 35, playing up to 3,796 yards (play it twice for 18), dating to 1960.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 16
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 12
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 2
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue-white",
+          "name": "Blue/White",
+          "par": 35,
+          "totalYards": 3796,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 35,
+          "totalYards": 3265,
+          "yardages": [
+            383,
+            414,
+            371,
+            535,
+            442,
+            375,
+            170,
+            155,
+            420
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/2c2b1bf9-a3ce-47d3-99b2-f073b3a82d26",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Gold: tee par 37 doesn't match the card (par 35); tee left out.",
+          "Red: tee par 37 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -16145,6 +19687,105 @@
       }
     },
     {
+      "id": "pomperaug-golf-club",
+      "name": "Pomperaug Golf Club",
+      "city": "Southbury",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4911072,
+        "lng": -73.2228719
+      },
+      "website": "http://www.pomperauggolfclub.com/",
+      "yearOpened": 1971,
+      "description": "Public 9-hole course in Southbury, par 35, playing up to 2,772 yards (play it twice for 18), dating to 1971.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 18
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 10
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 12
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 2772,
+          "yardages": [
+            333,
+            360,
+            285,
+            448,
+            171,
+            340,
+            388,
+            156,
+            302
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/24fd24cd-ba38-4a3b-bcbb-5d440e13f935",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 2783 vs. stated 2772.",
+          "Red: tee par 36 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "portland-golf-course",
       "name": "Portland Golf Course",
       "city": "Portland",
@@ -17599,6 +21240,105 @@
         ],
         "notes": [
           "Forward: hole yardages sum to 5589 vs. stated 5594.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "race-brook-country-club-nine-hole-course",
+      "name": "Race Brook Country Club (Nine Hole Course)",
+      "city": "Orange",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.2960433,
+        "lng": -73.0067062
+      },
+      "website": "https://www.racebrook.org/",
+      "architect": "Robert D. Pryde",
+      "yearOpened": 1912,
+      "description": "Private 9-hole course in Orange, par 35, playing up to 2,874 yards (play it twice for 18), designed by Robert D. Pryde, dating to 1912.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 35,
+          "totalYards": 2874,
+          "yardages": [
+            393,
+            372,
+            448,
+            224,
+            176,
+            290,
+            485,
+            219,
+            267
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/f14bb93a-5e86-4835-b83c-326878a4e16b",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Forward: tee par 36 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -20642,6 +24382,113 @@
       }
     },
     {
+      "id": "sharon-country-club",
+      "name": "Sharon Country Club",
+      "city": "Sharon",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.8702322233,
+        "lng": -73.4898077592
+      },
+      "website": "http://sharoncountryclub.org",
+      "architect": "Tom Bendelow",
+      "yearOpened": 1895,
+      "description": "Private 9-hole course in Sharon, par 36, playing up to 2,994 yards (play it twice for 18), designed by Tom Bendelow, dating to 1895.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 13
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "mens",
+          "name": "Mens",
+          "par": 36,
+          "totalYards": 2994,
+          "yardages": [
+            365,
+            422,
+            322,
+            133,
+            468,
+            372,
+            420,
+            166,
+            365
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "ladies",
+          "name": "Ladies",
+          "par": 36,
+          "totalYards": 2628,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/ed44b18e-3968-4fca-87b9-393d84e41896",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Mens: hole yardages sum to 3033 vs. stated 2994.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "shennecossett",
       "name": "Shennecossett Golf Course",
       "city": "Groton",
@@ -21110,6 +24957,139 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "short-beach-golf-course",
+      "name": "Short Beach Golf Course",
+      "city": "Stratford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.1618252,
+        "lng": -73.1154298
+      },
+      "website": "https://www.stratfordct.gov/content/39832/39846/52604/default.aspx",
+      "yearOpened": 1988,
+      "description": "Municipal 9-hole course in Stratford, par 27, playing up to 1,359 yards (play it twice for 18), dating to 1988.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 8
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 27,
+          "totalYards": 1359,
+          "yardages": [
+            135,
+            164,
+            100,
+            180,
+            103,
+            145,
+            230,
+            162,
+            140
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 1262,
+          "yardages": [
+            125,
+            154,
+            98,
+            170,
+            88,
+            130,
+            218,
+            154,
+            125
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 27,
+          "totalYards": 1116,
+          "yardages": [
+            115,
+            144,
+            88,
+            160,
+            80,
+            125,
+            150,
+            144,
+            110
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d42a2150-9312-4af2-8c08-2413a4c1c42d",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -21800,6 +25780,123 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "silvermine-golf-club-pro-shop-9-course",
+      "name": "Silvermine Golf Club Pro Shop 9 Course",
+      "city": "Norwalk",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.1511001,
+        "lng": -73.4341583
+      },
+      "website": "http://www.silverminegolf.com/",
+      "yearOpened": 1959,
+      "description": "Private 9-hole course in Norwalk, par 31, playing up to 2,105 yards (play it twice for 18), dating to 1959.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "back",
+          "name": "Back",
+          "par": 31,
+          "totalYards": 2105,
+          "yardages": [
+            162,
+            228,
+            292,
+            301,
+            338,
+            311,
+            123,
+            148,
+            202
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 31,
+          "totalYards": 1984,
+          "yardages": [
+            160,
+            220,
+            290,
+            294,
+            252,
+            307,
+            121,
+            145,
+            195
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/166ceee8-932c-4e85-aa54-316630843184",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 29 hole entries; only the first 9 have data and were used.",
+          "Forward: tee par 32 doesn't match the card (par 31); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -22508,6 +26605,104 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "sleeping-giant-golf-course",
+      "name": "Sleeping Giant Golf Course",
+      "city": "Hamden",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4371189,
+        "lng": -72.9082974
+      },
+      "website": "https://sleepinggiantgolfcourse.com/",
+      "yearOpened": 1924,
+      "description": "Public 9-hole course in Hamden, par 35, playing up to 2,572 yards (play it twice for 18), dating to 1924.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 5
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 2572,
+          "yardages": [
+            125,
+            399,
+            170,
+            355,
+            440,
+            331,
+            199,
+            217,
+            336
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/1143e842-fa18-451e-995c-4e35b208f07e",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: tee par 37 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -24347,6 +28542,229 @@
       }
     },
     {
+      "id": "stonybrook-golf-course",
+      "name": "Stonybrook Golf Course",
+      "city": "Litchfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.7590255,
+        "lng": -73.2340469
+      },
+      "website": "https://www.stonybrookgolfct.com/",
+      "architect": "Al Zikorus",
+      "yearOpened": 1955,
+      "description": "Public 9-hole course in Litchfield, par 35, playing up to 2,996 yards (play it twice for 18), designed by Al Zikorus, dating to 1955.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 13
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 35,
+          "totalYards": 2996,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 2868,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 35,
+          "totalYards": 2552,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d15d6360-084c-48eb-8b1b-081b42a86fc3",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Blue: hole yardages sum to 2898 vs. stated 2996; hole breakdown omitted.",
+          "White: hole yardages sum to 2744 vs. stated 2868; hole breakdown omitted.",
+          "Red: tee par 36 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "sunset-hill-golf-club",
+      "name": "Sunset Hill Golf Club",
+      "city": "Brookfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.455204,
+        "lng": -73.3859786
+      },
+      "website": "http://www.sunsethillgolfclub.com/",
+      "architect": "Gene Sarazen",
+      "yearOpened": 1936,
+      "description": "Public 9-hole course in Brookfield, par 35, playing up to 2,358 yards (play it twice for 18), designed by Gene Sarazen, dating to 1936.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 15
+        }
+      ],
+      "tees": [
+        {
+          "id": "white-blue",
+          "name": "White/Blue",
+          "par": 35,
+          "totalYards": 2358,
+          "yardages": [
+            437,
+            145,
+            112,
+            272,
+            290,
+            272,
+            428,
+            280,
+            122
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 35,
+          "totalYards": 1929,
+          "yardages": [
+            337,
+            145,
+            108,
+            251,
+            235,
+            187,
+            306,
+            243,
+            117
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/fc59d9e9-6ad8-407d-ab0c-c32ae87957f7",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "tallwood-country-club",
       "name": "Tallwood Country Club",
       "city": "Hebron",
@@ -24778,6 +29196,157 @@
         "notes": [
           "Black: hole yardages sum to 6793 vs. stated 6841.",
           "Red: hole yardages sum to 5346 vs. stated 5379.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "tashua-knolls-golf-club-tashua-glen",
+      "name": "Tashua Knolls Golf Club Tashua Glen",
+      "city": "Trumbull",
+      "state": "CT",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.2888889,
+        "lng": -73.2494444
+      },
+      "website": "http://www.tashuaknolls.com/",
+      "yearOpened": 1976,
+      "description": "Municipal 9-hole course in Trumbull, par 33, playing up to 2,184 yards (play it twice for 18), dating to 1976.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 1
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 33,
+          "totalYards": 2184,
+          "yardages": [
+            309,
+            140,
+            260,
+            140,
+            140,
+            325,
+            300,
+            110,
+            460
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 33,
+          "totalYards": 2036,
+          "yardages": [
+            290,
+            119,
+            252,
+            118,
+            132,
+            294,
+            284,
+            102,
+            445
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 33,
+          "totalYards": 1851,
+          "yardages": [
+            251,
+            103,
+            218,
+            95,
+            117,
+            278,
+            273,
+            84,
+            432
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 33,
+          "totalYards": 1664,
+          "yardages": [
+            243,
+            91,
+            202,
+            87,
+            97,
+            209,
+            255,
+            76,
+            404
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/c894b19d-988d-4275-a53d-574c163e7ac1",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
           "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
@@ -25238,6 +29807,121 @@
           "White: hole yardages sum to 6163 vs. stated 6423; hole breakdown omitted.",
           "Gold: hole yardages sum to 5536 vs. stated 6053; hole breakdown omitted.",
           "Red: hole yardages sum to 4245 vs. stated 5536; hole breakdown omitted.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "the-orchards-golf-course",
+      "name": "The Orchards Golf Course",
+      "city": "Milford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.2523536,
+        "lng": -73.050742
+      },
+      "website": "http://www.orchardsgc.com/",
+      "yearOpened": 1997,
+      "description": "Public 9-hole course in Milford, par 32, playing up to 1,625 yards (play it twice for 18), dating to 1997.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 32,
+          "totalYards": 1625,
+          "yardages": [
+            242,
+            93,
+            222,
+            207,
+            217,
+            120,
+            167,
+            91,
+            266
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 32,
+          "totalYards": 1433,
+          "yardages": [
+            218,
+            73,
+            199,
+            187,
+            195,
+            100,
+            146,
+            68,
+            247
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/36a5d89c-e7c8-4843-988f-362b42955da2",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -26592,6 +31276,396 @@
       }
     },
     {
+      "id": "tumble-brook-country-club-blue-nine",
+      "name": "Tumble Brook Country Club Blue Nine",
+      "city": "Bloomfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.8103398,
+        "lng": -72.7567228
+      },
+      "website": "http://www.tumblebrookcc.com/",
+      "architect": "Willie Park, Orrin E. Smith",
+      "yearOpened": 1949,
+      "description": "Private 9-hole course in Bloomfield, par 36, playing up to 3,455 yards (play it twice for 18), designed by Willie Park, Orrin E. Smith, dating to 1949.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 17
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3455,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 3347,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 36,
+          "totalYards": 2970,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2779,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 2590,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/7edf4c57-4011-4a98-a976-bed2b84678d7",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 3305 vs. stated 3455; hole breakdown omitted.",
+          "Red: hole yardages sum to 2650 vs. stated 2779; hole breakdown omitted.",
+          "Blue: hole yardages sum to 2549 vs. stated 2590; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "tumble-brook-country-club-green-nine",
+      "name": "Tumble Brook Country Club Green Nine",
+      "city": "Bloomfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.8103398,
+        "lng": -72.7567228
+      },
+      "website": "http://www.tumblebrookcc.com/",
+      "architect": "Willie Park, Orrin E. Smith",
+      "yearOpened": 1971,
+      "description": "Private 9-hole course in Bloomfield, par 36, playing up to 3,305 yards (play it twice for 18), designed by Willie Park, Orrin E. Smith, dating to 1971.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 11
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 3
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3305,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 3134,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 36,
+          "totalYards": 2830,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2650,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 2549,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/df6ff888-1ecb-4626-9604-e80732a4aca9",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 3455 vs. stated 3305; hole breakdown omitted.",
+          "Red: hole yardages sum to 2779 vs. stated 2650; hole breakdown omitted.",
+          "Blue: hole yardages sum to 2590 vs. stated 2549; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "tumble-brook-country-club-red-nine",
+      "name": "Tumble Brook Country Club Red Nine",
+      "city": "Bloomfield",
+      "state": "CT",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.8103398,
+        "lng": -72.7567228
+      },
+      "website": "http://www.tumblebrookcc.com/",
+      "architect": "Willie Park, Orrin E. Smith",
+      "yearOpened": 1924,
+      "description": "Private 9-hole course in Bloomfield, par 36, playing up to 3,327 yards (play it twice for 18), designed by Willie Park, Orrin E. Smith, dating to 1924.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 15
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 3
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 36,
+          "totalYards": 3327,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 3179,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "green",
+          "name": "Green",
+          "par": 36,
+          "totalYards": 2956,
+          "yardages": [
+            370,
+            330,
+            310,
+            144,
+            357,
+            472,
+            357,
+            484,
+            146
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2691,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 2588,
+          "yardages": [
+            337,
+            305,
+            255,
+            111,
+            303,
+            437,
+            290,
+            440,
+            112
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/74083336-2228-4a31-bc30-eb6abecca5bc",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 3455 vs. stated 3327; hole breakdown omitted.",
+          "Green: hole yardages sum to 2970 vs. stated 2956.",
+          "Red: hole yardages sum to 2779 vs. stated 2691; hole breakdown omitted.",
+          "Blue: hole yardages sum to 2590 vs. stated 2588.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "tunxis-country-club-green-course",
       "name": "Tunxis Country Club (Green Course)",
       "city": "Farmington",
@@ -26789,6 +31863,130 @@
         "notes": [
           "White: hole yardages sum to 6036 vs. stated 6027.",
           "Red: hole yardages sum to 4962 vs. stated 4883; hole breakdown omitted.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "tunxis-country-club-red-course",
+      "name": "Tunxis Country Club (Red Course)",
+      "city": "Farmington",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.7443234,
+        "lng": -72.8294299
+      },
+      "website": "http://tunxisgolf.com/",
+      "yearOpened": 1962,
+      "description": "Public 9-hole course in Farmington, par 35, playing up to 3,219 yards (play it twice for 18), dating to 1962.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 35,
+          "totalYards": 3219,
+          "yardages": [
+            377,
+            416,
+            170,
+            352,
+            512,
+            416,
+            389,
+            201,
+            386
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 2999,
+          "yardages": [
+            348,
+            395,
+            141,
+            322,
+            483,
+            396,
+            366,
+            177,
+            371
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 35,
+          "totalYards": 2725,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/1b985be2-01d8-4610-a21f-3a06f16b2d14",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: hole yardages sum to 2492 vs. stated 2725; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -27205,6 +32403,221 @@
           "Gold: hole yardages sum to 6735 vs. stated 6616; hole breakdown omitted.",
           "White: hole yardages sum to 5546 vs. stated 5649; hole breakdown omitted.",
           "Red: hole yardages sum to 5255 vs. stated 5416; hole breakdown omitted.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "twin-lakes-golf-course",
+      "name": "Twin Lakes Golf Course",
+      "city": "North Branford",
+      "state": "CT",
+      "region": "new-england",
+      "access": "semi-private",
+      "location": {
+        "lat": 41.3149147,
+        "lng": -72.7819442
+      },
+      "website": "http://twinlakesgolfclub.godaddysites.com/",
+      "description": "Semi-private 9-hole course in North Branford, par 27, playing up to 835 yards (play it twice for 18).",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 27,
+          "totalYards": 835,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 27,
+          "totalYards": 835,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/a4ff5d08-351d-493b-9d6f-7a352ac87d24",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "vineyard-valley-golf-club",
+      "name": "Vineyard Valley Golf Club",
+      "city": "Pomfret Center",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.8937905,
+        "lng": -71.9838487
+      },
+      "website": "http://www.vineyardvalleygolf.com/",
+      "architect": "Gus Loos",
+      "yearOpened": 1990,
+      "description": "Public 9-hole course in Pomfret Center, par 36, playing up to 3,033 yards (play it twice for 18), designed by Gus Loos, dating to 1990.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 15
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3033,
+          "yardages": [
+            436,
+            164,
+            350,
+            394,
+            362,
+            448,
+            426,
+            293,
+            160
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2829,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2081,
+          "yardages": null,
+          "ratings": {
+            "men": {
+              "rating": 63,
+              "slope": 103
+            }
+          },
+          "ratedHoles": 18
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/2c60f1ad-6478-4e93-8ddf-fdf6441b963c",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 2780 vs. stated 2829; hole breakdown omitted.",
+          "Red: hole yardages sum to 2121 vs. stated 2081; hole breakdown omitted.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -29732,6 +35145,139 @@
           }
         ],
         "notes": []
+      }
+    },
+    {
+      "id": "woodhaven-country-club",
+      "name": "Woodhaven Country Club",
+      "city": "Bethany",
+      "state": "CT",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.415596,
+        "lng": -73.039627
+      },
+      "website": "https://www.woodhavenctgolf.com/",
+      "yearOpened": 1968,
+      "description": "Public 9-hole course in Bethany, par 36, playing up to 3,387 yards (play it twice for 18), dating to 1968.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 14
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 10
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3387,
+          "yardages": [
+            530,
+            168,
+            374,
+            435,
+            360,
+            570,
+            370,
+            180,
+            400
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 3147,
+          "yardages": [
+            517,
+            156,
+            331,
+            375,
+            342,
+            542,
+            350,
+            152,
+            382
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2685,
+          "yardages": [
+            467,
+            147,
+            252,
+            315,
+            326,
+            422,
+            321,
+            140,
+            295
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/6bd4cd4c-c228-4318-b4bf-561f5895eaeb",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
       }
     },
     {

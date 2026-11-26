@@ -91,7 +91,7 @@ export default function CourseDetail() {
           <StatStrip
             compact
             items={[
-              { label: 'Par', value: String(par) },
+              { label: course.holes.length === 9 ? 'Par · 9 holes' : 'Par', value: String(par) },
               { label: 'Tees', value: String(course.tees.length) },
               { label: 'Played', value: String(rounds.length) },
               { label: 'Best', value: best ? String(best.strokes) : '—', sub: best ? formatToPar(best.toPar) : undefined },

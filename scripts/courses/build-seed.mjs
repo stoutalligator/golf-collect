@@ -15,7 +15,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { join } from 'node:path';
 
 import {
-  QuotaExhausted, ACCESS, ATTRIBUTION, cardProblem, courseDetail, describe, displayName, mapLimit, ogapiSource, regionFor, root, slug,
+  QuotaExhausted, ACCESS, ATTRIBUTION, cardProblem, nineProblem, courseDetail, describe, displayName, mapLimit, ogapiSource, regionFor, root, slug,
   stateIndex, statesInRegion, sum, teesFrom,
 } from './lib.mjs';
 
@@ -92,15 +92,22 @@ async function buildState(state) {
     if (!city) return skip('missing town');
     d.city = city;
     if (!(d.course_name ?? entry.name)) return skip('missing name');
-    if (d.holes && d.holes !== 18) return skip(`${d.holes}-hole course (only 18-hole cards are imported so far)`);
-    const holes = d.holes_data ?? [];
-    if (holes.length !== 18) return skip(`hole data has ${holes.length} holes`);
+    const raw = d.holes_data ?? [];
+    // 9-hole courses: some records pad hole data past the real nine with empty entries (no stroke index).
+    const padded = raw.length > 9 && raw.slice(9).every((h) => h.handicap_index == null);
+    const nine = d.holes === 9 || (d.holes == null && raw.length !== 18 && raw.length >= 9 && padded);
+    if (d.holes && d.holes !== 18 && d.holes !== 9) return skip(`${d.holes}-hole course`);
+    if (nine && raw.length > 9 && !padded) return skip('9-hole course with extra, non-empty hole data');
+    const holeCount = nine ? 9 : 18;
+    const holes = raw.slice(0, holeCount);
+    if (holes.length !== holeCount || (!nine && raw.length !== 18)) return skip(`hole data has ${raw.length} holes`);
     const par = holes.map((h) => h.par);
     const handicap = holes.map((h) => h.handicap_index);
-    const problem = cardProblem(par, handicap);
+    const problem = nine ? nineProblem(par, handicap) : cardProblem(par, handicap);
     if (problem) return skip(problem);
     const notes = [];
-    const tees = teesFrom(d, notes);
+    if (nine && raw.length > 9) notes.push(`Source lists ${raw.length} hole entries; only the first 9 have data and were used.`);
+    const tees = teesFrom(d, notes, holeCount);
     if (!tees.length) return skip('no tee data');
     if (!tees.some((t) => t.ratings.men || t.ratings.women)) notes.push('No course rating or slope published for any tee.');
     if (d.par && sum(par) !== d.par) notes.push(`Hole pars sum to ${sum(par)}; source lists ${d.par}.`);

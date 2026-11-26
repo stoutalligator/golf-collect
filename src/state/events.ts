@@ -9,6 +9,7 @@ import {
   type CompetitionEvent, type EventMatch, type EventMember, type EventRound, type MatchResult, type PlayerRoundResult,
   type SeasonRow, type Standing,
 } from '@/domain/competition';
+import { playLayout } from '@/domain/layout';
 import type { Course, Player, Round } from '@/domain/types';
 import { todayISO } from '@/lib/format';
 
@@ -62,7 +63,8 @@ const roundStatus = (date: string): EventRoundView['status'] => {
 };
 
 function holeNumbersFor(er: EventRound, course: Course | undefined): number[] {
-  const all = course?.holes.map((h) => h.number) ?? [];
+  // 9-hole courses: 'all' is 18 going around twice, 'front' is the nine.
+  const all = course ? playLayout(course).holes.map((h) => h.number) : [];
   return er.holes === 'front' ? all.slice(0, 9) : er.holes === 'back' ? all.slice(9, 18) : all;
 }
 
@@ -90,7 +92,7 @@ export function buildEventView(data: AppData, event: CompetitionEvent): EventVie
         const summary = data.summaries.get(r.id);
         const tee = course?.tees.find((t) => t.id === (r.teeId ?? er.teeId)) ?? course?.tees[0];
         if (!summary || !course || !tee) continue;
-        const ch = courseHandicap(handicapOf(playerId) ?? 0, tee, { allowance: f.allowance, nine: planned === 9 });
+        const ch = courseHandicap(handicapOf(playerId) ?? 0, tee, { allowance: f.allowance, holesPlayed: r.holeNumbers.length, courseHoles: course.holes.length });
         const recv = strokesPerHole(ch, summary.results.map((x) => x.hole));
         results.push(playerRoundResult({
           playerId,

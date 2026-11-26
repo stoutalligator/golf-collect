@@ -25,9 +25,11 @@ export interface Tee {
   name: string; // display name, e.g. "Blue"
   par: number;
   totalYards: number;
-  /** Hole-by-hole yardage (18 entries), or null if no trustworthy breakdown exists. */
+  /** Hole-by-hole yardage (one per real hole: 9 or 18), or null if no trustworthy breakdown exists. */
   yardages: number[] | null;
   ratings: Partial<Record<Gender, TeeRating>>;
+  /** 9-hole courses: whether `ratings` are for the nine (9) or for playing it twice (18). Default 18. */
+  ratedHoles?: 9 | 18;
 }
 
 export interface Hole {

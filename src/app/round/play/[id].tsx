@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
 import { Button, Empty, IconButton } from '@/components/ui';
+import { realHoleNumber } from '@/domain/layout';
 import { deriveGir, formatToPar } from '@/domain/stats';
 import type { FairwayResult, HoleScore, Round } from '@/domain/types';
 import { useAppData } from '@/state/app-data';
@@ -36,7 +37,7 @@ export default function PlayRound() {
   const hole = layout.holes.find((h) => h.number === holeNo)!;
   const course = round.kind === 'course' ? data.courseById(round.courseId) : undefined;
   const tee = course?.tees.find((t) => t.id === round.teeId);
-  const yards = tee?.yardages?.[holeNo - 1];
+  const yards = course ? tee?.yardages?.[realHoleNumber(course, holeNo) - 1] : undefined;
   const scores = round.scores[me];
   const current: HoleScore = scores[index] ?? { strokes: hole.par };
   const isLast = index === round.holeNumbers.length - 1;

@@ -658,6 +658,237 @@
       }
     },
     {
+      "id": "button-hole-short-course-teaching-center",
+      "name": "Button Hole Short Course Teaching Center",
+      "city": "Providence",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.825015052,
+        "lng": -71.4644937275
+      },
+      "website": "http://www.buttonhole.org",
+      "yearOpened": 2001,
+      "description": "Public 9-hole course in Providence, par 27, playing up to 972 yards (play it twice for 18), dating to 2001.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 27,
+          "totalYards": 972,
+          "yardages": [
+            90,
+            134,
+            130,
+            107,
+            89,
+            79,
+            111,
+            142,
+            90
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 651,
+          "yardages": [
+            78,
+            105,
+            33,
+            79,
+            66,
+            50,
+            77,
+            92,
+            71
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/befbe266-b7d3-4021-b893-0270fbfbcbbf",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 12 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "country-view-golf-club-harrisville",
+      "name": "Country View Golf Club",
+      "city": "Harrisville",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.9421658,
+        "lng": -71.6085263
+      },
+      "website": "https://countryviewgolf.teesnap.net/",
+      "yearOpened": 1964,
+      "description": "Public 9-hole course in Harrisville, par 36, playing up to 2,885 yards (play it twice for 18), dating to 1964.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 17
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2885,
+          "yardages": [
+            330,
+            335,
+            450,
+            125,
+            345,
+            480,
+            340,
+            335,
+            145
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2480,
+          "yardages": [
+            240,
+            310,
+            325,
+            125,
+            325,
+            430,
+            300,
+            300,
+            125
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/5822775c-90c8-4323-9574-d3d03163df72",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "countryview-golf-club",
       "name": "Countryview Golf Club",
       "city": "Harrisville",
@@ -1341,6 +1572,140 @@
       }
     },
     {
+      "id": "east-greenwich-golf-country-club",
+      "name": "East Greenwich Golf Country Club",
+      "city": "East Greenwich",
+      "state": "RI",
+      "region": "new-england",
+      "access": "semi-private",
+      "location": {
+        "lat": 41.6616686936,
+        "lng": -71.5104366098
+      },
+      "website": "http://eastgreenwichgolfclub.com",
+      "yearOpened": 1964,
+      "description": "Semi-private 9-hole course in East Greenwich, par 36, playing up to 3,315 yards (play it twice for 18), dating to 1964.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 5,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 7,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 15
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3315,
+          "yardages": [
+            375,
+            345,
+            520,
+            390,
+            405,
+            180,
+            500,
+            400,
+            200
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 3090,
+          "yardages": [
+            365,
+            325,
+            500,
+            360,
+            385,
+            160,
+            475,
+            380,
+            175
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2875,
+          "yardages": [
+            350,
+            310,
+            480,
+            340,
+            360,
+            115,
+            410,
+            360,
+            150
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/1469e92a-63bd-481a-9409-9ffbe24b30ed",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "White: hole yardages sum to 3125 vs. stated 3090.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "exeter-country-club",
       "name": "Exeter Country Club",
       "city": "Exeter",
@@ -1555,6 +1920,103 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "fairlawn-golf-course",
+      "name": "Fairlawn Golf Course",
+      "city": "Lincoln",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.914257,
+        "lng": -71.4423446
+      },
+      "website": "https://www.fairlawngolfri.com/",
+      "yearOpened": 1961,
+      "description": "Public 9-hole course in Lincoln, par 27, playing up to 1,267 yards (play it twice for 18), dating to 1961.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 4
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 27,
+          "totalYards": 1267,
+          "yardages": [
+            133,
+            181,
+            121,
+            167,
+            91,
+            110,
+            110,
+            161,
+            193
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/f44a439d-406a-4dab-8982-c7bbc372f4e8",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -1969,6 +2431,200 @@
       }
     },
     {
+      "id": "glocester-country-club",
+      "name": "Glocester Country Club",
+      "city": "Chepachet",
+      "state": "RI",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.8838598367,
+        "lng": -71.590393119
+      },
+      "website": "http://www.glocestercc.com",
+      "yearOpened": 1929,
+      "description": "Private 9-hole course in Chepachet, par 35, playing up to 2,802 yards (play it twice for 18), dating to 1929.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 18
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 16
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 10
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 35,
+          "totalYards": 2802,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/2e735593-7dff-4be5-960b-e64b0a1bcf8b",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Red: tee par 36 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "goddard-state-memorial-park",
+      "name": "Goddard State Memorial Park",
+      "city": "Warwick",
+      "state": "RI",
+      "region": "new-england",
+      "access": "municipal",
+      "location": {
+        "lat": 41.6569805683,
+        "lng": -71.4373691708
+      },
+      "website": "http://www.riparks.com",
+      "yearOpened": 1939,
+      "description": "Municipal 9-hole course in Warwick, par 36, playing up to 3,021 yards (play it twice for 18), dating to 1939.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "forward",
+          "name": "Forward",
+          "par": 36,
+          "totalYards": 3021,
+          "yardages": [
+            500,
+            375,
+            185,
+            292,
+            496,
+            300,
+            168,
+            390,
+            321
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "middle",
+          "name": "Middle",
+          "par": 36,
+          "totalYards": 3021,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/3e7a4e29-0449-4b9f-b3d5-ca82aae334f1",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Forward: hole yardages sum to 3027 vs. stated 3021.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "green-valley-country-club",
       "name": "Green Valley Country Club",
       "city": "Portsmouth",
@@ -2216,6 +2872,115 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "jamestown-golf-course",
+      "name": "Jamestown Golf Course",
+      "city": "Jamestown",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.5065236854,
+        "lng": -71.3650460344
+      },
+      "website": "http://jamestowngolf.com",
+      "yearOpened": 1895,
+      "description": "Public 9-hole course in Jamestown, par 36, playing up to 3,058 yards (play it twice for 18), dating to 1895.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 15
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3058,
+          "yardages": [
+            282,
+            541,
+            293,
+            403,
+            130,
+            450,
+            161,
+            405,
+            375
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2761,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/7f799b5d-9e8e-4e68-88ef-ace90952636e",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 10 hole entries; only the first 9 have data and were used.",
+          "Blue: hole yardages sum to 3040 vs. stated 3058.",
+          "White: hole yardages sum to 2865 vs. stated 2761; hole breakdown omitted.",
+          "Red: tee par 38 doesn't match the card (par 36); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -2633,6 +3398,114 @@
           }
         ],
         "notes": [
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "lincoln-country-club",
+      "name": "Lincoln Country Club",
+      "city": "Lincoln",
+      "state": "RI",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.917724,
+        "lng": -71.429727
+      },
+      "website": "http://lincolncountryclub.com/",
+      "yearOpened": 1955,
+      "description": "Private 9-hole course in Lincoln, par 35, playing up to 2,761 yards (play it twice for 18), dating to 1955.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 5
+        }
+      ],
+      "tees": [
+        {
+          "id": "men",
+          "name": "Men",
+          "par": 35,
+          "totalYards": 2761,
+          "yardages": [
+            346,
+            345,
+            138,
+            359,
+            314,
+            451,
+            311,
+            125,
+            389
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "ladies",
+          "name": "Ladies",
+          "par": 35,
+          "totalYards": 2497,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/9d887584-2a45-4ef8-a6a8-1ae2f458404b",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 10 hole entries; only the first 9 have data and were used.",
+          "Men: hole yardages sum to 2778 vs. stated 2761.",
+          "Ladies: hole yardages sum to 2449 vs. stated 2497; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -3173,6 +4046,302 @@
       }
     },
     {
+      "id": "met-links",
+      "name": "Met Links",
+      "city": "East Providence",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.805786,
+        "lng": -71.3807352
+      },
+      "website": "https://metlinksgolf.com/",
+      "architect": "Donald Ross",
+      "yearOpened": 1901,
+      "description": "Public 9-hole course in East Providence, par 34, playing up to 2,569 yards (play it twice for 18), designed by Donald Ross, dating to 1901.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "handicap": 6
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 1
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 34,
+          "totalYards": 2569,
+          "yardages": [
+            337,
+            488,
+            359,
+            161,
+            261,
+            156,
+            149,
+            486,
+            172
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 34,
+          "totalYards": 2449,
+          "yardages": [
+            324,
+            478,
+            342,
+            146,
+            257,
+            148,
+            133,
+            466,
+            155
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "gold",
+          "name": "Gold",
+          "par": 34,
+          "totalYards": 2205,
+          "yardages": [
+            308,
+            440,
+            267,
+            121,
+            251,
+            112,
+            121,
+            442,
+            143
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 34,
+          "totalYards": 1918,
+          "yardages": [
+            290,
+            405,
+            257,
+            90,
+            237,
+            87,
+            107,
+            353,
+            92
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/0c47151d-3ae6-4ee9-90cb-d0ccb868582c",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "midville-country-club",
+      "name": "Midville Country Club",
+      "city": "West Warwick",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.72237432,
+        "lng": -71.5020838135
+      },
+      "website": "http://www.midvillegolfclub.com",
+      "yearOpened": 1961,
+      "description": "Public 9-hole course in West Warwick, par 35, playing up to 2,905 yards (play it twice for 18), dating to 1961.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 11
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 35,
+          "totalYards": 2905,
+          "yardages": [
+            355,
+            315,
+            344,
+            380,
+            161,
+            522,
+            154,
+            334,
+            330
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "par": 35,
+          "totalYards": 2750,
+          "yardages": [
+            338,
+            306,
+            331,
+            335,
+            139,
+            517,
+            136,
+            290,
+            319
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 2540,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 35,
+          "totalYards": 2190,
+          "yardages": [
+            320,
+            224,
+            295,
+            308,
+            116,
+            360,
+            103,
+            201,
+            259
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/30888e00-174d-46de-bb69-70210e787667",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Black: hole yardages sum to 2895 vs. stated 2905.",
+          "Yellow: hole yardages sum to 2711 vs. stated 2750.",
+          "Blue: hole yardages sum to 2186 vs. stated 2190.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "misquamicut-club",
       "name": "Misquamicut Club",
       "city": "Westerly",
@@ -3597,6 +4766,193 @@
           "Blue: hole yardages sum to 6319 vs. stated 6321.",
           "White: hole yardages sum to 5783 vs. stated 5807.",
           "Red: hole yardages sum to 5357 vs. stated 5359.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "mulligans-island-par-3-course",
+      "name": "Mulligans Island Par 3 Course",
+      "city": "Cranston",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.740888161,
+        "lng": -71.4724525595
+      },
+      "website": "http://www.mulligansisland.com",
+      "yearOpened": 2002,
+      "description": "Public 9-hole course in Cranston, par 27, playing up to 1,265 yards (play it twice for 18), dating to 2002.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 3
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 1265,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/90e6a48b-286f-4687-893c-7a0cb43d61ae",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 17 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "newport-country-club",
+      "name": "Newport Country Club",
+      "city": "Newport",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.46219,
+        "lng": -71.346942
+      },
+      "website": "https://www.newportcountryclub.us/",
+      "architect": "William F. Davis, A.W. Tillinghast, Gil Hanse",
+      "yearOpened": 1956,
+      "description": "Public 9-hole course in Newport, par 32, playing up to 2,013 yards (play it twice for 18), designed by William F. Davis, A.W. Tillinghast, Gil Hanse, dating to 1956.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 32,
+          "totalYards": 2013,
+          "yardages": [
+            269,
+            150,
+            353,
+            244,
+            294,
+            95,
+            205,
+            223,
+            180
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/d21baadc-2216-4c7a-8d7f-5ceb2fbea699",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 23 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -5755,6 +7111,122 @@
       }
     },
     {
+      "id": "rose-hill-golf-club",
+      "name": "Rose Hill Golf Club",
+      "city": "South Kingstown",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.4706049141,
+        "lng": -71.4962194706
+      },
+      "website": "http://www.rosehillri.com",
+      "yearOpened": 2001,
+      "description": "Public 9-hole course in South Kingstown, par 27, playing up to 1,206 yards (play it twice for 18), dating to 2001.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 8
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 27,
+          "totalYards": 1206,
+          "yardages": [
+            144,
+            140,
+            74,
+            101,
+            143,
+            168,
+            129,
+            178,
+            129
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 981,
+          "yardages": [
+            122,
+            109,
+            61,
+            86,
+            80,
+            148,
+            111,
+            154,
+            110
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/bf943b72-31a2-438f-9572-53a968d63cee",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 10 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
       "id": "sakonnet-golf-club",
       "name": "Sakonnet Golf Club",
       "city": "Little Compton",
@@ -6201,6 +7673,294 @@
           "Black: hole yardages sum to 7028 vs. stated 7032.",
           "White: hole yardages sum to 6188 vs. stated 6229.",
           "Red: hole yardages sum to 4945 vs. stated 4951.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "shelter-harbor-golf-club-par-3-course",
+      "name": "Shelter Harbor Golf Club Par 3 Course",
+      "city": "Westerly",
+      "state": "RI",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.3564605,
+        "lng": -71.7331924
+      },
+      "website": "http://www.shgcri.com/",
+      "architect": "Hurdzan / Fry Environmental Golf Design",
+      "yearOpened": 2004,
+      "description": "Private 9-hole course in Westerly, par 27, playing up to 1,238 yards (play it twice for 18), designed by Hurdzan / Fry Environmental Golf Design, dating to 2004.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 2
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 4
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 6
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 8
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 9
+        }
+      ],
+      "tees": [
+        {
+          "id": "back",
+          "name": "Back",
+          "par": 27,
+          "totalYards": 1238,
+          "yardages": [
+            95,
+            143,
+            169,
+            131,
+            115,
+            138,
+            177,
+            138,
+            132
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "front",
+          "name": "Front",
+          "par": 27,
+          "totalYards": 1063,
+          "yardages": [
+            76,
+            118,
+            147,
+            115,
+            102,
+            120,
+            156,
+            118,
+            111
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/68f188f7-82bb-4922-af10-d8cb6d0cca13",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 26 hole entries; only the first 9 have data and were used.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "south-shore-village-golf-club",
+      "name": "South Shore Village Golf Club",
+      "city": "South Kingstown",
+      "state": "RI",
+      "region": "new-england",
+      "access": "private",
+      "location": {
+        "lat": 41.4171000745,
+        "lng": -71.5932389423
+      },
+      "website": "http://ssvgolfclub.com",
+      "yearOpened": 2023,
+      "description": "Private 9-hole course in South Kingstown, par 35, playing up to 3,046 yards (play it twice for 18), dating to 2023.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 6,
+          "par": 5,
+          "handicap": 5
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 8,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "black",
+          "name": "Black",
+          "par": 35,
+          "totalYards": 3046,
+          "yardages": [
+            327,
+            382,
+            175,
+            422,
+            429,
+            523,
+            162,
+            267,
+            359
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 35,
+          "totalYards": 2840,
+          "yardages": [
+            320,
+            362,
+            161,
+            388,
+            398,
+            505,
+            132,
+            241,
+            333
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 2581,
+          "yardages": [
+            294,
+            330,
+            125,
+            338,
+            373,
+            475,
+            115,
+            222,
+            309
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "teal",
+          "name": "Teal",
+          "par": 35,
+          "totalYards": 2302,
+          "yardages": [
+            270,
+            281,
+            98,
+            274,
+            335,
+            450,
+            99,
+            203,
+            292
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "silver",
+          "name": "Silver",
+          "par": 35,
+          "totalYards": 2081,
+          "yardages": [
+            240,
+            230,
+            88,
+            231,
+            320,
+            431,
+            95,
+            184,
+            262
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/7ba23720-c61b-4760-9541-3c15e85148de",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 11 hole entries; only the first 9 have data and were used.",
+          "Green/Par-3: tee par 27 doesn't match the card (par 35); tee left out.",
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }
@@ -7734,6 +9494,361 @@
           "Blue: hole yardages sum to 6361 vs. stated 6467; hole breakdown omitted.",
           "White: hole yardages sum to 6183 vs. stated 6269.",
           "Red: hole yardages sum to 5823 vs. stated 5815.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "weekapaug-golf-club",
+      "name": "Weekapaug Golf Club",
+      "city": "Westerly",
+      "state": "RI",
+      "region": "new-england",
+      "access": "semi-private",
+      "location": {
+        "lat": 41.3409362007,
+        "lng": -71.7781457388
+      },
+      "website": "http://www.weekapauggolfclub.com",
+      "architect": "Phil Wogan & Sprocky Urso",
+      "yearOpened": 1962,
+      "description": "Semi-private 9-hole course in Westerly, par 36, playing up to 3,111 yards (play it twice for 18), designed by Phil Wogan & Sprocky Urso, dating to 1962.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 5,
+          "par": 5,
+          "handicap": 15
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 7
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 13
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 36,
+          "totalYards": 3111,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 36,
+          "totalYards": 2957,
+          "yardages": null,
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 36,
+          "totalYards": 2504,
+          "yardages": null,
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/7d814a63-9d11-4341-a086-3e2f9370a7eb",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "Source lists 11 hole entries; only the first 9 have data and were used.",
+          "Blue: hole yardages sum to 3007 vs. stated 3111; hole breakdown omitted.",
+          "White: hole yardages sum to 2764 vs. stated 2957; hole breakdown omitted.",
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "west-warwick-country-club",
+      "name": "West Warwick Country Club",
+      "city": "West Warwick",
+      "state": "RI",
+      "region": "new-england",
+      "access": "semi-private",
+      "location": {
+        "lat": 41.7246788281,
+        "lng": -71.5127421032
+      },
+      "website": "http://wwccgolf.com",
+      "yearOpened": 1928,
+      "description": "Semi-private 9-hole course in West Warwick, par 35, playing up to 3,001 yards (play it twice for 18), dating to 1928.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 4,
+          "handicap": 1
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "handicap": 3
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 13
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 9,
+          "par": 5,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "white",
+          "name": "White",
+          "par": 35,
+          "totalYards": 3001,
+          "yardages": [
+            419,
+            338,
+            140,
+            375,
+            365,
+            360,
+            333,
+            162,
+            509
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 35,
+          "totalYards": 2733,
+          "yardages": [
+            410,
+            302,
+            114,
+            341,
+            350,
+            355,
+            329,
+            148,
+            384
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/f0422288-6afa-49a3-9428-a45c08c8a19e",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
+          "Access type from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    },
+    {
+      "id": "windmill-hill-golf-course",
+      "name": "Windmill Hill Golf Course",
+      "city": "Warren",
+      "state": "RI",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 41.7394704864,
+        "lng": -71.267103881
+      },
+      "website": "http://windmillgolfri.com",
+      "yearOpened": 2000,
+      "description": "Public 9-hole course in Warren, par 27, playing up to 1,381 yards (play it twice for 18), dating to 2000.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 2,
+          "par": 3,
+          "handicap": 11
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "handicap": 1
+        },
+        {
+          "number": 4,
+          "par": 3,
+          "handicap": 7
+        },
+        {
+          "number": 5,
+          "par": 3,
+          "handicap": 5
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 9
+        },
+        {
+          "number": 7,
+          "par": 3,
+          "handicap": 3
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "handicap": 15
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 27,
+          "totalYards": 1381,
+          "yardages": [
+            116,
+            160,
+            193,
+            136,
+            164,
+            133,
+            218,
+            133,
+            128
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 27,
+          "totalYards": 1162,
+          "yardages": [
+            91,
+            129,
+            167,
+            120,
+            136,
+            121,
+            162,
+            125,
+            111
+          ],
+          "ratings": {}
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 27,
+          "totalYards": 844,
+          "yardages": [
+            71,
+            103,
+            112,
+            88,
+            102,
+            74,
+            123,
+            92,
+            79
+          ],
+          "ratings": {}
+        }
+      ],
+      "verification": {
+        "status": "single-source",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/682eb415-bc8d-4e1a-a071-e018ba2fd82d",
+            "checked": "2026-11-26",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          }
+        ],
+        "notes": [
+          "No course rating or slope published for any tee.",
           "Access type from the OpenGolfAPI listing; not yet confirmed."
         ]
       }

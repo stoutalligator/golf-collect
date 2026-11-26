@@ -8,6 +8,7 @@
  *
  * Pure TypeScript, no React. Handicaps use the World Handicap System course-handicap formula.
  */
+import { ratingFor } from './layout';
 import type { Hole, ISODate, Tee } from './types';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -87,14 +88,16 @@ export interface EventMatch {
 
 /**
  * WHS course handicap: index × slope / 113 + (course rating − par), × allowance, rounded.
- * For a 9-hole round use half the index and the 9-hole par (rating halved), per WHS.
+ * For 9 holes played: half the index, with the rating and par for 9 holes (see `ratingFor`). `courseHoles` is the
+ * course's real hole count (a 9-hole course played twice is 18 holes played on a 9-hole course).
  */
-export function courseHandicap(index: number, tee: Pick<Tee, 'par' | 'ratings'>, opts: { allowance?: number; nine?: boolean } = {}): number {
-  const rating = tee.ratings.men ?? tee.ratings.women;
+export function courseHandicap(index: number, tee: Pick<Tee, 'par' | 'ratings' | 'ratedHoles'>, opts: { allowance?: number; holesPlayed?: number; courseHoles?: number } = {}): number {
   const allowance = (opts.allowance ?? 100) / 100;
-  if (!rating) return Math.round(index * allowance * (opts.nine ? 0.5 : 1));
-  const nine = opts.nine ? 0.5 : 1;
-  const raw = index * nine * (rating.slope / 113) + (rating.rating - tee.par) * nine;
+  const played = opts.holesPlayed ?? 18;
+  const scale = played / 18;
+  const r = ratingFor(tee, played, opts.courseHoles ?? 18);
+  if (!r) return Math.round(index * scale * allowance);
+  const raw = index * scale * (r.slope / 113) + (r.rating - r.par);
   return Math.round(raw * allowance);
 }
 

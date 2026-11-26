@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/state/auth';
 import { evaluateAchievements, type AchievementState } from '@/domain/achievements';
 import { handicapIndex, scoreDifferential } from '@/domain/analytics';
+import { playLayout, ratingFor } from '@/domain/layout';
 import { courseCollection, type CourseCollection, type ItemState } from '@/domain/collection';
 import { careerStats, summarizeRound, type CareerStats, type HoleLayout, type RoundSummary } from '@/domain/stats';
 import { roundOwner, type Comment, type Course, type CourseSummary, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
@@ -155,7 +156,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     const indexMap = new Map(snap.courseIndex.map((c) => [c.id, c]));
     const simMap = new Map(snap.simCourses.map((c) => [c.id, c]));
     const players = new Map([snap.me, ...snap.friends, ...snap.others].map((p) => [p.id, p]));
-    const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) : courseMap.get(r.courseId));
+    // 9-hole courses play as 18 virtual holes when you go around twice (see domain/layout).
+    const playable = new Map(snap.courses.map((c) => [c.id, playLayout(c)]));
+    const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) : playable.get(r.courseId));
     const allRounds = [...snap.rounds, ...snap.friendRounds];
     const roundMap = new Map(allRounds.map((r) => [r.id, r]));
 
@@ -172,7 +175,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       const differentials = new Map<string, number>();
       for (const r of [...rounds].reverse()) {
         const s = summaries.get(r.id);
-        const rating = r.kind === 'course' ? courseMap.get(r.courseId)?.tees.find((t) => t.id === r.teeId)?.ratings.men : undefined;
+        const course = r.kind === 'course' ? courseMap.get(r.courseId) : undefined;
+        const tee = course?.tees.find((t) => t.id === r.teeId);
+        const rating = course && tee ? ratingFor(tee, 18, course.holes.length) : undefined;
         if (s?.isFull18 && rating) differentials.set(r.id, scoreDifferential(s.strokes, rating.rating, rating.slope));
       }
       const cols = [...collections.values()];

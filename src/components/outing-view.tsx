@@ -80,7 +80,7 @@ export function OutingView({ view }: { view: EventView }) {
           <Text style={styles.time}>{r.round.teeTime ? formatTeeTime(r.round.teeTime) : 'Tee time TBD'}</Text>
           <Text style={styles.meta}>
             {tee ? `${tee.name} tees · ${tee.totalYards.toLocaleString('en-US')} yds` : ''}
-            {tee ? ' · ' : ''}{r.round.holes === 'all' ? '18 holes' : `${r.round.holes === 'front' ? 'Front' : 'Back'} 9`}
+            {tee ? ' · ' : ''}{course && course.holes.length === 9 ? (r.round.holes === 'all' ? '18 holes (twice around)' : '9 holes') : r.round.holes === 'all' ? '18 holes' : `${r.round.holes === 'front' ? 'Front' : 'Back'} 9`}
           </Text>
 
           <View style={styles.slots}>

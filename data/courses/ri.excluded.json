@@ -3,195 +3,6 @@
   "state": "RI",
   "excluded": [
     {
-      "ogapiId": "20f23b1d-4edd-46e0-9a1f-2069a635935f",
-      "name": "Bristol Golf Park",
-      "city": "Bristol",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "befbe266-b7d3-4021-b893-0270fbfbcbbf",
-      "name": "Button Hole Short Course Teaching Center",
-      "city": "Providence",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "5822775c-90c8-4323-9574-d3d03163df72",
-      "name": "Country View Golf Club",
-      "city": "Harrisville",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d17e1ba8-e43a-4956-90f2-e815dcb3986a",
-      "name": "Coventry Pines Public Golf Course",
-      "city": "Coventry",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "1469e92a-63bd-481a-9409-9ffbe24b30ed",
-      "name": "East Greenwich Golf Country Club",
-      "city": "East Greenwich",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "f44a439d-406a-4dab-8982-c7bbc372f4e8",
-      "name": "Fairlawn Golf Course",
-      "city": "Lincoln",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "2e735593-7dff-4be5-960b-e64b0a1bcf8b",
-      "name": "Glocester Country Club",
-      "city": "Chepachet",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "3e7a4e29-0449-4b9f-b3d5-ca82aae334f1",
-      "name": "Goddard State Memorial Park",
-      "city": "Warwick",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "714c77f3-6951-4312-a80e-cb504b71003c",
-      "name": "Harbor Lights Golf Country Club",
-      "city": "Warwick",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "7f799b5d-9e8e-4e68-88ef-ace90952636e",
-      "name": "Jamestown Golf Course",
-      "city": "Jamestown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d8b4d5d9-c12d-4128-b15b-5633b22de3de",
-      "name": "Kings Crossing Golf Club",
-      "city": "North Kingstown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "9d887584-2a45-4ef8-a6a8-1ae2f458404b",
-      "name": "Lincoln Country Club",
-      "city": "Lincoln",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "4b272a04-fd84-4f66-9cb8-27d4098ada10",
-      "name": "Louisquisset Golf Club",
-      "city": "North Providence",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "0c47151d-3ae6-4ee9-90cb-d0ccb868582c",
-      "name": "Met Links",
-      "city": "East Providence",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "30888e00-174d-46de-bb69-70210e787667",
-      "name": "Midville Country Club",
-      "city": "West Warwick",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "90e6a48b-286f-4687-893c-7a0cb43d61ae",
-      "name": "Mulligans Island Par 3 Course",
-      "city": "Cranston",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d21baadc-2216-4c7a-8d7f-5ceb2fbea699",
-      "name": "Newport Country Club",
-      "city": "Newport",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "3a3d814f-a881-4c08-8755-b62e6d14f4e7",
-      "name": "Pinecrest Golf Course",
-      "city": "Carolina",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "bfbce11b-a1c5-47c6-a1e6-8c273d1e4669",
-      "name": "Rolling Green Golf Course",
-      "city": "North Kingstown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "fa458618-ce81-4c37-a61a-b5710d9175ba",
-      "name": "Rolling Greens Golf Course",
-      "city": "North Kingstown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "bf943b72-31a2-438f-9572-53a968d63cee",
-      "name": "Rose Hill Golf Club",
-      "city": "South Kingstown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "68f188f7-82bb-4922-af10-d8cb6d0cca13",
-      "name": "Shelter Harbor Golf Club Par 3 Course",
-      "city": "Westerly",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "2472ded3-2111-477f-b22c-332c795006ff",
-      "name": "Silver Spring Golf Course",
-      "city": "East Providence",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "7ba23720-c61b-4760-9541-3c15e85148de",
-      "name": "South Shore Village Golf Club",
-      "city": "South Kingstown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "7d814a63-9d11-4341-a086-3e2f9370a7eb",
-      "name": "Weekapaug Golf Club",
-      "city": "Westerly",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "f0422288-6afa-49a3-9428-a45c08c8a19e",
-      "name": "West Warwick Country Club",
-      "city": "West Warwick",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "682eb415-bc8d-4e1a-a071-e018ba2fd82d",
-      "name": "Windmill Hill Golf Course",
-      "city": "Warren",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
       "ogapiId": "938d0b34-dc3d-4c94-963d-fc8066b80c5b",
       "name": "Yawgoo Valley Golf Course",
       "city": "Exeter",
@@ -213,11 +24,74 @@
       "reason": "hole data has 6 holes"
     },
     {
+      "ogapiId": "3a3d814f-a881-4c08-8755-b62e6d14f4e7",
+      "name": "Pinecrest Golf Course",
+      "city": "Carolina",
+      "holes": 9,
+      "reason": "implausible total par 39"
+    },
+    {
       "ogapiId": "3137bfa3-7ad9-4a52-ba9d-9b1b94efe9fb",
       "name": "Wentworth Hills Country Club",
       "city": null,
       "holes": 18,
       "reason": "missing town"
+    },
+    {
+      "ogapiId": "20f23b1d-4edd-46e0-9a1f-2069a635935f",
+      "name": "Bristol Golf Park",
+      "city": "Bristol",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "d17e1ba8-e43a-4956-90f2-e815dcb3986a",
+      "name": "Coventry Pines Public Golf Course",
+      "city": "Coventry",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "714c77f3-6951-4312-a80e-cb504b71003c",
+      "name": "Harbor Lights Golf Country Club",
+      "city": "Warwick",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "d8b4d5d9-c12d-4128-b15b-5633b22de3de",
+      "name": "Kings Crossing Golf Club",
+      "city": "North Kingstown",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "4b272a04-fd84-4f66-9cb8-27d4098ada10",
+      "name": "Louisquisset Golf Club",
+      "city": "North Providence",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "bfbce11b-a1c5-47c6-a1e6-8c273d1e4669",
+      "name": "Rolling Green Golf Course",
+      "city": "North Kingstown",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "fa458618-ce81-4c37-a61a-b5710d9175ba",
+      "name": "Rolling Greens Golf Course",
+      "city": "North Kingstown",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "2472ded3-2111-477f-b22c-332c795006ff",
+      "name": "Silver Spring Golf Course",
+      "city": "East Providence",
+      "holes": 9,
+      "reason": "no tee data"
     },
     {
       "ogapiId": "cf1f8915-e123-4036-bb92-c7bd638def38",

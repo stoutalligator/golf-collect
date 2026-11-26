@@ -3,466 +3,11 @@
   "state": "CT",
   "excluded": [
     {
-      "ogapiId": "7f619d05-d5ef-49af-9d8c-81acc519a936",
-      "name": "Apple Nine At Lyman Orchards Golf Club",
-      "city": "Middlefield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "24be7de5-c8f8-4bde-ac5b-9a9d6f03c9a3",
-      "name": "Birchwood Country Club",
-      "city": "Westport",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d3790600-fc14-495d-8034-69c1e322769d",
-      "name": "Blue At Golf Club Of Avon",
-      "city": "Avon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "14eb6ddf-acc8-488b-a6ad-cf08f60ceeda",
-      "name": "Blue Fox Run Golf Club Blue Nine",
-      "city": "Avon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "b05f8116-ed6c-4a2a-a773-892cc3b97850",
-      "name": "Blue Fox Run Golf Club Red Nine",
-      "city": "Avon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "cab9361b-22ea-4bdf-adc7-a4b539268b88",
-      "name": "Blue Fox Run Golf Club White Nine",
-      "city": "Avon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "5f793174-376f-41bc-87d5-1eb5e82df2f7",
-      "name": "Buena Vista Golf Course",
-      "city": "West Hartford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "4790f931-1f37-4146-8fc1-9615af21796e",
-      "name": "Canaan Country Club",
-      "city": "Canaan",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "a4315a32-9ac3-4fe4-8975-6a3e37aef592",
-      "name": "Candlewood Golf Club",
-      "city": "New Milford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "28d127e0-3bab-412f-b073-f22ef50422b2",
-      "name": "Candlewood Lake Club",
-      "city": "New Milford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "090ad6c8-0006-46bf-8dd3-a506dd7903a6",
-      "name": "Candlewood Lake Club",
-      "city": "Brookfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d576c90d-df75-41af-bc15-1e2f9b54bd31",
-      "name": "Carl Dickman Par 3 Golf Course",
-      "city": "Fairfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "c511fbcc-508d-4b12-8d3e-1c35de887f79",
-      "name": "Chanticlair Golf Club",
-      "city": "Colchester",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "08fb556b-8b67-4fcd-ba1b-d92a5f5705a1",
-      "name": "Copper Hill Golf Club",
-      "city": "East Granby",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "b18ec822-2cab-4782-8ac2-ee50076a0af1",
-      "name": "Eastwood Country Club",
-      "city": "Torrington",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "9ad7d346-76b5-44c2-94f9-73b81e3ec861",
-      "name": "Farmingbury Hills Golf Club",
-      "city": "Wolcott",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "3af11fcf-fa4a-48ac-ba1b-e7afea8838df",
-      "name": "Fenwick Golf Club",
-      "city": "Old Saybrook",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d93e7c3a-a552-477d-b222-3df5578668cf",
-      "name": "Gainfield Farms Golf Course",
-      "city": "Southbury",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "aeb97cc6-1b1f-4c39-a230-d57c9c759771",
-      "name": "Goose Run Golf Course At Naval Submarine Base",
-      "city": "Groton",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "2d28bc8c-7299-4885-a333-e176e24f642a",
-      "name": "Grassmere Country Club",
-      "city": "Enfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "39c73610-6892-4ada-bafe-11db71bc1e74",
-      "name": "Green Woods Country Club",
-      "city": "Winsted",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "867fbede-40fd-41fd-958d-d1b932249c8d",
-      "name": "Guilford Lakes Golf Course",
-      "city": "Guilford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "5c949956-1402-4581-ade6-8f07a3cd8250",
-      "name": "Harrisville Golf Course",
-      "city": "Woodstock",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
       "ogapiId": "80b71b2a-6cf4-4e1a-b25e-9f557907e2a9",
       "name": "Highfield Club",
       "city": "Middlebury",
       "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "743f034e-e801-4044-bdbd-619d75659f85",
-      "name": "Highland Golf Club",
-      "city": "Shelton",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "ab9be91a-51aa-44e6-838f-59502e901e85",
-      "name": "Highland Greens Golf Course",
-      "city": "Prospect",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "602ff658-4590-468c-a3e1-e625b554fa44",
-      "name": "Homewood Acres Golf Course",
-      "city": "Woodbridge",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "32163c94-03c3-4424-a3bc-5dce8658d109",
-      "name": "Hop Brook Golf Course",
-      "city": "Naugatuck",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "e49f6ee7-56b6-4a7b-8599-5a5e820c3228",
-      "name": "Hotchkiss School Golf Course",
-      "city": "Lakeville",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "25d343cc-1bdc-465b-80d0-d8e7f32472b6",
-      "name": "Indian Springs Golf Club",
-      "city": "Middlefield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "ceb78a0f-b49a-4f19-a1b6-55dba5425c14",
-      "name": "Lake Waramaug Country Club",
-      "city": "New Preston",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "c271bb27-2799-4a47-b719-4ee8a59652ce",
-      "name": "Litchfield Country Club",
-      "city": "Litchfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "f6feb5ee-a7ec-49ed-8164-01636e023275",
-      "name": "Milbrook Club",
-      "city": "Greenwich",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d3f49562-db9d-46ab-81e4-b4327d707fa9",
-      "name": "Miner Hills Golf Course",
-      "city": "Middletown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "fd72d8fa-c53a-4794-9e48-df2878095261",
-      "name": "Minnechaug Golf Course",
-      "city": "Glastonbury",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "e16a9f77-1cf7-4116-b88b-eeafa7a0f15a",
-      "name": "Newtown Country Club",
-      "city": "Newtown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "f14bb93a-5e86-4835-b83c-326878a4e16b",
-      "name": "Nine Hole At Race Brook Country Club",
-      "city": "Orange",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "376c1161-9a39-49df-9031-d811a0591a6c",
-      "name": "Norfolk Country Club",
-      "city": "Norfolk",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "2c2b1bf9-a3ce-47d3-99b2-f073b3a82d26",
-      "name": "North Ridge Golf Club",
-      "city": "Southington",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "af9901b3-c44c-45c1-84c4-a48557ec0114",
-      "name": "Old Lyme Country Club",
-      "city": "Old Lyme",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "b9986af2-f46f-4408-8f74-099c7cfec21f",
-      "name": "Pine Orchard Yacht Country Club",
-      "city": "Branford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "24fd24cd-ba38-4a3b-bcbb-5d440e13f935",
-      "name": "Pomperaug Golf Club",
-      "city": "Southbury",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "2f331494-7d17-4337-9180-a35ffb88df49",
-      "name": "Quarry View Golf Course",
-      "city": "Canaan",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "a52bd1af-809c-48cc-9bbc-d9c8f4139990",
-      "name": "Red At Golf Club Of Avon",
-      "city": "Avon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "1b985be2-01d8-4610-a21f-3a06f16b2d14",
-      "name": "Red At Tunxis Country Club",
-      "city": "Farmington",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "313051e8-98d0-4462-84af-dcdda99e71ed",
-      "name": "Rock Ridge Country Club",
-      "city": "Newtown",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "80511471-9eec-403a-97b2-1c55857c043c",
-      "name": "Rolling Greens Golf Course",
-      "city": "Rocky Hill",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "ed44b18e-3968-4fca-87b9-393d84e41896",
-      "name": "Sharon Country Club",
-      "city": "Sharon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d42a2150-9312-4af2-8c08-2413a4c1c42d",
-      "name": "Short Beach Golf Course",
-      "city": "Stratford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "166ceee8-932c-4e85-aa54-316630843184",
-      "name": "Silvermine Golf Club Pro Shop 9 Course",
-      "city": "Norwalk",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "1143e842-fa18-451e-995c-4e35b208f07e",
-      "name": "Sleeping Giant Golf Course",
-      "city": "Hamden",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "d15d6360-084c-48eb-8b1b-081b42a86fc3",
-      "name": "Stonybrook Golf Course",
-      "city": "Litchfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "98aae370-b512-47b0-add7-f2d02ee36dcb",
-      "name": "Suffield Country Club",
-      "city": "Suffield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "fc59d9e9-6ad8-407d-ab0c-c32ae87957f7",
-      "name": "Sunset Hill Golf Club",
-      "city": "Brookfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "c894b19d-988d-4275-a53d-574c163e7ac1",
-      "name": "Tashua Knolls Golf Club Tashua Glen",
-      "city": "Trumbull",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "1bc2f193-c9aa-413d-980b-a6162ab16ae8",
-      "name": "The North At Goodwin Golf Course",
-      "city": "Hartford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "36a5d89c-e7c8-4843-988f-362b42955da2",
-      "name": "The Orchards Golf Course",
-      "city": "Milford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "7edf4c57-4011-4a98-a976-bed2b84678d7",
-      "name": "Tumble Brook Country Club Blue Nine",
-      "city": "Bloomfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "df6ff888-1ecb-4626-9604-e80732a4aca9",
-      "name": "Tumble Brook Country Club Green Nine",
-      "city": "Bloomfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "74083336-2228-4a31-bc30-eb6abecca5bc",
-      "name": "Tumble Brook Country Club Red Nine",
-      "city": "Bloomfield",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "a4ff5d08-351d-493b-9d6f-7a352ac87d24",
-      "name": "Twin Lakes Golf Course",
-      "city": "North Branford",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "2c60f1ad-6478-4e93-8ddf-fdf6441b963c",
-      "name": "Vineyard Valley Golf Club",
-      "city": "Pomfret Center",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "9ebf1ec3-dd03-4b6a-a1ce-b7f948f02524",
-      "name": "Washington Golf Club",
-      "city": "CT 06793",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "a0c59a2d-8deb-4e6a-9cbc-5c13b7a9c5b0",
-      "name": "White At Golf Club Of Avon",
-      "city": "Avon",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "6bd4cd4c-c228-4318-b4bf-561f5895eaeb",
-      "name": "Woodhaven Country Club",
-      "city": "Bethany",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
-    },
-    {
-      "ogapiId": "63a88b3d-c7a7-4ecb-8a45-c10154381771",
-      "name": "Woodstock Golf Course",
-      "city": "Woodstock",
-      "holes": 9,
-      "reason": "9-hole course (only 18-hole cards are imported so far)"
+      "reason": "9-hole course with extra, non-empty hole data"
     },
     {
       "ogapiId": "0fd8ea9b-2fd0-4bb0-aafb-7977d115a84c",
@@ -549,6 +94,20 @@
       "reason": "hole data has 9 holes"
     },
     {
+      "ogapiId": "af9901b3-c44c-45c1-84c4-a48557ec0114",
+      "name": "Old Lyme Country Club",
+      "city": "Old Lyme",
+      "holes": 9,
+      "reason": "implausible total par 43"
+    },
+    {
+      "ogapiId": "c271bb27-2799-4a47-b719-4ee8a59652ce",
+      "name": "Litchfield Country Club",
+      "city": "Litchfield",
+      "holes": 9,
+      "reason": "implausible total par 45"
+    },
+    {
       "ogapiId": "52bb8569-685a-4fc8-85e2-cd17916161d1",
       "name": "Cedar Knob Golf Course",
       "city": "Somers",
@@ -582,6 +141,118 @@
       "city": null,
       "holes": 18,
       "reason": "missing town"
+    },
+    {
+      "ogapiId": "14eb6ddf-acc8-488b-a6ad-cf08f60ceeda",
+      "name": "Blue Fox Run Golf Club Blue Nine",
+      "city": "Avon",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "4790f931-1f37-4146-8fc1-9615af21796e",
+      "name": "Canaan Country Club",
+      "city": "Canaan",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "c511fbcc-508d-4b12-8d3e-1c35de887f79",
+      "name": "Chanticlair Golf Club",
+      "city": "Colchester",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "9ad7d346-76b5-44c2-94f9-73b81e3ec861",
+      "name": "Farmingbury Hills Golf Club",
+      "city": "Wolcott",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "3af11fcf-fa4a-48ac-ba1b-e7afea8838df",
+      "name": "Fenwick Golf Club",
+      "city": "Old Saybrook",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "f6feb5ee-a7ec-49ed-8164-01636e023275",
+      "name": "Milbrook Club",
+      "city": "Greenwich",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "fd72d8fa-c53a-4794-9e48-df2878095261",
+      "name": "Minnechaug Golf Course",
+      "city": "Glastonbury",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "e16a9f77-1cf7-4116-b88b-eeafa7a0f15a",
+      "name": "Newtown Country Club",
+      "city": "Newtown",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "b9986af2-f46f-4408-8f74-099c7cfec21f",
+      "name": "Pine Orchard Yacht Country Club",
+      "city": "Branford",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "2f331494-7d17-4337-9180-a35ffb88df49",
+      "name": "Quarry View Golf Course",
+      "city": "Canaan",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "313051e8-98d0-4462-84af-dcdda99e71ed",
+      "name": "Rock Ridge Country Club",
+      "city": "Newtown",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "80511471-9eec-403a-97b2-1c55857c043c",
+      "name": "Rolling Greens Golf Course",
+      "city": "Rocky Hill",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "98aae370-b512-47b0-add7-f2d02ee36dcb",
+      "name": "Suffield Country Club",
+      "city": "Suffield",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "9ebf1ec3-dd03-4b6a-a1ce-b7f948f02524",
+      "name": "Washington Golf Club",
+      "city": "CT 06793",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "63a88b3d-c7a7-4ecb-8a45-c10154381771",
+      "name": "Woodstock Golf Course",
+      "city": "Woodstock",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "aeb97cc6-1b1f-4c39-a230-d57c9c759771",
+      "name": "Goose Run Golf Course At Naval Submarine Base",
+      "city": "Groton",
+      "holes": 9,
+      "reason": "unknown access type \"Military\""
     },
     {
       "ogapiId": "1c6ac0fd-b2f9-4ff3-91f2-f9ce5a0a07ea",

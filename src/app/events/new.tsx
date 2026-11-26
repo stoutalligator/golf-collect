@@ -8,6 +8,7 @@ import { Tap } from '@/components/motion';
 import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
 import { defaultFormat, FORMAT_LABEL, type Basis, type EventKind, type EventRound, type Scoring } from '@/domain/competition';
+import { isNineHole } from '@/domain/layout';
 import { addDaysISO, formatDay, formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData, useCourse } from '@/state/app-data';
 import { colors, fonts, radius, space, type } from '@/theme';
@@ -144,7 +145,9 @@ export default function NewEvent() {
                 );
               })}
             </View>
-            <Chips value={holes} onChange={setHoles} options={[{ value: 'all', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]} />
+            <Chips value={isNineHole(course) && holes === 'back' ? 'front' : holes} onChange={setHoles} options={isNineHole(course)
+                ? [{ value: 'front' as const, label: '9 holes' }, { value: 'all' as const, label: '18 · twice around' }]
+                : [{ value: 'all' as const, label: '18 holes' }, { value: 'front' as const, label: 'Front 9' }, { value: 'back' as const, label: 'Back 9' }]} />
           </>
         ) : null}
 

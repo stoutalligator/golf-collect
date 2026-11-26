@@ -73,7 +73,7 @@ export default function Courses() {
                   <CourseThumb course={c} />
                   <View style={{ flex: 1, gap: 2 }}>
                     <Text style={styles.name} numberOfLines={1}>{c.name}</Text>
-                    <Text style={styles.meta} numberOfLines={1}>{c.city}, {c.state}  ·  {ACCESS_LABEL[c.access]}{c.par ? `  ·  Par ${c.par}` : ''}</Text>
+                    <Text style={styles.meta} numberOfLines={1}>{c.city}, {c.state}  ·  {ACCESS_LABEL[c.access]}{c.holeCount === 9 ? '  ·  9 holes' : ''}{c.par ? `  ·  Par ${c.par}` : ''}</Text>
                     <View style={styles.status}>
                       {played ? (
                         <View style={styles.inline}>

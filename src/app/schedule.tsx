@@ -13,6 +13,7 @@ import { CourseThumb } from '@/components/round-card';
 import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
 import { defaultFormat, type EventRound } from '@/domain/competition';
+import { isNineHole } from '@/domain/layout';
 import type { Player } from '@/domain/types';
 import { addDaysISO, formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData, useCourse } from '@/state/app-data';
@@ -94,7 +95,7 @@ export default function Schedule() {
     try {
       if (editing && editRound) {
         await data.updateEvent(editing.id, { name: name.trim() || autoName, format: { ...editing.format, ...format } });
-        await data.updateEventRound(editRound.id, { scheduledOn: date, teeTime, courseId, teeId: tee, holes });
+        await data.updateEventRound(editRound.id, { scheduledOn: date, teeTime, courseId, teeId: tee, holes: course && isNineHole(course) && holes === 'back' ? 'front' : holes });
         if (invite.length) await data.inviteToEvent(editing.id, invite);
         if (router.canGoBack()) router.back();
         else router.replace(`/event/${editing.id}`);
@@ -104,7 +105,7 @@ export default function Schedule() {
           name: name.trim() || autoName,
           format,
           inviteIds: invite,
-          rounds: [{ name: 'Round', courseId, teeId: tee, scheduledOn: date, teeTime, holes }],
+          rounds: [{ name: 'Round', courseId, teeId: tee, scheduledOn: date, teeTime, holes: course && isNineHole(course) && holes === 'back' ? 'front' : holes }],
         });
         router.replace(`/event/${id}`);
       }
@@ -138,7 +139,7 @@ export default function Schedule() {
             <Text style={styles.ticketMeta}>
               {teeTime ? formatTeeTime(teeTime) : 'Tee time TBD'}
               {teeInfo ? ` · ${teeInfo.name} tees` : ''}
-              {holes !== 'all' ? ` · ${holes === 'front' ? 'Front' : 'Back'} 9` : ' · 18 holes'}
+              {course && isNineHole(course) ? (holes === 'all' ? ' · 18 holes (twice around)' : ' · 9 holes') : holes !== 'all' ? ` · ${holes === 'front' ? 'Front' : 'Back'} 9` : ' · 18 holes'}
             </Text>
             <View style={styles.slots}>
               {Array.from({ length: Math.max(limit || groupPlayers.length, groupPlayers.length) }, (_, i) => {
@@ -210,7 +211,9 @@ export default function Schedule() {
                   );
                 })}
               </ScrollView>
-              <Chips value={holes} onChange={setHoles} options={[{ value: 'all', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]} />
+              <Chips value={isNineHole(course) && holes === 'back' ? 'front' : holes} onChange={setHoles} options={isNineHole(course)
+                ? [{ value: 'front' as const, label: '9 holes' }, { value: 'all' as const, label: '18 · twice around' }]
+                : [{ value: 'all' as const, label: '18 holes' }, { value: 'front' as const, label: 'Front 9' }, { value: 'back' as const, label: 'Back 9' }]} />
             </>
           ) : null}
         </Section>

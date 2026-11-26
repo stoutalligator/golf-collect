@@ -13,6 +13,7 @@ import { uuid } from '@/lib/ids';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
 import { linkableEventRounds } from '@/state/events';
+import { isNineHole, playLayout } from '@/domain/layout';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { Tap } from '@/components/motion';
 
@@ -59,8 +60,9 @@ export default function NewRound() {
 
   const start = async () => {
     if (!layout) return;
-    const all = layout.holes.map((h) => h.number);
-    const holeNumbers = holes === '18' ? all : holes === 'front' ? all.slice(0, 9) : all.slice(9, 18);
+    const all = playLayout(layout).holes.map((h) => h.number); // 9-hole courses: 18 = twice around
+    const effective = isNineHole(layout) && holes === 'back' ? 'front' : holes;
+    const holeNumbers = effective === '18' ? all : effective === 'front' ? all.slice(0, 9) : all.slice(9, 18);
     const now = new Date().toISOString();
     const round: Round = {
       id: uuid(),
@@ -101,7 +103,7 @@ export default function NewRound() {
             ) : <SceneImage seed={layout.id} style={styles.selectedThumb} />}
             <View style={{ flex: 1 }}>
               <Text style={styles.selectedName}>{layout.name}</Text>
-              <Text style={styles.sub}>Par {layout.holes.reduce((s, h) => s + h.par, 0)} · tap to change</Text>
+              <Text style={styles.sub}>{isNineHole(layout) ? '9 holes · ' : ''}Par {layout.holes.reduce((s, h) => s + h.par, 0)} · tap to change</Text>
             </View>
             <Icon name="check" size={20} color={colors.fairway} />
           </Tap>
@@ -143,7 +145,13 @@ export default function NewRound() {
         {layout ? (
           <>
             <Text style={styles.label}>Holes</Text>
-            <Chips value={holes} onChange={setHoles} options={[{ value: '18', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]} />
+            <Chips
+              value={isNineHole(layout) && holes === 'back' ? 'front' : holes}
+              onChange={setHoles}
+              options={isNineHole(layout)
+                ? [{ value: 'front', label: '9 holes' }, { value: '18', label: '18 · twice around' }]
+                : [{ value: '18', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]}
+            />
 
             {linkable.length ? (
               <>

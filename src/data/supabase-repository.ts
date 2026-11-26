@@ -99,6 +99,7 @@ type CourseRow = {
   course_tees: {
     id: string; name: string; par: number; total_yards: number; hole_yardages: number[] | null; sort_order: number;
     rating_men: number | null; slope_men: number | null; rating_women: number | null; slope_women: number | null;
+    rated_holes: number | null;
   }[];
   course_sources: { name: string; url: string; license: string | null; checked_on: string }[];
 };
@@ -110,6 +111,7 @@ function toCourse(c: CourseRow): Course {
     par: t.par,
     totalYards: t.total_yards,
     yardages: t.hole_yardages,
+    ...(t.rated_holes === 9 ? { ratedHoles: 9 as const } : {}),
     ratings: {
       ...(t.rating_men !== null && t.slope_men !== null ? { men: { rating: Number(t.rating_men), slope: t.slope_men } } : {}),
       ...(t.rating_women !== null && t.slope_women !== null ? { women: { rating: Number(t.rating_women), slope: t.slope_women } } : {}),

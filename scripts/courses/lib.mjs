@@ -119,23 +119,63 @@ export function cardProblem(par, handicap) {
   return null;
 }
 
-/** Group OpenGolfAPI tee rows (one per gender) into tees; hole yardages kept only when they add up. */
-export function teesFrom(d, notes) {
+/** 9-hole card checks: 9 holes, par 3–6 each, stroke indexes 9 distinct values in 1–18 (1–9, odd or even sets). */
+export function nineProblem(par, handicap) {
+  if (par.length !== 9) return `expected 9 holes, got ${par.length}`;
+  if (par.some((p) => !Number.isInteger(p) || p < 3 || p > 6)) return 'implausible hole par';
+  if (handicap.some((h) => !Number.isInteger(h) || h < 1 || h > 18) || new Set(handicap).size !== 9) return 'stroke index is not 9 distinct values in 1–18';
+  const total = sum(par);
+  if (total < 27 || total > 38) return `implausible total par ${total}`;
+  return null;
+}
+
+/**
+ * Group OpenGolfAPI tee rows (one per gender) into tees; hole yardages kept only when they add up.
+ * `holeCount` is the course's real holes (9 or 18). On 9-hole courses each rating keeps its basis (`ratedHoles`):
+ * rows named "(18-hole)" are ratings for playing the nine twice; other rows are read by magnitude (a 9-hole rating
+ * is ~27–40, an 18-hole one ~55–80). Tee yardage is always for the real holes.
+ */
+export function teesFrom(d, notes, holeCount = 18) {
   const teeMap = new Map();
+  const cardPar = sum((d.holes_data ?? []).slice(0, holeCount).map((h) => h.par ?? 0));
   for (const t of d.tees ?? []) {
     if (!t.tee_name) continue;
-    if (/9-hole/i.test(t.tee_name)) continue; // 9-hole rating rows don't describe the 18-hole card
-    const name = titleCase(t.tee_name.replace(/\s*\(18-hole\)\s*/i, '').trim());
+    // On a 9-hole course, a row whose par is ~double the card's describes playing it twice (18 holes).
+    const tagged18 = /\(18-hole\)/i.test(t.tee_name) || (holeCount === 9 && !!t.par && t.par >= cardPar * 1.6);
+    const tagged9 = /\(9-hole\)/i.test(t.tee_name);
+    if (holeCount === 18 && tagged9) continue; // 9-hole rating rows don't describe an 18-hole card
+    const name = titleCase(t.tee_name.replace(/\s*\((18|9)-hole\)\s*/i, '').trim());
     const id = slug(name);
-    const tee = teeMap.get(id) ?? { id, name, par: t.par ?? d.par, totalYards: t.yardage, yardages: null, ratings: {} };
-    if (t.course_rating && t.slope) tee.ratings[t.gender === 'Female' ? 'women' : 'men'] = { rating: t.course_rating, slope: t.slope };
-    if (!tee.totalYards && t.yardage) tee.totalYards = t.yardage;
+    const tee = teeMap.get(id) ?? { id, name, par: null, totalYards: 0, yardages: null, ratings: {} };
+    // Yardage and par describe the real holes; an 18-hole row on a 9-hole course doesn't.
+    if (!(holeCount === 9 && tagged18)) {
+      if (!tee.totalYards && t.yardage) tee.totalYards = t.yardage;
+      if (!tee.par && t.par) tee.par = t.par;
+    }
+    if (t.course_rating && t.slope) {
+      const ratedHoles = holeCount === 18 ? 18 : tagged18 ? 18 : tagged9 ? 9 : t.course_rating < 45 ? 9 : 18;
+      if (tee.ratedHoles && tee.ratedHoles !== ratedHoles) {
+        notes.push(`${name}: mixed 9- and 18-hole ratings; kept the ${tee.ratedHoles}-hole rating.`);
+      } else {
+        tee.ratedHoles = ratedHoles;
+        tee.ratings[t.gender === 'Female' ? 'women' : 'men'] = { rating: t.course_rating, slope: t.slope };
+      }
+    }
     teeMap.set(id, tee);
   }
-  const holes = d.holes_data ?? [];
+  const holes = (d.holes_data ?? []).slice(0, holeCount);
+  const coursePar = cardPar;
   for (const tee of teeMap.values()) {
+    if (!tee.par) tee.par = holeCount === 9 ? coursePar : d.par ?? coursePar;
+    if (holeCount === 9 && tee.par !== coursePar) {
+      notes.push(`${tee.name}: tee par ${tee.par} doesn't match the card (par ${coursePar}); tee left out.`);
+      tee.totalYards = 0; // dropped below
+      continue;
+    }
+    if (holeCount === 18 || !tee.ratedHoles) delete tee.ratedHoles;
     const ys = holes.map((h) => h.yardages?.[tee.id] ?? h.yardages?.[tee.name.toLowerCase()]);
-    if (ys.length === 18 && ys.every((y) => typeof y === 'number' && y > 0) && tee.totalYards) {
+    if (holeCount === 9 && !tee.totalYards && ys.every((y) => typeof y === 'number' && y > 0)) tee.totalYards = sum(ys);
+    if (ys.length === holeCount && ys.every((y) => typeof y === 'number' && y > 0) && tee.totalYards) {
       const diff = Math.abs(sum(ys) - tee.totalYards) / tee.totalYards;
       if (diff <= YARDAGE_TOLERANCE) {
         tee.yardages = ys;
@@ -152,7 +192,8 @@ export function teesFrom(d, notes) {
 export function describe(c) {
   const access = { public: 'Public', municipal: 'Municipal', 'semi-private': 'Semi-private', private: 'Private' }[c.access];
   const maxYards = Math.max(...c.tees.map((t) => t.totalYards));
-  const parts = [`${access} 18-hole course in ${c.city}, par ${sum(c.holes.map((h) => h.par))}, playing up to ${maxYards.toLocaleString('en-US')} yards`];
+  const n = c.holes.length;
+  const parts = [`${access} ${n}-hole course in ${c.city}, par ${sum(c.holes.map((h) => h.par))}, playing up to ${maxYards.toLocaleString('en-US')} yards${n === 9 ? ' (play it twice for 18)' : ''}`];
   if (c.architect) parts.push(`designed by ${c.architect}`);
   if (c.yearOpened) parts.push(`dating to ${c.yearOpened}`);
   return parts.join(', ') + '.';
