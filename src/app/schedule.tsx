@@ -1,6 +1,6 @@
 /**
- * Schedule a round with friends (or edit one with ?event=<id>). A focused flow: live invitation preview, a date
- * strip, tee-time presets, group size, invites and a note. Saved as an "outing" event with one event round.
+ * Schedule a round with friends (or edit one with ?event=<id>). A focused flow: live invitation preview, quick
+ * date picks (or a calendar), one tee-time control, group size, invites and a note. Saved as an "outing" event with one event round.
  *
  * League mode: ?into=<eventId> adds a one-off round to a league's (or tournament's) schedule, and ?round=<id> edits
  * or removes one. The league's members are the players, so there's no group size, invites or note.
@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@/components/icons';
 import { Animated, popIn, Tap } from '@/components/motion';
 import { CourseThumb } from '@/components/round-card';
+import { DatePicker, TeeTimePicker } from '@/components/date-time';
 import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
 import { defaultFormat, type EventRound } from '@/domain/competition';
@@ -23,8 +24,7 @@ import { useAppData, useCourse } from '@/state/app-data';
 import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 type Holes = EventRound['holes'];
-const PRESETS = ['06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '17:30'];
-const GROUPS = [{ value: '2', label: 'Twosome' }, { value: '3', label: 'Threesome' }, { value: '4', label: 'Foursome' }, { value: '0', label: 'Open' }] as const;
+const GROUPS = [{ value: '2', label: '2' }, { value: '3', label: '3' }, { value: '4', label: '4' }, { value: '0', label: 'Any' }] as const;
 const WEEKDAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const dateParts = (iso: string) => {
@@ -36,12 +36,6 @@ const dateParts = (iso: string) => {
     month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
     weekend: d.getDay() === 0 || d.getDay() === 6,
   };
-};
-
-const shiftTime = (t: string, minutes: number) => {
-  const [h, m] = t.split(':').map(Number);
-  const total = Math.min(20 * 60, Math.max(5 * 60, h * 60 + m + minutes));
-  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
 };
 
 /** Next Saturday (or today if it's Saturday). */
@@ -91,12 +85,8 @@ export default function Schedule() {
     const q = query.trim().toLowerCase();
     return q.length < 2 ? [] : data.courseIndex.filter((c) => c.name.toLowerCase().includes(q) || c.city.toLowerCase().includes(q)).slice(0, 8);
   }, [query, data.courseIndex]);
-  // Leagues plan further out; an edited round that's already past keeps its own date in the strip.
+  // An edited round that's already past can keep its own date.
   const firstDay = editRound && editRound.scheduledOn < todayISO() ? editRound.scheduledOn : todayISO();
-  const days = useMemo(() => {
-    const back = Math.round((Date.parse(`${todayISO()}T12:00:00`) - Date.parse(`${firstDay}T12:00:00`)) / 86400000);
-    return Array.from({ length: back + (league ? 120 : 35) }, (_, i) => addDaysISO(firstDay, i));
-  }, [league, firstDay]);
 
   const parts = dateParts(date);
   const shortCourse = (course?.name ?? '').replace(/\s+(Golf Course|Golf Club|Country Club|Golf & Country Club|Club)\b.*$/i, '') || 'the course';
@@ -263,43 +253,10 @@ export default function Schedule() {
           ) : null}
         </Section>
 
-        {/* Date */}
+        {/* Date & time */}
         <Section title="When">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hRow} style={styles.hScroll}>
-            {days.map((d) => {
-              const p = dateParts(d);
-              const on = d === date;
-              return (
-                <Tap key={d} onPress={() => setDate(d)} haptic={on ? 'none' : 'select'} scaleTo={0.94} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${p.weekday} ${p.month} ${p.day}`} style={[styles.day, p.weekend && styles.dayWeekend, on && styles.on]}>
-                  <Text style={[styles.dayDow, on && styles.onSub]}>{d === todayISO() ? 'TODAY' : p.dow}</Text>
-                  <Text style={[styles.dayNum, on && styles.onText]}>{p.day}</Text>
-                  <Text style={[styles.dayMonth, on && styles.onSub]}>{p.month}</Text>
-                </Tap>
-              );
-            })}
-          </ScrollView>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hRow} style={styles.hScroll}>
-            {PRESETS.map((t) => {
-              const on = t === teeTime;
-              return (
-                <Tap key={t} onPress={() => setTeeTime(t)} haptic={on ? 'none' : 'select'} scaleTo={0.94} accessibilityRole="button" accessibilityState={{ selected: on }} style={[styles.timeChip, on && styles.on]}>
-                  <Text style={[styles.timeText, on && styles.onText]}>{formatTeeTime(t)}</Text>
-                </Tap>
-              );
-            })}
-          </ScrollView>
-          <View style={styles.fine}>
-            <Tap onPress={() => setTeeTime((t) => shiftTime(t ?? '08:00', -10))} haptic="select" scaleTo={0.9} accessibilityRole="button" accessibilityLabel="Ten minutes earlier" style={styles.stepBtn}>
-              <Icon name="minus" size={16} color={colors.fairway} />
-            </Tap>
-            <Text style={styles.fineValue}>{teeTime ? formatTeeTime(teeTime) : 'No tee time'}</Text>
-            <Tap onPress={() => setTeeTime((t) => shiftTime(t ?? '08:00', 10))} haptic="select" scaleTo={0.9} accessibilityRole="button" accessibilityLabel="Ten minutes later" style={styles.stepBtn}>
-              <Icon name="plus" size={16} color={colors.fairway} />
-            </Tap>
-            <Tap onPress={() => setTeeTime(teeTime ? undefined : '08:00')} haptic="select" scaleTo={0.95} accessibilityRole="button" style={styles.tbd}>
-              <Text style={styles.pillText}>{teeTime ? 'TBD' : 'Set time'}</Text>
-            </Tap>
-          </View>
+          <DatePicker value={date} onChange={setDate} min={firstDay} />
+          <TeeTimePicker value={teeTime} onChange={setTeeTime} />
         </Section>
 
         {league ? (
@@ -314,7 +271,12 @@ export default function Schedule() {
         <>
         {/* Group */}
         <Section title="Who">
-          <Chips value={spots} onChange={setSpots} options={GROUPS.map((g) => ({ value: g.value, label: g.label }))} />
+          <View style={styles.sizeRow}>
+            <Text style={styles.sizeLabel}>Group size</Text>
+            <View style={{ flex: 1 }}>
+              <Chips value={spots} onChange={setSpots} options={GROUPS.map((g) => ({ value: g.value, label: g.label }))} />
+            </View>
+          </View>
           <View style={styles.wrap}>
             {data.friends.map((f) => {
               const on = invite.includes(f.id);
@@ -336,7 +298,7 @@ export default function Schedule() {
               );
             })}
           </View>
-          {over ? <Text style={styles.warn}>That’s more than a {GROUPS.find((g) => g.value === spots)?.label.toLowerCase()}. Everyone can still accept; first to say yes are in.</Text> : null}
+          {over ? <Text style={styles.warn}>That’s more than {limit} players. Everyone can still accept; the first {limit} to say yes are in.</Text> : null}
           <Text style={styles.help}>Friends get a notification. You’ll also get a join code to share with anyone else.</Text>
         </Section>
 
@@ -442,5 +404,7 @@ const styles = themed(() => StyleSheet.create({
   friendName: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   input: { minHeight: 48, borderRadius: radius.md, backgroundColor: colors.paper, paddingHorizontal: space.md, fontFamily: fonts.body, fontSize: 16, color: colors.ink, outlineStyle: 'none' } as never,
   noteInput: { minHeight: 76, paddingTop: 12, textAlignVertical: 'top' },
+  sizeRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
+  sizeLabel: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.ink },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule, backgroundColor: colors.cream },
 }));

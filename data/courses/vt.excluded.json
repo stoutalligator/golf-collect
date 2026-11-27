@@ -1,0 +1,90 @@
+{
+  "generated": "2026-11-27",
+  "state": "VT",
+  "excluded": [
+    {
+      "ogapiId": "82e72ced-287d-4d50-b5d0-4dd11118f5f8",
+      "name": "Club De Golf Lac Brome",
+      "city": "Lac Brome",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "c9f1fbff-bccb-4c7e-98b3-5cc19f4bd6f9",
+      "name": "Sitzmark Lodge",
+      "city": "Wilmington",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "989f2436-2375-47e1-bae9-4f3e5691beea",
+      "name": "The Golf Club at The Equinox Resort",
+      "city": "Manchester",
+      "holes": 18,
+      "reason": "hole data has 19 holes"
+    },
+    {
+      "ogapiId": "8f6eb750-8fc9-4307-be05-85784779e4d7",
+      "name": "The Quechee Club Highland Course",
+      "city": "Quechee",
+      "holes": 18,
+      "reason": "hole data has 27 holes"
+    },
+    {
+      "ogapiId": "453bcfdb-9602-4372-9726-4e5a28225517",
+      "name": "Stoweflake Mountain Resort Spa",
+      "city": "Stowe",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "9515c004-548d-4db6-a4e3-986af4496275",
+      "name": "Blush Hill Country Club",
+      "city": "Waterbury",
+      "holes": 9,
+      "reason": "implausible total par 41"
+    },
+    {
+      "ogapiId": "4affc001-c9a4-4b62-874c-2c46e53e9196",
+      "name": "Stamford Valley Golf Course",
+      "city": "Stamford",
+      "holes": 9,
+      "reason": "implausible total par 43"
+    },
+    {
+      "ogapiId": "182e97f3-8e69-4b57-bcc4-f96a6fca93bb",
+      "name": "Rocky Ridge Golf Club",
+      "city": "St George",
+      "holes": 18,
+      "reason": "implausible total par 87"
+    },
+    {
+      "ogapiId": "91ba101e-5099-42fd-9b3f-5e581511c2ed",
+      "name": "Bakersfield Country Club",
+      "city": "Bakersfield",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "4f0d444d-df2c-470c-b9be-03d1daab2c9b",
+      "name": "Hermitage Club",
+      "city": "Magog",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "288c4e67-f986-4792-a016-853ad937c43c",
+      "name": "The Mountain Course At Spruce Peak",
+      "city": "Stowe",
+      "holes": 18,
+      "reason": "unknown access type \"Resort/Private\""
+    },
+    {
+      "ogapiId": "fd871553-9ca1-404e-b626-40022eef37d9",
+      "name": "Green Mountain National Golf Course",
+      "city": "Killington",
+      "holes": 18,
+      "reason": "unknown access type \"Semi-Private/Municipal\""
+    }
+  ]
+}

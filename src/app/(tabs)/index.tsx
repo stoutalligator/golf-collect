@@ -9,7 +9,8 @@ import { Emblem, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
 import { Animated, enterItem, Tap } from '@/components/motion';
 import { Avatar, FeedCard } from '@/components/social';
-import { Button, Chips, Empty, IconButton, SectionHeader, StatStrip } from '@/components/ui';
+import { roundOwner } from '@/domain/types';
+import { Button, Chips, Empty, IconButton, SectionHeader, StatStrip, usePullToRefresh } from '@/components/ui';
 import { recentRounds } from '@/domain/analytics';
 import { formatDay, formatTeeTime, greeting, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
@@ -40,6 +41,7 @@ const PAGE = 10;
 export default function Home() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
+  const pull = usePullToRefresh();
   // Gold icons on the forest quick buttons; on the pale-green dark-mode buttons, match the text instead.
   const quickIcon = currentScheme() === 'dark' ? colors.cream : colors.gold;
   const [filter, setFilter] = useState<FeedFilter>('all');
@@ -50,6 +52,10 @@ export default function Home() {
   const last5 = mine.slice(-5).map((s) => s.strokes);
   const avg5 = last5.length ? last5.reduce((a, b) => a + b, 0) / last5.length : null;
   const active = data.roundsByDate.find((r) => r.status === 'active');
+  // Friends out on the course right now who tagged you and you haven't joined: join to keep your own score live.
+  const liveInvites = data.friendRounds.filter((r) =>
+    r.status === 'active' && r.kind === 'course' && r.date === todayISO() && r.scoredBy !== data.me.id
+    && r.playerIds.includes(data.me.id) && !data.roundGroup(r).some((x) => roundOwner(x) === data.me.id));
   const { invitations, upcoming } = useEventLists();
   const nextEvent = upcoming[0];
 
@@ -57,7 +63,7 @@ export default function Home() {
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={{ paddingTop: insets.top + space.xs, paddingBottom: space.xxl * 3 }}>
+      <ScrollView refreshControl={pull} contentContainerStyle={{ paddingTop: insets.top + space.xs, paddingBottom: space.xxl * 3 }}>
         <View style={styles.header}>
           <Emblem size={40} onDark={false} />
           <Text style={styles.wordmark}>Greens Keeper</Text>
@@ -99,6 +105,20 @@ export default function Home() {
               <Icon name="chevron-right" size={16} color={colors.cream} />
             </Tap>
           ) : null}
+
+          {liveInvites.slice(0, 2).map((r) => {
+            const who = data.playerById(roundOwner(r));
+            return who ? (
+              <Tap key={r.id} onPress={() => router.push(`/round/new?join=${r.id}`)} haptic="press" scaleTo={0.98} swish accessibilityRole="button" accessibilityLabel={`${who.name} teed off with you at ${data.roundCourseName(r)}. Join`} style={styles.liveInvite}>
+                <Avatar player={who} size={38} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.liveTitle} numberOfLines={1}>{who.name.split(' ')[0]} teed off with you</Text>
+                  <Text style={styles.liveSub} numberOfLines={1}>{data.roundCourseName(r)} · keep your score, see theirs live</Text>
+                </View>
+                <View style={styles.liveJoin}><Text style={styles.liveJoinText}>Join</Text></View>
+              </Tap>
+            ) : null;
+          })}
 
           <View style={styles.quick}>
             <Tap onPress={() => router.push('/schedule')} scaleTo={0.97} swish accessibilityRole="button" style={styles.quickBtn}>
@@ -165,6 +185,11 @@ const styles = themed(() => StyleSheet.create({
   liveDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.gold },
   activeTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.cream },
   activeSub: { ...type.caption, color: colors.onFillMuted },
+  liveInvite: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.tint, borderRadius: radius.xl, padding: space.md },
+  liveTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
+  liveSub: { ...type.caption, color: colors.inkMuted },
+  liveJoin: { paddingHorizontal: 16, minHeight: 36, borderRadius: radius.pill, backgroundColor: colors.fairway, justifyContent: 'center' },
+  liveJoinText: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.cream },
   quick: { flexDirection: 'row', gap: space.sm, marginTop: -space.sm },
   quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: 46, borderRadius: radius.pill, backgroundColor: colors.fairway, ...shadow.card },
   quickText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },

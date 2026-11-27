@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AppState, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
@@ -8,7 +8,7 @@ import { Avatar } from '@/components/social';
 import { Button, Empty, IconButton } from '@/components/ui';
 import { realHoleNumber } from '@/domain/layout';
 import { deriveGir, formatToPar } from '@/domain/stats';
-import type { FairwayResult, HoleScore, Round } from '@/domain/types';
+import { roundGroupKey, type FairwayResult, type HoleScore, type Round } from '@/domain/types';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
@@ -37,6 +37,21 @@ export default function PlayRound() {
     setGroup(stored.groupId ? data.friendRounds.filter((r) => r.groupId === stored.groupId && r.scoredBy === data.me.id && r.status === 'active') : []);
   }
 
+  // Live group: friends on their own phones in the same group (or tagged and yet to join). Their rounds are
+  // refetched every 30 seconds while this screen is open (and right away when the app comes back on screen); each
+  // hole is saved as it's entered, so totals stay current.
+  const liveKey = stored && (stored.groupId || stored.playerIds.length > 1) ? roundGroupKey(stored) : undefined;
+  const refreshGroup = useRef(data.refreshGroup);
+  useEffect(() => { refreshGroup.current = data.refreshGroup; });
+  useEffect(() => {
+    if (!liveKey) return;
+    const first = setTimeout(() => refreshGroup.current(liveKey), 400);
+    const tick = setInterval(() => refreshGroup.current(liveKey), 30_000);
+    // Timers pause while the phone is locked; catch up the moment the app is back on screen.
+    const wake = AppState.addEventListener('change', (state) => { if (state === 'active') refreshGroup.current(liveKey); });
+    return () => { clearTimeout(first); clearInterval(tick); wake.remove(); };
+  }, [liveKey]);
+
   const layout = round ? data.layoutFor(round) : undefined;
   if (!round || !layout) return <Empty title="Round not found" body="" />;
 
@@ -52,6 +67,10 @@ export default function PlayRound() {
   const ownerOf = (r: Round) => r.ownerId ?? data.me.id;
   const scoreOf = (r: Round) => r.scores[ownerOf(r)] ?? r.holeNumbers.map(() => null);
   const isLast = index === round.holeNumbers.length - 1;
+  const scoring = new Set(friends.map((r) => r.id));
+  const liveRounds = stored ? data.roundGroup(stored).filter((r) => r.id !== round.id && !scoring.has(r.id)) : [];
+  const joinedIds = new Set([...liveRounds.map(ownerOf), ...friends.map(ownerOf)]);
+  const waiting = round.playerIds.slice(1).filter((pid) => !joinedIds.has(pid)).map((pid) => data.playerById(pid)).filter((p) => !!p);
   const gir = deriveGir(current, hole.par);
 
   const patch = (p: Partial<HoleScore>) => {
@@ -133,6 +152,30 @@ export default function PlayRound() {
             );
           })}
         </ScrollView>
+        {liveRounds.length || waiting.length ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.live} accessibilityLabel="Your group's scores">
+            {liveRounds.map((r) => {
+              const p = data.playerById(ownerOf(r));
+              const s = data.summaries.get(r.id);
+              if (!p) return null;
+              const line = r.status === 'complete' ? `${s?.strokes ?? '—'} · done` : s && s.holesPlayed ? `${formatToPar(s.toPar)} thru ${s.holesPlayed}` : 'Teed off';
+              return (
+                <View key={r.id} style={styles.liveChip} accessibilityLabel={`${p.name}: ${line}`}>
+                  <Avatar player={p} size={24} />
+                  <Text style={styles.liveName} numberOfLines={1}>{p.name.split(' ')[0]}</Text>
+                  <Text style={styles.liveScore}>{line}</Text>
+                </View>
+              );
+            })}
+            {waiting.map((p) => (
+              <View key={p!.id} style={[styles.liveChip, { opacity: 0.6 }]} accessibilityLabel={`${p!.name} hasn't joined yet`}>
+                <Avatar player={p!} size={24} />
+                <Text style={styles.liveName} numberOfLines={1}>{p!.name.split(' ')[0]}</Text>
+                <Text style={styles.liveWaiting}>not joined</Text>
+              </View>
+            ))}
+          </ScrollView>
+        ) : null}
       </View>
 
       <ScrollView contentContainerStyle={styles.body}>
@@ -278,6 +321,11 @@ const styles = themed(() => StyleSheet.create({
   courseName: { flex: 1, fontFamily: fonts.display, fontSize: 19, color: colors.fairway, marginLeft: space.xs },
   running: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   strip: { gap: 4, paddingVertical: 2 },
+  live: { gap: space.sm, paddingVertical: 2 },
+  liveChip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 3, paddingRight: 12, height: 32, borderRadius: radius.pill, backgroundColor: colors.tint },
+  liveName: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink, maxWidth: 90 },
+  liveScore: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, fontVariant: ['tabular-nums'] },
+  liveWaiting: { ...type.caption, color: colors.inkMuted },
   stripCell: { width: 36, alignItems: 'center', paddingVertical: 5, borderRadius: radius.sm, backgroundColor: colors.paper },
   stripActive: { backgroundColor: colors.fairway },
   stripHole: { fontFamily: fonts.body, fontSize: 10, color: colors.inkMuted },

@@ -9,7 +9,7 @@ import { Icon } from '@/components/icons';
 import { Animated, enterItem, popIn, Tap } from '@/components/motion';
 import { RoundRow } from '@/components/round-card';
 import { Avatar } from '@/components/social';
-import { Button, Empty, Group, IconButton, Loading, SectionHeader, StatStrip } from '@/components/ui';
+import { Button, Empty, Group, IconButton, Loading, SectionHeader, StatStrip, usePullToRefresh } from '@/components/ui';
 import { TIERS } from '@/data/config/game';
 import { formatToPar } from '@/domain/stats';
 import { roundOwner } from '@/domain/types';
@@ -39,6 +39,7 @@ export default function CourseDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
   const data = useAppData();
+  const pull = usePullToRefresh();
   const { course, loading } = useCourse(id);
   if (loading) return <Loading label="Loading course…" />;
   if (!course) return <Empty title="Course not found" body="It may have been removed." />;
@@ -67,7 +68,7 @@ export default function CourseDetail() {
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={{ paddingBottom: space.xxl * 3 }}>
+      <ScrollView refreshControl={pull} contentContainerStyle={{ paddingBottom: space.xxl * 3 }}>
         <View style={styles.hero}>
           <CourseScene course={course} style={StyleSheet.absoluteFill} />
           <HeroFade />

@@ -1,12 +1,13 @@
 import { router } from 'expo-router';
 import { Children, Fragment, isValidElement, useEffect, useState, type ReactNode } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icons';
 import { Animated, CountUp, SPRING, Tap, useFill } from '@/components/motion';
 import type { HapticKind } from '@/lib/haptics';
+import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 // ── Screen chrome ──────────────────────────────────────────────────────────
@@ -15,11 +16,40 @@ import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
  * Standard screen: cream page, large serif title, round icon buttons (back on the left, actions on the right).
  * One header system for every non-hero screen.
  */
-export function SheetScreen({ title, back, right, children, scroll = true, headerExtra }: {
+/**
+ * Pull to refresh for any ScrollView: `<ScrollView refreshControl={usePullToRefresh()} />`. Refetches everything
+ * from the server unless you pass your own `onRefresh`.
+ */
+export function usePullToRefresh(onRefresh?: () => Promise<unknown>) {
+  const data = useAppData();
+  const [refreshing, setRefreshing] = useState(false);
+  return (
+    <RefreshControl
+      refreshing={refreshing}
+      tintColor={colors.fairway}
+      colors={[colors.fairway]}
+      onRefresh={async () => {
+        setRefreshing(true);
+        try {
+          await (onRefresh ?? data.refresh)();
+        } finally {
+          setRefreshing(false);
+        }
+      }}
+    />
+  );
+}
+
+export function SheetScreen({ title, back, right, children, scroll = true, headerExtra, onRefresh, refreshable = true }: {
   title: string; back?: boolean; right?: ReactNode; children: ReactNode; scroll?: boolean; headerExtra?: ReactNode;
+  /** Pull to refresh: by default every scrolling screen refetches everything; pass your own, or `refreshable={false}`. */
+  onRefresh?: () => Promise<unknown>;
+  refreshable?: boolean;
 }) {
   const insets = useSafeAreaInsets();
   const Body = scroll ? ScrollView : View;
+  const pull = usePullToRefresh(onRefresh);
+  const refreshControl = scroll && refreshable ? pull : undefined;
   return (
     <View style={styles.root}>
       <View style={[styles.header, { paddingTop: insets.top + space.xs }]}>
@@ -33,7 +63,7 @@ export function SheetScreen({ title, back, right, children, scroll = true, heade
       </View>
       <Body
         {...(scroll
-          ? { contentContainerStyle: styles.content, keyboardShouldPersistTaps: 'handled' as const }
+          ? { contentContainerStyle: styles.content, keyboardShouldPersistTaps: 'handled' as const, refreshControl }
           : { style: [styles.content, { flex: 1 }] })}>
         {children}
       </Body>

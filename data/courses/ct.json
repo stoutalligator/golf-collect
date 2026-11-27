@@ -1,6 +1,6 @@
 {
   "_attribution": "© OpenStreetMap contributors (ODbL 1.0) via OpenGolfAPI — https://opengolfapi.org/attribution",
-  "generated": "2026-11-26",
+  "generated": "2026-11-27",
   "state": "CT",
   "courses": [
     {
@@ -655,7 +655,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/6a2fc074-b40f-4e28-94a1-8efee795e6ec",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -808,7 +808,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/24be7de5-c8f8-4bde-ac5b-9a9d6f03c9a3",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -1027,7 +1027,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/53997b26-b8e4-457b-bb8e-017bae83dbc3",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -1305,7 +1305,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/3c0d9636-cae0-4c8f-8904-39f0555a278b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -1564,7 +1564,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/40adbd49-4f9b-49b9-a87a-f0a4f1dc1d3f",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -1805,7 +1805,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/38835de6-53d6-4ef2-bf5a-3793c7c30f5b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -2065,7 +2065,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/c8679e40-6de9-406f-9891-b4cc0936856c",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -2185,7 +2185,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b05f8116-ed6c-4a2a-a773-892cc3b97850",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -2340,7 +2340,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/cab9361b-22ea-4bdf-adc7-a4b539268b88",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -2706,7 +2706,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/63b3ed39-339c-4579-a211-e41788807527",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -2888,7 +2888,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/77284f95-aaaa-4d20-8092-46563e21b4b2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -3005,7 +3005,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/5f793174-376f-41bc-87d5-1eb5e82df2f7",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -3293,7 +3293,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/6b783d98-6dc0-42de-89a5-71630b506bdb",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -3519,7 +3519,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/6c4d9f54-df85-4693-b064-0b4c660d1584",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -3618,7 +3618,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/a4315a32-9ac3-4fe4-8975-6a3e37aef592",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -3715,7 +3715,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/28d127e0-3bab-412f-b073-f22ef50422b2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -3814,7 +3814,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/090ad6c8-0006-46bf-8dd3-a506dd7903a6",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -4017,7 +4017,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b360e78a-db86-46ea-9385-04abdcde1bc8",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -4134,7 +4134,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d576c90d-df75-41af-bc15-1e2f9b54bd31",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -4545,7 +4545,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b2c4f2dc-ba97-4fac-beac-e095cbc2f57b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -5042,7 +5042,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/5a1bd70c-7f9c-4880-9643-605d3f1fe77e",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -5222,7 +5222,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d570cbeb-1da7-4460-9bbe-f4be1fb52775",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -5478,7 +5478,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7b6e3919-04e3-4a5c-be46-2b74d22072df",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -5632,7 +5632,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/08fb556b-8b67-4fcd-ba1b-d92a5f5705a1",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -5929,7 +5929,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/90354f52-c729-4e40-9b1a-d5965f6fab2a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -6131,7 +6131,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/fa87acee-4d19-4a6a-b855-8557aa00bf82",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -6355,7 +6355,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/36648946-4753-4494-bfb6-b18fad42749f",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -6576,7 +6576,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/dad0103f-3e9d-47ed-9bcc-d8aae5a190c1",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -6817,7 +6817,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/f6746552-c00b-4674-ad2c-2a51f31bcb9d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -7021,7 +7021,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/153db5e0-f027-48ac-8dff-a8289c6f1fc2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -7520,7 +7520,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b61f7f24-56cd-42d3-9238-e8ab335febb0",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -7720,7 +7720,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/bd627616-34b7-4a6e-91a3-28c46a4df991",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -7910,7 +7910,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/476bdb68-b496-4951-8494-fefebc88367b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -8130,7 +8130,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d3270b23-c76e-4b3d-9e59-ad2f8dd4de99",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -8311,7 +8311,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2c3880ca-5d36-45dd-9c29-1d840f0000af",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -8444,7 +8444,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b18ec822-2cab-4782-8ac2-ee50076a0af1",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -8688,7 +8688,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/0513a7d2-f3c9-48b5-892d-5f85118ee802",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -8893,7 +8893,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d63e85de-6c56-48c6-94d0-06e7d14cda05",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -9095,7 +9095,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/41c34ea0-fb88-436e-ad2d-6aed748f2cef",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -9297,7 +9297,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/01fdf575-e9cd-47ea-a9f6-7c52e46b72ea",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -9604,7 +9604,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e6942548-c7a7-49af-9325-c9ee977441a8",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -9860,7 +9860,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7cab2740-ff91-406d-9cf7-b48d0512e6e5",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -10114,7 +10114,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/10e074ba-e329-4661-8957-83bd1257d7bb",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -10433,7 +10433,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d93e7c3a-a552-477d-b222-3df5578668cf",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -10688,7 +10688,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/83d0188c-75b1-4bf9-81d2-b584e64125e0",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -10869,7 +10869,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/701e00c7-c282-4115-a6cb-cf4c9451552a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11011,7 +11011,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d3790600-fc14-495d-8034-69c1e322769d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11184,7 +11184,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/a52bd1af-809c-48cc-9bbc-d9c8f4139990",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11319,7 +11319,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/a0c59a2d-8deb-4e6a-9cbc-5c13b7a9c5b0",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11522,7 +11522,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b21dc176-3b67-45b2-a884-72a1ebbfcf19",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11618,7 +11618,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/1bc2f193-c9aa-413d-980b-a6162ab16ae8",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11713,7 +11713,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2d28bc8c-7299-4885-a333-e176e24f642a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -11934,7 +11934,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/abcafbd9-3dbf-4be9-865c-b8eee7ad7508",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -12171,7 +12171,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/30d10a69-230b-473c-93a9-3bf02b8959c2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -12421,7 +12421,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/61ef6b5f-a2de-44b4-85c1-ae418f6885bf",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -12527,7 +12527,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/39c73610-6892-4ada-bafe-11db71bc1e74",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -12785,7 +12785,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/cd888ae7-6122-4745-910c-cc7167d038d8",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -12919,7 +12919,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/867fbede-40fd-41fd-958d-d1b932249c8d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -13244,7 +13244,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/5c949956-1402-4581-ade6-8f07a3cd8250",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -13445,7 +13445,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/70eb333d-9bb1-4af0-93d8-070800f655b4",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -13664,7 +13664,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ea98921f-1c0a-4441-a87d-344291e9d22b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -13886,7 +13886,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/f7ff59c6-d4c6-4c7a-86c2-02a450acc99a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14139,7 +14139,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/a32e2c86-92cc-461c-bbee-a646945f49af",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14240,7 +14240,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/743f034e-e801-4044-bdbd-619d75659f85",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14358,7 +14358,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ab9be91a-51aa-44e6-838f-59502e901e85",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14454,7 +14454,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/602ff658-4590-468c-a3e1-e625b554fa44",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14560,7 +14560,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/32163c94-03c3-4424-a3bc-5dce8658d109",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14847,7 +14847,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/def1edcb-c380-4f8c-9a51-aed60d0cf636",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -14935,7 +14935,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e49f6ee7-56b6-4a7b-8599-5a5e820c3228",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -15201,7 +15201,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/a59d53cb-ffef-4b9d-a79b-a85d42204633",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -15414,7 +15414,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/8946b43e-ed34-4177-8f42-786808c9ed29",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -15548,7 +15548,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/25d343cc-1bdc-465b-80d0-d8e7f32472b6",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -15795,7 +15795,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/41a8f7e3-34ba-461d-8f77-0b6ec3c18c36",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -16676,7 +16676,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e52e9b18-733b-4799-a799-caef4210cc97",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -16773,7 +16773,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ceb78a0f-b49a-4f19-a1b6-55dba5425c14",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -17000,7 +17000,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/f99c7fa2-2ec7-40cd-bbb8-d5fee40a4a6d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -17544,7 +17544,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7f619d05-d5ef-49af-9d8c-81acc519a936",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -17750,7 +17750,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e464ebcf-6463-4bfa-885f-8efc094f82dc",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -17865,7 +17865,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d3f49562-db9d-46ab-81e4-b4327d707fa9",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -18102,7 +18102,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/8a0d46c8-9d43-4a7e-95cb-b5284ab473d2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -18402,7 +18402,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/1983a102-ba91-435b-aebc-4076cba18f93",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -18516,7 +18516,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/376c1161-9a39-49df-9031-d811a0591a6c",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -18620,7 +18620,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2c2b1bf9-a3ce-47d3-99b2-f073b3a82d26",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -19115,7 +19115,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b0d5b96d-f749-4f27-8b32-073eb0ef5024",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -19315,7 +19315,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/572b34d0-19c8-490c-83c4-2166e1f9d2c5",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -19500,7 +19500,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ba69fa0d-db6d-41d4-aba5-58890f8a3d9a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -19785,7 +19785,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2feed6d9-c447-48b4-9597-11d4f4f9d960",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -20018,7 +20018,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d361044f-ab38-4863-99b4-f52ef123713b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -20246,7 +20246,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d173c505-3bce-4749-bd96-8e48710738d9",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -20437,7 +20437,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/29e11d72-5a55-47ef-901f-866f9843240d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -20534,7 +20534,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/24fd24cd-ba38-4a3b-bcbb-5d440e13f935",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -20789,7 +20789,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/bc99ddd7-cf18-4670-921b-118b814858df",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -21009,7 +21009,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2286f32f-489d-4daf-b0cd-701b19a552f1",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -21261,7 +21261,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/87d1db7c-f046-4aa3-8489-c7609e28fc0a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -21469,7 +21469,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7ac0d63d-29ef-4c0d-88e8-b82330d08de7",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -21813,7 +21813,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/cf6c4334-fa9b-4c74-891e-2b4fedf7e7ab",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -21995,7 +21995,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/40077e26-0044-4588-a986-d0676f2f2db5",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -22093,7 +22093,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/f14bb93a-5e86-4835-b83c-326878a4e16b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -22315,7 +22315,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/0403efa7-b512-44bd-9758-826156cdb380",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -22583,7 +22583,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/18319f10-b538-417d-a22e-8a37ff38133b",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -23014,7 +23014,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/3fd281d3-250c-4e54-a2d8-9a3034680eec",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -23210,7 +23210,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/4e1c542e-9f76-4732-bfec-92f3ebc22714",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -23478,7 +23478,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/460e0df1-d477-4c79-9a2d-c42dcddbca81",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -23658,7 +23658,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/528fdd7f-08b4-4343-901b-1497698239cf",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -23854,7 +23854,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/190827e4-5785-41a6-bedb-9e7328887110",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -24073,7 +24073,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/58356f17-808d-499f-afcb-1f274a919c06",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -24360,7 +24360,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/8f1b30d3-e931-4043-b5fc-d784834a6825",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -24624,7 +24624,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/06bba836-bc6d-4b81-8e6d-7c3e071f3f77",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -24880,7 +24880,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/3d7fc231-91be-4cc4-a89e-3ea8b6f17893",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -25133,7 +25133,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d8ae5b54-6733-4bbf-ad26-4f6750810c6c",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -25238,7 +25238,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ed44b18e-3968-4fca-87b9-393d84e41896",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -25713,7 +25713,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/69b323e7-f88e-4f61-97b9-50049124dd3c",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -25845,7 +25845,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d42a2150-9312-4af2-8c08-2413a4c1c42d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -26028,7 +26028,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/424833b0-642e-425c-b80d-82f1f3f03f8d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -26282,7 +26282,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/15867b2e-8d28-44ce-b49c-e70d3323a11a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -26536,7 +26536,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ac081bc4-4aa9-4422-a2d5-6399f310dda2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -26650,7 +26650,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/166ceee8-932c-4e85-aa54-316630843184",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -26872,7 +26872,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e290ae5a-66a2-4175-afd7-aef3e0463717",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -27361,7 +27361,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d8524734-3e3c-427d-8630-25ca319dbea7",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -27457,7 +27457,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/1143e842-fa18-451e-995c-4e35b208f07e",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -27710,7 +27710,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/465027d4-01d9-4bbe-b30b-f654ba4625b4",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -27962,7 +27962,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7ec71ba3-a400-43e6-8f41-7ce0a11f6fb7",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -28213,7 +28213,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/8cd1841c-a2e8-4a54-8ad1-261cc3627175",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -28466,7 +28466,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7441d4a0-bd5e-4927-975c-1b0753e4fecc",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -28767,7 +28767,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/5e1cfe77-63f6-40c6-aee3-f5809e9ceba6",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -29057,7 +29057,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e7ee8698-11da-4131-a0d9-063cf60c5f6a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -29290,7 +29290,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/c84cac01-01c2-493c-8bb4-86ec6b4cf08a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -29396,7 +29396,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/d15d6360-084c-48eb-8b1b-081b42a86fc3",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -29515,7 +29515,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/fc59d9e9-6ad8-407d-ab0c-c32ae87957f7",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -29748,7 +29748,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/4dd9c017-c26a-4fc6-aece-d18d6885ddfe",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -29950,7 +29950,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7110636d-d4fe-49dd-a253-db957dd08ded",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -30103,7 +30103,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/c894b19d-988d-4275-a53d-574c163e7ac1",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -30559,7 +30559,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/4aa097d7-e5d4-4081-91cd-83bf27e45a6f",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -30677,7 +30677,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/36a5d89c-e7c8-4843-988f-362b42955da2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -30911,7 +30911,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/77b62350-90a7-40be-8637-e39467c52cab",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -31447,7 +31447,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/3ca7dc7e-9c26-4406-847f-7fae8c99baf2",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -31699,7 +31699,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/feeab514-e7b0-4441-8427-f652929b028e",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -32146,7 +32146,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/7edf4c57-4011-4a98-a976-bed2b84678d7",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -32269,7 +32269,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/df6ff888-1ecb-4626-9604-e80732a4aca9",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -32412,7 +32412,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/74083336-2228-4a31-bc30-eb6abecca5bc",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -32617,7 +32617,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/c42ff586-51e7-476a-bb41-3f41650c71bd",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -32741,7 +32741,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/1b985be2-01d8-4610-a21f-3a06f16b2d14",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -32962,7 +32962,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/35464bdb-4881-47ae-90ed-c91dabd93e47",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -33156,7 +33156,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/b661d793-018f-49fc-8afd-bcb05bf3bae0",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -33252,7 +33252,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/a4ff5d08-351d-493b-9d6f-7a352ac87d24",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -33372,7 +33372,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2c60f1ad-6478-4e93-8ddf-fdf6441b963c",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -33587,7 +33587,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/3fd42f73-50f4-4de3-b204-0f5098aae82d",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -33770,7 +33770,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/8092e04b-c413-4729-a834-2fc82a984a43",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -34003,7 +34003,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/831bf630-ba67-40e2-9e29-7a6baccbd210",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -34288,7 +34288,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/ae2cce69-c8c1-4d8d-9d5c-baff3104fa77",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -34451,7 +34451,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/60e04786-279c-4a0d-810e-c2eae8136520",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -34640,7 +34640,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/36361dcb-d73c-40a2-9dd8-447bc947bc70",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -34803,7 +34803,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/e128bcbf-5347-412e-8ee7-7b32e9595094",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -35018,7 +35018,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/55aa947c-704b-4d7e-8267-d515e22e81ec",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -35243,7 +35243,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/2b634eee-540b-4c21-a55c-4ee5bd8276f9",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -35451,7 +35451,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/024c0008-c77c-4bb6-a0a8-eaa97dd1aecb",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -35630,7 +35630,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/adae3f7f-4fe0-45cd-ab09-12ba3457c0fa",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -36031,7 +36031,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/6bd4cd4c-c228-4318-b4bf-561f5895eaeb",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],
@@ -36324,7 +36324,7 @@
           {
             "name": "OpenGolfAPI",
             "url": "https://api.opengolfapi.org/api/v1/courses/3577ddae-9526-4c11-8395-e1058caf717a",
-            "checked": "2026-11-26",
+            "checked": "2026-11-27",
             "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
           }
         ],

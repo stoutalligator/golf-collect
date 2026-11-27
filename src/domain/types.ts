@@ -184,6 +184,12 @@ export interface Round {
 /** Owner of a round ("me" when omitted). */
 export const roundOwner = (r: Round): string => r.ownerId ?? 'me';
 
+/**
+ * Rounds played together share a group: a scorekeeper's group (`groupId` on every round), or a friend who added
+ * their own scores to your round afterwards (their `groupId` is your round's id). Every round is in its own group.
+ */
+export const roundGroupKey = (r: Round): string => r.groupId ?? r.id;
+
 // ── Social ─────────────────────────────────────────────────────────────────
 
 export const REACTIONS = ['👏', '🔥', '⛳', '😂'] as const;

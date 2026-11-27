@@ -9,7 +9,7 @@ import { Animated, enterItem, Tap } from '@/components/motion';
 import type { IconName } from '@/components/icons';
 import { RoundRow } from '@/components/round-card';
 import { Avatar } from '@/components/social';
-import { Group, IconButton, ListRow, SectionHeader, StatStrip } from '@/components/ui';
+import { Group, IconButton, ListRow, SectionHeader, StatStrip, usePullToRefresh } from '@/components/ui';
 import { tierRank } from '@/domain/collection';
 import { formatMonthYear, oneDecimal } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
@@ -20,6 +20,7 @@ import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; headerRight?: ReactNode; children?: ReactNode }) {
   const insets = useSafeAreaInsets();
   const data = useAppData();
+  const pull = usePullToRefresh();
   const p = pd.player;
   const isMe = p.id === data.me.id;
   const home = p.homeCourseId ? data.courseById(p.homeCourseId) ?? data.courseSummary(p.homeCourseId) : undefined;
@@ -34,7 +35,7 @@ export function ProfileView({ pd, headerRight, children }: { pd: PlayerData; hea
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={{ paddingTop: insets.top + space.xs, paddingBottom: space.xxl * 3 }}>
+      <ScrollView refreshControl={pull} contentContainerStyle={{ paddingTop: insets.top + space.xs, paddingBottom: space.xxl * 3 }}>
         <View style={styles.topRow}>
           <IconButton name="chevron-left" label="Back" onPress={() => router.back()} />
           <Text style={styles.headerTitle}>{isMe ? 'Profile' : 'Friend'}</Text>

@@ -319,6 +319,25 @@ export class SupabaseRepository implements Repository {
     return this.snap;
   }
 
+  async refreshGroup(groupKey: string): Promise<AppSnapshot> {
+    const snap = this.snap ?? (await this.load());
+    const rows = (await this.must(
+      this.db.from('rounds')
+        .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
+        .or(`id.eq.${groupKey},group_id.eq.${groupKey}`),
+      'group rounds',
+    )) as RoundRow[];
+    const fresh = rows.map(toRound);
+    const merge = (list: Round[], mine: boolean) => {
+      const byId = new Map(list.map((r) => [r.id, r]));
+      for (const r of fresh) if ((r.ownerId === this.userId) === mine && r.scoredBy !== this.userId) byId.set(r.id, r);
+      return [...byId.values()];
+    };
+    // Rounds you're editing (yours, or ones you keep score for) keep their local copy; friends' own rounds take the server's.
+    this.snap = { ...snap, rounds: snap.rounds, friendRounds: merge(snap.friendRounds, false) };
+    return this.snap;
+  }
+
   private patch(next: Partial<AppSnapshot>) {
     if (this.snap) this.snap = { ...this.snap, ...next };
   }
@@ -456,14 +475,30 @@ export class SupabaseRepository implements Repository {
     }
   }
 
+  /**
+   * People search. Every word must match the name or the username, in any order ("russo mike", "mike r",
+   * "@birdie_hunter" all work). Exact and leading username/name matches come first.
+   */
   async searchPlayers(query: string): Promise<Player[]> {
-    const q = safeQuery(query);
+    const q = safeQuery(query).toLowerCase();
     if (q.length < 2) return [];
-    const rows = (await this.must(
-      this.db.from('profiles').select('*').or(`display_name.ilike.%${q}%,username.ilike.%${q}%`).neq('id', this.userId).limit(20),
-      'search',
-    )) as ProfileRow[];
-    return rows.map((p) => toPlayer(p, this.userId));
+    const words = q.split(/\s+/).filter(Boolean).slice(0, 4);
+    let req = this.db.from('profiles').select('*').neq('id', this.userId);
+    for (const w of words) req = req.or(`display_name.ilike.%${w}%,username.ilike.%${w}%`);
+    const rows = (await this.must(req.limit(40), 'search')) as ProfileRow[];
+    const score = (p: ProfileRow) => {
+      const name = (p.display_name ?? '').toLowerCase();
+      const user = (p.username ?? '').toLowerCase();
+      if (user === q.replace(/\s+/g, '')) return 0;
+      if (name === q) return 1;
+      if (user.startsWith(words[0]) || name.startsWith(words[0])) return 2;
+      if (name.split(/\s+/).some((part) => part.startsWith(words[0]))) return 3;
+      return 4;
+    };
+    return rows
+      .sort((a, b) => score(a) - score(b) || (a.display_name ?? '').localeCompare(b.display_name ?? ''))
+      .slice(0, 25)
+      .map((p) => toPlayer(p, this.userId));
   }
 
   async sendFriendRequest(playerId: string) {

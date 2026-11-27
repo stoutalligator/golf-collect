@@ -4,8 +4,8 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ScorecardEngraving, Tree } from '@/art/components';
 import { Icon } from '@/components/icons';
-import { Avatar, ReactionBar } from '@/components/social';
-import { Empty, SheetScreen, StatStrip } from '@/components/ui';
+import { Avatar, joinableRound, ReactionBar } from '@/components/social';
+import { Button, Empty, SheetScreen, StatStrip } from '@/components/ui';
 import { formatToPar, type HoleResult } from '@/domain/stats';
 import { roundOwner, type Hole, type Round } from '@/domain/types';
 import { formatDate, oneDecimal, pct } from '@/lib/format';
@@ -38,6 +38,11 @@ export default function Scorecard() {
     : isMine ? round.id
       : round.scoredBy === data.me.id && round.groupId ? data.rounds.find((r) => r.groupId === round.groupId && r.status === 'active')?.id : undefined;
   const scorer = round.scoredBy && round.scoredBy !== roundOwner(round) ? data.playerById(round.scoredBy) : undefined;
+  const join = joinableRound(data, round);
+  const together = data.roundGroup(round)
+    .map((r) => ({ r, p: data.playerById(roundOwner(r)), s: data.summaries.get(r.id) }))
+    .filter((x): x is { r: Round; p: NonNullable<typeof x.p>; s: typeof x.s } => !!x.p)
+    .sort((a, b) => (a.s?.strokes ?? 999) - (b.s?.strokes ?? 999));
   const nines = [layout.holes.slice(0, 9), layout.holes.slice(9, 18)].filter((n) => n.some((h) => round.holeNumbers.includes(h.number)));
 
   return (
@@ -60,6 +65,27 @@ export default function Scorecard() {
         </Tap>
       ) : null}
       {round.eventRoundId ? <EventChip eventRoundId={round.eventRoundId} /> : null}
+      {join.ok && round.status === 'complete' ? (
+        <Button
+          variant={join.tagged ? 'primary' : 'secondary'}
+          icon="flag"
+          label={join.tagged ? 'You played this round? Add your scores' : 'I played this round too'}
+          onPress={() => router.push(`/round/new?join=${round.id}`)}
+        />
+      ) : null}
+      {together.length > 1 ? (
+        <View style={styles.together}>
+          <Text style={styles.togetherTitle}>Played together</Text>
+          {together.map(({ r, p, s }) => (
+            <Tap key={r.id} onPress={() => (r.id === round.id ? undefined : router.push(`/round/${r.id}`))} disabled={r.id === round.id} scaleTo={0.98} accessibilityRole="button" style={styles.togetherRow}>
+              <Avatar player={p} size={30} />
+              <Text style={[styles.togetherName, r.id === round.id && { fontFamily: fonts.bodySemibold }]} numberOfLines={1}>{p.id === data.me.id ? 'You' : p.name}</Text>
+              <Text style={styles.togetherScore}>{r.status === 'active' ? 'Playing' : `${s?.strokes ?? '—'}${s ? ` (${formatToPar(s.toPar)})` : ''}`}</Text>
+              {r.id === round.id ? <View style={{ width: 14 }} /> : <Icon name="chevron-right" size={14} color={colors.inkMuted} />}
+            </Tap>
+          ))}
+        </View>
+      ) : null}
       {scorer ? (
         <Text style={styles.note}>
           Scored by {scorer.id === data.me.id ? 'you' : scorer.name}{round.status === 'active' ? ' · in progress' : ''}
@@ -266,6 +292,11 @@ const styles = themed(() => StyleSheet.create({
   legendMark: { width: 14, height: 14, borderWidth: 1.2 },
   legendText: { ...type.caption, color: colors.inkMuted },
   note: { ...type.caption, color: colors.inkMuted, textAlign: 'center' },
+  together: { backgroundColor: colors.creamLight, borderRadius: radius.lg, paddingVertical: space.sm, ...shadow.card },
+  togetherTitle: { ...type.label, color: colors.inkMuted, paddingHorizontal: space.lg, paddingTop: space.sm, paddingBottom: space.xs },
+  togetherRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: space.sm },
+  togetherName: { flex: 1, fontFamily: fonts.bodyMedium, fontSize: 15, color: colors.ink },
+  togetherScore: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink, fontVariant: ['tabular-nums'] },
   delete: { alignSelf: 'center', padding: space.sm },
   ownerRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   ownerName: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },

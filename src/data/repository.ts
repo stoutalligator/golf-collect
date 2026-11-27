@@ -54,6 +54,8 @@ export interface Repository {
   /** Save a round you own, or one you're keeping score for (group scoring; `ownerId` is the friend). */
   saveRound(round: Round): Promise<void>;
   deleteRound(id: string): Promise<void>;
+  /** Refetch just the rounds in one group (live scores while playing), merged into the snapshot. */
+  refreshGroup(groupKey: string): Promise<AppSnapshot>;
   setWishlist(courseIds: string[]): Promise<void>;
   /** Toggle my reaction on a round (same emoji again removes it). */
   react(roundId: string, emoji: ReactionEmoji): Promise<void>;
@@ -214,6 +216,8 @@ export class LocalRepository implements Repository {
   private needsAccount(): never {
     throw new Error('Leagues and events need an account (this is the offline demo).');
   }
+
+  async refreshGroup() { return this.load(); }
 
   async createEvent(): Promise<string> { this.needsAccount(); }
 

@@ -9,8 +9,8 @@ import { hashString } from '@/art/placeholders';
 import { Icon } from '@/components/icons';
 import { Tap } from '@/components/motion';
 import { formatToPar, type HoleResult, type RoundSummary } from '@/domain/stats';
-import { REACTIONS, type Player, type Reaction, type ReactionEmoji } from '@/domain/types';
-import { formatDate } from '@/lib/format';
+import { REACTIONS, roundOwner, type Player, type Reaction, type ReactionEmoji } from '@/domain/types';
+import { formatDate, todayISO } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, type FeedPost } from '@/state/app-data';
 import { avatarTones, chart, colors, fonts, radius, shadow, space, themed, type } from '@/theme';
@@ -155,6 +155,18 @@ function quickStats(s: RoundSummary) {
   return out.slice(0, 4);
 }
 
+/**
+ * Whether you can add your own scores to a friend's round ("I played too"): a real-course round, not yours, and
+ * you don't already have a round in its group. `tagged` means they listed you as playing with them.
+ */
+export function joinableRound(data: ReturnType<typeof useAppData>, round: FeedPost['round']): { ok: boolean; tagged: boolean; recent: boolean } {
+  const owner = roundOwner(round);
+  const mine = owner === data.me.id || data.roundGroup(round).some((r) => roundOwner(r) === data.me.id);
+  const ok = !data.offline && round.kind === 'course' && !mine;
+  const days = (Date.parse(`${todayISO()}T12:00:00`) - Date.parse(`${round.date}T12:00:00`)) / 864e5;
+  return { ok, tagged: ok && round.playerIds.includes(data.me.id), recent: ok && days <= 7 };
+}
+
 export function FeedCard({ post }: { post: FeedPost }) {
   const data = useAppData();
   const { round, owner, summary, earned } = post;
@@ -163,6 +175,7 @@ export function FeedCard({ post }: { post: FeedPost }) {
   const isMe = owner.id === data.me.id;
   const open = () => router.push(`/round/${round.id}`);
   const nine = summary.holesPlanned === 9;
+  const join = joinableRound(data, round);
 
   return (
     <View style={styles.card}>
@@ -214,8 +227,20 @@ export function FeedCard({ post }: { post: FeedPost }) {
         ) : null}
       </Tap>
 
+      {join.tagged ? (
+        <Tap onPress={() => router.push(`/round/new?join=${round.id}`)} haptic="press" scaleTo={0.98} swish accessibilityRole="button" style={styles.joinTagged}>
+          <Icon name="flag" size={16} color={colors.cream} />
+          <Text style={styles.joinTaggedText}>You played this round? Add your scores</Text>
+        </Tap>
+      ) : null}
       <View style={styles.rule} />
       <ReactionBar roundId={round.id} reactions={post.reactions} comments={post.comments.length} onComment={open} />
+      {!join.tagged && join.recent ? (
+        <Tap onPress={() => router.push(`/round/new?join=${round.id}`)} haptic="tap" scaleTo={0.97} accessibilityRole="button" accessibilityLabel={`Played with ${owner.name.split(' ')[0]}? Add your scores`} style={styles.joinLink}>
+          <Icon name="plus" size={13} color={colors.fairway} />
+          <Text style={styles.joinLinkText}>Played too? Add your scores</Text>
+        </Tap>
+      ) : null}
       {post.comments.length ? (
         <Tap onPress={open} scaleTo={0.99} accessibilityRole="button" style={styles.commentPreview}>
           <Text style={styles.commentText} numberOfLines={2}>
@@ -262,6 +287,10 @@ const styles = themed(() => StyleSheet.create({
   scoreRow: { flexDirection: 'row', alignItems: 'flex-end', gap: space.md },
   course: { fontFamily: fonts.display, fontSize: 20, lineHeight: 25, color: colors.ink },
   withRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 6 },
+  joinTagged: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.sm, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.fairway },
+  joinTaggedText: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.cream },
+  joinLink: { flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start', marginTop: -space.xs },
+  joinLinkText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway },
   withText: { ...type.caption, color: colors.inkMuted, flexShrink: 1 },
   earned: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
   earnedText: { flex: 1, ...type.caption, fontSize: 13, color: colors.ink },

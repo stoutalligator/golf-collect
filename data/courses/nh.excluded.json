@@ -1,0 +1,202 @@
+{
+  "generated": "2026-11-27",
+  "state": "NH",
+  "excluded": [
+    {
+      "ogapiId": "e84dd344-d302-4739-b4ef-ec6aec66b543",
+      "name": "Hoodkroft Country Club",
+      "city": "Derry",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "9a445715-df88-4cb6-b42a-61238d12139b",
+      "name": "Coashaukee At Balsams Grand Resort Hotel The",
+      "city": "Dixville Notch",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "d56ebd99-aa38-4000-a8cb-e2209bc13512",
+      "name": "Jade Trace At Mystic Meadows",
+      "city": "Laconia",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "7a6d0f66-5250-451b-8035-9d3a8e4a5bf6",
+      "name": "Kona Mansion Inn",
+      "city": "Moultonborough",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "77cf0eb4-8a61-4ec9-8d7e-cde3a9910f77",
+      "name": "Oak Brook Golf",
+      "city": "Weare",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "b0ea70cb-7c15-46af-bf0d-e32fcf0f152a",
+      "name": "Steele Hill Resort Golf Course",
+      "city": "Sanbornton",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "d7c21aef-abb7-46b3-b53d-64c55dc9ecd1",
+      "name": "Panorama At Balsams Grand Resort Hotel The",
+      "city": "Colebrook",
+      "holes": 18,
+      "reason": "hole data has 19 holes"
+    },
+    {
+      "ogapiId": "56c6c526-1a44-4565-a8ad-6a9f6adfed15",
+      "name": "The Oaks Golf Links",
+      "city": "Somersworth",
+      "holes": 18,
+      "reason": "hole data has 20 holes"
+    },
+    {
+      "ogapiId": "80cab53c-dfc5-45ed-aef3-3dd3217ad252",
+      "name": "Pease Original 18 Golf Course",
+      "city": "Portsmouth",
+      "holes": 18,
+      "reason": "hole data has 21 holes"
+    },
+    {
+      "ogapiId": "6f802161-dcdf-43b6-bc80-d3f0305c08f8",
+      "name": "Pease Blue Golf Course",
+      "city": "Portsmouth",
+      "holes": 18,
+      "reason": "hole data has 23 holes"
+    },
+    {
+      "ogapiId": "e89c6bc9-ccfc-49be-984e-eda54ab6aaf8",
+      "name": "Fore U Golf Center",
+      "city": "West Lebanon",
+      "holes": 18,
+      "reason": "hole data has 3 holes"
+    },
+    {
+      "ogapiId": "de25b5d6-00a2-4a4d-9891-02c2a146e308",
+      "name": "World Cup Golf Center",
+      "city": "Hudson",
+      "holes": 18,
+      "reason": "hole data has 3 holes"
+    },
+    {
+      "ogapiId": "76549608-e182-4cb7-bf02-56145814ec4d",
+      "name": "Locke Lake Links",
+      "city": "Barnstead",
+      "holes": 18,
+      "reason": "hole data has 6 holes"
+    },
+    {
+      "ogapiId": "a0e30fbe-dcf3-47c0-bf7f-374ee69d0fb7",
+      "name": "Lisbon Village Country Club",
+      "city": "Lisbon",
+      "holes": 18,
+      "reason": "hole data has 7 holes"
+    },
+    {
+      "ogapiId": "aedf0024-e109-478c-b856-a9f1e4cf6dca",
+      "name": "Linderhof Country Club",
+      "city": "Glen",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "2bbff8e1-cc30-4e3d-94aa-a02f152633e9",
+      "name": "Blackmount Country Club",
+      "city": "North Haverhill",
+      "holes": 9,
+      "reason": "implausible total par 40"
+    },
+    {
+      "ogapiId": "33d6b47c-c196-4dc4-993b-afac7ebffb6b",
+      "name": "Colebrook Country Club",
+      "city": "Colebrook",
+      "holes": 9,
+      "reason": "implausible total par 40"
+    },
+    {
+      "ogapiId": "6c5cccd5-c413-4ddd-8d03-00f322cb9ac3",
+      "name": "Kingston Fairways Golf Club",
+      "city": "Kingston",
+      "holes": 18,
+      "reason": "implausible total par 80"
+    },
+    {
+      "ogapiId": "3b186fac-a554-49ed-b092-41663ae724dc",
+      "name": "Jack Olantern Golf Resort",
+      "city": "Woodstock",
+      "holes": 18,
+      "reason": "implausible total par 82"
+    },
+    {
+      "ogapiId": "e9171cd8-a8f3-4362-a420-9b1f779e6e0a",
+      "name": "Waumbek Golf Club",
+      "city": "Jefferson",
+      "holes": 18,
+      "reason": "implausible total par 82"
+    },
+    {
+      "ogapiId": "cba0293c-6332-492a-89a0-ef36a07a3ad2",
+      "name": "Club De Golf North Hatley",
+      "city": "North Hatley",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "af36f436-588f-44c0-9923-38b2dfb9cc84",
+      "name": "Exeter Country Club",
+      "city": "Exeter",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "e7c112ca-116d-45bb-89e4-da9c0b062a44",
+      "name": "Profile Golf Club",
+      "city": "Franconia",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "f3b16bc0-acf6-4d20-a63c-bfbd35f13b18",
+      "name": "Waterville Valley Golf Club",
+      "city": "Waterville Valley",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "e89ed848-c65a-4093-a548-39bd9f1914ca",
+      "name": "Granliden On Sunapee Golf Course",
+      "city": "Sunapee",
+      "holes": 9,
+      "reason": "unknown access type \"Private/Resort\""
+    },
+    {
+      "ogapiId": "db318e2e-b0d9-4b87-8536-c5845a83855c",
+      "name": "Lake Sunapee Country Club",
+      "city": "New London",
+      "holes": 18,
+      "reason": "unknown access type \"Private/Resort\""
+    },
+    {
+      "ogapiId": "e83cfca2-1822-4f35-ba09-3ceacf3d7efc",
+      "name": "Maplewood Golf Club",
+      "city": "Bethlehem",
+      "holes": 18,
+      "reason": "unknown access type \"Semi-Private/Resort\""
+    },
+    {
+      "ogapiId": "39fd012a-1877-456b-962f-7f034739bf8d",
+      "name": "Owls Nest Golf Club",
+      "city": "Campton",
+      "holes": 18,
+      "reason": "unknown access type \"Semi-Private/Resort\""
+    }
+  ]
+}

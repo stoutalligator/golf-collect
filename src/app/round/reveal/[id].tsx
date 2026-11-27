@@ -140,13 +140,11 @@ function WrapUp({ round, rewards }: { round: Round; rewards: number }) {
   const current = col?.tier?.tier;
   const nextTier = TIERS.find((t) => !current || tierRank(t.tier) > tierRank(current));
   const group = useMemo(() => {
-    if (!round.groupId) return [];
-    return [...data.rounds, ...data.friendRounds]
-      .filter((r) => r.groupId === round.groupId)
+    return data.roundGroup(round)
       .map((r) => ({ r, s: data.summaries.get(r.id), p: data.playerById(r.ownerId ?? data.me.id) }))
       .filter((x) => x.s && x.p)
       .sort((a, b) => a.s!.strokes - b.s!.strokes);
-  }, [data, round.groupId]);
+  }, [data, round]);
 
   return (
     <View style={{ gap: space.lg, alignSelf: 'stretch' }}>

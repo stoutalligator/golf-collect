@@ -1,0 +1,524 @@
+{
+  "generated": "2026-11-27",
+  "state": "MA",
+  "excluded": [
+    {
+      "ogapiId": "8caf9140-393a-4c79-b6ba-c7a50bb936c6",
+      "name": "Edgewood Golf Club",
+      "city": "Southwick",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "00ed8d21-b176-43f8-b2e9-ed60afed80eb",
+      "name": "Long Meadow Golf Club",
+      "city": "Lowell",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "13224cc2-b22e-4656-a818-7c2aa5d8d2c1",
+      "name": "North Hill Country Club",
+      "city": "Duxbury",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "40adc5c5-7c4c-43bb-a223-e7c2418cfdae",
+      "name": "Olde Salem Greens Golf Course",
+      "city": "Salem",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "cb9e5ae3-107c-4ed1-9646-d4b28f60d982",
+      "name": "Pakachoag Golf Course",
+      "city": "Auburn",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "5c052fb5-d98a-4ad3-95b0-359fe11256e8",
+      "name": "Tewksbury Country Club",
+      "city": "Billerica",
+      "holes": 9,
+      "reason": "9-hole course with extra, non-empty hole data"
+    },
+    {
+      "ogapiId": "cc6ab790-0d86-4e86-970f-acf463e1a9ee",
+      "name": "Sammy K's Golf",
+      "city": "Greenfield",
+      "holes": 18,
+      "reason": "hole data has 0 holes"
+    },
+    {
+      "ogapiId": "b7fa49f3-4d5e-4475-8970-52a042111a11",
+      "name": "Hillside Links",
+      "city": "Rehoboth",
+      "holes": 18,
+      "reason": "hole data has 10 holes"
+    },
+    {
+      "ogapiId": "493f952c-bc0e-46af-9310-ecbe4ea37244",
+      "name": "Northfields",
+      "city": "Haverhill",
+      "holes": 18,
+      "reason": "hole data has 10 holes"
+    },
+    {
+      "ogapiId": "1f9b13b9-3a6d-4027-aa54-946c0d126178",
+      "name": "Northfields",
+      "city": "Northfield",
+      "holes": 18,
+      "reason": "hole data has 13 holes"
+    },
+    {
+      "ogapiId": "1ba0dc4c-a1c5-422b-b8a1-2160d8cbcfc3",
+      "name": "Executive At Ferncroft Country Club",
+      "city": "Middleton",
+      "holes": 18,
+      "reason": "hole data has 17 holes"
+    },
+    {
+      "ogapiId": "53853e4d-0619-4a49-ad71-e0e480591412",
+      "name": "Delmont Golf Course",
+      "city": "Rehoboth",
+      "holes": 18,
+      "reason": "hole data has 19 holes"
+    },
+    {
+      "ogapiId": "f397c1d3-daee-4b57-849e-6ec1131c95bc",
+      "name": "Rockland Golf Course",
+      "city": "Rockland",
+      "holes": 18,
+      "reason": "hole data has 19 holes"
+    },
+    {
+      "ogapiId": "689164de-3a21-42cb-b380-1d57c229a6b0",
+      "name": "Black Rock Country Club",
+      "city": "Hingham",
+      "holes": 18,
+      "reason": "hole data has 21 holes"
+    },
+    {
+      "ogapiId": "ee826360-7376-4e87-9bfa-2f4ce9ae7df5",
+      "name": "River Club",
+      "city": "Newton",
+      "holes": 18,
+      "reason": "hole data has 21 holes"
+    },
+    {
+      "ogapiId": "227a1f9c-9754-4652-883d-b8f9babab44f",
+      "name": "Middle South At Heather Hill Country Club",
+      "city": "Plainville",
+      "holes": 18,
+      "reason": "hole data has 27 holes"
+    },
+    {
+      "ogapiId": "8954c045-63da-43ee-9409-2e97da3a4edd",
+      "name": "North At Heather Hill Country Club",
+      "city": "Plainville",
+      "holes": 18,
+      "reason": "hole data has 27 holes"
+    },
+    {
+      "ogapiId": "309ef12f-7ea3-4a2f-af7c-d543898fb9c8",
+      "name": "International Golf Club Pines Course",
+      "city": "Bolton",
+      "holes": 18,
+      "reason": "hole data has 38 holes"
+    },
+    {
+      "ogapiId": "8d3b4ed5-fc48-4d71-9d5a-ed6f349a8aad",
+      "name": "The International",
+      "city": "Bolton",
+      "holes": 18,
+      "reason": "hole data has 40 holes"
+    },
+    {
+      "ogapiId": "c0a1013c-1ac9-4717-ac9e-685c911b7afb",
+      "name": "Ashfield Community Golf Course",
+      "city": "Ashfield",
+      "holes": 18,
+      "reason": "hole data has 7 holes"
+    },
+    {
+      "ogapiId": "acaf4ddc-7eae-4831-b4fa-72307b37bc1e",
+      "name": "Atlantic Golf Center Pitch Putt",
+      "city": "Attleboro",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "6910521c-ccfb-4f6f-8911-94f671792a93",
+      "name": "Atlantic Golf Center Shadow Brook Golf Course",
+      "city": "Attleboro",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "69142bed-d369-4a1a-9428-8ef0171ac46c",
+      "name": "Blue Hill Country Club",
+      "city": "Canton",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "efe7ce85-47c8-44db-91a8-5b42ccdf158c",
+      "name": "Cold Brook Golf Rv Resort",
+      "city": "Barre",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "dfa32e2e-c572-443a-afae-c821927bea4b",
+      "name": "Dudley Hill Golf Club at Nichols College",
+      "city": "Dudley",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "68e38c41-e140-49ad-acc6-515d06cc3376",
+      "name": "Granite Links Golf Club",
+      "city": "Milton",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "44946cc8-2dcb-40e3-a492-b7dbb4496d99",
+      "name": "John F Parker Golf Course",
+      "city": "Taunton",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "b67ac24b-e75f-4c5f-ad8e-d76a77e93a4b",
+      "name": "Weathervane Golf Academy",
+      "city": "Hingham",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "52401edd-f532-470c-ba6f-e2c36847f4a9",
+      "name": "White Pines Golf Course",
+      "city": "Brockton",
+      "holes": 18,
+      "reason": "hole data has 9 holes"
+    },
+    {
+      "ogapiId": "0afc6b45-77ad-4e78-9302-f7aa745aaf72",
+      "name": "Donnybrook Country Club",
+      "city": "Lanesborough",
+      "holes": 9,
+      "reason": "implausible total par 40"
+    },
+    {
+      "ogapiId": "6cb3d592-1f25-45ae-9a71-b369ee336c0f",
+      "name": "Rehoboth Country Club",
+      "city": "Rehoboth",
+      "holes": 18,
+      "reason": "implausible total par 81"
+    },
+    {
+      "ogapiId": "eb47bf0f-e5db-426a-a389-79f58a8432ea",
+      "name": "Townsend Ridge Country Club",
+      "city": "Townsend",
+      "holes": 18,
+      "reason": "implausible total par 82"
+    },
+    {
+      "ogapiId": "f6078795-4f62-4201-8857-fd55886d221f",
+      "name": "Edge Hill Golf Course",
+      "city": "Ashfield",
+      "holes": 18,
+      "reason": "implausible total par 85"
+    },
+    {
+      "ogapiId": "cbe672e6-474a-46ef-aaef-9e6e0ffffd92",
+      "name": "Cherry Hill Golf Course",
+      "city": null,
+      "holes": 9,
+      "reason": "missing town"
+    },
+    {
+      "ogapiId": "ea091bce-1259-4627-9edd-e93f95256fd0",
+      "name": "Dunes At Monterey Peninsula Country Club",
+      "city": null,
+      "holes": 18,
+      "reason": "missing town"
+    },
+    {
+      "ogapiId": "f6debf05-a5c4-4ce5-b142-757743e49460",
+      "name": "Holyoke Country Club",
+      "city": null,
+      "holes": 9,
+      "reason": "missing town"
+    },
+    {
+      "ogapiId": "eb6c22de-697f-4d85-9a95-63f6d8f52268",
+      "name": "John F Parker Municipal Golf Course",
+      "city": null,
+      "holes": 9,
+      "reason": "missing town"
+    },
+    {
+      "ogapiId": "a0704a8f-4321-4476-88fb-18be6ea925fd",
+      "name": "Pine Oaks Golf Club",
+      "city": null,
+      "holes": 9,
+      "reason": "missing town"
+    },
+    {
+      "ogapiId": "cbccf32c-bbee-49d4-b20a-bf75369e9c0b",
+      "name": "Acoaxet Club",
+      "city": "Westport",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "17a6ec53-1f8f-4562-9d80-462a4d01ef23",
+      "name": "Bellevue Golf Club",
+      "city": "Melrose",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "69305207-690c-4c5e-8e45-efdb9f1c2bc8",
+      "name": "Cedar Hill Golf Club",
+      "city": "Stoughton",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "ea1eb249-dda2-470c-9e3e-26795c235c23",
+      "name": "Edgartown Golf Club",
+      "city": "Edgartown",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "ead11901-b818-4b5d-9df9-843d59e8d49f",
+      "name": "Falcon Golf Course",
+      "city": "Buzzards Bay",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "21d31099-cc55-4918-8ec9-ee23b35c5d15",
+      "name": "Granite Links Golf Club At Quarry Hills Milton Nine",
+      "city": "Quincy",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "15ed1013-3bb5-4361-b906-e8df8e0e9e1b",
+      "name": "Granite Links Golf Club At Quarry Hills Quincy Nine",
+      "city": "Quincy",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "77ad8100-17bc-43db-96eb-9aba774e3352",
+      "name": "Highland Links Cape Cod",
+      "city": "North Truro",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "e0996115-8a03-4e11-894f-d4e8ab7af2f4",
+      "name": "Hillside Country Club",
+      "city": "Rehoboth",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "2736d25c-6fc0-4a57-9c35-54bb724fa45c",
+      "name": "King Rail Reserve Golf Course",
+      "city": "Lynnfield",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "7d9a520f-c900-4b3f-a046-3ce9420943fc",
+      "name": "Lexington Golf Club",
+      "city": "Lexington",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "8869af0c-290a-4e29-8000-80d3e31f1d9d",
+      "name": "Meadow Brook Golf Club",
+      "city": "Reading",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "136733b2-d282-4b15-bb42-67d12cc922f7",
+      "name": "New Meadows Golf Club",
+      "city": "Topsfield",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "779de2ca-4542-4339-9a37-a3488e5930c7",
+      "name": "Quaboag Country Club",
+      "city": "Monson",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "71e807b3-1386-4eb9-aa4c-3a25e706b4de",
+      "name": "Reservation Golf Club",
+      "city": "Mattapoisett",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "4940fa93-bcb5-4d71-b52a-c707d4e0b38b",
+      "name": "Rockport Golf Club",
+      "city": "Rockport",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "dae49e8e-340e-4c04-a370-f8cc4462098b",
+      "name": "Round Hill Community Golf Club",
+      "city": "Dartmouth",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "0519320b-6749-4ec6-8218-6429fe963e2f",
+      "name": "Siasconset Golf Course",
+      "city": "Nantucket",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "246ae853-b523-4a5b-8c36-7a4ff38f68bc",
+      "name": "Stoneham Oaks Golf Course",
+      "city": "Stoneham",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "210596e8-886b-4f67-be38-fc04bc5f6be9",
+      "name": "The Milton Hoosic Club",
+      "city": "Canton",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "ace9e2d9-2386-4b4d-b9a5-aa3ed9ebe6e0",
+      "name": "Touisset Country Club",
+      "city": "Swansea",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "79265ae4-f2d6-43bb-9524-a932307f9b79",
+      "name": "Wampatuck Country Club",
+      "city": "Canton",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "b43f7d04-a6a9-43cf-8f69-e349e4a5f39f",
+      "name": "Whitinsville Golf Club",
+      "city": "Whitinsville",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "d262b8b0-bebe-4992-b6fb-5bab64f746a0",
+      "name": "Worthington Golf Club",
+      "city": "Worthington",
+      "holes": 9,
+      "reason": "no tee data"
+    },
+    {
+      "ogapiId": "bd4279cf-c4ac-4bf4-95f4-8a60169b5237",
+      "name": "Strawberry Valley Golf Club",
+      "city": "Abington",
+      "holes": 9,
+      "reason": "stroke index is not 9 distinct values in 1–18"
+    },
+    {
+      "ogapiId": "21d0a30e-ae33-4ed5-8dd6-5894052ff356",
+      "name": "Patriot Golf Course",
+      "city": "Bedford",
+      "holes": 9,
+      "reason": "unknown access type \"Military\""
+    },
+    {
+      "ogapiId": "06204b96-4457-4a75-9c52-b520419c6f7e",
+      "name": "Renaissance Golf Club",
+      "city": "Haverhill",
+      "holes": 18,
+      "reason": "unknown access type \"Private/Community\""
+    },
+    {
+      "ogapiId": "2aae174d-332e-4bbb-9b86-a0d51a64fc36",
+      "name": "The Bay Club At Mattapoisett",
+      "city": "Mattapoisett",
+      "holes": 18,
+      "reason": "unknown access type \"Private/Community\""
+    },
+    {
+      "ogapiId": "46a6493f-9014-45c5-8306-6688c8d887da",
+      "name": "The Golf Club At Southport",
+      "city": "Mashpee",
+      "holes": 9,
+      "reason": "unknown access type \"Private/Community\""
+    },
+    {
+      "ogapiId": "46030732-f1f2-430a-8d31-a98fd3fccb01",
+      "name": "Andover Country Club",
+      "city": "Andover",
+      "holes": 18,
+      "reason": "unknown access type \"Private/Resort\""
+    },
+    {
+      "ogapiId": "c47d03b6-09f4-4172-9274-9f22e0474d77",
+      "name": "Old Sandwich Golf Club",
+      "city": "Plymouth",
+      "holes": 18,
+      "reason": "unknown access type \"Private/Resort\""
+    },
+    {
+      "ogapiId": "9cedbd77-0bf7-4a7c-a2b6-e5be9b11d143",
+      "name": "Ocean Edge Resort and Golf Club",
+      "city": "Brewster",
+      "holes": 18,
+      "reason": "unknown access type \"Resort/Private\""
+    },
+    {
+      "ogapiId": "a5be2f7e-dbde-4a93-aa7d-9a2d93770498",
+      "name": "Ocean Edge Resort Club On Cape Cod",
+      "city": "Brewster",
+      "holes": 18,
+      "reason": "unknown access type \"Resort/Private\""
+    },
+    {
+      "ogapiId": "1d57d408-579c-4c41-801d-6c9f8ca0b2cb",
+      "name": "The Club At New Seabury Dunes Course",
+      "city": "Mashpee",
+      "holes": 18,
+      "reason": "unknown access type \"Resort/Private\""
+    },
+    {
+      "ogapiId": "ce3dbb2a-7dc0-43e1-ae5b-2d00014ebfa6",
+      "name": "The Club At New Seabury Ocean Course",
+      "city": "Mashpee",
+      "holes": 18,
+      "reason": "unknown access type \"Resort/Private\""
+    },
+    {
+      "ogapiId": "01e14bc5-a837-4521-94f2-7735521dda90",
+      "name": "Blue Rock Golf Course",
+      "city": "South Yarmouth",
+      "holes": 18,
+      "reason": "unknown access type \"Semi-Private/Resort\""
+    }
+  ]
+}

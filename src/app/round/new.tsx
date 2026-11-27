@@ -8,7 +8,7 @@ import { Icon } from '@/components/icons';
 import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
 import { formatMiles, nearest } from '@/domain/geo';
-import type { Round, RoundKind } from '@/domain/types';
+import { roundGroupKey, roundOwner, type Round, type RoundKind } from '@/domain/types';
 import { addDaysISO, formatDay, todayISO } from '@/lib/format';
 import { uuid } from '@/lib/ids';
 import { useLocation } from '@/lib/location';
@@ -37,7 +37,10 @@ const dayParts = (iso: string) => {
 export default function NewRound() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string }>();
+  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string }>();
+  // Joining a friend's round: log your own round in the same group, same course, holes and day.
+  const joinRound = params.join ? data.roundById(params.join) : undefined;
+  const joinOwner = joinRound ? data.playerById(roundOwner(joinRound)) : undefined;
   // Opened from an event round: start from its course, tee and holes, and count toward it.
   const fromEvent = params.eventRound ? data.eventRounds.find((r) => r.id === params.eventRound) : undefined;
   const [kind, setKind] = useState<RoundKind>('course');
@@ -57,6 +60,19 @@ export default function NewRound() {
     setTeeId(fromEvent.teeId);
     setHoles(fromEvent.holes === 'front' ? 'front' : fromEvent.holes === 'back' ? 'back' : '18');
     setEventRoundId(fromEvent.id);
+  }
+  const [appliedJoin, setAppliedJoin] = useState<string | undefined>();
+  if (joinRound && appliedJoin !== joinRound.id) {
+    setAppliedJoin(joinRound.id);
+    setKind('course');
+    setCourseId(joinRound.courseId);
+    setTeeId(joinRound.teeId);
+    const first = joinRound.holeNumbers[0] ?? 1;
+    setHoles(joinRound.holeNumbers.length >= 18 ? '18' : first >= 10 ? 'back' : 'front');
+    // A round in progress today: tee off now, live. Otherwise log it for the day they played.
+    setWhen(joinRound.status === 'active' && joinRound.date === todayISO() ? 'now' : 'earlier');
+    setPlayedOn(joinRound.date);
+    setEventRoundId(undefined);
   }
   const [query, setQuery] = useState('');
   const [withIds, setWithIds] = useState<string[]>([]);
@@ -100,8 +116,9 @@ export default function NewRound() {
     const effective = isNineHole(layout) && holes === 'back' ? 'front' : holes;
     const holeNumbers = effective === '18' ? all : effective === 'front' ? all.slice(0, 9) : all.slice(9, 18);
     const now = new Date().toISOString();
-    const group = scoring === 'group' && withIds.length > 0;
-    const groupId = group ? uuid() : undefined;
+    const group = !joinRound && scoring === 'group' && withIds.length > 0;
+    // Any round with friends forms a group, so friends on their own phones can join and everyone sees live scores.
+    const groupId = joinRound ? roundGroupKey(joinRound) : withIds.length > 0 ? uuid() : undefined;
     const linkTo = kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? eventRoundId : undefined;
     const linkEvent = linkTo ? data.eventRounds.find((r) => r.id === linkTo)?.eventId : undefined;
     const inEvent = (id: string) => !!linkEvent && data.eventMembers.some((m) => m.eventId === linkEvent && m.playerId === id && m.status === 'joined');
@@ -125,7 +142,9 @@ export default function NewRound() {
     const mine = roundFor(data.me.id);
     setStarting(true);
     try {
-      await data.saveRounds(group ? [mine, ...withIds.map(roundFor)] : [mine]);
+      // Friends' scored rounds first, so nobody you're scoring for gets a "join this round" prompt.
+      if (group) await data.saveRounds(withIds.map(roundFor));
+      await data.saveRounds([mine]);
       router.replace(`/round/play/${mine.id}`);
     } finally {
       setStarting(false);
@@ -135,11 +154,23 @@ export default function NewRound() {
   return (
     <View style={[styles.root, { paddingTop: insets.top || space.lg }]}>
       <View style={styles.header}>
-        <Text style={styles.title}>Log a Round</Text>
+        <Text style={styles.title}>{joinRound ? 'Add your scores' : 'Log a Round'}</Text>
         <IconButton name="x" label="Close" onPress={() => router.back()} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        {joinRound ? (
+          <View style={styles.joinBanner}>
+            {joinOwner ? <Avatar player={joinOwner} size={36} /> : null}
+            <Text style={[styles.note, { flex: 1, color: colors.ink }]}>
+              {joinRound.status === 'active' && joinRound.date === todayISO()
+                ? `${joinOwner?.name.split(' ')[0] ?? 'A friend'} teed off at ${data.roundCourseName(joinRound)}. Keep your own score on your phone; you'll see each other's scores live as you play.`
+                : `You played with ${joinOwner?.name.split(' ')[0] ?? 'a friend'} at ${data.roundCourseName(joinRound)} on ${formatDay(joinRound.date)}. Enter your own scores hole by hole; your round shows up next to theirs.`}
+            </Text>
+          </View>
+        ) : null}
+        {joinRound ? null : (
+        <>
         <Chips
           value={kind}
           onChange={(k) => { setKind(k); setCourseId(undefined); setTeeId(undefined); if (k === 'sim' && when === 'later') setWhen('now'); }}
@@ -147,8 +178,10 @@ export default function NewRound() {
         />
         {kind === 'sim' ? <Text style={styles.note}>Sim rounds count toward sim stats and sim badges only, never real-course collectibles.</Text> : null}
 
-        <Text style={styles.label}>When</Text>
-        <Chips
+        </>
+        )}
+        {joinRound ? null : <Text style={styles.label}>When</Text>}
+        {joinRound ? null : <Chips
           value={when}
           onChange={setWhen}
           options={[
@@ -156,8 +189,8 @@ export default function NewRound() {
             { value: 'earlier' as When, label: 'Already played' },
             ...(kind === 'course' ? [{ value: 'later' as When, label: 'Schedule' }] : []),
           ]}
-        />
-        {when === 'earlier' ? (
+        />}
+        {when === 'earlier' && !joinRound ? (
           <>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.days} style={styles.daysScroll}>
               {pastDays.map((d) => {
@@ -180,13 +213,13 @@ export default function NewRound() {
         ) : null}
 
         {layout ? (
-          <Tap haptic="select" scaleTo={0.98} style={styles.selected} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
+          <Tap haptic="select" scaleTo={0.98} style={styles.selected} disabled={!!joinRound} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
             {course ? (
               <Collectible courseId={course.id} region={course.region} kind="ball-marker" tier={data.collections.get(course.id)?.tier?.tier} label={shortCourseName(course.name)} size={52} />
             ) : <SceneImage seed={layout.id} style={styles.selectedThumb} />}
             <View style={{ flex: 1 }}>
               <Text style={styles.selectedName}>{layout.name}</Text>
-              <Text style={styles.sub}>{isNineHole(layout) ? '9 holes · ' : ''}Par {layout.holes.reduce((s, h) => s + h.par, 0)} · tap to change</Text>
+              <Text style={styles.sub}>{isNineHole(layout) ? '9 holes · ' : ''}Par {layout.holes.reduce((s, h) => s + h.par, 0)}{joinRound ? '' : ' · tap to change'}</Text>
             </View>
             <Icon name="check" size={20} color={colors.fairway} />
           </Tap>
@@ -302,6 +335,8 @@ export default function NewRound() {
               </>
             ) : null}
 
+            {joinRound ? null : (
+            <>
             <Text style={styles.label}>Playing with</Text>
             <View style={styles.friends}>
               {data.friends.map((f) => {
@@ -330,6 +365,8 @@ export default function NewRound() {
               </>
             ) : (
               <Text style={styles.note}>Add friends to keep the whole group’s score on this phone.</Text>
+            )}
+            </>
             )}
           </>
         ) : null}
@@ -381,6 +418,7 @@ const styles = themed(() => StyleSheet.create({
   locNote: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: space.sm },
   link: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway },
   miles: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.inkMuted, marginRight: space.sm, fontVariant: ['tabular-nums'] },
+  joinBanner: { flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md, borderRadius: radius.lg, backgroundColor: colors.tint },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
   startButton: { backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
   startText: { fontFamily: fonts.bodySemibold, fontSize: 17, color: colors.cream },

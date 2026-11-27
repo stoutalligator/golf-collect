@@ -1,3 +1,4 @@
+import { AppState } from 'react-native';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
@@ -11,7 +12,7 @@ import { handicapIndex, scoreDifferential } from '@/domain/analytics';
 import { playLayout, ratingFor } from '@/domain/layout';
 import { courseCollection, type CourseCollection, type ItemState } from '@/domain/collection';
 import { careerStats, summarizeRound, type CareerStats, type HoleLayout, type RoundSummary } from '@/domain/stats';
-import { roundOwner, type Comment, type Course, type CourseSummary, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
+import { roundGroupKey, roundOwner, type Comment, type Course, type CourseSummary, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
 
 /** Everything derived for one player (you or a friend) from their rounds. */
 export interface PlayerData {
@@ -71,6 +72,8 @@ export interface AppData extends AppSnapshot {
   playerData(id: string): PlayerData | undefined;
   /** Any round (yours or a friend's). */
   roundById(id: string): Round | undefined;
+  /** Everyone's rounds from the same tee time (see `roundGroupKey`), including this one. */
+  roundGroup(round: Round): Round[];
   earnedInRound(round: Round): RoundEarnings;
   layoutFor(round: Round): HoleLayout | undefined;
   /** Full scorecard when loaded (see `useCourse` / `loadCourses`). */
@@ -95,6 +98,8 @@ export interface AppData extends AppSnapshot {
   clearRounds(): Promise<void>;
   /** Refetch everything from the server (pull to refresh). */
   refresh(): Promise<void>;
+  /** Refetch one group's rounds (live scores on the play screen). */
+  refreshGroup(groupKey: string): Promise<void>;
   searchPlayers(query: string): Promise<Player[]>;
   sendFriendRequest(playerId: string): Promise<void>;
   respondToRequest(playerId: string, accept: boolean): Promise<void>;
@@ -133,10 +138,12 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const loadedAt = useRef(0);
   const reload = useCallback(async (force = false) => {
     if (!repo) return;
     try {
       setSnap(await repo.load(force));
+      loadedAt.current = Date.now();
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -156,6 +163,15 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     reload();
   }, [reload]);
 
+  // Coming back to the app after a minute or more: refetch quietly, so friends' rounds, requests and schedule
+  // changes are there without pulling to refresh.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active' && loadedAt.current && Date.now() - loadedAt.current > 60_000) reload(true);
+    });
+    return () => sub.remove();
+  }, [reload]);
+
   const derived = useMemo(() => {
     const courseMap = new Map(snap.courses.map((c) => [c.id, c]));
     const indexMap = new Map(snap.courseIndex.map((c) => [c.id, c]));
@@ -166,6 +182,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) : playable.get(r.courseId));
     const allRounds = [...snap.rounds, ...snap.friendRounds];
     const roundMap = new Map(allRounds.map((r) => [r.id, r]));
+    const groups = new Map<string, Round[]>();
+    for (const r of allRounds) groups.set(roundGroupKey(r), [...(groups.get(roundGroupKey(r)) ?? []), r]);
+    const roundGroup = (round: Round) => groups.get(roundGroupKey(round)) ?? [round];
 
     const summaries = new Map<string, RoundSummary>();
     for (const r of allRounds) {
@@ -223,7 +242,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           round,
           owner,
           summary,
-          with: round.playerIds.filter((id) => id !== owner.id).map((id) => players.get(id)).filter((p): p is Player => !!p),
+          // Tagged players plus anyone who logged their own round in the same group.
+          with: [...new Set([...round.playerIds, ...roundGroup(round).map(roundOwner)])]
+            .filter((id) => id !== owner.id)
+            .map((id) => players.get(id))
+            .filter((p): p is Player => !!p),
           earned: earnedInRound(round),
           reactions: snap.social.reactions[round.id] ?? [],
           comments: snap.social.comments[round.id] ?? [],
@@ -243,6 +266,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       playerById: (id: string) => players.get(id),
       playerData: (id: string) => playerDataMap.get(id),
       roundById: (id: string) => roundMap.get(id),
+      roundGroup,
       earnedInRound,
       layoutFor,
       courseById: (id: string) => courseMap.get(id),
@@ -272,6 +296,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     resetToSample: repo?.resetToSample ? async () => { await repo.resetToSample!(); await reload(); } : undefined,
     clearRounds: async () => { await repo!.clearRounds(); await reload(); },
     refresh: () => reload(true),
+    refreshGroup: async (key) => {
+      if (!repo) return;
+      try {
+        setSnap(await repo.refreshGroup(key));
+      } catch {
+        // Live scores are best effort; the next tick tries again.
+      }
+    },
     loadCourses: async (ids) => { await repo!.loadCourses(ids); await reload(); },
     searchPlayers: (q) => repo!.searchPlayers(q),
     sendFriendRequest: async (id) => { await repo!.sendFriendRequest(id); await reload(); },
