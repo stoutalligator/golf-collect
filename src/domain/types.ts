@@ -150,6 +150,8 @@ export interface HoleScore {
   penalties?: number;
   chips?: number;
   sandShots?: number;
+  /** Who last entered this hole's strokes (set by the server; shared scoring while playing). */
+  enteredBy?: string;
 }
 
 export type RoundKind = 'course' | 'sim';
@@ -177,12 +179,18 @@ export interface Round {
   scoredBy?: string;
   /** Rounds scored together on one phone share a group id. */
   groupId?: string;
+  /** Team scramble: one team score per hole, teammates in playerIds. Never counts toward handicap, stats,
+   *  collectibles or badges. Omitted = an individual round. */
+  format?: 'scramble';
   createdAt: ISODateTime;
   completedAt?: ISODateTime;
 }
 
 /** Owner of a round ("me" when omitted). */
 export const roundOwner = (r: Round): string => r.ownerId ?? 'me';
+
+/** Rounds that count toward handicap, stats, collectibles and badges (scrambles don't). */
+export const countsForStats = (r: Pick<Round, 'format'>): boolean => r.format !== 'scramble';
 
 /**
  * Rounds played together share a group: a scorekeeper's group (`groupId` on every round), or a friend who added

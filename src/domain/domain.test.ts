@@ -35,6 +35,17 @@ describe('stats', () => {
     expect(s.pars).toBe(18);
   });
 
+  it('keeps scrambles out of course stats and collectibles', () => {
+    const scramble = { ...makeRound({ id: 's1', strokes: keney.holes.map((h) => h.par - 1) }), format: 'scramble' as const };
+    const s = sum(scramble);
+    expect(s.kind).toBe('scramble'); // so every course/sim filter skips it
+    expect(s.strokes).toBe(52);
+    expect(careerStats([s].filter((x) => x.kind === 'course')).rounds).toBe(0);
+    const col = courseCollection(keney, [s], TIERS, collectiblesForCourse(keney.id));
+    expect(col.played).toBe(false);
+    expect(col.tier).toBeNull();
+  });
+
   it('derives GIR only when putts are entered', () => {
     expect(deriveGir({ strokes: 4, putts: 2 }, 4)).toBe(true);
     expect(deriveGir({ strokes: 5, putts: 2 }, 4)).toBe(false);

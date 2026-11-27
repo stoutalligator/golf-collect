@@ -14,7 +14,8 @@ export interface HoleResult {
 
 export interface RoundSummary {
   roundId: string;
-  kind: Round['kind'];
+  /** 'scramble' for team scrambles, so every course/sim filter leaves them out. */
+  kind: Round['kind'] | 'scramble';
   courseId: string;
   date: string;
   /** Number of holes with a recorded score. */
@@ -79,7 +80,7 @@ export function summarizeRound(round: Round, layout: HoleLayout, playerId: strin
 
   return {
     roundId: round.id,
-    kind: round.kind,
+    kind: round.format === 'scramble' ? 'scramble' : round.kind,
     courseId: round.courseId,
     date: round.date,
     holesPlayed: results.length,

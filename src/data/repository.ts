@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import type { CompetitionEvent, EventKind, EventFormat, EventMatch, EventMember, EventRound } from '@/domain/competition';
-import { summarizeCourse, type Comment, type Course, type CourseSummary, type Player, type ReactionEmoji, type Round, type SimCourse, type SocialState } from '@/domain/types';
+import { summarizeCourse, type Comment, type Course, type CourseSummary, type HoleScore, type Player, type ReactionEmoji, type Round, type SimCourse, type SocialState } from '@/domain/types';
 
 import { FRIENDS, generateFriendRounds, generateSampleRounds, ME } from './sample/generate';
 import { generateSocial } from './sample/social';
@@ -51,8 +51,11 @@ export interface Repository {
   load(force?: boolean): Promise<AppSnapshot>;
   /** Make sure full scorecards for these course ids are in the snapshot (no-op when already loaded). */
   loadCourses(ids: string[]): Promise<void>;
-  /** Save a round you own, or one you're keeping score for (group scoring; `ownerId` is the friend). */
-  saveRound(round: Round): Promise<void>;
+  /** Save a round you own, or one you're keeping score for (group scoring; `ownerId` is the friend).
+   *  `holes` limits the write to those hole numbers (so others' entries on other holes are never overwritten). */
+  saveRound(round: Round, opts?: { holes?: number[] }): Promise<void>;
+  /** Shared scoring: write holes on a round you're playing but don't own (while it's in progress). */
+  saveHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<void>;
   deleteRound(id: string): Promise<void>;
   /** Refetch just the rounds in one group (live scores while playing), merged into the snapshot. */
   refreshGroup(groupKey: string): Promise<AppSnapshot>;
@@ -218,6 +221,8 @@ export class LocalRepository implements Repository {
   }
 
   async refreshGroup() { return this.load(); }
+
+  async saveHoleScores() {}
 
   async createEvent(): Promise<string> { this.needsAccount(); }
 

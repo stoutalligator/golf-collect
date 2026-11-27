@@ -14,6 +14,7 @@ import { Icon } from '@/components/icons';
 import { Animated, popIn, Tap } from '@/components/motion';
 import { CourseThumb } from '@/components/round-card';
 import { DatePicker, TeeTimePicker } from '@/components/date-time';
+import { RoundTicket } from '@/components/round-ticket';
 import { Avatar } from '@/components/social';
 import { Button, Chips, IconButton, Loading, SearchField } from '@/components/ui';
 import { defaultFormat, type EventRound } from '@/domain/competition';
@@ -71,6 +72,8 @@ export default function Schedule() {
   const [roundName, setRoundName] = useState(leagueRound?.name ?? '');
   const [confirmRemove, setConfirmRemove] = useState(false);
   const [spots, setSpots] = useState<string>(String(editing?.format.spots ?? 4));
+  // Stroke play (everyone's own round) or a team scramble (doesn't count toward stats).
+  const [team, setTeam] = useState<'stroke' | 'scramble'>(editing?.format.team === 'scramble' ? 'scramble' : 'stroke');
   const [invite, setInvite] = useState<string[]>([]);
   const [note, setNote] = useState(editing?.format.note ?? '');
   const [name, setName] = useState(editing?.name ?? '');
@@ -105,7 +108,7 @@ export default function Schedule() {
     if (!courseId || busy) return;
     setBusy(true);
     setError(null);
-    const format = { ...defaultFormat('outing'), spots: limit || undefined, note: note.trim() || undefined };
+    const format = { ...defaultFormat('outing'), spots: limit || undefined, note: note.trim() || undefined, team: team === 'scramble' ? ('scramble' as const) : undefined };
     try {
       if (league) {
         const round = { name: roundName.trim() || autoRoundName, scheduledOn: date, teeTime, courseId, teeId: tee, holes: finalHoles };
@@ -157,40 +160,20 @@ export default function Schedule() {
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         {/* Live invitation preview */}
-        <Animated.View entering={popIn(0, { from: 0.97, duration: 260 })} style={styles.ticket}>
-          <View style={styles.ticketTop}>
-            {course ? <CourseThumb course={course} style={styles.ticketArt} /> : <View style={[styles.ticketArt, styles.ticketArtEmpty]}><Icon name="flag" size={22} color={colors.inkMuted} /></View>}
-            <View style={styles.dateBlock}>
-              <Text style={styles.dateDow}>{parts.dow}</Text>
-              <Text style={styles.dateDay}>{parts.day}</Text>
-              <Text style={styles.dateMonth}>{parts.month}</Text>
-            </View>
-          </View>
-          <View style={styles.ticketBody}>
-            <Text style={styles.ticketName} numberOfLines={1}>{league ? `${league.name} · ${roundName.trim() || autoRoundName}` : name.trim() || autoName}</Text>
-            <Text style={styles.ticketCourse} numberOfLines={1}>{course?.name ?? 'Pick a course'}</Text>
-            <Text style={styles.ticketMeta}>
-              {teeTime ? formatTeeTime(teeTime) : 'Tee time TBD'}
-              {teeInfo ? ` · ${teeInfo.name} tees` : ''}
-              {course && isNineHole(course) ? (holes === 'all' ? ' · 18 holes (twice around)' : ' · 9 holes') : holes !== 'all' ? ` · ${holes === 'front' ? 'Front' : 'Back'} 9` : ' · 18 holes'}
-            </Text>
-            <View style={styles.slots}>
-              {Array.from({ length: league ? Math.min(groupPlayers.length, 6) : Math.max(limit || groupPlayers.length, groupPlayers.length) }, (_, i) => {
-                const p = groupPlayers[i];
-                return p ? (
-                  <View key={p.id} style={styles.slotFilled}><Avatar player={p} size={34} /></View>
-                ) : (
-                  <View key={`open-${i}`} style={styles.slotOpen}><Icon name="plus" size={14} color={colors.inkMuted} /></View>
-                );
-              })}
-              <Text style={styles.slotText}>
-                {league
-                  ? `${groupPlayers.length} ${groupPlayers.length === 1 ? 'player' : 'players'} in the ${league.kind}`
-                  : limit ? `${Math.max(0, limit - groupPlayers.length)} ${limit - groupPlayers.length === 1 ? 'spot' : 'spots'} open` : `${groupPlayers.length} invited`}
-              </Text>
-            </View>
-            {!league && note.trim() ? <Text style={styles.ticketNote} numberOfLines={3}>“{note.trim()}”</Text> : null}
-          </View>
+        <Animated.View entering={popIn(0, { from: 0.97, duration: 260 })}>
+          <RoundTicket
+            course={course}
+            date={date}
+            kicker={league ? `${league.name} · ${roundName.trim() || autoRoundName}` : name.trim() || autoName}
+            title={course?.name ?? 'Pick a course'}
+            meta={`${teeTime ? formatTeeTime(teeTime) : 'Tee time TBD'}${teeInfo ? ` · ${teeInfo.name} tees` : ''}${course && isNineHole(course) ? (holes === 'all' ? ' · 18 holes (twice around)' : ' · 9 holes') : holes !== 'all' ? ` · ${holes === 'front' ? 'Front' : 'Back'} 9` : ' · 18 holes'}${!league && team === 'scramble' ? ' · Scramble' : ''}`}
+            players={league ? groupPlayers.slice(0, 6) : groupPlayers}
+            openSpots={league ? 0 : Math.max(0, (limit || groupPlayers.length) - groupPlayers.length)}
+            playersText={league
+              ? `${groupPlayers.length} ${groupPlayers.length === 1 ? 'player' : 'players'} in the ${league.kind}`
+              : limit ? `${Math.max(0, limit - groupPlayers.length)} ${limit - groupPlayers.length === 1 ? 'spot' : 'spots'} open` : `${groupPlayers.length} invited`}
+            note={!league && note.trim() ? note.trim() : undefined}
+          />
         </Animated.View>
 
         {/* Course */}
@@ -272,6 +255,13 @@ export default function Schedule() {
         {/* Group */}
         <Section title="Who">
           <View style={styles.sizeRow}>
+            <Text style={styles.sizeLabel}>Format</Text>
+            <View style={{ flex: 1 }}>
+              <Chips value={team} onChange={setTeam} options={[{ value: 'stroke' as const, label: 'Stroke play' }, { value: 'scramble' as const, label: 'Scramble' }]} />
+            </View>
+          </View>
+          {team === 'scramble' ? <Text style={styles.help}>A team scramble: one score per team. It shows in everyone’s feed but doesn’t count toward handicap, stats, collectibles or badges.</Text> : null}
+          <View style={styles.sizeRow}>
             <Text style={styles.sizeLabel}>Group size</Text>
             <View style={{ flex: 1 }}>
               <Chips value={spots} onChange={setSpots} options={GROUPS.map((g) => ({ value: g.value, label: g.label }))} />
@@ -352,24 +342,6 @@ const styles = themed(() => StyleSheet.create({
   help: { ...type.caption, fontSize: 12, color: colors.inkMuted },
   warn: { ...type.caption, fontSize: 12, color: colors.ink },
   error: { ...type.body, fontSize: 14, color: colors.danger },
-  // Ticket
-  ticket: { backgroundColor: colors.creamLight, borderRadius: radius.xl, overflow: 'hidden', ...shadow.card },
-  ticketTop: { height: 110 },
-  ticketArt: { width: '100%', height: '100%', borderRadius: 0 },
-  ticketArtEmpty: { backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
-  dateBlock: { position: 'absolute', right: space.lg, bottom: -28, width: 64, paddingVertical: 8, borderRadius: radius.md, backgroundColor: colors.creamLight, alignItems: 'center', ...shadow.control },
-  dateDow: { fontFamily: fonts.bodySemibold, fontSize: 10, letterSpacing: 1.2, color: colors.gold },
-  dateDay: { fontFamily: fonts.displayBold, fontSize: 26, lineHeight: 30, color: colors.fairway },
-  dateMonth: { fontFamily: fonts.bodySemibold, fontSize: 10, letterSpacing: 1.2, color: colors.inkMuted },
-  ticketBody: { padding: space.lg, paddingTop: space.md, gap: 2 },
-  ticketName: { fontFamily: fonts.bodySemibold, fontSize: 12, letterSpacing: 0.6, color: colors.gold, paddingRight: 80 },
-  ticketCourse: { fontFamily: fonts.displayBold, fontSize: 22, lineHeight: 28, color: colors.fairway, paddingRight: 80 },
-  ticketMeta: { ...type.caption, fontSize: 13, color: colors.inkMuted },
-  ticketNote: { fontFamily: fonts.displayItalic, fontSize: 15, color: colors.ink, marginTop: space.sm },
-  slots: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: space.md },
-  slotFilled: { borderRadius: 19, borderWidth: 2, borderColor: colors.creamLight },
-  slotOpen: { width: 38, height: 38, borderRadius: 19, borderWidth: 1.5, borderStyle: 'dashed', borderColor: colors.rule, alignItems: 'center', justifyContent: 'center' },
-  slotText: { ...type.caption, fontSize: 12, color: colors.inkMuted, marginLeft: 4 },
   // Course
   courseRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.creamLight, borderRadius: radius.lg, padding: space.sm, paddingRight: space.md, ...shadow.card },
   courseThumb: { width: 64, height: 46 },

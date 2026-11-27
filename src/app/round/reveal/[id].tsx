@@ -12,6 +12,7 @@ import { formatToPar } from '@/domain/stats';
 import type { Round } from '@/domain/types';
 import { haptics } from '@/lib/haptics';
 import { shortCourseName } from '@/lib/names';
+import { matchLine, matchStatus, teamNumbers } from '@/domain/teams';
 import { useAppData } from '@/state/app-data';
 import { fonts, palettes, radius, space, themed, type } from '@/theme';
 import { FadeIn } from 'react-native-reanimated';
@@ -140,30 +141,43 @@ function WrapUp({ round, rewards }: { round: Round; rewards: number }) {
   const current = col?.tier?.tier;
   const nextTier = TIERS.find((t) => !current || tierRank(t.tier) > tierRank(current));
   const group = useMemo(() => {
-    return data.roundGroup(round)
-      .map((r) => ({ r, s: data.summaries.get(r.id), p: data.playerById(r.ownerId ?? data.me.id) }))
+    const all = data.roundGroup(round);
+    const teams = teamNumbers(all);
+    return all
+      .map((r) => ({
+        r, s: data.summaries.get(r.id), p: data.playerById(r.ownerId ?? data.me.id),
+        // Scramble teams read "Team 2 · Mike, Dana"; individual rounds the player's first name.
+        label: teams.get(r.id) ? `Team ${teams.get(r.id)}` : undefined,
+        members: r.playerIds.map((pid) => data.playerById(pid)).filter((x): x is NonNullable<typeof x> => !!x),
+      }))
       .filter((x) => x.s && x.p)
       .sort((a, b) => a.s!.strokes - b.s!.strokes);
   }, [data, round]);
+  const versus = group.length === 2 && group.every((g) => g.s!.isComplete)
+    ? matchLine(matchStatus(group[0].r.scores[group[0].r.ownerId ?? data.me.id] ?? [], group[1].r.scores[group[1].r.ownerId ?? data.me.id] ?? [], round.holeNumbers.length),
+      group[0].label ?? (group[0].p!.id === data.me.id ? 'You' : group[0].p!.name.split(' ')[0]),
+      group[1].label ?? (group[1].p!.id === data.me.id ? 'You' : group[1].p!.name.split(' ')[0]))
+    : undefined;
 
   return (
     <View style={{ gap: space.lg, alignSelf: 'stretch' }}>
-      <Text style={styles.kicker}>{rewards ? `${rewards} earned this round` : 'Round saved'}</Text>
+      <Text style={styles.kicker}>{round.format === 'scramble' ? 'Scramble saved · just for fun' : rewards ? `${rewards} earned this round` : 'Round saved'}</Text>
       <Text style={styles.course}>{course ? shortCourseName(course.name) : data.roundCourseName(round)}</Text>
       {group.length > 1 ? (
         <View style={styles.board}>
-          {group.map(({ r, s, p }, i) => (
+          {versus ? <Text style={styles.versus}>{versus} · match play</Text> : null}
+          {group.map(({ r, s, p, label, members }, i) => (
             <Animated.View key={r.id} entering={popIn(80 + i * 70, { from: 0.96 })} style={[styles.boardRow, i > 0 && styles.boardRule]}>
               <Text style={styles.boardPos}>{i + 1}</Text>
               <View style={styles.ring}><Avatar player={p!} size={30} /></View>
-              <Text style={styles.boardName} numberOfLines={1}>{p!.id === data.me.id ? 'You' : p!.name.split(' ')[0]}</Text>
+              <Text style={styles.boardName} numberOfLines={1}>{label ? `${label} · ${members.map((m) => (m.id === data.me.id ? 'You' : m.name.split(' ')[0])).join(', ')}` : p!.id === data.me.id ? 'You' : p!.name.split(' ')[0]}</Text>
               <Text style={styles.boardScore}>{s!.strokes}</Text>
               <Text style={styles.boardToPar}>{formatToPar(s!.toPar)}</Text>
             </Animated.View>
           ))}
         </View>
       ) : null}
-      {round.kind === 'course' && nextTier ? (
+      {round.kind === 'course' && round.format !== 'scramble' && nextTier ? (
         <View style={styles.nextUp}>
           <Text style={styles.nextLabel}>Next here</Text>
           <Text style={styles.nextText}>{nextTier.label} for the {nextTier.name} ball marker</Text>
@@ -243,6 +257,7 @@ const styles = themed(() => StyleSheet.create({
   title: { fontFamily: fonts.display, fontSize: 28, lineHeight: 34, color: colors.cream, textAlign: 'center' },
   sub: { ...type.body, fontSize: 15, color: colors.goldSoft, textAlign: 'center', maxWidth: 300 },
   board: { borderRadius: radius.lg, backgroundColor: 'rgba(246,239,227,0.06)', borderWidth: StyleSheet.hairlineWidth, borderColor: 'rgba(233,220,190,0.25)', paddingHorizontal: space.md },
+  versus: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.gold, textAlign: 'center', paddingVertical: space.sm },
   boardRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm + 2 },
   boardRule: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: 'rgba(233,220,190,0.2)' },
   boardPos: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.goldSoft, width: 14 },

@@ -162,7 +162,8 @@ function quickStats(s: RoundSummary) {
 export function joinableRound(data: ReturnType<typeof useAppData>, round: FeedPost['round']): { ok: boolean; tagged: boolean; recent: boolean } {
   const owner = roundOwner(round);
   const mine = owner === data.me.id || data.roundGroup(round).some((r) => roundOwner(r) === data.me.id);
-  const ok = !data.offline && round.kind === 'course' && !mine;
+  // A scramble already has its whole team on one card.
+  const ok = !data.offline && round.kind === 'course' && round.format !== 'scramble' && !mine;
   const days = (Date.parse(`${todayISO()}T12:00:00`) - Date.parse(`${round.date}T12:00:00`)) / 864e5;
   return { ok, tagged: ok && round.playerIds.includes(data.me.id), recent: ok && days <= 7 };
 }
@@ -185,7 +186,7 @@ export function FeedCard({ post }: { post: FeedPost }) {
           <Text style={styles.who} numberOfLines={1}>{isMe ? 'You' : owner.name}</Text>
           <Text style={styles.when} numberOfLines={1}>{formatDate(round.date)} · {course ? `${course.city}, ${course.state}` : 'Simulator'}</Text>
         </View>
-        {round.kind === 'sim' ? <Text style={styles.simTag}>SIM</Text> : null}
+        {round.kind === 'sim' ? <Text style={styles.simTag}>SIM</Text> : round.format === 'scramble' ? <Text style={styles.simTag}>SCRAMBLE</Text> : null}
       </Tap>
       <Tap onPress={open} scaleTo={0.985} accessibilityRole="button" accessibilityLabel={`${owner.name} shot ${summary.strokes} at ${courseName}`} style={{ gap: space.md }}>
 

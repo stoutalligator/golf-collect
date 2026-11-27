@@ -25,13 +25,12 @@ type ProfileRow = {
 };
 type HoleScoreRow = {
   hole_number: number; strokes: number; putts: number | null; fairway: FairwayResult | null; gir: boolean | null;
-  penalties: number | null; chips: number | null; sand_shots: number | null;
-};
+  penalties: number | null; chips: number | null; sand_shots: number | null; entered_by?: string | null; };
 type RoundPlayerRow = { id: string; profile_id: string | null; guest_name: string | null; is_owner: boolean; hole_scores: HoleScoreRow[] };
 type RoundRow = {
   id: string; owner_id: string; kind: 'course' | 'sim'; course_id: string | null; sim_course_id: string | null; tee_id: string | null;
   played_on: string; status: 'active' | 'complete'; hole_numbers: number[]; created_at: string; completed_at: string | null;
-  event_round_id: string | null; scored_by: string | null; group_id: string | null;
+  event_round_id: string | null; scored_by: string | null; group_id: string | null; format?: 'individual' | 'scramble';
   round_players: RoundPlayerRow[];
 };
 
@@ -60,6 +59,7 @@ function toHoleScore(h: HoleScoreRow): HoleScore {
   if (h.penalties !== null) s.penalties = h.penalties;
   if (h.chips !== null) s.chips = h.chips;
   if (h.sand_shots !== null) s.sandShots = h.sand_shots;
+  if (h.entered_by) s.enteredBy = h.entered_by;
   return s;
 }
 
@@ -90,6 +90,7 @@ function toRound(r: RoundRow): Round {
     eventRoundId: r.event_round_id ?? undefined,
     scoredBy: r.scored_by ?? undefined,
     groupId: r.group_id ?? undefined,
+    ...(r.format === 'scramble' ? { format: 'scramble' as const } : {}),
   };
 }
 
@@ -250,7 +251,7 @@ export class SupabaseRepository implements Repository {
       this.must(this.db.from('friendships').select('requester_id, addressee_id, status'), 'friendships'),
       this.must(
         this.db.from('rounds')
-          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
+          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, format, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots, entered_by))')
           .order('played_on', { ascending: false })
           .limit(500),
         'rounds',
@@ -323,18 +324,19 @@ export class SupabaseRepository implements Repository {
     const snap = this.snap ?? (await this.load());
     const rows = (await this.must(
       this.db.from('rounds')
-        .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots))')
+        .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, format, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots, entered_by))')
         .or(`id.eq.${groupKey},group_id.eq.${groupKey}`),
       'group rounds',
     )) as RoundRow[];
     const fresh = rows.map(toRound);
     const merge = (list: Round[], mine: boolean) => {
       const byId = new Map(list.map((r) => [r.id, r]));
-      for (const r of fresh) if ((r.ownerId === this.userId) === mine && r.scoredBy !== this.userId) byId.set(r.id, r);
+      for (const r of fresh) if ((r.ownerId === this.userId) === mine) byId.set(r.id, r);
       return [...byId.values()];
     };
-    // Rounds you're editing (yours, or ones you keep score for) keep their local copy; friends' own rounds take the server's.
-    this.snap = { ...snap, rounds: snap.rounds, friendRounds: merge(snap.friendRounds, false) };
+    // Everyone can edit every card while playing, so the server's copy wins; the play screen keeps its own unsaved
+    // edits on top until they're saved.
+    this.snap = { ...snap, rounds: merge(snap.rounds, true), friendRounds: merge(snap.friendRounds, false) };
     return this.snap;
   }
 
@@ -342,7 +344,7 @@ export class SupabaseRepository implements Repository {
     if (this.snap) this.snap = { ...this.snap, ...next };
   }
 
-  async saveRound(round: Round) {
+  async saveRound(round: Round, opts: { holes?: number[] } = {}) {
     const me = this.userId;
     const owner = round.ownerId ?? me;
     // Keeping score for a friend: the round stays 'active' until its scores are written (the scorekeeper can only
@@ -363,6 +365,7 @@ export class SupabaseRepository implements Repository {
       created_at: round.createdAt,
       completed_at: keeper ? null : round.completedAt ?? null,
       event_round_id: round.eventRoundId ?? null,
+      format: round.format ?? 'individual',
     }), 'save round');
 
     // Players: the owner row once; tagged friends added/removed to match playerIds.
@@ -385,8 +388,11 @@ export class SupabaseRepository implements Repository {
     if (drop.length) await this.must(this.db.from('round_players').delete().eq('round_id', round.id).in('profile_id', drop), 'untag players');
 
     // Scores: write entered holes (unentered stats as null, never 0); remove holes cleared back to empty.
+    // With `holes`, only those holes are touched, so a save never overwrites what someone else entered on another hole.
     const scores = round.scores[owner] ?? round.scores[round.playerIds[0]] ?? [];
+    const only = opts.holes ? new Set(opts.holes) : null;
     const rows = round.holeNumbers.flatMap((n, i) => {
+      if (only && !only.has(n)) return [];
       const s = scores[i];
       return s ? [{
         round_player_id: slot, hole_number: n, strokes: s.strokes, putts: s.putts ?? null, fairway: s.fairway ?? null, gir: s.gir ?? null,
@@ -394,7 +400,7 @@ export class SupabaseRepository implements Repository {
       }] : [];
     });
     if (rows.length) await this.must(this.db.from('hole_scores').upsert(rows), 'save scores');
-    const empty = round.holeNumbers.filter((_, i) => !scores[i]);
+    const empty = round.holeNumbers.filter((n, i) => !scores[i] && (!only || only.has(n)));
     if (empty.length) await this.must(this.db.from('hole_scores').delete().eq('round_player_id', slot).in('hole_number', empty), 'clear scores');
 
     if (keeper && round.status === 'complete') {
@@ -406,6 +412,38 @@ export class SupabaseRepository implements Repository {
       this.patch(keeper
         ? { friendRounds: [...this.snap.friendRounds.filter((r) => r.id !== round.id), stored] }
         : { rounds: [...this.snap.rounds.filter((r) => r.id !== round.id), stored] });
+    }
+  }
+
+  /** Shared scoring: write some holes on a round you're playing but don't own (allowed while it's in progress). */
+  async saveHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]) {
+    if (!holes.length) return;
+    const owner = round.ownerId ?? this.userId;
+    let slot = this.ownerSlot.get(round.id);
+    if (!slot) {
+      const row = (await this.must(this.db.from('round_players').select('id').eq('round_id', round.id).eq('is_owner', true).single(), 'owner slot')) as { id: string };
+      slot = row.id;
+      this.ownerSlot.set(round.id, slot);
+    }
+    const put = holes.filter((h) => h.score).map(({ hole, score: s }) => ({
+      round_player_id: slot, hole_number: hole, strokes: s!.strokes, putts: s!.putts ?? null, fairway: s!.fairway ?? null, gir: s!.gir ?? null,
+      penalties: s!.penalties ?? null, chips: s!.chips ?? null, sand_shots: s!.sandShots ?? null,
+    }));
+    const clear = holes.filter((h) => !h.score).map((h) => h.hole);
+    if (put.length) await this.must(this.db.from('hole_scores').upsert(put), 'save scores');
+    if (clear.length) await this.must(this.db.from('hole_scores').delete().eq('round_player_id', slot).in('hole_number', clear), 'clear scores');
+    // Reflect it locally right away.
+    if (this.snap) {
+      const apply = (r: Round): Round => {
+        if (r.id !== round.id) return r;
+        const list = (r.scores[owner] ?? r.holeNumbers.map(() => null)).slice();
+        for (const { hole, score } of holes) {
+          const i = r.holeNumbers.indexOf(hole);
+          if (i >= 0) list[i] = score ? { ...score, enteredBy: this.userId } : null;
+        }
+        return { ...r, scores: { ...r.scores, [owner]: list } };
+      };
+      this.patch({ rounds: this.snap.rounds.map(apply), friendRounds: this.snap.friendRounds.map(apply) });
     }
   }
 

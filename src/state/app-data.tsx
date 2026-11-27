@@ -12,7 +12,7 @@ import { handicapIndex, scoreDifferential } from '@/domain/analytics';
 import { playLayout, ratingFor } from '@/domain/layout';
 import { courseCollection, type CourseCollection, type ItemState } from '@/domain/collection';
 import { careerStats, summarizeRound, type CareerStats, type HoleLayout, type RoundSummary } from '@/domain/stats';
-import { roundGroupKey, roundOwner, type Comment, type Course, type CourseSummary, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
+import { countsForStats, roundGroupKey, roundOwner, type Comment, type Course, type CourseSummary, type HoleScore, type Player, type Reaction, type ReactionEmoji, type Round, type SimCourse, type Tier } from '@/domain/types';
 
 /** Everything derived for one player (you or a friend) from their rounds. */
 export interface PlayerData {
@@ -87,7 +87,9 @@ export interface AppData extends AppSnapshot {
   roundCourseName(round: Round): string;
   saveRound(round: Round): Promise<void>;
   /** Save several rounds at once (a group on one phone), then refresh once. */
-  saveRounds(rounds: Round[]): Promise<void>;
+  saveRounds(rounds: Round[], opts?: { holes?: number[] }): Promise<void>;
+  /** Shared scoring: write holes on a round you're playing but don't own (while it's in progress). */
+  saveHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<void>;
   deleteRound(id: string): Promise<void>;
   updateProfile(changes: ProfileChanges): Promise<void>;
   toggleWishlist(courseId: string): Promise<void>;
@@ -194,12 +196,13 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
     const buildPlayer = (player: Player): PlayerData => {
       const rounds = allRounds.filter((r) => roundOwner(r) === player.id).sort(byNewest);
-      const done = rounds.map((r) => summaries.get(r.id)).filter((s): s is RoundSummary => !!s && s.isComplete);
+      // Scrambles are shown but never counted: no stats, collectibles, badges or handicap.
+      const done = rounds.map((r) => summaries.get(r.id)).filter((s): s is RoundSummary => !!s && s.isComplete && s.kind !== 'scramble');
       const collections = new Map(snap.courses.map((c) => [c.id, courseCollection(c, done, TIERS, collectiblesForCourse(c.id))]));
       const differentials = new Map<string, number>();
       for (const r of [...rounds].reverse()) {
         const s = summaries.get(r.id);
-        const course = r.kind === 'course' ? courseMap.get(r.courseId) : undefined;
+        const course = r.kind === 'course' && countsForStats(r) ? courseMap.get(r.courseId) : undefined;
         const tee = course?.tees.find((t) => t.id === r.teeId);
         const rating = course && tee ? ratingFor(tee, 18, course.holes.length) : undefined;
         if (s?.isFull18 && rating) differentials.set(r.id, scoreDifferential(s.strokes, rating.rating, rating.slope));
@@ -283,7 +286,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     error,
     offline: auth.offline,
     saveRound: async (r) => { await repo!.saveRound(r); await reload(); },
-    saveRounds: async (rs) => { await Promise.all(rs.map((r) => repo!.saveRound(r))); await reload(); },
+    saveRounds: async (rs, opts) => { await Promise.all(rs.map((r) => repo!.saveRound(r, opts))); await reload(); },
+    saveHoleScores: async (r, holes) => { await repo!.saveHoleScores(r, holes); await reload(); },
     updateProfile: async (changes) => { await repo!.updateProfile(changes); await reload(); },
     deleteRound: async (id) => { await repo!.deleteRound(id); await reload(); },
     toggleWishlist: async (id) => {

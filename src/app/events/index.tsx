@@ -2,23 +2,31 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { Icon } from '@/components/icons';
 import { Animated, enterItem, Tap } from '@/components/motion';
+import { EventCard, EventRoundTicket } from '@/components/event-card';
 import { Button, Empty, Group, IconButton, SectionHeader, SheetScreen } from '@/components/ui';
-import { FORMAT_LABEL, KIND_LABEL, type CompetitionEvent, type EventKind } from '@/domain/competition';
-import { formatDay, formatTeeTime, todayISO } from '@/lib/format';
+import { KIND_LABEL, type EventKind } from '@/domain/competition';
+import { todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
 import { useAuth } from '@/state/auth';
 import { useEventLists } from '@/state/events';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
 
-const KIND_ORDER: EventKind[] = ['league', 'tournament', 'outing'];
 const SECTION: Record<EventKind, string> = { league: 'Leagues', tournament: 'Tournaments', outing: 'Scheduled rounds' };
 
 export default function Events() {
   const data = useAppData();
   const auth = useAuth();
   const { invitations, active, upcoming } = useEventLists();
+  // Up next: the next few league / tournament rounds (scheduled rounds with friends have their own section).
+  const nextRounds = upcoming.filter(({ event }) => event.kind !== 'outing').slice(0, 3);
+  // Scheduled rounds: soonest first, past ones after.
+  const today = todayISO();
+  const outings = active
+    .filter((e) => e.kind === 'outing')
+    .map((event) => ({ event, round: data.eventRounds.find((r) => r.eventId === event.id) }))
+    .filter((x): x is { event: typeof x.event; round: NonNullable<typeof x.round> } => !!x.round)
+    .sort((a, b) => (a.round.scheduledOn < today ? 1 : 0) - (b.round.scheduledOn < today ? 1 : 0) || a.round.scheduledOn.localeCompare(b.round.scheduledOn));
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,48 +72,42 @@ export default function Events() {
         </View>
       ) : null}
 
-      {upcoming.length ? (
+      {nextRounds.length ? (
         <View style={styles.section}>
           <SectionHeader title="Up next" />
-          <Group>
-            {upcoming.slice(0, 4).map(({ round, event, courseName }) => {
-              const today = round.scheduledOn === todayISO();
-              return (
-                <View key={round.id} style={[styles.row, { paddingVertical: 0, paddingRight: today ? space.lg : 0 }]}>
-                  <Tap onPress={() => router.push(`/event/${event.id}/round/${round.id}`)} scaleTo={0.985} accessibilityRole="button" style={styles.rowMain}>
-                    <View style={[styles.dateBadge, today && styles.dateBadgeToday]}>
-                      <Icon name="calendar" size={16} color={today ? colors.cream : colors.fairway} />
-                    </View>
-                    <View style={{ flex: 1, gap: 2 }}>
-                      <Text style={styles.name} numberOfLines={1}>{event.name} · {round.name}</Text>
-                      <Text style={styles.meta} numberOfLines={1}>
-                        {today ? 'Today' : formatDay(round.scheduledOn)}{round.teeTime ? ` · ${formatTeeTime(round.teeTime)}` : ''} · {courseName}
-                      </Text>
-                    </View>
-                    {today ? null : <Icon name="chevron-right" size={16} color={colors.inkMuted} />}
-                  </Tap>
-                  {today ? <Small label="Log round" onPress={() => router.push(`/round/new?eventRound=${round.id}`)} /> : null}
-                </View>
-              );
-            })}
-          </Group>
+          {nextRounds.map(({ round, event }, i) => (
+            <Animated.View key={round.id} entering={enterItem(i)}>
+              <EventRoundTicket eventId={event.id} roundId={round.id} withEventName />
+            </Animated.View>
+          ))}
         </View>
       ) : null}
 
-      {KIND_ORDER.map((kind) => {
+      {(['league', 'tournament'] as EventKind[]).map((kind) => {
         const list = active.filter((e) => e.kind === kind);
         if (!list.length) return null;
         return (
           <View key={kind} style={styles.section}>
             <SectionHeader title={SECTION[kind]} count={String(list.length)} />
-            <Animated.View entering={enterItem(0)}>
-              <Group>
-                {list.map((e) => <EventRow key={e.id} event={e} />)}
-              </Group>
-            </Animated.View>
+            {list.map((e, i) => (
+              <Animated.View key={e.id} entering={enterItem(i)}>
+                <EventCard eventId={e.id} />
+              </Animated.View>
+            ))}
           </View>
         );
       })}
+
+      {outings.length ? (
+        <View style={styles.section}>
+          <SectionHeader title={SECTION.outing} count={String(outings.length)} />
+          {outings.map(({ event, round }, i) => (
+            <Animated.View key={event.id} entering={enterItem(i)}>
+              <EventRoundTicket eventId={event.id} roundId={round.id} />
+            </Animated.View>
+          ))}
+        </View>
+      ) : null}
 
       {!active.length && !invitations.length ? (
         <Empty title="No events yet" body="Start a league, run a tournament, or schedule a round with friends." />
@@ -129,25 +131,6 @@ export default function Events() {
         </View>
       </View>
     </SheetScreen>
-  );
-}
-
-function EventRow({ event }: { event: CompetitionEvent }) {
-  const data = useAppData();
-  const rounds = data.eventRounds.filter((r) => r.eventId === event.id);
-  const today = todayISO();
-  const played = rounds.filter((r) => r.scheduledOn < today).length;
-  const players = data.eventMembers.filter((m) => m.eventId === event.id && m.status === 'joined').length;
-  return (
-    <Tap onPress={() => router.push(`/event/${event.id}`)} scaleTo={0.985} accessibilityRole="button" accessibilityLabel={event.name} style={styles.row}>
-      <View style={{ flex: 1, gap: 2 }}>
-        <Text style={styles.name} numberOfLines={1}>{event.name}</Text>
-        <Text style={styles.meta} numberOfLines={1}>
-          {event.kind === 'outing' ? formatDay(event.startsOn) : `${FORMAT_LABEL(event.format)} · ${rounds.length ? `${played}/${rounds.length} rounds` : 'no rounds yet'}`} · {players} {players === 1 ? 'player' : 'players'}
-        </Text>
-      </View>
-      <Icon name="chevron-right" size={16} color={colors.inkMuted} />
-    </Tap>
   );
 }
 

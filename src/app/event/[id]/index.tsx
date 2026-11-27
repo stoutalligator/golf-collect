@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { Share, StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
+import { EventCard, EventRoundTicket } from '@/components/event-card';
 import { OutingView } from '@/components/outing-view';
 import { Tap } from '@/components/motion';
 import { Avatar } from '@/components/social';
 import { Button, Card, Chips, Empty, Group, IconButton, SectionHeader, SheetScreen } from '@/components/ui';
-import { FORMAT_LABEL, KIND_LABEL, positionLabel } from '@/domain/competition';
-import { formatDay, formatTeeTime } from '@/lib/format';
+import { KIND_LABEL, positionLabel } from '@/domain/competition';
 import { useAppData } from '@/state/app-data';
 import { useEvent, type EventView } from '@/state/events';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
@@ -51,18 +51,7 @@ export default function EventScreen() {
 
   return (
     <SheetScreen title={KIND_LABEL[event.kind]} back right={<IconButton name="share" label="Share join code" onPress={share} />}>
-      <Card style={styles.hero}>
-        <Text style={styles.name}>{event.name}</Text>
-        <Text style={styles.meta}>
-          {event.kind === 'outing' ? formatDay(event.startsOn) : !view.rounds.length ? `${FORMAT_LABEL(event.format)} · no rounds scheduled yet` : `${FORMAT_LABEL(event.format)} · ${formatDay(event.startsOn)}${event.endsOn && event.endsOn !== event.startsOn ? ` – ${formatDay(event.endsOn)}` : ''}`}
-        </Text>
-        <Text style={styles.meta}>Organized by {view.isOrganizer ? 'you' : view.organizer?.name ?? 'a friend'} · {view.joined.length} {view.joined.length === 1 ? 'player' : 'players'}</Text>
-        <Tap onPress={share} scaleTo={0.97} accessibilityRole="button" accessibilityLabel={`Join code ${event.joinCode}, share`} style={styles.code}>
-          <Text style={styles.codeLabel}>JOIN CODE</Text>
-          <Text style={styles.codeValue}>{event.joinCode}</Text>
-          <Icon name="share" size={16} color={colors.fairway} />
-        </Tap>
-      </Card>
+      <EventCard eventId={event.id} header />
 
       {view.myMembership?.status === 'invited' ? (
         <Card style={styles.invite}>
@@ -74,7 +63,12 @@ export default function EventScreen() {
         </Card>
       ) : null}
 
-      {view.next ? <NextUp view={view} /> : null}
+      {view.next ? (
+        <View style={styles.section}>
+          <SectionHeader title={view.next.status === 'today' ? 'Today' : 'Up next'} />
+          <EventRoundTicket eventId={event.id} roundId={view.next.round.id} compact={false} />
+        </View>
+      ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <Chips
@@ -103,30 +97,6 @@ export default function EventScreen() {
         <Button variant="secondary" label="Leave event" haptic="warning" onPress={async () => { await act('leave', () => data.leaveEvent(event.id)); if (router.canGoBack()) router.back(); else router.replace('/events'); }} />
       ) : null}
     </SheetScreen>
-  );
-}
-
-function NextUp({ view }: { view: EventView }) {
-  const r = view.next!;
-  const today = r.status === 'today';
-  const posted = r.linked.has(useAppData().me.id);
-  return (
-    <Card style={styles.next}>
-      <Tap onPress={() => router.push(`/event/${view.event.id}/round/${r.round.id}`)} scaleTo={0.985} accessibilityRole="button" style={styles.nextMain}>
-        <View style={[styles.calendar, today && styles.calendarToday]}>
-          <Icon name="calendar" size={18} color={today ? colors.cream : colors.fairway} />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.nextTitle}>{today ? 'Today' : 'Up next'} · {r.round.name}</Text>
-          <Text style={styles.meta}>{formatDay(r.round.scheduledOn)}{r.round.teeTime ? ` · ${formatTeeTime(r.round.teeTime)}` : ''} · {r.courseName}</Text>
-        </View>
-      </Tap>
-      {today && view.myMembership?.status === 'joined' && !posted ? (
-        <Tap onPress={() => router.push(`/round/new?eventRound=${r.round.id}`)} haptic="press" scaleTo={0.94} accessibilityRole="button" style={styles.logBtn}>
-          <Text style={styles.logText}>Log round</Text>
-        </Tap>
-      ) : <Icon name="chevron-right" size={16} color={colors.inkMuted} />}
-    </Card>
   );
 }
 
@@ -206,7 +176,6 @@ function Row({ pos, id, cols, bold }: { pos: string; id: string; cols: string[];
 }
 
 function Schedule({ view }: { view: EventView }) {
-  const data = useAppData();
   const add = view.isOrganizer ? (
     <Button label="Schedule a round" icon="calendar" onPress={() => router.push(`/schedule?into=${view.event.id}`)} />
   ) : null;
@@ -221,30 +190,16 @@ function Schedule({ view }: { view: EventView }) {
       </View>
     );
   }
+  // Coming up soonest first, then what's been played (latest first).
+  const coming = view.rounds.filter((r) => r.status !== 'past');
+  const played = view.rounds.filter((r) => r.status === 'past').reverse();
   return (
     <View style={styles.section}>
-    <Group>
-      {view.rounds.map((r) => {
-        const posted = [...r.linked.values()].filter((x) => x.status === 'complete').length;
-        const mine = r.linked.get(data.me.id);
-        return (
-          <Tap key={r.round.id} onPress={() => router.push(`/event/${view.event.id}/round/${r.round.id}`)} scaleTo={0.985} accessibilityRole="button" style={styles.schedRow}>
-            <View style={[styles.calendar, r.status === 'today' && styles.calendarToday]}>
-              <Text style={[styles.calDay, r.status === 'today' && { color: colors.cream }]}>{new Date(`${r.round.scheduledOn}T12:00:00`).getDate()}</Text>
-            </View>
-            <View style={{ flex: 1, gap: 2 }}>
-              <Text style={styles.schedName}>{r.round.name}</Text>
-              <Text style={styles.meta} numberOfLines={1}>{formatDay(r.round.scheduledOn)}{r.round.teeTime ? ` · ${formatTeeTime(r.round.teeTime)}` : ''} · {r.courseName}</Text>
-            </View>
-            <Text style={styles.schedState}>
-              {r.status === 'upcoming' ? '' : `${posted} posted`}{mine ? ' · ✓ you' : ''}
-            </Text>
-            <Icon name="chevron-right" size={16} color={colors.inkMuted} />
-          </Tap>
-        );
-      })}
-    </Group>
-    {add}
+      {add}
+      {coming.length ? <Text style={styles.listLabel}>COMING UP</Text> : null}
+      {coming.map((r) => <EventRoundTicket key={r.round.id} eventId={view.event.id} roundId={r.round.id} />)}
+      {played.length ? <Text style={styles.listLabel}>PLAYED</Text> : null}
+      {played.map((r) => <EventRoundTicket key={r.round.id} eventId={view.event.id} roundId={r.round.id} />)}
     </View>
   );
 }
@@ -284,25 +239,13 @@ function Players({ view, busy, act }: { view: EventView; busy: string | null; ac
 
 const styles = themed(() => StyleSheet.create({
   section: { gap: space.md },
-  hero: { padding: space.lg, gap: 4 },
-  name: { fontFamily: fonts.displayBold, fontSize: 26, lineHeight: 32, color: colors.fairway },
+  listLabel: { ...type.label, color: colors.inkMuted, marginTop: space.sm },
   meta: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   help: { ...type.caption, fontSize: 12, color: colors.inkMuted },
   error: { ...type.body, fontSize: 14, color: colors.danger },
-  code: { flexDirection: 'row', alignItems: 'center', gap: space.sm, alignSelf: 'flex-start', marginTop: space.sm, paddingHorizontal: space.md, paddingVertical: 8, borderRadius: radius.md, backgroundColor: colors.paper },
-  codeLabel: { fontFamily: fonts.bodySemibold, fontSize: 10, letterSpacing: 1.2, color: colors.inkMuted },
-  codeValue: { fontFamily: fonts.bodyBold, fontSize: 18, letterSpacing: 3, color: colors.ink },
   invite: { padding: space.lg, gap: space.md },
   inviteText: { ...type.body, color: colors.ink },
   inviteActions: { flexDirection: 'row', gap: space.md },
-  next: { flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md },
-  nextMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md },
-  nextTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
-  calendar: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
-  calendarToday: { backgroundColor: colors.fairway },
-  calDay: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.fairway },
-  logBtn: { paddingHorizontal: 14, minHeight: 36, borderRadius: radius.pill, backgroundColor: colors.fairway, justifyContent: 'center' },
-  logText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },
   tableRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: 10, paddingHorizontal: space.lg, minHeight: 48 },
   tableHead: { minHeight: 36, paddingVertical: 8 },
   headText: { fontFamily: fonts.bodySemibold, fontSize: 11, letterSpacing: 0.6, color: colors.inkMuted },
@@ -311,9 +254,6 @@ const styles = themed(() => StyleSheet.create({
   playerName: { flexShrink: 1, fontFamily: fonts.bodyMedium, fontSize: 15, color: colors.ink },
   col: { width: 52, textAlign: 'right', fontFamily: fonts.body, fontSize: 14, color: colors.inkMuted, fontVariant: ['tabular-nums'] },
   colBold: { fontFamily: fonts.bodySemibold, color: colors.ink, fontSize: 15 },
-  schedRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.md, paddingHorizontal: space.lg },
-  schedName: { fontFamily: fonts.display, fontSize: 16, color: colors.ink },
-  schedState: { ...type.caption, color: colors.inkMuted },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   friend: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingLeft: 4, paddingRight: 12, height: 36, borderRadius: radius.pill, backgroundColor: colors.paper },
   friendText: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.ink },

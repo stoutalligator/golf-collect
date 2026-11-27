@@ -5,6 +5,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScorecardEngraving, Tree } from '@/art/components';
 import { Icon } from '@/components/icons';
 import { Avatar, joinableRound, ReactionBar } from '@/components/social';
+import { teamNumbers } from '@/domain/teams';
 import { Button, Empty, SheetScreen, StatStrip } from '@/components/ui';
 import { formatToPar, type HoleResult } from '@/domain/stats';
 import { roundOwner, type Hole, type Round } from '@/domain/types';
@@ -39,6 +40,14 @@ export default function Scorecard() {
       : round.scoredBy === data.me.id && round.groupId ? data.rounds.find((r) => r.groupId === round.groupId && r.status === 'active')?.id : undefined;
   const scorer = round.scoredBy && round.scoredBy !== roundOwner(round) ? data.playerById(round.scoredBy) : undefined;
   const join = joinableRound(data, round);
+  // Holes someone other than the card's owner entered (shared scoring while playing).
+  const ownerScores = round.scores[roundOwner(round)] ?? [];
+  const byPerson = new Map<string, number[]>();
+  ownerScores.forEach((sc, i) => {
+    if (sc?.enteredBy && sc.enteredBy !== roundOwner(round) && sc.enteredBy !== round.scoredBy) byPerson.set(sc.enteredBy, [...(byPerson.get(sc.enteredBy) ?? []), round.holeNumbers[i]]);
+  });
+  const enteredByOthers = [...byPerson].map(([pid, holes]) => [pid === data.me.id ? 'you' : data.playerById(pid)?.name.split(' ')[0] ?? 'a friend', holes] as const);
+  const teams = teamNumbers(data.roundGroup(round));
   const together = data.roundGroup(round)
     .map((r) => ({ r, p: data.playerById(roundOwner(r)), s: data.summaries.get(r.id) }))
     .filter((x): x is { r: Round; p: NonNullable<typeof x.p>; s: typeof x.s } => !!x.p)
@@ -79,12 +88,20 @@ export default function Scorecard() {
           {together.map(({ r, p, s }) => (
             <Tap key={r.id} onPress={() => (r.id === round.id ? undefined : router.push(`/round/${r.id}`))} disabled={r.id === round.id} scaleTo={0.98} accessibilityRole="button" style={styles.togetherRow}>
               <Avatar player={p} size={30} />
-              <Text style={[styles.togetherName, r.id === round.id && { fontFamily: fonts.bodySemibold }]} numberOfLines={1}>{p.id === data.me.id ? 'You' : p.name}</Text>
+              <Text style={[styles.togetherName, r.id === round.id && { fontFamily: fonts.bodySemibold }]} numberOfLines={1}>
+                {teams.get(r.id) ? `Team ${teams.get(r.id)} · ${r.playerIds.map((pid) => (pid === data.me.id ? 'You' : data.playerById(pid)?.name.split(' ')[0])).filter(Boolean).join(', ')}` : p.id === data.me.id ? 'You' : p.name}
+              </Text>
               <Text style={styles.togetherScore}>{r.status === 'active' ? 'Playing' : `${s?.strokes ?? '—'}${s ? ` (${formatToPar(s.toPar)})` : ''}`}</Text>
               {r.id === round.id ? <View style={{ width: 14 }} /> : <Icon name="chevron-right" size={14} color={colors.inkMuted} />}
             </Tap>
           ))}
         </View>
+      ) : null}
+      {enteredByOthers.length ? (
+        <Text style={styles.note}>{enteredByOthers.map(([who, holes]) => `${holes.length === round.holeNumbers.length ? 'All holes' : `${holes.length === 1 ? 'Hole' : 'Holes'} ${holes.join(', ')}`} entered by ${who}`).join(' · ')}</Text>
+      ) : null}
+      {round.format === 'scramble' ? (
+        <Text style={styles.note}>Team scramble · one score for the team. Doesn’t count toward handicap, stats, collectibles or badges.</Text>
       ) : null}
       {scorer ? (
         <Text style={styles.note}>

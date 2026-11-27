@@ -44,6 +44,8 @@ export default function NewRound() {
   // Opened from an event round: start from its course, tee and holes, and count toward it.
   const fromEvent = params.eventRound ? data.eventRounds.find((r) => r.id === params.eventRound) : undefined;
   const [kind, setKind] = useState<RoundKind>('course');
+  // Individual stroke play, or a team scramble (one team score; never counts toward stats, collectibles or badges).
+  const [format, setFormat] = useState<'individual' | 'scramble'>('individual');
   const [when, setWhen] = useState<When>('now');
   const [playedOn, setPlayedOn] = useState(todayISO());
   const pastDays = useMemo(() => Array.from({ length: PAST_DAYS }, (_, i) => addDaysISO(todayISO(), -i)), []);
@@ -60,6 +62,7 @@ export default function NewRound() {
     setTeeId(fromEvent.teeId);
     setHoles(fromEvent.holes === 'front' ? 'front' : fromEvent.holes === 'back' ? 'back' : '18');
     setEventRoundId(fromEvent.id);
+    if (data.events.find((e) => e.id === fromEvent.eventId)?.format.team === 'scramble') setFormat('scramble');
   }
   const [appliedJoin, setAppliedJoin] = useState<string | undefined>();
   if (joinRound && appliedJoin !== joinRound.id) {
@@ -80,6 +83,9 @@ export default function NewRound() {
   const [scoring, setScoring] = useState<'group' | 'me'>('group');
   const [starting, setStarting] = useState(false);
   const toggleWith = (id: string) => setWithIds((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
+  // Scramble teams: how many, and who's on which (you included). Unassigned players alternate between teams.
+  const [teamCount, setTeamCount] = useState(1);
+  const [assigned, setAssigned] = useState<Record<string, number>>({});
 
   const options = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -103,8 +109,21 @@ export default function NewRound() {
   const course = kind === 'course' ? loaded : undefined;
   const sim = kind === 'sim' && courseId ? data.simCourseById(courseId) : undefined;
   const layout = course ?? sim;
-  const linkable = kind === 'course' ? linkableEventRounds(data, courseId, date) : [];
+  const scramble = kind === 'course' && format === 'scramble' && !joinRound;
+  // Scrambles only count toward scheduled scramble rounds; individual rounds never toward those.
+  const linkable = kind === 'course'
+    ? linkableEventRounds(data, courseId, date).filter((l) => (l.event.format.team === 'scramble') === scramble)
+    : [];
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
+
+  // Team roster (index 0 = Team 1). Everyone playing: you plus the friends you picked.
+  const roster = [data.me.id, ...withIds];
+  const teams = scramble ? Math.max(1, Math.min(teamCount, roster.length)) : 1;
+  const teamFor = (pid: string) => {
+    const t = assigned[pid];
+    return t && t <= teams ? t : (roster.indexOf(pid) % teams) + 1;
+  };
+  const teamRoster = Array.from({ length: teams }, (_, t) => roster.filter((pid) => teamFor(pid) === t + 1));
 
   const start = async () => {
     if (when === 'later') {
@@ -116,9 +135,9 @@ export default function NewRound() {
     const effective = isNineHole(layout) && holes === 'back' ? 'front' : holes;
     const holeNumbers = effective === '18' ? all : effective === 'front' ? all.slice(0, 9) : all.slice(9, 18);
     const now = new Date().toISOString();
-    const group = !joinRound && scoring === 'group' && withIds.length > 0;
+    const group = !joinRound && !scramble && scoring === 'group' && withIds.length > 0;
     // Any round with friends forms a group, so friends on their own phones can join and everyone sees live scores.
-    const groupId = joinRound ? roundGroupKey(joinRound) : withIds.length > 0 ? uuid() : undefined;
+    const groupId = joinRound ? roundGroupKey(joinRound) : withIds.length > 0 && !scramble ? uuid() : undefined;
     const linkTo = kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? eventRoundId : undefined;
     const linkEvent = linkTo ? data.eventRounds.find((r) => r.id === linkTo)?.eventId : undefined;
     const inEvent = (id: string) => !!linkEvent && data.eventMembers.some((m) => m.eventId === linkEvent && m.playerId === id && m.status === 'joined');
@@ -136,9 +155,39 @@ export default function NewRound() {
       createdAt: now,
       ...(owner === data.me.id ? {} : { ownerId: owner, scoredBy: data.me.id }),
       ...(groupId ? { groupId } : {}),
+      ...(scramble ? { format: 'scramble' as const } : {}),
       // A friend's round counts toward the event only if they're in it too.
       ...(linkTo && (owner === data.me.id || inEvent(owner)) ? { eventRoundId: linkTo } : {}),
     });
+    if (scramble && teams > 1) {
+      // One card per team in one group. Your team's card is yours; each other team's card belongs to its first
+      // player and you keep it. createdAt is staggered so "Team 1, Team 2…" read the same on every phone.
+      const gid = uuid();
+      const base = Date.parse(now);
+      const cards = teamRoster.flatMap((members, t) => {
+        if (!members.length) return [];
+        const owner = members.includes(data.me.id) ? data.me.id : members[0];
+        return [{
+          id: uuid(), kind, courseId: layout.id, teeId: selectedTee, date, status: 'active' as const, holeNumbers,
+          playerIds: [owner, ...members.filter((p) => p !== owner)],
+          scores: { [owner]: holeNumbers.map(() => null) },
+          createdAt: new Date(base + t).toISOString(),
+          ...(owner === data.me.id ? {} : { ownerId: owner, scoredBy: data.me.id }),
+          groupId: gid, format: 'scramble' as const,
+          ...(linkTo ? { eventRoundId: linkTo } : {}),
+        } satisfies Round];
+      });
+      const mineCard = cards.find((c) => !c.ownerId)!;
+      setStarting(true);
+      try {
+        await data.saveRounds(cards.filter((c) => c !== mineCard));
+        await data.saveRounds([mineCard]);
+        router.replace(`/round/play/${mineCard.id}`);
+      } finally {
+        setStarting(false);
+      }
+      return;
+    }
     const mine = roundFor(data.me.id);
     setStarting(true);
     try {
@@ -319,6 +368,20 @@ export default function NewRound() {
                 : [{ value: '18', label: '18 holes' }, { value: 'front', label: 'Front 9' }, { value: 'back', label: 'Back 9' }]}
             />
 
+            {kind === 'course' && !joinRound ? (
+              <>
+                <Text style={styles.label}>Format</Text>
+                <Chips
+                  value={format}
+                  onChange={(f) => { setFormat(f); setEventRoundId(undefined); }}
+                  options={[{ value: 'individual' as const, label: 'Individual' }, { value: 'scramble' as const, label: 'Scramble' }]}
+                />
+                {scramble ? (
+                  <Text style={styles.note}>One team score per hole. It shows in your team’s feeds, but doesn’t count toward handicap, stats, collectibles or badges.</Text>
+                ) : null}
+              </>
+            ) : null}
+
             {linkable.length ? (
               <>
                 <Text style={styles.label}>Counts toward</Text>
@@ -337,7 +400,17 @@ export default function NewRound() {
 
             {joinRound ? null : (
             <>
-            <Text style={styles.label}>Playing with</Text>
+            {scramble ? (
+              <>
+                <Text style={styles.label}>Teams</Text>
+                <Chips
+                  value={String(teamCount)}
+                  onChange={(v) => setTeamCount(Number(v))}
+                  options={['1', '2', '3', '4'].map((v) => ({ value: v, label: v === '1' ? '1 team' : `${v} teams` }))}
+                />
+              </>
+            ) : null}
+            <Text style={styles.label}>{scramble ? (teams > 1 ? 'Who’s playing' : 'Your team') : 'Playing with'}</Text>
             <View style={styles.friends}>
               {data.friends.map((f) => {
                 const on = withIds.includes(f.id);
@@ -350,7 +423,36 @@ export default function NewRound() {
                 );
               })}
             </View>
-            {withIds.length ? (
+            {scramble && teams > 1 ? (
+              <View style={styles.teamBox}>
+                {roster.map((pid) => {
+                  const p = pid === data.me.id ? data.me : data.playerById(pid);
+                  if (!p) return null;
+                  return (
+                    <View key={pid} style={styles.teamRow}>
+                      <Avatar player={p} size={30} />
+                      <Text style={styles.teamName} numberOfLines={1}>{pid === data.me.id ? 'You' : p.name.split(' ')[0]}</Text>
+                      <View style={styles.teamPick}>
+                        {Array.from({ length: teams }, (_, t) => {
+                          const on = teamFor(pid) === t + 1;
+                          return (
+                            <Tap key={t} haptic={on ? 'none' : 'select'} scaleTo={0.9} onPress={() => setAssigned((a) => ({ ...a, [pid]: t + 1 }))} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${pid === data.me.id ? 'You' : p.name}: Team ${t + 1}`} style={[styles.teamChip, on && styles.friendOn]}>
+                              <Text style={[styles.teamChipText, on && { color: colors.cream }]}>{t + 1}</Text>
+                            </Tap>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  );
+                })}
+                <Text style={styles.note}>
+                  {teamRoster.map((m, t) => `Team ${t + 1}: ${m.length ? m.map((pid) => (pid === data.me.id ? 'you' : data.playerById(pid)?.name.split(' ')[0])).join(', ') : 'nobody yet'}`).join(' · ')}.
+                  {' '}One card per team; anyone can enter any team’s score while you play.
+                </Text>
+              </View>
+            ) : scramble ? (
+              <Text style={styles.note}>{withIds.length ? `Team of ${withIds.length + 1}. One card for the team; teammates can enter scores from their phones too.` : 'Add your teammates.'}</Text>
+            ) : withIds.length ? (
               <>
                 <Chips
                   value={scoring}
@@ -418,6 +520,12 @@ const styles = themed(() => StyleSheet.create({
   locNote: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: space.sm },
   link: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway },
   miles: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.inkMuted, marginRight: space.sm, fontVariant: ['tabular-nums'] },
+  teamBox: { gap: space.sm, backgroundColor: colors.creamLight, borderRadius: radius.lg, padding: space.md, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.rule },
+  teamRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
+  teamName: { flex: 1, fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
+  teamPick: { flexDirection: 'row', gap: 6 },
+  teamChip: { width: 38, height: 34, borderRadius: radius.pill, borderWidth: 1.5, borderColor: colors.rule, alignItems: 'center', justifyContent: 'center' },
+  teamChipText: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.ink },
   joinBanner: { flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md, borderRadius: radius.lg, backgroundColor: colors.tint },
   footer: { paddingHorizontal: space.lg, paddingTop: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.rule },
   startButton: { backgroundColor: colors.fairway, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },

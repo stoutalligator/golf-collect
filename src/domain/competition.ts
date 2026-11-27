@@ -30,6 +30,8 @@ export interface EventFormat {
   spots?: number;
   /** Scheduled round: the organizer's note to the group ("Carts on me, meet at the range"). */
   note?: string;
+  /** Scheduled round: played as a team scramble (rounds logged for it are scrambles; they don't count for stats). */
+  team?: 'scramble';
 }
 
 export const DEFAULT_SEASON_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];

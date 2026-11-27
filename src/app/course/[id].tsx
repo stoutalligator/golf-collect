@@ -12,7 +12,7 @@ import { Avatar } from '@/components/social';
 import { Button, Empty, Group, IconButton, Loading, SectionHeader, StatStrip, usePullToRefresh } from '@/components/ui';
 import { TIERS } from '@/data/config/game';
 import { formatToPar } from '@/domain/stats';
-import { roundOwner } from '@/domain/types';
+import { countsForStats, roundOwner } from '@/domain/types';
 import { ACCESS_LABEL } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
@@ -47,7 +47,7 @@ export default function CourseDetail() {
   const col = data.collections.get(course.id);
   const saved = data.wishlist.includes(course.id);
   const rounds = data.roundsByDate.filter((r) => r.kind === 'course' && r.courseId === course.id);
-  const best = rounds.map((r) => data.summaries.get(r.id)).filter((s) => s?.isFull18).sort((a, b) => a!.strokes - b!.strokes)[0];
+  const best = rounds.filter(countsForStats).map((r) => data.summaries.get(r.id)).filter((s) => s?.isFull18).sort((a, b) => a!.strokes - b!.strokes)[0];
   const par = course.holes.reduce((s, h) => s + h.par, 0);
   const tierName = col?.tier ? TIERS.find((t) => t.tier === col.tier!.tier)?.name : null;
   // Shared regional painting (not a depiction of this course) unless a course-specific override exists.
@@ -57,7 +57,7 @@ export default function CourseDetail() {
     .map((p) => {
       const pd = data.playerData(p.id);
       const scores = (pd?.rounds ?? [])
-        .filter((r) => r.kind === 'course' && r.courseId === course.id && roundOwner(r) === p.id)
+        .filter((r) => r.kind === 'course' && countsForStats(r) && r.courseId === course.id && roundOwner(r) === p.id)
         .map((r) => data.summaries.get(r.id))
         .filter((s) => s?.isFull18);
       const top = scores.sort((a, b) => a!.strokes - b!.strokes)[0];
@@ -94,7 +94,7 @@ export default function CourseDetail() {
             items={[
               { label: course.holes.length === 9 ? 'Par · 9 holes' : 'Par', value: String(par) },
               { label: 'Tees', value: String(course.tees.length) },
-              { label: 'Played', value: String(rounds.length) },
+              { label: 'Played', value: String(rounds.filter(countsForStats).length) },
               { label: 'Best', value: best ? String(best.strokes) : '—', sub: best ? formatToPar(best.toPar) : undefined },
             ]}
           />

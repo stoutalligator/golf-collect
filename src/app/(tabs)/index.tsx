@@ -52,9 +52,12 @@ export default function Home() {
   const last5 = mine.slice(-5).map((s) => s.strokes);
   const avg5 = last5.length ? last5.reduce((a, b) => a + b, 0) / last5.length : null;
   const active = data.roundsByDate.find((r) => r.status === 'active');
+  // Scramble team cards you're on but someone else owns (any teammate can enter the team's scores).
+  const teamCards = data.friendRounds.filter((r) =>
+    r.status === 'active' && r.format === 'scramble' && r.date === todayISO() && r.playerIds.includes(data.me.id));
   // Friends out on the course right now who tagged you and you haven't joined: join to keep your own score live.
   const liveInvites = data.friendRounds.filter((r) =>
-    r.status === 'active' && r.kind === 'course' && r.date === todayISO() && r.scoredBy !== data.me.id
+    r.status === 'active' && r.kind === 'course' && r.format !== 'scramble' && r.date === todayISO() && r.scoredBy !== data.me.id
     && r.playerIds.includes(data.me.id) && !data.roundGroup(r).some((x) => roundOwner(x) === data.me.id));
   const { invitations, upcoming } = useEventLists();
   const nextEvent = upcoming[0];
@@ -106,6 +109,19 @@ export default function Home() {
             </Tap>
           ) : null}
 
+          {teamCards.slice(0, 2).map((r) => {
+            const who = data.playerById(r.scoredBy ?? roundOwner(r));
+            return (
+              <Tap key={r.id} onPress={() => router.push(`/round/play/${r.id}`)} haptic="press" scaleTo={0.98} swish accessibilityRole="button" accessibilityLabel={`Scramble at ${data.roundCourseName(r)}. Open your team's card`} style={styles.liveInvite}>
+                {who ? <Avatar player={who} size={38} /> : null}
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.liveTitle} numberOfLines={1}>{who ? `${who.name.split(' ')[0]} started a scramble` : 'Scramble in progress'}</Text>
+                  <Text style={styles.liveSub} numberOfLines={1}>{data.roundCourseName(r)} · you’re on this team’s card</Text>
+                </View>
+                <View style={styles.liveJoin}><Text style={styles.liveJoinText}>Open</Text></View>
+              </Tap>
+            );
+          })}
           {liveInvites.slice(0, 2).map((r) => {
             const who = data.playerById(roundOwner(r));
             return who ? (
