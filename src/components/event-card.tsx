@@ -15,7 +15,7 @@ import { FORMAT_LABEL, KIND_LABEL } from '@/domain/competition';
 import { formatDay, formatTeeTime, todayISO } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
-import { useEvent, type EventView } from '@/state/events';
+import { myEventRound, startEventRoundHref, useEvent, type EventView } from '@/state/events';
 import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 const ordinal = (n: number) => `${n}${['th', 'st', 'nd', 'rd'][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10 < 4 ? n % 10 : 0]}`;
@@ -115,7 +115,8 @@ const styles = themed(() => StyleSheet.create({
 
 /**
  * One scheduled event round as a ticket (league week, tournament round, or a scheduled round with friends).
- * Upcoming: who's in. Today: "Today" and Log round. Past: faded, with who posted.
+ * Upcoming: who's in. Today: "Today". Past: faded, with who posted. Joined and not played yet: Start now (any day).
+ * Past and not played: Log my round. Started: Resume.
  */
 export function EventRoundTicket({ eventId, roundId, compact = true, withEventName = false }: { eventId: string; roundId: string; compact?: boolean; withEventName?: boolean }) {
   const data = useAppData();
@@ -125,7 +126,7 @@ export function EventRoundTicket({ eventId, roundId, compact = true, withEventNa
   const { event } = view;
   const outing = event.kind === 'outing';
   const posted = [...r.linked.values()].filter((x) => x.status === 'complete');
-  const mine = r.linked.get(data.me.id);
+  const mine = myEventRound(data, r.round.id);
   const joined = view.myMembership?.status === 'joined';
   // Who's in until someone posts; after that, who posted.
   const showMembers = r.status === 'upcoming' || outing || (r.status === 'today' && !posted.length);
@@ -151,10 +152,10 @@ export function EventRoundTicket({ eventId, roundId, compact = true, withEventNa
       statusTone="live"
       faded={r.status === 'past'}
       onPress={() => router.push(outing ? `/event/${event.id}` : `/event/${event.id}/round/${r.round.id}`)}
-      footer={r.status === 'today' && joined && !mine && !outing ? (
-        <Tap onPress={() => router.push(`/round/new?eventRound=${r.round.id}`)} haptic="press" scaleTo={0.95} swish accessibilityRole="button" style={styles.log}>
+      footer={joined && !mine ? (
+        <Tap onPress={() => router.push(r.status === 'past' ? `/round/new?eventRound=${r.round.id}&when=earlier` : startEventRoundHref(r.round.id))} haptic="press" scaleTo={0.95} swish accessibilityRole="button" style={styles.log}>
           <Icon name="flag" size={14} color={colors.cream} />
-          <Text style={styles.logText}>Log my round</Text>
+          <Text style={styles.logText}>{r.status === 'past' ? 'Log my round' : 'Start now'}</Text>
         </Tap>
       ) : mine?.status === 'active' ? (
         <Tap onPress={() => router.push(`/round/play/${mine.id}`)} haptic="press" scaleTo={0.95} accessibilityRole="button" style={styles.log}>

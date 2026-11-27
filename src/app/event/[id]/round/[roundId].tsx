@@ -9,7 +9,7 @@ import { Button, Card, Empty, Group, IconButton, SectionHeader, SheetScreen } fr
 import { FORMAT_LABEL, positionLabel, roundRobin } from '@/domain/competition';
 import { formatDay, formatTeeTime } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
-import { useEvent } from '@/state/events';
+import { myEventRound, startEventRoundHref, useEvent } from '@/state/events';
 import { colors, fonts, space, themed, type } from '@/theme';
 
 export default function EventRoundScreen() {
@@ -23,9 +23,9 @@ export default function EventRoundScreen() {
 
   const f = view.event.format;
   const name = (pid: string) => (pid === data.me.id ? 'You' : data.playerById(pid)?.name ?? 'Player');
-  const mine = r.linked.get(data.me.id);
+  const mine = myEventRound(data, r.round.id);
   const joined = view.myMembership?.status === 'joined';
-  const canLog = joined && !mine && r.status !== 'upcoming';
+  const canPlay = joined && !mine;
   const metricOf = (pid: string) => {
     const x = r.results.find((y) => y.playerId === pid);
     if (!x) return '';
@@ -57,7 +57,16 @@ export default function EventRoundScreen() {
           {r.round.holes !== 'all' ? ` · ${r.round.holes === 'front' ? 'Front' : 'Back'} 9` : ''}
           {` · ${FORMAT_LABEL(f)}`}
         </Text>
-        {canLog ? <Button label="Log my round for this" icon="flag" onPress={() => router.push(`/round/new?eventRound=${r.round.id}`)} style={{ marginTop: space.md }} /> : null}
+        {canPlay && r.status !== 'past' ? <Button label="Start now" icon="flag" onPress={() => router.push(startEventRoundHref(r.round.id))} style={{ marginTop: space.md }} /> : null}
+        {canPlay ? (
+          <Button
+            variant={r.status === 'past' ? 'primary' : 'secondary'}
+            label={r.status === 'past' ? 'Log my round for this' : 'Already played it'}
+            icon={r.status === 'past' ? 'flag' : undefined}
+            onPress={() => router.push(`/round/new?eventRound=${r.round.id}&when=earlier`)}
+            style={{ marginTop: r.status === 'past' ? space.md : space.sm }}
+          />
+        ) : null}
         {mine ? (
           <Tap onPress={() => router.push(mine.status === 'active' ? `/round/play/${mine.id}` : `/round/${mine.id}`)} scaleTo={0.98} accessibilityRole="button" style={styles.mine}>
             <Text style={styles.mineText}>{mine.status === 'active' ? 'Your round is in progress · continue' : 'Your round is posted · view scorecard'}</Text>

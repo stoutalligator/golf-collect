@@ -10,7 +10,7 @@ import {
   type SeasonRow, type Standing,
 } from '@/domain/competition';
 import { playLayout } from '@/domain/layout';
-import type { Course, Player, Round } from '@/domain/types';
+import { roundOwner, type Course, type Player, type Round } from '@/domain/types';
 import { todayISO } from '@/lib/format';
 
 import { useAppData, type AppData } from './app-data';
@@ -196,3 +196,20 @@ export function linkableEventRounds(data: AppData, courseId: string | undefined,
     .map((r) => ({ round: r, event: data.events.find((e) => e.id === r.eventId)! }))
     .filter((x) => x.event);
 }
+
+/**
+ * Your round for a scheduled event round, if you have one: a card you own, or one someone else keeps that you're on
+ * (a scramble team card, a friend scoring for the group). Drives "Start now" vs "Resume".
+ */
+export function myEventRound(data: AppData, eventRoundId: string): Round | undefined {
+  const all = [...data.rounds, ...data.friendRounds].filter((r) => r.eventRoundId === eventRoundId);
+  return all.find((r) => roundOwner(r) === data.me.id) ?? all.find((r) => r.playerIds.includes(data.me.id));
+}
+
+/** An active card for this event round that a friend already started today, so starting joins their group. */
+export function liveEventGroup(data: AppData, eventRoundId: string): Round | undefined {
+  return data.friendRounds.find((r) => r.eventRoundId === eventRoundId && r.status === 'active' && r.date === todayISO());
+}
+
+/** "Start now" on a scheduled round: tee off straight away (scrambles stop at team setup first). */
+export const startEventRoundHref = (eventRoundId: string) => `/round/new?eventRound=${eventRoundId}&start=1` as const;

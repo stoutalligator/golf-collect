@@ -14,7 +14,7 @@ import { Group, IconButton, SectionHeader, SheetScreen } from '@/components/ui';
 import type { Player } from '@/domain/types';
 import { formatTeeTime, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
-import type { EventView } from '@/state/events';
+import { myEventRound, startEventRoundHref, type EventView } from '@/state/events';
 import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 export function OutingView({ view }: { view: EventView }) {
@@ -36,7 +36,7 @@ export function OutingView({ view }: { view: EventView }) {
   const me = view.myMembership;
   const isToday = r.round.scheduledOn === todayISO();
   const past = r.round.scheduledOn < todayISO();
-  const mine = r.linked.get(data.me.id);
+  const mine = myEventRound(data, r.round.id);
 
   const act = async (key: string, fn: () => Promise<unknown>) => {
     setBusy(key);
@@ -117,10 +117,12 @@ export function OutingView({ view }: { view: EventView }) {
         <Action icon="pin" label="Directions" onPress={directions} />
         <Action icon="share" label="Invite" onPress={share} />
         {view.isOrganizer && !past ? <Action icon="calendar" label="Edit" onPress={() => router.push(`/schedule?event=${event.id}`)} /> : null}
-        {(isToday || past) && me?.status === 'joined' ? (
+        {me?.status === 'joined' || view.isOrganizer ? (
           mine
-            ? <Action icon="book" label="Scorecard" onPress={() => router.push(mine.status === 'active' ? `/round/play/${mine.id}` : `/round/${mine.id}`)} />
-            : <Action icon="flag" label="Log round" primary onPress={() => router.push(`/round/new?eventRound=${r.round.id}`)} />
+            ? <Action icon="book" label={mine.status === 'active' ? 'Resume' : 'Scorecard'} primary={mine.status === 'active'} onPress={() => router.push(mine.status === 'active' ? `/round/play/${mine.id}` : `/round/${mine.id}`)} />
+            : past
+              ? <Action icon="flag" label="Log round" primary onPress={() => router.push(`/round/new?eventRound=${r.round.id}&when=earlier`)} />
+              : <Action icon="flag" label="Start now" primary onPress={() => router.push(startEventRoundHref(r.round.id))} />
         ) : null}
       </View>
 

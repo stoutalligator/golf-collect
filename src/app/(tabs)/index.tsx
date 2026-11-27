@@ -16,7 +16,7 @@ import { Button, Chips, Empty, IconButton, SectionHeader, StatStrip, usePullToRe
 import { recentRounds } from '@/domain/analytics';
 import { formatDay, formatTeeTime, greeting, todayISO } from '@/lib/format';
 import { useAppData } from '@/state/app-data';
-import { useEventLists } from '@/state/events';
+import { myEventRound, startEventRoundHref, useEventLists } from '@/state/events';
 import { colors, currentScheme, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 /** Left-to-right fade so the greeting reads over the painting without darkening the whole scene. */
@@ -72,6 +72,8 @@ export default function Home() {
     && r.playerIds.includes(data.me.id) && !data.roundGroup(r).some((x) => roundOwner(x) === data.me.id));
   const { invitations, upcoming } = useEventLists();
   const nextEvent = upcoming[0];
+  // Up next gets a Start now / Resume pill; nothing once you've posted it.
+  const nextMine = nextEvent ? myEventRound(data, nextEvent.round.id) : undefined;
 
   const posts = data.feed.filter((p) => (filter === 'all' ? true : filter === 'me' ? p.owner.id === data.me.id : p.owner.id !== data.me.id));
 
@@ -171,7 +173,8 @@ export default function Home() {
           </View>
 
           {nextEvent || invitations.length ? (
-            <Tap onPress={() => router.push(nextEvent ? `/event/${nextEvent.event.id}/round/${nextEvent.round.id}` : '/events')} scaleTo={0.98} accessibilityRole="button" style={styles.upNext}>
+            <View style={styles.upNext}>
+            <Tap onPress={() => router.push(nextEvent ? `/event/${nextEvent.event.id}/round/${nextEvent.round.id}` : '/events')} scaleTo={0.98} accessibilityRole="button" style={styles.upNextMain}>
               <View style={styles.upNextIcon}><Icon name="calendar" size={18} color={colors.fairway} /></View>
               <View style={{ flex: 1 }}>
                 {nextEvent ? (
@@ -182,8 +185,18 @@ export default function Home() {
                 ) : null}
                 {invitations.length ? <Text style={styles.upNextInvite}>{invitations.length} event {invitations.length === 1 ? 'invitation' : 'invitations'} waiting</Text> : null}
               </View>
-              <Icon name="chevron-right" size={16} color={colors.inkMuted} />
+              {nextEvent && (!nextMine || nextMine.status === 'active') ? null : <Icon name="chevron-right" size={16} color={colors.inkMuted} />}
             </Tap>
+            {nextEvent && (!nextMine || nextMine.status === 'active') ? (
+              <Tap
+                onPress={() => router.push(nextMine ? `/round/play/${nextMine.id}` : startEventRoundHref(nextEvent.round.id))}
+                haptic="press" scaleTo={0.95} swish accessibilityRole="button"
+                accessibilityLabel={nextMine ? `Resume ${nextEvent.event.name}` : `Start ${nextEvent.event.name} now`}
+                style={styles.upNextGo}>
+                <Text style={styles.upNextGoText}>{nextMine ? 'Resume' : 'Start now'}</Text>
+              </Tap>
+            ) : null}
+            </View>
           ) : null}
 
           <View style={{ gap: space.lg }}>
@@ -237,6 +250,9 @@ const styles = themed(() => StyleSheet.create({
   quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: 46, borderRadius: radius.pill, backgroundColor: colors.fairway, ...shadow.card },
   quickText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },
   upNext: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.creamLight, borderRadius: radius.xl, padding: space.md, ...shadow.card },
+  upNextMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md },
+  upNextGo: { paddingHorizontal: 14, minHeight: 34, borderRadius: radius.pill, backgroundColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
+  upNextGoText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.cream },
   upNextIcon: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.tint, alignItems: 'center', justifyContent: 'center' },
   upNextTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink },
   upNextSub: { ...type.caption, fontSize: 13, color: colors.inkMuted },

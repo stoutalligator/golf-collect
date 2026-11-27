@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,7 +14,7 @@ import { uuid } from '@/lib/ids';
 import { useLocation } from '@/lib/location';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
-import { linkableEventRounds } from '@/state/events';
+import { linkableEventRounds, liveEventGroup } from '@/state/events';
 import { isNineHole, playLayout } from '@/domain/layout';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
@@ -37,7 +37,7 @@ const dayParts = (iso: string) => {
 export default function NewRound() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string; when?: 'earlier' }>();
+  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string; when?: 'earlier'; start?: string }>();
   // Joining a friend's round: log your own round in the same group, same course, holes and day.
   const joinRound = params.join ? data.roundById(params.join) : undefined;
   const joinOwner = joinRound ? data.playerById(roundOwner(joinRound)) : undefined;
@@ -54,15 +54,26 @@ export default function NewRound() {
   const [teeId, setTeeId] = useState<string | undefined>(fromEvent?.teeId);
   const [holes, setHoles] = useState<Holes>(fromEvent?.holes === 'front' ? 'front' : fromEvent?.holes === 'back' ? 'back' : '18');
   const [eventRoundId, setEventRoundId] = useState<string | undefined>(fromEvent?.id);
-  // Event data can arrive after the first render (cold start from a link): apply it once when it does.
-  const [appliedEvent, setAppliedEvent] = useState<string | undefined>(fromEvent?.id);
+  const [withIds, setWithIds] = useState<string[]>([]);
+  // With friends along: keep everyone's card on this phone (each player gets their own round) or just yours.
+  const [scoring, setScoring] = useState<'group' | 'me'>('group');
+  // Apply the event round once (format, partners), including when its data arrives after the first render.
+  const [appliedEvent, setAppliedEvent] = useState<string | undefined>();
   if (fromEvent && appliedEvent !== fromEvent.id) {
     setAppliedEvent(fromEvent.id);
     setCourseId(fromEvent.courseId);
     setTeeId(fromEvent.teeId);
     setHoles(fromEvent.holes === 'front' ? 'front' : fromEvent.holes === 'back' ? 'back' : '18');
     setEventRoundId(fromEvent.id);
-    if (data.events.find((e) => e.id === fromEvent.eventId)?.format.team === 'scramble') setFormat('scramble');
+    // Logging a scheduled round that's already gone by: default to the day it was scheduled.
+    if (params.when === 'earlier' && fromEvent.scheduledOn < todayISO() && fromEvent.scheduledOn >= addDaysISO(todayISO(), -(PAST_DAYS - 1))) setPlayedOn(fromEvent.scheduledOn);
+    const ev = data.events.find((e) => e.id === fromEvent.eventId);
+    if (ev?.format.team === 'scramble') setFormat('scramble');
+    // A round with friends (or a scramble): the others who are in come along as your playing partners.
+    if (ev && (ev.kind === 'outing' || ev.format.team === 'scramble')) {
+      setWithIds(data.eventMembers.filter((m) => m.eventId === ev.id && m.status === 'joined' && m.playerId !== data.me.id).map((m) => m.playerId));
+      if (params.start) setScoring('me');
+    }
   }
   const [appliedJoin, setAppliedJoin] = useState<string | undefined>();
   if (joinRound && appliedJoin !== joinRound.id) {
@@ -78,9 +89,6 @@ export default function NewRound() {
     setEventRoundId(undefined);
   }
   const [query, setQuery] = useState('');
-  const [withIds, setWithIds] = useState<string[]>([]);
-  // With friends along: keep everyone's card on this phone (each player gets their own round) or just yours.
-  const [scoring, setScoring] = useState<'group' | 'me'>('group');
   const [starting, setStarting] = useState(false);
   const toggleWith = (id: string) => setWithIds((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
   // Scramble teams: how many, and who's on which (you included). Unassigned players alternate between teams.
@@ -105,15 +113,22 @@ export default function NewRound() {
     return ids.filter((id) => !shown.has(id)).map((id) => data.courseSummary(id)).filter((c) => !!c).slice(0, 5);
   }, [data, nearby]);
 
-  const { course: loaded, loading: courseLoading } = useCourse(kind === 'course' ? courseId : undefined);
+  const { course: loaded, loading: courseLoading, missing: courseMissing } = useCourse(kind === 'course' ? courseId : undefined);
   const course = kind === 'course' ? loaded : undefined;
   const sim = kind === 'sim' && courseId ? data.simCourseById(courseId) : undefined;
   const layout = course ?? sim;
   const scramble = kind === 'course' && format === 'scramble' && !joinRound;
   // Scrambles only count toward scheduled scramble rounds; individual rounds never toward those.
-  const linkable = kind === 'course'
+  const nearbyEvents = kind === 'course'
     ? linkableEventRounds(data, courseId, date).filter((l) => (l.event.format.team === 'scramble') === scramble)
     : [];
+  // Started from a scheduled round: it always counts toward that round, whatever day you actually play it.
+  const fromEventLink = fromEvent && fromEvent.courseId === courseId && kind === 'course' ? data.events.find((e) => e.id === fromEvent.eventId) : undefined;
+  const linkable = fromEventLink && !nearbyEvents.some((l) => l.round.id === fromEvent!.id)
+    ? [{ round: fromEvent!, event: fromEventLink }, ...nearbyEvents]
+    : nearbyEvents;
+  // A friend already teed off for this scheduled round: start in their group so you see each other live.
+  const liveGroup = fromEvent && when === 'now' ? liveEventGroup(data, fromEvent.id) : undefined;
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
 
   // Team roster (index 0 = Team 1). Everyone playing: you plus the friends you picked.
@@ -137,7 +152,7 @@ export default function NewRound() {
     const now = new Date().toISOString();
     const group = !joinRound && !scramble && scoring === 'group' && withIds.length > 0;
     // Any round with friends forms a group, so friends on their own phones can join and everyone sees live scores.
-    const groupId = joinRound ? roundGroupKey(joinRound) : withIds.length > 0 && !scramble ? uuid() : undefined;
+    const groupId = joinRound ? roundGroupKey(joinRound) : liveGroup && !scramble ? roundGroupKey(liveGroup) : withIds.length > 0 && !scramble ? uuid() : undefined;
     const linkTo = kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? eventRoundId : undefined;
     const linkEvent = linkTo ? data.eventRounds.find((r) => r.id === linkTo)?.eventId : undefined;
     const inEvent = (id: string) => !!linkEvent && data.eventMembers.some((m) => m.eventId === linkEvent && m.playerId === id && m.status === 'joined');
@@ -200,6 +215,16 @@ export default function NewRound() {
       setStarting(false);
     }
   };
+
+  // "Start now" on a scheduled round: tee off as soon as the scorecard is loaded. Scrambles stop here for team setup.
+  const autoStart = !!params.start && !!fromEvent && !scramble && format === 'individual' && !courseMissing;
+  const autoFired = useRef(false);
+  useEffect(() => {
+    if (!autoStart || autoFired.current || !course || appliedEvent !== fromEvent?.id) return;
+    autoFired.current = true;
+    void start();
+  });
+  if (autoStart) return <View style={[styles.root, { justifyContent: 'center' }]}><Loading label="Teeing off…" /></View>;
 
   return (
     <View style={[styles.root, { paddingTop: insets.top || space.lg }]}>
