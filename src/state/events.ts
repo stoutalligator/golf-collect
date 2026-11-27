@@ -206,9 +206,12 @@ export function myEventRound(data: AppData, eventRoundId: string): Round | undef
   return all.find((r) => roundOwner(r) === data.me.id) ?? all.find((r) => r.playerIds.includes(data.me.id));
 }
 
-/** An active card for this event round that a friend already started today, so starting joins their group. */
-export function liveEventGroup(data: AppData, eventRoundId: string): Round | undefined {
-  return data.friendRounds.find((r) => r.eventRoundId === eventRoundId && r.status === 'active' && r.date === todayISO());
+/** A group already playing (or that played) this event round on that day, so logging it joins that group. */
+export function liveEventGroup(data: AppData, eventRoundId: string, date: string = todayISO()): Round | undefined {
+  // Anyone's round for this scheduled round on that day (in progress first, then finished): joining it puts
+  // everyone in one group instead of a separate round each. Scrambles are team cards and set up their own groups.
+  const linked = [...data.friendRounds, ...data.rounds].filter((r) => r.eventRoundId === eventRoundId && r.date === date && r.format !== 'scramble');
+  return linked.find((r) => r.status === 'active') ?? linked[0];
 }
 
 /** "Start now" on a scheduled round: tee off straight away (scrambles stop at team setup first). */

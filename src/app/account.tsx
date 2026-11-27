@@ -1,9 +1,12 @@
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
 import { Tap } from '@/components/motion';
+import { Avatar } from '@/components/social';
 import { Button, Card, IconButton, SearchField, SheetScreen } from '@/components/ui';
 import { useAppData } from '@/state/app-data';
 import { useAuth } from '@/state/auth';
@@ -11,7 +14,7 @@ import { colors, fonts, radius, space, themed, type } from '@/theme';
 
 const USERNAME = /^[a-z0-9_]{3,20}$/;
 
-/** Edit your profile (name, username, tagline, home course) and change your password. */
+/** Edit your profile (photo, name, username, tagline, home course) and change your password. */
 export default function Account() {
   const data = useAppData();
   const auth = useAuth();
@@ -33,6 +36,39 @@ export default function Account() {
     setTagline(me.tagline ?? '');
     setHomeId(me.homeCourseId ?? null);
   }
+
+  // Profile photo: picked square, shrunk to 400 px JPEG on the phone, then uploaded.
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoMessage, setPhotoMessage] = useState<string | null>(null);
+  const pickPhoto = async () => {
+    if (photoBusy) return;
+    setPhotoMessage(null);
+    const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], allowsEditing: true, aspect: [1, 1], quality: 1 });
+    if (picked.canceled || !picked.assets[0]) return;
+    setPhotoBusy(true);
+    try {
+      const img = await ImageManipulator.manipulate(picked.assets[0].uri, { maxWidth: 1600, maxHeight: 1600 }).resize({ width: 400, height: null }).renderAsync();
+      const out = await img.saveAsync({ format: SaveFormat.JPEG, compress: 0.8, base64: true });
+      if (!out.base64) throw new Error('Couldn’t read that photo.');
+      await data.setAvatar(out.base64);
+    } catch (e) {
+      setPhotoMessage(e instanceof Error ? e.message : String(e));
+    } finally {
+      setPhotoBusy(false);
+    }
+  };
+  const removePhoto = async () => {
+    if (photoBusy) return;
+    setPhotoBusy(true);
+    setPhotoMessage(null);
+    try {
+      await data.setAvatar(null);
+    } catch (e) {
+      setPhotoMessage(e instanceof Error ? e.message : String(e));
+    } finally {
+      setPhotoBusy(false);
+    }
+  };
 
   const [password, setPassword] = useState('');
   const [pwBusy, setPwBusy] = useState(false);
@@ -80,6 +116,22 @@ export default function Account() {
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.cream }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <SheetScreen title="Edit profile" right={<IconButton name="x" label="Close" onPress={() => (router.canGoBack() ? router.back() : router.replace('/profile'))} />}>
         <Card style={styles.card}>
+          <View style={styles.photoRow}>
+            <Tap haptic="tap" scaleTo={0.96} onPress={pickPhoto} disabled={photoBusy} accessibilityRole="button" accessibilityLabel={me.avatarUrl ? 'Change profile photo' : 'Add a profile photo'}>
+              <Avatar player={me} size={72} />
+            </Tap>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Tap haptic="tap" onPress={pickPhoto} disabled={photoBusy} accessibilityRole="button" hitSlop={8}>
+                <Text style={styles.link}>{photoBusy ? 'Saving photo…' : me.avatarUrl ? 'Change photo' : 'Add a photo'}</Text>
+              </Tap>
+              {me.avatarUrl && !photoBusy ? (
+                <Tap haptic="warning" onPress={removePhoto} accessibilityRole="button" hitSlop={8}>
+                  <Text style={styles.removeLink}>Remove photo</Text>
+                </Tap>
+              ) : null}
+              {photoMessage ? <Text style={[styles.hint, { color: colors.danger }]}>{photoMessage}</Text> : null}
+            </View>
+          </View>
           <Field label="Name" value={name} onChange={setName} placeholder="First and last name" max={40} />
           <Field
             label="Username"
@@ -187,6 +239,8 @@ const styles = themed(() => StyleSheet.create({
   option: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.rule },
   optionName: { fontFamily: fonts.display, fontSize: 15, color: colors.ink },
   link: { fontFamily: fonts.bodySemibold, fontSize: 14, color: colors.fairway },
+  photoRow: { flexDirection: 'row', alignItems: 'center', gap: space.lg },
+  removeLink: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.inkMuted },
   message: { ...type.body, fontSize: 14, color: colors.fairway },
   error: { color: colors.danger },
 }));

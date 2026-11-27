@@ -130,6 +130,8 @@ export interface Player {
   homeCourseId?: string;
   /** Short bio line shown on profiles. */
   tagline?: string;
+  /** Profile photo (public URL); initials show when there's none. */
+  avatarUrl?: string;
 }
 
 // ── Collection ─────────────────────────────────────────────────────────────
@@ -138,14 +140,21 @@ export type CollectibleItem = 'bag-tag' | 'ball-marker' | 'pitch-marker' | 'patc
 export type CollectibleCategory = 'bag-tags' | 'markers' | 'patches' | 'pins';
 export type Tier = 'bronze' | 'silver' | 'gold' | 'platinum';
 
-export type FairwayResult = 'hit' | 'left' | 'right' | 'short';
+/** Where a missed shot finished: left, right, short of the target, or long (past / through it). */
+export type MissDirection = 'left' | 'right' | 'short' | 'long';
+/** Tee shot on a par 4 or 5: in the fairway, or where it missed. */
+export type FairwayResult = 'hit' | MissDirection;
+/** Approach: green in regulation ('hit'), or where it missed the green. */
+export type GreenResult = 'hit' | MissDirection;
 
 /** Only `strokes` is required; every other stat is optional and `undefined` means "not entered". */
 export interface HoleScore {
   strokes: number;
   putts?: number;
   fairway?: FairwayResult;
-  /** Explicit GIR override; otherwise derived from strokes/putts. */
+  /** Green in regulation, or the miss direction. Sets GIR when entered (and `gir` is kept in step for older builds). */
+  green?: GreenResult;
+  /** Explicit GIR override; otherwise derived from `green`, then from strokes/putts. */
   gir?: boolean;
   penalties?: number;
   chips?: number;

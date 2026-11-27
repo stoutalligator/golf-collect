@@ -11,6 +11,33 @@ const ratio = (hit: number, of: number) => (of ? hit / of : null);
 export const chronological = (summaries: RoundSummary[]) =>
   summaries.filter((s) => s.isComplete).sort((a, b) => a.date.localeCompare(b.date) || a.roundId.localeCompare(b.roundId));
 
+/**
+ * Which rounds the Stats dashboard covers: the last N rounds, a date window (this calendar year, the last 12
+ * months), one past calendar year, or everything.
+ */
+export type StatsWindow = { kind: 'last'; n: number } | { kind: 'ytd' } | { kind: '12m' } | { kind: 'year'; year: number } | { kind: 'all' };
+
+/** Completed rounds inside the window, oldest first. `today` is an ISO date (YYYY-MM-DD). */
+export function roundsInWindow(summaries: RoundSummary[], w: StatsWindow, today: string): RoundSummary[] {
+  const all = chronological(summaries);
+  switch (w.kind) {
+    case 'last': return all.slice(-w.n);
+    case 'all': return all;
+    case 'ytd': return all.filter((s) => s.date.slice(0, 4) === today.slice(0, 4) && s.date <= today);
+    case '12m': {
+      const from = `${Number(today.slice(0, 4)) - 1}${today.slice(4)}`; // same day last year, exclusive
+      return all.filter((s) => s.date > from && s.date <= today);
+    }
+    case 'year': return all.filter((s) => s.date.startsWith(`${w.year}-`));
+  }
+}
+
+/** Past calendar years (newest first) that have at least one completed round, excluding the current year. */
+export function pastYears(summaries: RoundSummary[], today: string): number[] {
+  const current = Number(today.slice(0, 4));
+  return [...new Set(chronological(summaries).map((s) => Number(s.date.slice(0, 4))))].filter((y) => y < current).sort((a, b) => b - a);
+}
+
 /** The most recent `n` completed rounds (all when n is undefined), oldest first. */
 export function recentRounds(summaries: RoundSummary[], n?: number): RoundSummary[] {
   const all = chronological(summaries);
@@ -77,8 +104,9 @@ export interface Analytics {
   birdiesPer18: number | null;
   doublesPer18: number | null;
   parTypes: ParTypeStat[];
-  driving: { entered: number; hit: number; left: number; right: number; short: number; pct: number | null };
-  approach: { entered: number; hit: number; pct: number | null };
+  driving: { entered: number; hit: number; left: number; right: number; short: number; long: number; pct: number | null };
+  /** GIR (from the green result, an override or putts), plus where greens were missed when that was entered. */
+  approach: { entered: number; hit: number; pct: number | null; misses: { entered: number; left: number; right: number; short: number; long: number } };
   putting: {
     entered: number;
     perRound: number | null;
@@ -129,6 +157,8 @@ export function analytics(summaries: RoundSummary[]): Analytics {
   const tee = holes.filter((h) => h.hole.par > 3 && h.score.fairway !== undefined);
   const fw = (v: string) => tee.filter((h) => h.score.fairway === v).length;
   const girHoles = holes.filter((h) => h.gir !== undefined);
+  const greenMisses = holes.filter((h) => h.score.green !== undefined && h.score.green !== 'hit');
+  const gm = (v: string) => greenMisses.filter((h) => h.score.green === v).length;
   const putts = holes.filter((h) => h.score.putts !== undefined);
   const puttsOnGir = putts.filter((h) => h.gir === true);
   const missed = holes.filter((h) => h.gir === false);
@@ -148,8 +178,11 @@ export function analytics(summaries: RoundSummary[]): Analytics {
     birdiesPer18: per18(scoring.birdies + scoring.eagles, scoring.holes),
     doublesPer18: per18(scoring.doublesPlus, scoring.holes),
     parTypes,
-    driving: { entered: tee.length, hit: fw('hit'), left: fw('left'), right: fw('right'), short: fw('short'), pct: ratio(fw('hit'), tee.length) },
-    approach: { entered: girHoles.length, hit: girHoles.filter((h) => h.gir).length, pct: ratio(girHoles.filter((h) => h.gir).length, girHoles.length) },
+    driving: { entered: tee.length, hit: fw('hit'), left: fw('left'), right: fw('right'), short: fw('short'), long: fw('long'), pct: ratio(fw('hit'), tee.length) },
+    approach: {
+      entered: girHoles.length, hit: girHoles.filter((h) => h.gir).length, pct: ratio(girHoles.filter((h) => h.gir).length, girHoles.length),
+      misses: { entered: greenMisses.length, left: gm('left'), right: gm('right'), short: gm('short'), long: gm('long') },
+    },
     putting: {
       entered: putts.length,
       perRound: putts.length ? (putts.reduce((a, h) => a + h.score.putts!, 0) / putts.length) * 18 : null,

@@ -1,7 +1,9 @@
 /**
  * Friends & feed building blocks: avatars, the hole-by-hole "round strip", reactions and the feed card.
  */
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Badge, Collectible } from '@/art/components';
@@ -17,16 +19,22 @@ import { avatarTones, chart, colors, fonts, radius, shadow, space, themed, type 
 
 // ── Avatars ────────────────────────────────────────────────────────────────
 
-export function Avatar({ player, size = 40, ring = false }: { player: Pick<Player, 'id' | 'initials' | 'isMe'>; size?: number; ring?: boolean }) {
+export function Avatar({ player, size = 40, ring = false }: { player: Pick<Player, 'id' | 'initials' | 'isMe' | 'avatarUrl'>; size?: number; ring?: boolean }) {
   const bg = player.isMe ? colors.fairway : avatarTones[hashString(player.id) % avatarTones.length];
+  // Profile photo when there is one; initials underneath (and if the photo can't load).
+  const [failed, setFailed] = useState<string | undefined>();
+  const photo = player.avatarUrl && failed !== player.avatarUrl ? player.avatarUrl : undefined;
   return (
     <View
       style={[
         styles.avatar,
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: bg },
+        { width: size, height: size, borderRadius: size / 2, backgroundColor: bg, overflow: 'hidden' },
         ring && { borderWidth: 2, borderColor: colors.gold },
       ]}>
       <Text style={[styles.avatarText, { fontSize: size * 0.38 }]}>{player.initials}</Text>
+      {photo ? (
+        <Image source={{ uri: photo }} style={StyleSheet.absoluteFill} contentFit="cover" cachePolicy="memory-disk" transition={120} onError={() => setFailed(photo)} accessibilityIgnoresInvertColors />
+      ) : null}
     </View>
   );
 }

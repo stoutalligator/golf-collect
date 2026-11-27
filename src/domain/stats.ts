@@ -43,6 +43,7 @@ export interface RoundSummary {
 }
 
 export function deriveGir(score: HoleScore, par: number): boolean | undefined {
+  if (score.green !== undefined) return score.green === 'hit';
   if (score.gir !== undefined) return score.gir;
   if (score.putts === undefined) return undefined;
   return score.strokes - score.putts <= par - 2;

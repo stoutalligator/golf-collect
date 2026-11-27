@@ -14,7 +14,7 @@ import { uuid } from '@/lib/ids';
 import { useLocation } from '@/lib/location';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
-import { linkableEventRounds, liveEventGroup } from '@/state/events';
+import { linkableEventRounds, liveEventGroup, myEventRound } from '@/state/events';
 import { isNineHole, playLayout } from '@/domain/layout';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
@@ -37,13 +37,13 @@ const dayParts = (iso: string) => {
 export default function NewRound() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string; when?: 'earlier'; start?: string }>();
+  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string; when?: 'earlier'; start?: string; sim?: string }>();
   // Joining a friend's round: log your own round in the same group, same course, holes and day.
   const joinRound = params.join ? data.roundById(params.join) : undefined;
   const joinOwner = joinRound ? data.playerById(roundOwner(joinRound)) : undefined;
   // Opened from an event round: start from its course, tee and holes, and count toward it.
   const fromEvent = params.eventRound ? data.eventRounds.find((r) => r.id === params.eventRound) : undefined;
-  const [kind, setKind] = useState<RoundKind>('course');
+  const [kind, setKind] = useState<RoundKind>(params.sim && !params.join && !params.eventRound ? 'sim' : 'course');
   // Individual stroke play, or a team scramble (one team score; never counts toward stats, collectibles or badges).
   const [format, setFormat] = useState<'individual' | 'scramble'>('individual');
   const [when, setWhen] = useState<When>(params.when === 'earlier' ? 'earlier' : 'now');
@@ -97,9 +97,10 @@ export default function NewRound() {
 
   const options = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = kind === 'course'
-      ? data.courseIndex.map((c) => ({ id: c.id, name: c.name, sub: `${c.city}, ${c.state}` }))
-      : data.simCourses.map((c) => ({ id: c.id, name: c.name, sub: c.platform ?? 'Simulator' }));
+    const real = data.courseIndex.map((c) => ({ id: c.id, name: c.name, sub: `${c.city}, ${c.state}` }));
+    const sims = data.simCourses.map((c) => ({ id: c.id, name: c.name, sub: c.platform ?? 'Simulator' }));
+    // On the simulator you can play a sim course or any real course; real courses show once you search.
+    const list = kind === 'course' ? real : q ? [...sims, ...real] : sims;
     return list.filter((o) => !q || o.name.toLowerCase().includes(q) || o.sub.toLowerCase().includes(q));
   }, [kind, data.courseIndex, data.simCourses, query]);
 
@@ -113,9 +114,10 @@ export default function NewRound() {
     return ids.filter((id) => !shown.has(id)).map((id) => data.courseSummary(id)).filter((c) => !!c).slice(0, 5);
   }, [data, nearby]);
 
-  const { course: loaded, loading: courseLoading, missing: courseMissing } = useCourse(kind === 'course' ? courseId : undefined);
-  const course = kind === 'course' ? loaded : undefined;
   const sim = kind === 'sim' && courseId ? data.simCourseById(courseId) : undefined;
+  // A real course, on the course or played on the simulator.
+  const { course: loaded, loading: courseLoading, missing: courseMissing } = useCourse(sim ? undefined : courseId);
+  const course = sim ? undefined : loaded;
   const layout = course ?? sim;
   const scramble = kind === 'course' && format === 'scramble' && !joinRound;
   // Scrambles only count toward scheduled scramble rounds; individual rounds never toward those.
@@ -127,8 +129,13 @@ export default function NewRound() {
   const linkable = fromEventLink && !nearbyEvents.some((l) => l.round.id === fromEvent!.id)
     ? [{ round: fromEvent!, event: fromEventLink }, ...nearbyEvents]
     : nearbyEvents;
-  // A friend already teed off for this scheduled round: start in their group so you see each other live.
-  const liveGroup = fromEvent && when === 'now' ? liveEventGroup(data, fromEvent.id) : undefined;
+  // Counting toward a scheduled round: if others already logged it that day, join their group (one round, not a
+  // separate one each); if you already have a card for it (a scorekeeper started it for you), open that instead.
+  const linkTarget = kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? eventRoundId : undefined;
+  const liveGroup = linkTarget && !scramble && !joinRound ? liveEventGroup(data, linkTarget, date) : undefined;
+  const mineForEvent = linkTarget && !scramble && !joinRound ? myEventRound(data, linkTarget) : undefined;
+  const existing = mineForEvent && roundOwner(mineForEvent) === data.me.id && mineForEvent.format !== 'scramble' ? mineForEvent : undefined;
+  const liveOwner = liveGroup && !existing ? data.playerById(roundOwner(liveGroup)) : undefined;
   const selectedTee = course ? (teeId ?? course.tees[Math.min(1, course.tees.length - 1)]?.id) : undefined;
 
   // Team roster (index 0 = Team 1). Everyone playing: you plus the friends you picked.
@@ -146,6 +153,10 @@ export default function NewRound() {
       return;
     }
     if (!layout || starting) return;
+    if (existing) {
+      router.replace(existing.status === 'active' ? `/round/play/${existing.id}` : `/round/${existing.id}`);
+      return;
+    }
     const all = playLayout(layout).holes.map((h) => h.number); // 9-hole courses: 18 = twice around
     const effective = isNineHole(layout) && holes === 'back' ? 'front' : holes;
     const holeNumbers = effective === '18' ? all : effective === 'front' ? all.slice(0, 9) : all.slice(9, 18);
@@ -153,7 +164,10 @@ export default function NewRound() {
     const group = !joinRound && !scramble && scoring === 'group' && withIds.length > 0;
     // Any round with friends forms a group, so friends on their own phones can join and everyone sees live scores.
     const groupId = joinRound ? roundGroupKey(joinRound) : liveGroup && !scramble ? roundGroupKey(liveGroup) : withIds.length > 0 && !scramble ? uuid() : undefined;
-    const linkTo = kind === 'course' && eventRoundId && linkable.some((l) => l.round.id === eventRoundId) ? eventRoundId : undefined;
+    const linkTo = linkTarget;
+    // Joining a group: friends who already have a card in it keep theirs (no second card kept for them here).
+    const inGroup = new Set(liveGroup ? data.roundGroup(liveGroup).map(roundOwner) : []);
+    const scoredFor = withIds.filter((id) => !inGroup.has(id));
     const linkEvent = linkTo ? data.eventRounds.find((r) => r.id === linkTo)?.eventId : undefined;
     const inEvent = (id: string) => !!linkEvent && data.eventMembers.some((m) => m.eventId === linkEvent && m.playerId === id && m.status === 'joined');
     const everyone = [data.me.id, ...withIds];
@@ -209,7 +223,7 @@ export default function NewRound() {
       // Friends' scored rounds first, so nobody you're scoring for gets a "join this round" prompt.
       // Queued (works with no signal). Friends' scored rounds first, so nobody you're scoring for gets a
       // "join this round" prompt.
-      await data.queueRounds(group ? [...withIds.map(roundFor), mine] : [mine]);
+      await data.queueRounds(group ? [...scoredFor.map(roundFor), mine] : [mine]);
       router.replace(`/round/play/${mine.id}`);
     } finally {
       setStarting(false);
@@ -243,12 +257,23 @@ export default function NewRound() {
                 : `You played with ${joinOwner?.name.split(' ')[0] ?? 'a friend'} at ${data.roundCourseName(joinRound)} on ${formatDay(joinRound.date)}. Enter your own scores hole by hole; your round shows up next to theirs.`}
             </Text>
           </View>
+        ) : existing ? (
+          <View style={styles.joinBanner}>
+            <Text style={[styles.note, { flex: 1, color: colors.ink }]}>You already have a card for this round. Opening it instead of starting another.</Text>
+          </View>
+        ) : liveGroup && when !== 'later' ? (
+          <View style={styles.joinBanner}>
+            {liveOwner ? <Avatar player={liveOwner} size={36} /> : null}
+            <Text style={[styles.note, { flex: 1, color: colors.ink }]}>
+              {`${liveOwner?.name.split(' ')[0] ?? 'Someone'}'s group already ${liveGroup.status === 'active' ? 'teed off' : 'played'} this round. You'll join their group, so it shows as one round with everyone's scores.`}
+            </Text>
+          </View>
         ) : null}
         {joinRound ? null : (
         <>
         <Chips
           value={kind}
-          onChange={(k) => { setKind(k); setCourseId(undefined); setTeeId(undefined); if (k === 'sim' && when === 'later') setWhen('now'); }}
+          onChange={(k) => { setKind(k); if (!course) { setCourseId(undefined); setTeeId(undefined); } if (k === 'sim' && when === 'later') setWhen('now'); }}
           options={[{ value: 'course', label: 'On the course' }, { value: 'sim', label: 'Simulator' }]}
         />
         {kind === 'sim' ? <Text style={styles.note}>Sim rounds count toward sim stats and sim badges only, never real-course collectibles.</Text> : null}
@@ -289,7 +314,7 @@ export default function NewRound() {
 
         {layout ? (
           <Tap haptic="select" scaleTo={0.98} style={styles.selected} disabled={!!joinRound} onPress={() => setCourseId(undefined)} accessibilityRole="button" accessibilityLabel="Change course">
-            {course ? (
+            {course && kind === 'course' ? (
               <Collectible courseId={course.id} region={course.region} kind="ball-marker" tier={data.collections.get(course.id)?.tier?.tier} label={shortCourseName(course.name)} size={52} />
             ) : <SceneImage seed={layout.id} style={styles.selectedThumb} />}
             <View style={{ flex: 1 }}>
@@ -302,7 +327,8 @@ export default function NewRound() {
           <Loading label="Loading scorecard…" />
         ) : (
           <>
-            <SearchField value={query} onChange={setQuery} placeholder={kind === 'course' ? 'Search courses or towns...' : 'Search sim courses...'} />
+            <SearchField value={query} onChange={setQuery} placeholder={kind === 'course' ? 'Search courses or towns...' : 'Search sim or real courses...'} />
+            {kind === 'sim' && !query.trim() ? <Text style={styles.note}>Or search any real course to play it on the simulator.</Text> : null}
             {kind === 'course' && !query.trim() ? (
               <>
                 <Text style={styles.label}>Near you</Text>
@@ -502,7 +528,7 @@ export default function NewRound() {
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
         <Button
-          label={starting ? 'Setting up…' : when === 'later' ? 'Pick a date & time' : when === 'earlier' ? 'Enter scores' : 'Tee Off'}
+          label={starting ? 'Setting up…' : existing && when !== 'later' ? 'Open your card' : when === 'later' ? 'Pick a date & time' : when === 'earlier' ? 'Enter scores' : 'Tee Off'}
           icon={when === 'later' ? 'calendar' : 'flag'}
           onPress={start}
           disabled={(when !== 'later' && !layout) || starting}

@@ -98,6 +98,8 @@ export interface AppData extends AppSnapshot {
   retrySync(): void;
   deleteRound(id: string): Promise<void>;
   updateProfile(changes: ProfileChanges): Promise<void>;
+  /** Set your profile photo from a small JPEG (base64), or remove it with null. */
+  setAvatar(jpegBase64: string | null): Promise<void>;
   toggleWishlist(courseId: string): Promise<void>;
   react(roundId: string, emoji: ReactionEmoji): Promise<void>;
   addComment(roundId: string, text: string): Promise<void>;
@@ -204,7 +206,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     const players = new Map([snap.me, ...snap.friends, ...snap.others].map((p) => [p.id, p]));
     // 9-hole courses play as 18 virtual holes when you go around twice (see domain/layout).
     const playable = new Map(snap.courses.map((c) => [c.id, playLayout(c)]));
-    const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) : playable.get(r.courseId));
+    // A sim round is on a sim course or on a real course played on the simulator.
+    const layoutFor = (r: Round): HoleLayout | undefined => (r.kind === 'sim' ? simMap.get(r.courseId) ?? playable.get(r.courseId) : playable.get(r.courseId));
     const allRounds = [...snap.rounds, ...snap.friendRounds];
     const roundMap = new Map(allRounds.map((r) => [r.id, r]));
     const groups = new Map<string, Round[]>();
@@ -298,7 +301,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       courseById: (id: string) => courseMap.get(id),
       courseSummary: (id: string) => indexMap.get(id),
       simCourseById: (id: string) => simMap.get(id),
-      roundCourseName: (r: Round) => (r.kind === 'sim' ? simMap.get(r.courseId)?.name : (courseMap.get(r.courseId) ?? indexMap.get(r.courseId))?.name) ?? 'Unknown course',
+      roundCourseName: (r: Round) => (simMap.get(r.courseId) ?? courseMap.get(r.courseId) ?? indexMap.get(r.courseId))?.name ?? 'Unknown course',
     };
   }, [snap]);
 
@@ -320,6 +323,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     sync,
     retrySync: () => { void repo?.flushOutbox(); },
     updateProfile: async (changes) => { await repo!.updateProfile(changes); await reload(); },
+    setAvatar: async (jpegBase64) => { await repo!.setAvatar(jpegBase64); await reload(); },
     deleteRound: async (id) => { await repo!.deleteRound(id); await reload(); },
     toggleWishlist: async (id) => {
       const next = snap.wishlist.includes(id) ? snap.wishlist.filter((x) => x !== id) : [...snap.wishlist, id];

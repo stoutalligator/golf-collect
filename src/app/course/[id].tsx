@@ -103,6 +103,8 @@ export default function CourseDetail() {
             <Button label="Log a Round" icon="flag" onPress={() => router.push(`/round/new?courseId=${course.id}`)} style={{ flex: 1.2 }} />
             <Button label="Schedule" icon="calendar" variant="secondary" onPress={() => router.push(`/schedule?courseId=${course.id}`)} style={{ flex: 1 }} />
           </View>
+          {/* Every course can be played on a simulator: a sim round (sim stats and badges only, no real-course credit). */}
+          <Button label="Play on the Simulator" variant="secondary" onPress={() => router.push(`/round/new?courseId=${course.id}&sim=1`)} />
           {rounds.length ? (
             <Button label={`Your rounds here (${rounds.length})`} variant="secondary" onPress={() => router.navigate(`/stats?view=rounds&courseId=${course.id}`)} />
           ) : null}

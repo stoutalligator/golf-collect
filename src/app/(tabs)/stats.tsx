@@ -1,21 +1,25 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ChartCard, LineChart, MeterRow, Ring, SegmentedBar, Sparkline } from '@/components/charts';
 import { Icon } from '@/components/icons';
 import { Animated, enterItem, Tap } from '@/components/motion';
 import { RoundRow } from '@/components/round-card';
 import { Chips, Empty, Group, SheetScreen, StatStrip } from '@/components/ui';
-import { analytics, recentRounds, trendDelta, type Analytics } from '@/domain/analytics';
+import { analytics, pastYears, roundsInWindow, trendDelta, type Analytics, type StatsWindow } from '@/domain/analytics';
 import { formatToPar, type RoundSummary } from '@/domain/stats';
-import { formatDate, oneDecimal, pct } from '@/lib/format';
+import { formatDate, oneDecimal, pct, todayISO } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData } from '@/state/app-data';
 import { chart, colors, currentScheme, fonts, radius, shadow, space, themed, type } from '@/theme';
 
 type View_ = 'overview' | 'rounds' | 'sim';
-type Range = 10 | 20 | 'all';
+/** Stats window: last N rounds, this year, last 12 months, one past year (`y2025`), or everything. */
+type Range = 'last10' | 'last20' | 'ytd' | '12m' | 'all' | `y${number}`;
+const toWindow = (r: Range): StatsWindow =>
+  r === 'last10' ? { kind: 'last', n: 10 } : r === 'last20' ? { kind: 'last', n: 20 } : r === 'ytd' ? { kind: 'ytd' }
+    : r === '12m' ? { kind: '12m' } : r === 'all' ? { kind: 'all' } : { kind: 'year', year: Number(r.slice(1)) };
 
 export default function Stats() {
   const params = useLocalSearchParams<{ courseId?: string; view?: View_ }>();
@@ -25,7 +29,7 @@ export default function Stats() {
   const [picked, setPicked] = useState<{ sig: string; view: View_ }>({ sig, view: linked });
   const view = picked.sig === sig ? picked.view : linked;
   const setView = (v: View_) => setPicked({ sig, view: v });
-  const [range, setRange] = useState<Range>(20);
+  const [range, setRange] = useState<Range>('last20');
 
   return (
     <SheetScreen title="Stats">
@@ -51,7 +55,14 @@ function Overview({ track, range, setRange }: { track: 'course' | 'sim'; range: 
     () => data.roundsByDate.map((r) => data.summaries.get(r.id)).filter((s): s is RoundSummary => !!s && s.kind === track && s.isComplete),
     [data.roundsByDate, data.summaries, track],
   );
-  const scoped = recentRounds(all, range === 'all' ? undefined : range);
+  const today = todayISO();
+  const scoped = roundsInWindow(all, toWindow(range), today);
+  const ranges: { value: Range; label: string }[] = [
+    { value: 'last10', label: 'Last 10' }, { value: 'last20', label: 'Last 20' }, { value: 'ytd', label: 'This year' },
+    { value: '12m', label: 'Last 12 months' },
+    ...pastYears(all, today).map((y) => ({ value: `y${y}` as Range, label: String(y) })),
+    { value: 'all', label: 'All' },
+  ];
   const a = analytics(scoped);
   const nameOf = (id: string) => {
     const r = data.roundById(id);
@@ -70,14 +81,18 @@ function Overview({ track, range, setRange }: { track: 'course' | 'sim'; range: 
     <>
       <View style={styles.rangeRow}>
         <Text style={styles.rangeLabel}>{track === 'sim' ? 'Sim rounds · separate track' : 'Course rounds'}</Text>
-        <View style={styles.rangeChips}>
-          {([10, 20, 'all'] as Range[]).map((r) => (
-            <Tap key={String(r)} haptic={range === r ? 'none' : 'select'} scaleTo={0.94} onPress={() => setRange(r)} accessibilityRole="tab" accessibilityState={{ selected: range === r }} style={[styles.rangeChip, range === r && styles.rangeChipOn]}>
-              <Text style={[styles.rangeText, range === r && styles.rangeTextOn]}>{r === 'all' ? 'All' : `Last ${r}`}</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.rangeScroll} contentContainerStyle={styles.rangeChips}>
+          {ranges.map(({ value: r, label }) => (
+            <Tap key={r} haptic={range === r ? 'none' : 'select'} scaleTo={0.94} onPress={() => setRange(r)} accessibilityRole="tab" accessibilityState={{ selected: range === r }} style={[styles.rangeChip, range === r && styles.rangeChipOn]}>
+              <Text style={[styles.rangeText, range === r && styles.rangeTextOn]}>{label}</Text>
             </Tap>
           ))}
-        </View>
+        </ScrollView>
       </View>
+      {scoped.length === 0 ? (
+        <Empty title="No rounds in this range" body="Pick a wider range to see your stats." />
+      ) : (
+      <>
 
       {/* Headline */}
       <Animated.View entering={enterItem(0)} style={styles.hero}>
@@ -155,6 +170,7 @@ function Overview({ track, range, setRange }: { track: 'course' | 'sim'; range: 
                 { key: 'hit', label: 'Fairway', value: a.driving.hit, color: chart.line, ink: colors.cream },
                 { key: 'right', label: 'Right', value: a.driving.right, color: chart.double, ink: currentScheme() === 'dark' ? colors.cream : colors.white },
                 { key: 'short', label: 'Short', value: a.driving.short, color: chart.par, ink: colors.ink },
+                { key: 'long', label: 'Long', value: a.driving.long, color: chart.muted, ink: colors.ink },
               ]}
             />
             <Text style={styles.foot}>{missNote(a)}</Text>
@@ -168,6 +184,21 @@ function Overview({ track, range, setRange }: { track: 'course' | 'sim'; range: 
           <Ring value={a.scrambling.pct} label="Scrambling" sub={a.scrambling.chances ? `${a.scrambling.saves}/${a.scrambling.chances}` : undefined} />
           <Ring value={a.putting.onePuttPct} label="One-putts" sub={a.putting.entered ? `${a.putting.entered} holes` : undefined} />
         </View>
+        {a.approach.misses.entered ? (
+          <>
+            <View style={styles.divider} />
+            <Text style={styles.subhead}>Where you miss greens</Text>
+            <SegmentedBar
+              segments={[
+                { key: 'left', label: 'Left', value: a.approach.misses.left, color: chart.bogey, ink: colors.white },
+                { key: 'short', label: 'Short', value: a.approach.misses.short, color: chart.par, ink: colors.ink },
+                { key: 'long', label: 'Long', value: a.approach.misses.long, color: chart.muted, ink: colors.ink },
+                { key: 'right', label: 'Right', value: a.approach.misses.right, color: chart.double, ink: currentScheme() === 'dark' ? colors.cream : colors.white },
+              ]}
+            />
+            <Text style={styles.foot}>{greenMissNote(a)}</Text>
+          </>
+        ) : null}
         <View style={styles.divider} />
         <View style={styles.twoUp}>
           <MiniFigure label="Putts / round" value={oneDecimal(a.putting.perRound)} />
@@ -183,11 +214,21 @@ function Overview({ track, range, setRange }: { track: 'course' | 'sim'; range: 
       </ChartCard>
 
       {track === 'course' ? <CourseAverages rounds={scoped} /> : null}
+      </>
+      )}
     </>
   );
 }
 
 const signed = (v: number | null) => (v === null ? '—' : `${v >= 0 ? '+' : ''}${v.toFixed(1)}`);
+
+function greenMissNote(a: Analytics) {
+  const m = a.approach.misses;
+  const dirs = (['short', 'long', 'left', 'right'] as const).map((d) => ({ d, n: m[d] })).sort((x, y) => y.n - x.n);
+  const top = dirs[0]!;
+  if (dirs[1]!.n === top.n) return `${m.entered} missed greens tracked.`;
+  return `Most missed greens finish ${top.d === 'short' || top.d === 'long' ? top.d : `to the ${top.d}`} (${Math.round((top.n / m.entered) * 100)}%).`;
+}
 
 function missNote(a: Analytics) {
   const { left, right } = a.driving;
@@ -297,9 +338,10 @@ function RoundsList({ courseId }: { courseId?: string }) {
 }
 
 const styles = themed(() => StyleSheet.create({
-  rangeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: -space.xs },
+  rangeRow: { gap: space.sm, marginTop: -space.xs },
+  rangeScroll: { marginHorizontal: -space.lg },
   rangeLabel: { ...type.caption, color: colors.inkMuted },
-  rangeChips: { flexDirection: 'row', gap: 4 },
+  rangeChips: { flexDirection: 'row', gap: 6, paddingHorizontal: space.lg },
   rangeChip: { paddingHorizontal: 12, minHeight: 32, justifyContent: 'center', borderRadius: radius.pill, backgroundColor: colors.paper },
   rangeChipOn: { backgroundColor: colors.fairway },
   rangeText: { fontFamily: fonts.bodyMedium, fontSize: 12, color: colors.ink },
@@ -322,6 +364,7 @@ const styles = themed(() => StyleSheet.create({
   miniLabel: { ...type.caption, fontSize: 11, color: colors.inkMuted },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.rule },
   foot: { ...type.caption, fontSize: 11, color: colors.inkMuted },
+  subhead: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   rings: { flexDirection: 'row', justifyContent: 'space-between' },
   delta: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: colors.paper },
   deltaGood: { backgroundColor: colors.goldSoft },

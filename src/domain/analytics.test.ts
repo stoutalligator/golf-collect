@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import seed from '@/data/seed/courses.ct.json';
 
-import { analytics, handicapIndex, recentRounds, scoreDifferential, trendDelta } from './analytics';
+import { analytics, handicapIndex, pastYears, recentRounds, roundsInWindow, scoreDifferential, trendDelta } from './analytics';
 import { summarizeRound } from './stats';
 import type { Course, HoleScore, Round } from './types';
 
@@ -69,6 +69,30 @@ describe('analytics', () => {
     expect(a.trend.map((t) => t.roundId)).toEqual(['b', 'a']);
     expect(a.best?.roundId).toBe('b');
     expect(recentRounds([r1, r2], 1).map((s) => s.roundId)).toEqual(['a']);
+  });
+
+  it('takes GIR from the green result and counts green misses by direction', () => {
+    const r = sum(round('g', '2026-07-01', par((p, i) => ({
+      // Hole 1 hit, 2 short, 3 short, 4 left; hole 5 has 2 putts on par (derived GIR); the green result wins over putts.
+      ...(i === 0 ? { green: 'hit' as const } : i < 3 ? { green: 'short' as const } : i === 3 ? { green: 'left' as const, putts: 1, strokes: p - 1 } : i === 4 ? { putts: 2 } : {}),
+    }))));
+    const a = analytics([r]);
+    expect(a.approach.entered).toBe(5);
+    expect(a.approach.hit).toBe(2); // hole 1 (green hit) + hole 5 (derived from putts); hole 4's birdie is still a missed green
+    expect(a.approach.misses).toEqual({ entered: 3, left: 1, right: 0, short: 2, long: 0 });
+  });
+
+  it('filters rounds to a stats window', () => {
+    const today = '2026-11-27';
+    const rs = [['a', '2024-05-01'], ['b', '2025-11-27'], ['c', '2025-11-28'], ['d', '2026-01-02'], ['e', '2026-11-20']]
+      .map(([id, d]) => sum(round(id, d, par())));
+    const ids = (w: Parameters<typeof roundsInWindow>[1]) => roundsInWindow(rs, w, today).map((s) => s.roundId);
+    expect(ids({ kind: 'last', n: 2 })).toEqual(['d', 'e']);
+    expect(ids({ kind: 'ytd' })).toEqual(['d', 'e']);
+    expect(ids({ kind: '12m' })).toEqual(['c', 'd', 'e']); // a year ago today is outside
+    expect(ids({ kind: 'year', year: 2025 })).toEqual(['b', 'c']);
+    expect(ids({ kind: 'all' })).toHaveLength(5);
+    expect(pastYears(rs, today)).toEqual([2025, 2024]);
   });
 
   it('trend delta compares the newer half to the older half', () => {

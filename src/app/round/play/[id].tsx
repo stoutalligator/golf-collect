@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, ScrollView, StyleSheet, Text, View, type ScrollViewInstance } from 'react-native';
+import { AppState, ScrollView, StyleSheet, Text, View, type ScrollViewInstance, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
@@ -10,10 +10,11 @@ import { ActionSheet, Button, Empty, IconButton } from '@/components/ui';
 import { realHoleNumber } from '@/domain/layout';
 import { deriveGir, formatToPar } from '@/domain/stats';
 import { isScramble, matchLine, matchStatus, teamNumbers, toParThru } from '@/domain/teams';
-import { roundGroupKey, roundOwner, type FairwayResult, type HoleScore, type Round } from '@/domain/types';
+import { roundGroupKey, roundOwner, type FairwayResult, type GreenResult, type HoleScore, type MissDirection, type Round } from '@/domain/types';
 import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Tap } from '@/components/motion';
+import { ScoreMark } from '@/components/score-mark';
 import { haptics } from '@/lib/haptics';
 
 type Pending = Record<string, Record<number, HoleScore | null>>;
@@ -75,7 +76,8 @@ export default function PlayRound() {
   const pars = round.holeNumbers.map((n) => layout.holes.find((h) => h.number === n)?.par ?? 4);
   const holeNo = round.holeNumbers[index];
   const hole = layout.holes.find((h) => h.number === holeNo)!;
-  const course = round.kind === 'course' ? data.courseById(round.courseId) : undefined;
+  // Real course (also when played on the simulator) for tee yardages.
+  const course = data.courseById(round.courseId);
   const tee = course?.tees.find((t) => t.id === round.teeId);
   const yards = course ? tee?.yardages?.[realHoleNumber(course, holeNo) - 1] : undefined;
   const scramble = isScramble(round);
@@ -126,12 +128,16 @@ export default function PlayRound() {
     edit(target, index, next);
   };
 
-  /** Save your edits (and par for untouched cards you keep on this hole). Returns each card's scores after saving. */
-  const flush = async (): Promise<Map<string, (HoleScore | null)[]>> => {
+  /**
+   * Save your edits. With `confirm` (Next / Finish only), an untouched hole on the cards you keep is also recorded
+   * as par; just visiting another hole (grid, header, Prev, back) saves only what you actually changed.
+   * Returns each card's scores after saving.
+   */
+  const flush = async (confirm = false): Promise<Map<string, (HoleScore | null)[]>> => {
     const out = new Map<string, (HoleScore | null)[]>();
     const touched = new Map<string, Set<number>>();
     for (const [rid, holes] of Object.entries(pending)) touched.set(rid, new Set(Object.keys(holes).map(Number)));
-    for (const r of autoFill) {
+    if (confirm) for (const r of autoFill) {
       if (!view(r)[index]) touched.set(r.id, new Set([...(touched.get(r.id) ?? []), index]));
     }
     const jobs: Promise<void>[] = [];
@@ -158,8 +164,8 @@ export default function PlayRound() {
     return out;
   };
 
-  const go = async (i: number, focus: string | null = null) => {
-    if (i !== index) await flush();
+  const go = async (i: number, focus: string | null = null, confirm = false) => {
+    if (i !== index) await flush(confirm);
     setIndex(i);
     setFocusId(focus);
   };
@@ -167,7 +173,7 @@ export default function PlayRound() {
   const selectCell = (r: Round, i: number) => go(i, r.id === round.id ? null : r.id);
 
   const finish = async () => {
-    const lists = await flush();
+    const lists = await flush(true);
     if (!canFinish) {
       router.back();
       return;
@@ -245,7 +251,11 @@ export default function PlayRound() {
                           accessibilityRole="button"
                           accessibilityLabel={`${nameOf(r)}, hole ${n}: ${sc ? sc.strokes : 'not entered'}${byOther ? `, entered by ${data.playerById(sc!.enteredBy!)?.name.split(' ')[0] ?? 'someone else'}` : ''}`}
                           style={[styles.cell, i === index && styles.cellCol, focused && styles.cellFocus]}>
-                          <Text style={[styles.cellText, sc && sc.strokes < pars[i] && styles.cellUnder, sc && sc.strokes > pars[i] && styles.cellOver, focused && styles.cellTextFocus]}>{sc ? sc.strokes : '·'}</Text>
+                          {sc ? (
+                            <ScoreMark toPar={sc.strokes - pars[i]} strokes={sc.strokes} size="md" onFill={focused} />
+                          ) : (
+                            <Text style={[styles.cellText, focused && styles.cellTextFocus]}>·</Text>
+                          )}
                           {byOther ? <View style={[styles.cellDot, focused && { backgroundColor: colors.goldSoft }]} /> : null}
                         </Tap>
                       );
@@ -310,15 +320,19 @@ export default function PlayRound() {
           />
         </Field>
 
-        {hole.par > 3 ? (
-          <Field label="Fairway">
-            <ChoiceRow<FairwayResult>
-              options={[{ value: 'left', label: 'Left' }, { value: 'hit', label: 'Hit' }, { value: 'right', label: 'Right' }, { value: 'short', label: 'Short' }]}
-              value={sel.fairway}
-              onChange={(v) => patch({ fairway: v })}
-            />
-          </Field>
-        ) : null}
+        {/* Tee shot and approach: where each finished. The green result sets GIR (kept in step for older builds). */}
+        <View style={styles.pads}>
+          {hole.par > 3 ? (
+            <MissPad<FairwayResult> title="Fairway" hitLabel="Hit" value={sel.fairway} onChange={(v) => patch({ fairway: v })} />
+          ) : null}
+          <MissPad<GreenResult>
+            title="Green"
+            hitLabel="GIR"
+            value={sel.green}
+            onChange={(v) => patch({ green: v, gir: v === undefined ? undefined : v === 'hit' })}
+            style={hole.par > 3 ? undefined : styles.padSolo}
+          />
+        </View>
 
         <View style={styles.smallRow}>
           <SmallStepper label="Penalties" value={sel.penalties} onChange={(v) => patch({ penalties: v })} />
@@ -328,11 +342,11 @@ export default function PlayRound() {
 
         {(() => {
           const gir = deriveGir(sel, hole.par);
-          return (
-        <Text style={styles.gir}>
-          {gir === undefined ? 'GIR: enter putts to calculate' : gir ? 'Green in regulation ✓' : 'Missed green in regulation'}
-        </Text>
-          );
+          const text = sel.green === 'hit' ? 'Green in regulation ✓'
+            : sel.green ? `Missed the green ${sel.green === 'long' ? 'long' : sel.green === 'short' ? 'short' : `to the ${sel.green}`}`
+            : gir === undefined ? 'GIR: tap the green, or enter putts to work it out'
+            : gir ? 'Green in regulation ✓ (from putts)' : 'Missed green in regulation (from putts)';
+          return <Text style={styles.gir}>{text}</Text>;
         })()}
       </ScrollView>
 
@@ -341,7 +355,7 @@ export default function PlayRound() {
         <Button
           style={{ flex: 1 }}
           label={isLast ? (canFinish ? 'Finish Round' : 'Save & close') : `Next · Hole ${round.holeNumbers[index + 1]}`}
-          onPress={() => (isLast ? finish() : go(index + 1))}
+          onPress={() => (isLast ? finish() : go(index + 1, null, true))}
           disabled={saving}
         />
       </View>
@@ -374,6 +388,39 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <View style={{ gap: space.sm }}>
       <Text style={styles.fieldLabel}>{label} <Text style={styles.optional}>optional</Text></Text>
       {children}
+    </View>
+  );
+}
+
+/**
+ * Where a shot finished, laid out like the shot: Long above, Short below, Left and Right either side, the target in
+ * the middle. Tap to select, tap again to clear (back to "not entered").
+ */
+function MissPad<T extends 'hit' | MissDirection>({ title, hitLabel, value, onChange, style }: {
+  title: string; hitLabel: string; value: T | undefined; onChange: (v: T | undefined) => void; style?: ViewStyle;
+}) {
+  const cell = (v: T, label: string, center = false) => {
+    const active = v === value;
+    return (
+      <Tap
+        haptic="select"
+        scaleTo={0.94}
+        onPress={() => onChange(active ? undefined : v)}
+        style={[styles.padCell, center && styles.padCenter, active && (center ? styles.padCenterOn : styles.choiceActive)]}
+        accessibilityRole="button"
+        accessibilityLabel={`${title}: ${center ? (title === 'Green' ? 'green in regulation' : 'hit') : `missed ${label.toLowerCase()}`}`}
+        accessibilityState={{ selected: active }}>
+        <Text style={[styles.padText, active && { color: colors.cream }]}>{label}</Text>
+      </Tap>
+    );
+  };
+  const gap = <View style={styles.padGap} />;
+  return (
+    <View style={[styles.pad, style]}>
+      <Text style={styles.fieldLabel}>{title} <Text style={styles.optional}>optional</Text></Text>
+      <View style={styles.padRow}>{gap}{cell('long' as T, 'Long')}{gap}</View>
+      <View style={styles.padRow}>{cell('left' as T, 'Left')}{cell('hit' as T, hitLabel, true)}{cell('right' as T, 'Right')}</View>
+      <View style={styles.padRow}>{gap}{cell('short' as T, 'Short')}{gap}</View>
     </View>
   );
 }
@@ -438,10 +485,8 @@ const styles = themed(() => StyleSheet.create({
   cellCol: { backgroundColor: colors.tint },
   cellFocus: { backgroundColor: colors.fairway, borderRadius: 6 },
   cellText: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink, fontVariant: ['tabular-nums'] },
-  cellUnder: { color: colors.gold },
-  cellOver: { color: colors.inkMuted },
   cellTextFocus: { color: colors.cream },
-  cellDot: { position: 'absolute', top: 4, right: 4, width: 4, height: 4, borderRadius: 2, backgroundColor: colors.gold },
+  cellDot: { position: 'absolute', top: 1, right: 1, width: 4, height: 4, borderRadius: 2, backgroundColor: colors.gold },
   backLink: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway, textDecorationLine: 'underline' },
   matchBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 2 },
   matchText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway },
@@ -464,6 +509,15 @@ const styles = themed(() => StyleSheet.create({
   fieldLabel: { ...type.label, color: colors.ink },
   optional: { fontFamily: fonts.body, letterSpacing: 0, textTransform: 'none', color: colors.inkMuted, fontSize: 11 },
   choiceRow: { flexDirection: 'row', gap: space.sm },
+  pads: { flexDirection: 'row', gap: space.md },
+  pad: { flex: 1, gap: 6 },
+  padSolo: { flex: 0, width: '50%', alignSelf: 'center' },
+  padRow: { flexDirection: 'row', gap: 6 },
+  padGap: { flex: 1 },
+  padCell: { flex: 1, minHeight: 40, borderRadius: radius.sm, borderWidth: 1.5, borderColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
+  padCenter: { borderRadius: radius.pill, backgroundColor: colors.tint },
+  padCenterOn: { backgroundColor: colors.fairway },
+  padText: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.fairway },
   choice: { flex: 1, minHeight: 48, borderRadius: radius.md, borderWidth: 1.5, borderColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
   choiceActive: { backgroundColor: colors.fairway },
   choiceText: { fontFamily: fonts.bodySemibold, fontSize: 16, color: colors.fairway },

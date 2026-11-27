@@ -8,7 +8,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type {
-  Comment, Course, CourseAccess, CourseSummary, FairwayResult, HoleScore, Player, Reaction, ReactionEmoji, Round, SimCourse, SocialState, Tee,
+  Comment, Course, CourseAccess, CourseSummary, FairwayResult, GreenResult, HoleScore, Player, Reaction, ReactionEmoji, Round, SimCourse, SocialState, Tee,
 } from '@/domain/types';
 
 import type { CompetitionEvent, EventFormat, EventMember, EventRound } from '@/domain/competition';
@@ -26,7 +26,7 @@ type ProfileRow = {
   home_state: string | null; home_course_id: string | null; created_at: string;
 };
 type HoleScoreRow = {
-  hole_number: number; strokes: number; putts: number | null; fairway: FairwayResult | null; gir: boolean | null;
+  hole_number: number; strokes: number; putts: number | null; fairway: FairwayResult | null; green?: GreenResult | null; gir: boolean | null;
   penalties: number | null; chips: number | null; sand_shots: number | null; entered_by?: string | null; };
 type RoundPlayerRow = { id: string; profile_id: string | null; guest_name: string | null; is_owner: boolean; hole_scores: HoleScoreRow[] };
 type RoundRow = {
@@ -48,6 +48,7 @@ function toPlayer(p: ProfileRow, me: string): Player {
     homeState: p.home_state ?? undefined,
     homeCourseId: p.home_course_id ?? undefined,
     tagline: p.tagline ?? undefined,
+    avatarUrl: p.avatar_url ?? undefined,
     memberSince: p.created_at.slice(0, 10),
     isMe: p.id === me,
   };
@@ -57,6 +58,7 @@ function toHoleScore(h: HoleScoreRow): HoleScore {
   const s: HoleScore = { strokes: h.strokes };
   if (h.putts !== null) s.putts = h.putts;
   if (h.fairway !== null) s.fairway = h.fairway;
+  if (h.green) s.green = h.green;
   if (h.gir !== null) s.gir = h.gir;
   if (h.penalties !== null) s.penalties = h.penalties;
   if (h.chips !== null) s.chips = h.chips;
@@ -80,7 +82,8 @@ function toRound(r: RoundRow): Round {
     id: r.id,
     ownerId: r.owner_id,
     kind: r.kind,
-    courseId: (r.kind === 'course' ? r.course_id : r.sim_course_id) ?? '',
+    // A sim round points at a sim course or, when a real course was played on the simulator, at that course.
+    courseId: (r.kind === 'course' ? r.course_id : r.sim_course_id ?? r.course_id) ?? '',
     teeId: r.tee_id ?? undefined,
     date: r.played_on,
     status: r.status,
@@ -272,7 +275,7 @@ export class SupabaseRepository implements Repository {
       this.must(this.db.from('friendships').select('requester_id, addressee_id, status'), 'friendships'),
       this.must(
         this.db.from('rounds')
-          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, format, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots, entered_by))')
+          .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, format, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, green, gir, penalties, chips, sand_shots, entered_by))')
           .order('played_on', { ascending: false })
           .limit(500),
         'rounds',
@@ -318,7 +321,8 @@ export class SupabaseRepository implements Repository {
 
     const wishlist = (wish as { course_id: string }[]).map((w) => w.course_id);
     // Full scorecards only for courses that stats, feed and collections need right away.
-    await this.fetchCourses([...rounds.filter((r) => r.kind === 'course').map((r) => r.courseId), ...wishlist, ...eventRounds.map((r) => r.courseId)]);
+    const simIds = new Set(ref.simCourses.map((c) => c.id));
+    await this.fetchCourses([...rounds.filter((r) => !simIds.has(r.courseId)).map((r) => r.courseId), ...wishlist, ...eventRounds.map((r) => r.courseId)]);
 
     const pick = (list: string[]) => list.map((id) => byId.get(id)).filter((p): p is Player => !!p);
     this.snap = {
@@ -465,7 +469,7 @@ export class SupabaseRepository implements Repository {
     const snap = this.snap ?? (await this.load());
     const rows = (await this.must(
       this.db.from('rounds')
-        .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, format, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, gir, penalties, chips, sand_shots, entered_by))')
+        .select('id, owner_id, kind, course_id, sim_course_id, tee_id, played_on, status, hole_numbers, created_at, completed_at, event_round_id, scored_by, group_id, format, round_players(id, profile_id, guest_name, is_owner, hole_scores(hole_number, strokes, putts, fairway, green, gir, penalties, chips, sand_shots, entered_by))')
         .or(`id.eq.${groupKey},group_id.eq.${groupKey}`),
       'group rounds',
     )) as RoundRow[];
@@ -492,15 +496,16 @@ export class SupabaseRepository implements Repository {
     // Keeping score for a friend: the round stays 'active' until its scores are written (the scorekeeper can only
     // write to active rounds), then it's marked complete in a final update.
     const keeper = owner !== me;
+    const onSimCourse = round.kind === 'sim' && !!SupabaseRepository.reference?.simCourses.some((c) => c.id === round.courseId);
     await this.must(this.db.from('rounds').upsert({
       id: round.id,
       owner_id: owner,
       scored_by: keeper ? me : round.scoredBy ?? null,
       group_id: round.groupId ?? null,
       kind: round.kind,
-      course_id: round.kind === 'course' ? round.courseId : null,
-      sim_course_id: round.kind === 'sim' ? round.courseId : null,
-      tee_id: round.kind === 'course' ? round.teeId ?? null : null,
+      course_id: onSimCourse ? null : round.courseId,
+      sim_course_id: onSimCourse ? round.courseId : null,
+      tee_id: onSimCourse ? null : round.teeId ?? null,
       played_on: round.date,
       status: keeper ? 'active' : round.status,
       hole_numbers: round.holeNumbers,
@@ -537,7 +542,7 @@ export class SupabaseRepository implements Repository {
       if (only && !only.has(n)) return [];
       const s = scores[i];
       return s ? [{
-        round_player_id: slot, hole_number: n, strokes: s.strokes, putts: s.putts ?? null, fairway: s.fairway ?? null, gir: s.gir ?? null,
+        round_player_id: slot, hole_number: n, strokes: s.strokes, putts: s.putts ?? null, fairway: s.fairway ?? null, green: s.green ?? null, gir: s.gir ?? null,
         penalties: s.penalties ?? null, chips: s.chips ?? null, sand_shots: s.sandShots ?? null,
       }] : [];
     });
@@ -574,7 +579,7 @@ export class SupabaseRepository implements Repository {
       this.ownerSlot.set(round.id, slot);
     }
     const put = holes.filter((h) => h.score).map(({ hole, score: s }) => ({
-      round_player_id: slot, hole_number: hole, strokes: s!.strokes, putts: s!.putts ?? null, fairway: s!.fairway ?? null, gir: s!.gir ?? null,
+      round_player_id: slot, hole_number: hole, strokes: s!.strokes, putts: s!.putts ?? null, fairway: s!.fairway ?? null, green: s!.green ?? null, gir: s!.gir ?? null,
       penalties: s!.penalties ?? null, chips: s!.chips ?? null, sand_shots: s!.sandShots ?? null,
     }));
     const clear = holes.filter((h) => !h.score).map((h) => h.hole);
@@ -625,6 +630,29 @@ export class SupabaseRepository implements Repository {
       if (/username_check/.test(error.message)) throw new Error('Usernames are 3–20 lowercase letters, numbers or underscores.');
       throw new Error(error.message);
     }
+    await this.load(true);
+  }
+
+  /** Upload a profile photo (a small JPEG, base64) or remove it (null). Older photos in your folder are deleted. */
+  async setAvatar(jpegBase64: string | null) {
+    const bucket = this.db.storage.from('avatars');
+    let url: string | null = null;
+    if (jpegBase64) {
+      const bin = atob(jpegBase64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const path = `${this.userId}/${Date.now()}.jpg`; // new name each time, so cached copies of the old photo don't linger
+      const { error } = await bucket.upload(path, bytes, { contentType: 'image/jpeg', upsert: true });
+      if (error) throw new Error(`Couldn't upload the photo: ${error.message}`);
+      url = bucket.getPublicUrl(path).data.publicUrl;
+    }
+    const { error } = await this.db.from('profiles').update({ avatar_url: url }).eq('id', this.userId);
+    if (error) throw new Error(`Couldn't save the photo: ${error.message}`);
+    // Tidy up: remove every other file in your folder (best effort).
+    const { data: files } = await bucket.list(this.userId);
+    const keep = url?.split('/').pop();
+    const old = (files ?? []).filter((f) => f.name !== keep).map((f) => `${this.userId}/${f.name}`);
+    if (old.length) await bucket.remove(old);
     await this.load(true);
   }
 

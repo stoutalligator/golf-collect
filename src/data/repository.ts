@@ -106,6 +106,8 @@ export interface Repository {
   updateEventRound(eventRoundId: string, changes: EventRoundChanges): Promise<void>;
   /** Edit your own profile. Throws a readable message (e.g. username taken). */
   updateProfile(changes: ProfileChanges): Promise<void>;
+  /** Set your profile photo from a small JPEG (base64), or remove it with null. */
+  setAvatar(jpegBase64: string | null): Promise<void>;
   /** Offline demo only: restore the generated sample data. */
   resetToSample?(): Promise<void>;
 }
@@ -277,6 +279,10 @@ export class LocalRepository implements Repository {
 
   async updateProfile(): Promise<void> {
     throw new Error('Profiles need an account (this is the offline demo).');
+  }
+
+  async setAvatar(): Promise<void> {
+    throw new Error('Profile photos need an account (this is the offline demo).');
   }
 
   async resetToSample() {

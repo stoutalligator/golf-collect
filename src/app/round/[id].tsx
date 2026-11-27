@@ -15,6 +15,7 @@ import { useAppData } from '@/state/app-data';
 import { colors, fonts, radius, shadow, space, themed, type } from '@/theme';
 import { EarnedThisRound } from '@/components/earned-this-round';
 import { Tap } from '@/components/motion';
+import { ScoreMark } from '@/components/score-mark';
 
 export default function Scorecard() {
   const { id, celebrate } = useLocalSearchParams<{ id: string; celebrate?: string }>();
@@ -251,20 +252,6 @@ function Row({ head, cells, end, bold, muted }: { head: string; cells: string[];
   );
 }
 
-/** Golf convention: circle = birdie (double = eagle), square = bogey (double = double bogey+). */
-function ScoreMark({ toPar, strokes }: { toPar: number; strokes: number }) {
-  const under = toPar < 0;
-  const over = toPar > 0;
-  const double = toPar <= -2 || toPar >= 2;
-  return (
-    <View style={[styles.mark, under && styles.markUnder, over && styles.markOver]}>
-      <View style={[styles.markInner, double && (under ? styles.markUnderInner : styles.markOverInner)]}>
-        <Text style={[styles.markText, under && { color: colors.fairwayDeep }]}>{strokes}</Text>
-      </View>
-    </View>
-  );
-}
-
 function Legend({ mark, label }: { mark: 'circle' | 'square'; label: string }) {
   return (
     <View style={styles.legendItem}>
@@ -292,13 +279,8 @@ const styles = themed(() => StyleSheet.create({
   end: { flex: 1.3, borderLeftWidth: StyleSheet.hairlineWidth, borderLeftColor: colors.rule },
   bold: { fontFamily: fonts.bodySemibold },
   muted: { color: colors.inkMuted, fontSize: 11 },
-  mark: { width: 24, height: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 1.2, borderColor: 'transparent' },
   markUnder: { borderRadius: 12, borderColor: colors.gold, backgroundColor: colors.goldSoft },
   markOver: { borderRadius: 2, borderColor: colors.inkMuted },
-  markInner: { width: 19, height: 19, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'transparent' },
-  markUnderInner: { borderRadius: 10, borderColor: colors.gold },
-  markOverInner: { borderRadius: 1, borderColor: colors.inkMuted },
-  markText: { fontFamily: fonts.bodySemibold, fontSize: 12, color: colors.ink, fontVariant: ['tabular-nums'] },
   totalRow: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'baseline', gap: space.md, paddingHorizontal: space.lg },
   totalLabel: { fontFamily: fonts.bodyMedium, fontSize: 15, color: colors.ink },
   total: { fontFamily: fonts.displayItalic, fontSize: 32, color: colors.ink },
