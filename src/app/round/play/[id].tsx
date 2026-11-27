@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AppState, ScrollView, StyleSheet, Text, View, type ScrollViewInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
@@ -41,7 +41,7 @@ export default function PlayRound() {
   // The card the big −/+ edits: null = this round's own card; a friend's / other team's round id after tapping
   // their cell in the scorecard grid.
   const [focusId, setFocusId] = useState<string | null>(null);
-  const gridRef = useRef<ScrollView>(null);
+  const gridRef = useRef<ScrollViewInstance>(null);
   const [index, setIndex] = useState(() => {
     const first = base ? (base.scores[roundOwner(base)] ?? []).findIndex((s) => !s) : 0;
     return first < 0 ? 0 : first;
@@ -84,11 +84,15 @@ export default function PlayRound() {
     return list;
   };
   const scores = view(round);
-  const current: HoleScore = scores[index] ?? { strokes: hole.par };
   const ownsOrKeeps = (r: Round) => roundOwner(r) === me || r.scoredBy === me;
   // Cards in the group besides this one; cards you keep (and your team's card) get par filled in as you go.
   const group = data.roundGroup(round);
-  const others = group.filter((r) => r.id !== round.id).sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+  // Rows: scramble teams in team order; players alphabetically by first name (the same on every phone).
+  const firstName = (r: Round) => data.playerById(roundOwner(r))?.name ?? '';
+  const others = group.filter((r) => r.id !== round.id).sort((a, b) =>
+    isScramble(a) && isScramble(b)
+      ? a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id)
+      : firstName(a).localeCompare(firstName(b)));
   const teams = teamNumbers(group);
   const teamOf = (r: Round) => teams.get(r.id);
   const membersOf = (r: Round) => r.playerIds.map((pid) => data.playerById(pid)).filter((p): p is NonNullable<typeof p> => !!p);
@@ -98,25 +102,24 @@ export default function PlayRound() {
   const waiting = scramble ? [] : round.playerIds.filter((pid) => !joinedIds.has(pid)).map((pid) => data.playerById(pid)).filter((p) => !!p);
   const isLast = index === round.holeNumbers.length - 1;
   const canFinish = ownsOrKeeps(round);
-  const gir = deriveGir(current, hole.par);
+
 
   const target = (focusId && others.find((r) => r.id === focusId)) || round;
   const editingOther = target.id !== round.id;
   const targetScore = view(target)[index];
-  const targetStrokes = (editingOther ? targetScore?.strokes : current.strokes) ?? hole.par;
+  // The selected card's hole: strokes and every stat below edit this (yours, or a friend's / team's after tapping
+  // their cell). Untouched = par.
+  const sel: HoleScore = (editingOther ? targetScore : scores[index]) ?? { strokes: hole.par };
+  const targetStrokes = sel.strokes;
   const rows = [round, ...others];
 
   const edit = (r: Round, i: number, score: HoleScore | null) =>
     setPending((p) => ({ ...p, [r.id]: { ...(p[r.id] ?? {}), [i]: score } }));
   const patch = (p: Partial<HoleScore>) => {
-    const next = { ...current, ...p };
+    const next = { ...sel, ...p };
     (Object.keys(next) as (keyof HoleScore)[]).forEach((k) => next[k] === undefined && delete next[k]);
     delete next.enteredBy;
-    edit(round, index, next);
-  };
-  const setStrokes = (r: Round, strokes: number) => {
-    const prev = view(r)[index];
-    edit(r, index, { ...(prev ?? {}), strokes: Math.max(1, strokes), enteredBy: undefined });
+    edit(target, index, next);
   };
 
   /** Save your edits (and par for untouched cards you keep on this hole). Returns each card's scores after saving. */
@@ -273,7 +276,7 @@ export default function PlayRound() {
           </View>
         ) : null}
         <View style={[styles.stepper, scramble || others.length ? { marginTop: -space.lg } : null]}>
-          <StepButton icon="minus" label={editingOther ? `One fewer stroke for ${nameOf(target)}` : 'One fewer stroke'} onPress={() => (editingOther ? setStrokes(target, targetStrokes - 1) : patch({ strokes: Math.max(1, current.strokes - 1) }))} />
+          <StepButton icon="minus" label={editingOther ? `One fewer stroke for ${nameOf(target)}` : 'One fewer stroke'} onPress={() => patch({ strokes: Math.max(1, sel.strokes - 1) })} />
           <View style={{ alignItems: 'center', minWidth: 110 }}>
             <Text style={styles.strokes}>{targetStrokes}</Text>
             <Text style={styles.toPar}>
@@ -284,15 +287,13 @@ export default function PlayRound() {
               })()}
             </Text>
           </View>
-          <StepButton icon="plus" label={editingOther ? `One more stroke for ${nameOf(target)}` : 'One more stroke'} onPress={() => (editingOther ? setStrokes(target, targetStrokes + 1) : patch({ strokes: current.strokes + 1 }))} />
+          <StepButton icon="plus" label={editingOther ? `One more stroke for ${nameOf(target)}` : 'One more stroke'} onPress={() => patch({ strokes: sel.strokes + 1 })} />
         </View>
 
-        {editingOther ? null : (
-        <>
         <Field label="Putts">
           <ChoiceRow
             options={[0, 1, 2, 3, 4].map((n) => ({ value: n, label: n === 4 ? '4+' : String(n) }))}
-            value={current.putts}
+            value={sel.putts}
             onChange={(v) => patch({ putts: v })}
           />
         </Field>
@@ -301,23 +302,26 @@ export default function PlayRound() {
           <Field label="Fairway">
             <ChoiceRow<FairwayResult>
               options={[{ value: 'left', label: 'Left' }, { value: 'hit', label: 'Hit' }, { value: 'right', label: 'Right' }, { value: 'short', label: 'Short' }]}
-              value={current.fairway}
+              value={sel.fairway}
               onChange={(v) => patch({ fairway: v })}
             />
           </Field>
         ) : null}
 
         <View style={styles.smallRow}>
-          <SmallStepper label="Penalties" value={current.penalties} onChange={(v) => patch({ penalties: v })} />
-          <SmallStepper label="Chips" value={current.chips} onChange={(v) => patch({ chips: v })} />
-          <SmallStepper label="Sand" value={current.sandShots} onChange={(v) => patch({ sandShots: v })} />
+          <SmallStepper label="Penalties" value={sel.penalties} onChange={(v) => patch({ penalties: v })} />
+          <SmallStepper label="Chips" value={sel.chips} onChange={(v) => patch({ chips: v })} />
+          <SmallStepper label="Sand" value={sel.sandShots} onChange={(v) => patch({ sandShots: v })} />
         </View>
 
+        {(() => {
+          const gir = deriveGir(sel, hole.par);
+          return (
         <Text style={styles.gir}>
           {gir === undefined ? 'GIR: enter putts to calculate' : gir ? 'Green in regulation ✓' : 'Missed green in regulation'}
         </Text>
-        </>
-        )}
+          );
+        })()}
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, space.lg) }]}>
