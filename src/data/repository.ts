@@ -43,6 +43,13 @@ export interface NewEvent {
   inviteIds: string[];
 }
 
+export interface SyncStatus {
+  /** Saves waiting to upload. */
+  pending: number;
+  /** The last upload attempt failed (no signal); it will keep retrying. */
+  failing: boolean;
+}
+
 export type NewEventRound = Omit<EventRound, 'id' | 'eventId' | 'seq'>;
 export type EventRoundChanges = Partial<Pick<EventRound, 'name' | 'scheduledOn' | 'teeTime' | 'courseId' | 'teeId' | 'holes'>>;
 
@@ -56,6 +63,17 @@ export interface Repository {
   saveRound(round: Round, opts?: { holes?: number[] }): Promise<void>;
   /** Shared scoring: write holes on a round you're playing but don't own (while it's in progress). */
   saveHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<void>;
+  /**
+   * Offline-safe versions for the course: applied to the snapshot at once, kept in an outbox on the phone and
+   * uploaded in order in the background, retrying until they succeed. Return the updated snapshot.
+   */
+  queueRound(round: Round, opts?: { holes?: number[] }): Promise<AppSnapshot>;
+  queueHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<AppSnapshot>;
+  /** Try to upload the outbox now (e.g. back on screen). */
+  flushOutbox(): Promise<void>;
+  /** Outbox state for the "Offline · will sync" indicator; the callback fires on every change. */
+  outboxStatus(): SyncStatus;
+  onOutboxChange(cb: () => void): () => void;
   deleteRound(id: string): Promise<void>;
   /** Refetch just the rounds in one group (live scores while playing), merged into the snapshot. */
   refreshGroup(groupKey: string): Promise<AppSnapshot>;
@@ -221,6 +239,17 @@ export class LocalRepository implements Repository {
   }
 
   async refreshGroup() { return this.load(); }
+
+  // The offline demo already saves on the phone: queueing is just saving.
+  async queueRound(round: Round) { await this.saveRound(round); return this.load(); }
+
+  async queueHoleScores() { return this.load(); }
+
+  async flushOutbox() {}
+
+  outboxStatus() { return { pending: 0, failing: false }; }
+
+  onOutboxChange() { return () => {}; }
 
   async saveHoleScores() {}
 

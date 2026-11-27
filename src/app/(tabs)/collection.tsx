@@ -105,10 +105,11 @@ const styles = themed(() => StyleSheet.create({
   shelf: { gap: space.md },
   shelfScroll: { marginHorizontal: -space.lg },
   shelfRow: { gap: space.md, paddingHorizontal: space.lg, paddingTop: space.xs, paddingBottom: space.xs },
-  ledge: { position: 'absolute', left: 0, right: 0, top: 70, height: 26, borderRadius: radius.md, backgroundColor: colors.paper },
+  // The ledge the items stand on: under the bottom of the 84-pt art (row padding 4), names sit below it.
+  ledge: { position: 'absolute', left: 0, right: 0, top: 78, height: 12, borderRadius: radius.sm, backgroundColor: colors.paper },
   shelfEmpty: { ...type.caption, fontSize: 13, color: colors.inkMuted },
   item: { width: 92, alignItems: 'center', gap: 2 },
-  itemName: { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 15, color: colors.ink, textAlign: 'center', marginTop: 4 },
+  itemName: { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 15, color: colors.ink, textAlign: 'center', marginTop: 10 },
   itemTier: { ...type.caption, fontSize: 11, color: colors.inkMuted },
   lock: { position: 'absolute', right: 2, bottom: 2 },
 }));

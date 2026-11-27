@@ -5,7 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
 import { Avatar, AvatarStack } from '@/components/social';
-import { Button, Empty, IconButton } from '@/components/ui';
+import { DiscardRoundSheet, discardTargets } from '@/components/round-actions';
+import { ActionSheet, Button, Empty, IconButton } from '@/components/ui';
 import { realHoleNumber } from '@/domain/layout';
 import { deriveGir, formatToPar } from '@/domain/stats';
 import { isScramble, matchLine, matchStatus, teamNumbers, toParThru } from '@/domain/teams';
@@ -42,6 +43,8 @@ export default function PlayRound() {
   // their cell in the scorecard grid.
   const [focusId, setFocusId] = useState<string | null>(null);
   const gridRef = useRef<ScrollViewInstance>(null);
+  const [menu, setMenu] = useState(false);
+  const [discarding, setDiscarding] = useState(false);
   const [index, setIndex] = useState(() => {
     const first = base ? (base.scores[roundOwner(base)] ?? []).findIndex((s) => !s) : 0;
     return first < 0 ? 0 : first;
@@ -102,6 +105,7 @@ export default function PlayRound() {
   const waiting = scramble ? [] : round.playerIds.filter((pid) => !joinedIds.has(pid)).map((pid) => data.playerById(pid)).filter((p) => !!p);
   const isLast = index === round.holeNumbers.length - 1;
   const canFinish = ownsOrKeeps(round);
+  const canDiscard = discardTargets(data, round).length > 0;
 
 
   const target = (focusId && others.find((r) => r.id === focusId)) || round;
@@ -139,9 +143,10 @@ export default function PlayRound() {
       if (!idx?.size) continue;
       const holes = [...idx].map((i) => r.holeNumbers[i]);
       const next: Round = { ...r, scores: { ...r.scores, [roundOwner(r)]: list.map((s) => (s ? { ...s, enteredBy: undefined } : s)) } };
+      // Queued: saved on the phone now, uploaded in the background (retrying with no signal).
       jobs.push(ownsOrKeeps(r)
-        ? data.saveRounds([next], { holes })
-        : data.saveHoleScores(r, [...idx].map((i) => ({ hole: r.holeNumbers[i], score: list[i] }))));
+        ? data.queueRounds([next], { holes })
+        : data.queueHoleScores(r, [...idx].map((i) => ({ hole: r.holeNumbers[i], score: list[i] }))));
     }
     setSaving(true);
     try {
@@ -175,7 +180,7 @@ export default function PlayRound() {
       return;
     }
     const completedAt = new Date().toISOString();
-    await data.saveRounds(mine.map((r) => ({ ...r, scores: { ...r.scores, [roundOwner(r)]: lists.get(r.id)! }, status: 'complete' as const, completedAt })), { holes: [] });
+    await data.queueRounds(mine.map((r) => ({ ...r, scores: { ...r.scores, [roundOwner(r)]: lists.get(r.id)! }, status: 'complete' as const, completedAt })), { holes: [] });
     haptics.success();
     router.replace(`/round/reveal/${round.id}`);
   };
@@ -192,7 +197,14 @@ export default function PlayRound() {
           <IconButton name="chevron-left" label="Save and exit" onPress={async () => { await flush(); router.back(); }} />
           <Text style={styles.courseName} numberOfLines={1}>{data.roundCourseName(round)}</Text>
           <Text style={styles.running}>{mineNow.thru ? `${formatToPar(mineNow.toPar)} thru ${mineNow.thru}` : ''}</Text>
+          <IconButton name="more" label="Round options" onPress={() => setMenu(true)} />
         </View>
+        {data.sync.failing ? (
+          <Tap onPress={data.retrySync} haptic="tap" scaleTo={0.97} accessibilityRole="button" accessibilityLabel="Offline. Scores are saved on this phone and will upload when you have signal. Tap to retry." style={styles.syncPill}>
+            <View style={styles.syncDot} />
+            <Text style={styles.syncText}>Offline · {data.sync.pending} {data.sync.pending === 1 ? 'save' : 'saves'} on this phone, will sync</Text>
+          </Tap>
+        ) : null}
         <View style={styles.grid}>
           <View style={styles.nameCol}>
             <Text style={styles.gridHeadLabel}>HOLE</Text>
@@ -333,6 +345,18 @@ export default function PlayRound() {
           disabled={saving}
         />
       </View>
+
+      <ActionSheet
+        visible={menu}
+        title={data.roundCourseName(round)}
+        body={canDiscard ? undefined : 'This is a teammate’s card. Your entries are saved as you go; its owner finishes or deletes it.'}
+        onClose={() => setMenu(false)}
+        actions={[
+          { label: canDiscard ? 'Save & exit' : 'Leave', icon: 'chevron-left', onPress: async () => { setMenu(false); await flush(); router.back(); } },
+          ...(canDiscard ? [{ label: 'Discard round', icon: 'trash' as const, destructive: true, onPress: () => { setMenu(false); setDiscarding(true); } }] : []),
+        ]}
+      />
+      <DiscardRoundSheet round={round} visible={discarding} onClose={() => setDiscarding(false)} onDone={() => { setDiscarding(false); setPending({}); router.replace('/'); }} />
     </View>
   );
 }
@@ -391,10 +415,13 @@ const styles = themed(() => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
   header: { backgroundColor: colors.cream, paddingHorizontal: space.lg, paddingBottom: space.sm, gap: space.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.rule },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  courseName: { flex: 1, fontFamily: fonts.display, fontSize: 19, color: colors.fairway, marginLeft: space.xs },
+  courseName: { flex: 1, minWidth: 0, flexShrink: 1, fontFamily: fonts.display, fontSize: 19, color: colors.fairway, marginLeft: space.xs },
   running: { fontFamily: fonts.bodySemibold, fontSize: 13, color: colors.ink },
   strip: { gap: 4, paddingVertical: 2 },
   stripDot: { position: 'absolute', top: 3, right: 3, width: 5, height: 5, borderRadius: 3, backgroundColor: colors.gold },
+  syncPill: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: colors.goldSoft },
+  syncDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.gold },
+  syncText: { fontFamily: fonts.bodySemibold, fontSize: 12, color: colors.ink },
   grid: { flexDirection: 'row', backgroundColor: colors.creamLight, borderRadius: radius.md, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.rule, overflow: 'hidden' },
   nameCol: { width: 78, borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: colors.rule, backgroundColor: colors.creamLight },
   gridHeadLabel: { height: 26, lineHeight: 26, paddingLeft: space.sm, fontFamily: fonts.bodySemibold, fontSize: 10, letterSpacing: 1, color: colors.inkMuted },

@@ -37,7 +37,7 @@ const dayParts = (iso: string) => {
 export default function NewRound() {
   const insets = useSafeAreaInsets();
   const data = useAppData();
-  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string }>();
+  const params = useLocalSearchParams<{ courseId?: string; eventRound?: string; join?: string; when?: 'earlier' }>();
   // Joining a friend's round: log your own round in the same group, same course, holes and day.
   const joinRound = params.join ? data.roundById(params.join) : undefined;
   const joinOwner = joinRound ? data.playerById(roundOwner(joinRound)) : undefined;
@@ -46,7 +46,7 @@ export default function NewRound() {
   const [kind, setKind] = useState<RoundKind>('course');
   // Individual stroke play, or a team scramble (one team score; never counts toward stats, collectibles or badges).
   const [format, setFormat] = useState<'individual' | 'scramble'>('individual');
-  const [when, setWhen] = useState<When>('now');
+  const [when, setWhen] = useState<When>(params.when === 'earlier' ? 'earlier' : 'now');
   const [playedOn, setPlayedOn] = useState(todayISO());
   const pastDays = useMemo(() => Array.from({ length: PAST_DAYS }, (_, i) => addDaysISO(todayISO(), -i)), []);
   const date = when === 'earlier' ? playedOn : todayISO();
@@ -180,8 +180,8 @@ export default function NewRound() {
       const mineCard = cards.find((c) => !c.ownerId)!;
       setStarting(true);
       try {
-        await data.saveRounds(cards.filter((c) => c !== mineCard));
-        await data.saveRounds([mineCard]);
+        // Queued: starting works with no signal; the cards upload in order in the background.
+        await data.queueRounds([...cards.filter((c) => c !== mineCard), mineCard]);
         router.replace(`/round/play/${mineCard.id}`);
       } finally {
         setStarting(false);
@@ -192,8 +192,9 @@ export default function NewRound() {
     setStarting(true);
     try {
       // Friends' scored rounds first, so nobody you're scoring for gets a "join this round" prompt.
-      if (group) await data.saveRounds(withIds.map(roundFor));
-      await data.saveRounds([mine]);
+      // Queued (works with no signal). Friends' scored rounds first, so nobody you're scoring for gets a
+      // "join this round" prompt.
+      await data.queueRounds(group ? [...withIds.map(roundFor), mine] : [mine]);
       router.replace(`/round/play/${mine.id}`);
     } finally {
       setStarting(false);

@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Children, Fragment, isValidElement, useEffect, useState, type ReactNode } from 'react';
-import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import { ActivityIndicator, Modal, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -331,6 +331,60 @@ export function Loading({ label }: { label?: string }) {
   );
 }
 
+/**
+ * Bottom sheet for destructive or multi-choice actions: a title, an explanation of exactly what happens, and the
+ * actions (the destructive one in red), with Cancel always available. Use instead of "tap again to confirm".
+ */
+export function ActionSheet({ visible, title, body, actions, onClose }: {
+  visible: boolean;
+  title: string;
+  body?: string;
+  actions: { label: string; onPress: () => void | Promise<void>; destructive?: boolean; icon?: IconName }[];
+  onClose: () => void;
+}) {
+  const insets = useSafeAreaInsets();
+  const [busy, setBusy] = useState<string | null>(null);
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={styles.sheetWrap}>
+        <Tap onPress={onClose} haptic="none" scaleTo={1} accessibilityRole="button" accessibilityLabel="Cancel" style={StyleSheet.absoluteFill}>
+          <View style={styles.sheetBackdrop} />
+        </Tap>
+        <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, space.lg) }]} accessibilityViewIsModal>
+          <View style={styles.sheetGrip} />
+          <Text style={styles.sheetTitle}>{title}</Text>
+          {body ? <Text style={styles.sheetBody}>{body}</Text> : null}
+          <View style={{ gap: space.sm, marginTop: space.sm }}>
+            {actions.map((a) => (
+              <Tap
+                key={a.label}
+                disabled={!!busy}
+                haptic={a.destructive ? 'warning' : 'tap'}
+                scaleTo={0.97}
+                accessibilityRole="button"
+                onPress={async () => {
+                  setBusy(a.label);
+                  try {
+                    await a.onPress();
+                  } finally {
+                    setBusy(null);
+                  }
+                }}
+                style={[styles.sheetAction, a.destructive && styles.sheetActionDanger, busy && busy !== a.label && { opacity: 0.5 }]}>
+                {a.icon ? <Icon name={a.icon} size={18} color={a.destructive ? colors.white : colors.fairway} /> : null}
+                <Text style={[styles.sheetActionText, a.destructive && styles.sheetActionTextDanger]}>{busy === a.label ? 'Working…' : a.label}</Text>
+              </Tap>
+            ))}
+            <Tap onPress={onClose} disabled={!!busy} haptic="tap" scaleTo={0.97} accessibilityRole="button" style={styles.sheetCancel}>
+              <Text style={styles.sheetCancelText}>Cancel</Text>
+            </Tap>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 export function Empty({ title, body }: { title: string; body: string }) {
   return (
     <View style={styles.empty}>
@@ -341,6 +395,18 @@ export function Empty({ title, body }: { title: string; body: string }) {
 }
 
 const styles = themed(() => StyleSheet.create({
+  sheetWrap: { flex: 1, justifyContent: 'flex-end' },
+  sheetBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.38)' },
+  sheet: { backgroundColor: colors.creamLight, borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl, paddingHorizontal: space.lg, paddingTop: space.sm, gap: space.sm, ...shadow.card },
+  sheetGrip: { alignSelf: 'center', width: 40, height: 4, borderRadius: 2, backgroundColor: colors.rule, marginBottom: space.sm },
+  sheetTitle: { fontFamily: fonts.display, fontSize: 22, color: colors.fairway },
+  sheetBody: { ...type.body, fontSize: 14, lineHeight: 20, color: colors.inkMuted },
+  sheetAction: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.sm, minHeight: 52, borderRadius: radius.pill, backgroundColor: colors.tint },
+  sheetActionDanger: { backgroundColor: colors.danger },
+  sheetActionText: { fontFamily: fonts.bodySemibold, fontSize: 16, color: colors.fairway },
+  sheetActionTextDanger: { color: colors.white },
+  sheetCancel: { minHeight: 48, alignItems: 'center', justifyContent: 'center' },
+  sheetCancelText: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.inkMuted },
   root: { flex: 1, backgroundColor: colors.cream },
   header: { paddingHorizontal: space.lg, paddingBottom: space.sm, gap: space.md, backgroundColor: colors.cream },
   headerRow: { flexDirection: 'row', alignItems: 'center', minHeight: 48 },

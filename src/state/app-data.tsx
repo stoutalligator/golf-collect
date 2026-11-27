@@ -2,7 +2,7 @@ import { AppState } from 'react-native';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { ACHIEVEMENTS, collectiblesForCourse, TIERS } from '@/data/config/game';
-import { LocalRepository, type AppSnapshot, type EventRoundChanges, type NewEvent, type NewEventRound, type ProfileChanges, type Repository } from '@/data/repository';
+import { LocalRepository, type AppSnapshot, type EventRoundChanges, type SyncStatus, type NewEvent, type NewEventRound, type ProfileChanges, type Repository } from '@/data/repository';
 import type { EventFormat } from '@/domain/competition';
 import { SupabaseRepository } from '@/data/supabase-repository';
 import { supabase } from '@/lib/supabase';
@@ -90,6 +90,12 @@ export interface AppData extends AppSnapshot {
   saveRounds(rounds: Round[], opts?: { holes?: number[] }): Promise<void>;
   /** Shared scoring: write holes on a round you're playing but don't own (while it's in progress). */
   saveHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<void>;
+  /** Offline-safe saves for the course: applied at once, uploaded in the background with retries. */
+  queueRounds(rounds: Round[], opts?: { holes?: number[] }): Promise<void>;
+  queueHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<void>;
+  /** Saves waiting to upload, and whether the last try failed (no signal). */
+  sync: SyncStatus;
+  retrySync(): void;
   deleteRound(id: string): Promise<void>;
   updateProfile(changes: ProfileChanges): Promise<void>;
   toggleWishlist(courseId: string): Promise<void>;
@@ -164,6 +170,23 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     reload();
   }, [reload]);
+
+  // Outbox status for the "Offline · will sync" indicator; when uploads finish, pick up the server's copy.
+  const [sync, setSync] = useState<SyncStatus>({ pending: 0, failing: false });
+  useEffect(() => {
+    if (!repo) return;
+    return repo.onOutboxChange(() => {
+      const st = repo.outboxStatus();
+      setSync((prev) => (prev.pending === st.pending && prev.failing === st.failing ? prev : st));
+      // Show the phone's copy (server-confirmed holes plus anything still queued).
+      repo.load().then(setSnap).catch(() => {});
+    });
+  }, [repo]);
+  // Back on screen: try to upload anything still waiting.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => { if (state === 'active') void repo?.flushOutbox(); });
+    return () => sub.remove();
+  }, [repo]);
 
   // Coming back to the app after a minute or more: refetch quietly, so friends' rounds, requests and schedule
   // changes are there without pulling to refresh.
@@ -288,6 +311,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     saveRound: async (r) => { await repo!.saveRound(r); await reload(); },
     saveRounds: async (rs, opts) => { await Promise.all(rs.map((r) => repo!.saveRound(r, opts))); await reload(); },
     saveHoleScores: async (r, holes) => { await repo!.saveHoleScores(r, holes); await reload(); },
+    queueRounds: async (rs, opts) => {
+      let next: AppSnapshot | undefined;
+      for (const r of rs) next = await repo!.queueRound(r, opts);
+      if (next) setSnap(next);
+    },
+    queueHoleScores: async (r, holes) => { setSnap(await repo!.queueHoleScores(r, holes)); },
+    sync,
+    retrySync: () => { void repo?.flushOutbox(); },
     updateProfile: async (changes) => { await repo!.updateProfile(changes); await reload(); },
     deleteRound: async (id) => { await repo!.deleteRound(id); await reload(); },
     toggleWishlist: async (id) => {
@@ -324,7 +355,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     updateEventRound: async (id, changes) => { await repo!.updateEventRound(id, changes); await reload(); },
     addEventRound: async (id, round) => { await repo!.addEventRound(id, round); await reload(); },
     deleteEventRound: async (id) => { await repo!.deleteEventRound(id); await reload(); },
-  }), [snap, derived, ready, error, auth.offline, repo, reload]);
+  }), [snap, derived, ready, error, auth.offline, repo, reload, sync]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

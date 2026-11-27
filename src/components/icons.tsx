@@ -6,10 +6,13 @@ import { colors } from '@/theme';
 export type IconName =
   | 'home' | 'flag' | 'pin' | 'layers' | 'bell' | 'plus' | 'chart'
   | 'bookmark' | 'bookmark-filled' | 'chevron-right' | 'chevron-left' | 'search' | 'user' | 'trophy'
-  | 'check' | 'book' | 'minus' | 'x' | 'settings' | 'users' | 'message' | 'grid' | 'trend' | 'lock' | 'calendar' | 'share';
+  | 'check' | 'book' | 'minus' | 'x' | 'settings' | 'users' | 'message' | 'grid' | 'trend' | 'lock' | 'calendar' | 'share'
+  | 'more' | 'trash';
 
 const paths: Record<IconName, string[]> = {
   home: ['M4 11.5 12 5l8 6.5', 'M6 10v9h4.5v-5h3v5H18v-9'],
+  more: ['M5 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0', 'M10.8 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0', 'M16.6 12a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0'],
+  trash: ['M5 7h14', 'M10 4h4', 'M7 7l1 12.5h8L17 7', 'M10.5 10.5v6', 'M13.5 10.5v6'],
   flag: ['M6 21V4', 'M6 4.5h10.5l-2.5 3.5 2.5 3.5H6'],
   pin: ['M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11Z'],
   layers: ['M12 4 3.5 8.5 12 13l8.5-4.5L12 4Z', 'm3.5 12.5 8.5 4.5 8.5-4.5', 'm3.5 16.5 8.5 4.5 8.5-4.5'],

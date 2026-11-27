@@ -97,6 +97,7 @@ function AppStack() {
         <Stack.Screen name="round/[id]" />
         <Stack.Screen name="round/reveal/[id]" options={{ gestureEnabled: false, animation: 'fade', contentStyle: { backgroundColor: colors.fairwayDeep } }} />
         <Stack.Screen name="account" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="welcome" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
         <Stack.Screen name="course/[id]" />
         <Stack.Screen name="collectible/[courseId]/[item]" />
         <Stack.Screen name="collection/[kind]" />

@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
@@ -8,6 +8,8 @@ import { homeHeroKeys } from '@/art';
 import { Emblem, SceneImage } from '@/art/components';
 import { Icon } from '@/components/icons';
 import { Animated, enterItem, Tap } from '@/components/motion';
+import { DiscardRoundSheet } from '@/components/round-actions';
+import { welcomeSeen } from '@/lib/welcome';
 import { Avatar, FeedCard } from '@/components/social';
 import { roundOwner } from '@/domain/types';
 import { Button, Chips, Empty, IconButton, SectionHeader, StatStrip, usePullToRefresh } from '@/components/ui';
@@ -52,6 +54,15 @@ export default function Home() {
   const last5 = mine.slice(-5).map((s) => s.strokes);
   const avg5 = last5.length ? last5.reduce((a, b) => a + b, 0) / last5.length : null;
   const active = data.roundsByDate.find((r) => r.status === 'active');
+  const [discardActive, setDiscardActive] = useState(false);
+  // Brand-new account (no rounds, no friends): show the welcome checklist once.
+  const fresh = data.ready && !data.offline && data.roundsByDate.length === 0 && data.friends.length === 0;
+  useEffect(() => {
+    if (!fresh) return;
+    let live = true;
+    welcomeSeen(data.me.id).then((seen) => { if (live && !seen) router.push('/welcome'); });
+    return () => { live = false; };
+  }, [fresh, data.me.id]);
   // Scramble team cards you're on but someone else owns (any teammate can enter the team's scores).
   const teamCards = data.friendRounds.filter((r) =>
     r.status === 'active' && r.format === 'scramble' && r.date === todayISO() && r.playerIds.includes(data.me.id));
@@ -98,17 +109,29 @@ export default function Home() {
           </View>
 
           {active ? (
-            <Tap onPress={() => router.push(`/round/play/${active.id}`)} haptic="press" scaleTo={0.98} accessibilityRole="button" style={styles.active}>
-              <View style={styles.liveDot} />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.activeTitle}>Round in progress</Text>
-                <Text style={styles.activeSub} numberOfLines={1}>{data.roundCourseName(active)}</Text>
-              </View>
-              <Text style={styles.activeCta}>Resume</Text>
-              <Icon name="chevron-right" size={16} color={colors.cream} />
-            </Tap>
+            <View style={styles.active}>
+              <Tap onPress={() => router.push(`/round/play/${active.id}`)} haptic="press" scaleTo={0.98} accessibilityRole="button" accessibilityLabel={`Resume your round at ${data.roundCourseName(active)}`} style={styles.activeMain}>
+                <View style={styles.liveDot} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.activeTitle}>Round in progress</Text>
+                  <Text style={styles.activeSub} numberOfLines={1}>{data.roundCourseName(active)}</Text>
+                </View>
+                <Text style={styles.activeCta}>Resume</Text>
+                <Icon name="chevron-right" size={16} color={colors.cream} />
+              </Tap>
+              <Tap onPress={() => setDiscardActive(true)} haptic="tap" scaleTo={0.9} hitSlop={8} accessibilityRole="button" accessibilityLabel="Discard this round" style={styles.activeMore}>
+                <Icon name="more" size={18} color={colors.cream} strokeWidth={2.6} />
+              </Tap>
+              <DiscardRoundSheet round={active} visible={discardActive} onClose={() => setDiscardActive(false)} onDone={() => setDiscardActive(false)} />
+            </View>
           ) : null}
 
+          {data.sync.failing ? (
+            <Tap onPress={data.retrySync} haptic="tap" scaleTo={0.98} accessibilityRole="button" style={styles.syncNote}>
+              <Icon name="bell" size={14} color={colors.gold} />
+              <Text style={styles.syncNoteText}>Offline · {data.sync.pending} {data.sync.pending === 1 ? 'save' : 'saves'} on this phone will upload when you have signal. Tap to retry.</Text>
+            </Tap>
+          ) : null}
           {teamCards.slice(0, 2).map((r) => {
             const who = data.playerById(r.scoredBy ?? roundOwner(r));
             return (
@@ -153,8 +176,8 @@ export default function Home() {
               <View style={{ flex: 1 }}>
                 {nextEvent ? (
                   <>
-                    <Text style={styles.upNextTitle} numberOfLines={1}>{nextEvent.round.scheduledOn === todayISO() ? 'Today' : formatDay(nextEvent.round.scheduledOn)}{nextEvent.round.teeTime ? ` · ${formatTeeTime(nextEvent.round.teeTime)}` : ''} · {nextEvent.event.name}</Text>
-                    <Text style={styles.upNextSub} numberOfLines={1}>{nextEvent.round.name} at {nextEvent.courseName}</Text>
+                    <Text style={styles.upNextTitle} numberOfLines={1}>{nextEvent.event.name}</Text>
+                    <Text style={styles.upNextSub} numberOfLines={1}>{nextEvent.round.scheduledOn === todayISO() ? 'Today' : formatDay(nextEvent.round.scheduledOn)}{nextEvent.round.teeTime ? ` · ${formatTeeTime(nextEvent.round.teeTime)}` : ''} · {nextEvent.round.name} at {nextEvent.courseName}</Text>
                   </>
                 ) : null}
                 {invitations.length ? <Text style={styles.upNextInvite}>{invitations.length} event {invitations.length === 1 ? 'invitation' : 'invitations'} waiting</Text> : null}
@@ -198,6 +221,10 @@ const styles = themed(() => StyleSheet.create({
   swash: { width: 64, height: 3, borderRadius: 2, backgroundColor: colors.gold, marginTop: 2, transform: [{ rotate: '-4deg' }] },
   kpis: { marginTop: -44, marginHorizontal: space.sm },
   active: { flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: colors.fairway, borderRadius: radius.xl, padding: space.lg, ...shadow.card },
+  syncNote: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingHorizontal: space.md, paddingVertical: space.sm, borderRadius: radius.md, backgroundColor: colors.goldSoft },
+  syncNoteText: { flex: 1, ...type.caption, fontSize: 12, color: colors.ink },
+  activeMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md },
+  activeMore: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.onFillRule },
   liveDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.gold },
   activeTitle: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.cream },
   activeSub: { ...type.caption, color: colors.onFillMuted },

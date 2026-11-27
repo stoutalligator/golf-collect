@@ -6,6 +6,7 @@ import { ScorecardEngraving, Tree } from '@/art/components';
 import { Icon } from '@/components/icons';
 import { Avatar, joinableRound, ReactionBar } from '@/components/social';
 import { teamNumbers } from '@/domain/teams';
+import { DeleteRoundSheet, DiscardRoundSheet } from '@/components/round-actions';
 import { Button, Empty, SheetScreen, StatStrip } from '@/components/ui';
 import { formatToPar, type HoleResult } from '@/domain/stats';
 import { roundOwner, type Hole, type Round } from '@/domain/types';
@@ -151,20 +152,17 @@ export default function Scorecard() {
 
       {round.status === 'complete' ? <Conversation round={round} /> : null}
 
-      {isMine ? (
-      <Tap
-        haptic={confirmDelete ? 'warning' : 'tap'}
-        scaleTo={0.95}
-        onPress={async () => {
-          if (!confirmDelete) return setConfirmDelete(true);
-          await data.deleteRound(round.id);
-          router.back();
-        }}
-        accessibilityRole="button"
-        style={styles.delete}>
-        <Text style={[styles.deleteText, confirmDelete && { color: colors.danger }]}>{confirmDelete ? 'Tap again to delete this round' : 'Delete round'}</Text>
-      </Tap>
+      {isMine || (round.status === 'active' && round.scoredBy === data.me.id) ? (
+        <Tap haptic="tap" scaleTo={0.95} onPress={() => setConfirmDelete(true)} accessibilityRole="button" style={styles.delete}>
+          <Icon name="trash" size={16} color={colors.danger} />
+          <Text style={[styles.deleteText, { color: colors.danger }]}>{round.status === 'active' ? 'Discard round' : 'Delete round'}</Text>
+        </Tap>
       ) : null}
+      {round.status === 'active' ? (
+        <DiscardRoundSheet round={round} visible={confirmDelete} onClose={() => setConfirmDelete(false)} onDone={() => { setConfirmDelete(false); router.replace('/'); }} />
+      ) : (
+        <DeleteRoundSheet round={round} visible={confirmDelete} onClose={() => setConfirmDelete(false)} onDone={() => { setConfirmDelete(false); if (router.canGoBack()) router.back(); else router.replace('/'); }} />
+      )}
     </SheetScreen>
   );
 }
@@ -314,7 +312,7 @@ const styles = themed(() => StyleSheet.create({
   togetherRow: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: space.sm },
   togetherName: { flex: 1, fontFamily: fonts.bodyMedium, fontSize: 15, color: colors.ink },
   togetherScore: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink, fontVariant: ['tabular-nums'] },
-  delete: { alignSelf: 'center', padding: space.sm },
+  delete: { alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: space.lg, minHeight: 44, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.rule },
   ownerRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   ownerName: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
   ownerSub: { ...type.caption, color: colors.inkMuted },
@@ -326,7 +324,7 @@ const styles = themed(() => StyleSheet.create({
   composer: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   input: { flex: 1, height: 40, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.rule, backgroundColor: colors.cream, paddingHorizontal: space.lg, fontFamily: fonts.body, fontSize: 14, color: colors.ink, outlineStyle: 'none' } as never,
   send: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.fairway, alignItems: 'center', justifyContent: 'center' },
-  deleteText: { ...type.caption, color: colors.inkMuted, textDecorationLine: 'underline' },
+  deleteText: { fontFamily: fonts.bodySemibold, fontSize: 14 },
 }));
 
 /** "Counts toward Thursday Night League · Week 3" link on an event-linked scorecard. */

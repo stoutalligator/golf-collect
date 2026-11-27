@@ -15,7 +15,9 @@ import type { CompetitionEvent, EventFormat, EventMember, EventRound } from '@/d
 import { makeJoinCode } from '@/domain/competition';
 
 import { todayISO } from '@/lib/format';
-import type { AppSnapshot, EventRoundChanges, NewEvent, NewEventRound, ProfileChanges, Repository } from './repository';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import type { AppSnapshot, EventRoundChanges, NewEvent, NewEventRound, ProfileChanges, Repository, SyncStatus } from './repository';
 
 // ── Row shapes (only the columns we read) ───────────────────────────────────
 
@@ -174,6 +176,10 @@ const toEventRound = (r: EventRoundRow): EventRound => ({
 /** Strip characters that would break a PostgREST `or=` filter. */
 const safeQuery = (q: string) => q.replace(/[^\p{L}\p{N} _.'-]/gu, '').trim().slice(0, 40);
 
+type OutboxOp =
+  | { kind: 'round'; round: Round; holes?: number[] }
+  | { kind: 'holes'; round: Round; holes: { hole: number; score: HoleScore | null }[] };
+
 export class SupabaseRepository implements Repository {
   private snap: AppSnapshot | null = null;
   /** Course index + sim courses: shared reference data, fetched once per app session. */
@@ -182,6 +188,20 @@ export class SupabaseRepository implements Repository {
   private static fullCourses = new Map<string, Course>();
   /** round id → the owner's round_players id (needed to write hole scores). */
   private ownerSlot = new Map<string, string>();
+
+  /**
+   * Outbox: round saves made on the course, kept on the phone (AsyncStorage) and uploaded in order. Each op is
+   * applied to the snapshot right away and re-applied after every refetch until it has uploaded, so a weak signal
+   * never loses or rewinds a score.
+   */
+  private outbox: OutboxOp[] = [];
+  private outboxReady: Promise<void> | null = null;
+  private flushing = false;
+  private failing = false;
+  private retryMs = 5_000;
+  private retryTimer: ReturnType<typeof setTimeout> | null = null;
+  private outboxListeners = new Set<() => void>();
+  private get outboxKey() { return `gk.outbox.${this.userId}`; }
 
   private db: SupabaseClient;
   private userId: string;
@@ -245,6 +265,7 @@ export class SupabaseRepository implements Repository {
 
   async load(force = false): Promise<AppSnapshot> {
     if (this.snap && !force) return this.snap;
+    await this.readOutbox();
     const me = this.userId;
     const [ref, friendships, roundRows, wish, reactions, comments, eventRows, memberRows, eventRoundRows, matchRows] = await Promise.all([
       this.referenceData(),
@@ -317,7 +338,127 @@ export class SupabaseRepository implements Repository {
       eventRounds,
       eventMatches,
     };
+    this.reapplyOutbox();
+    if (this.outbox.length) void this.flushOutbox();
     return this.snap;
+  }
+
+  // ── Outbox ───────────────────────────────────────────────────────────────
+
+  private readOutbox(): Promise<void> {
+    this.outboxReady ??= AsyncStorage.getItem(this.outboxKey)
+      .then((raw) => { this.outbox = raw ? (JSON.parse(raw) as OutboxOp[]) : []; })
+      .catch(() => { this.outbox = []; });
+    return this.outboxReady;
+  }
+
+  private persistOutbox() {
+    AsyncStorage.setItem(this.outboxKey, JSON.stringify(this.outbox)).catch(() => {});
+    this.outboxListeners.forEach((l) => l());
+  }
+
+  outboxStatus(): SyncStatus {
+    return { pending: this.outbox.length, failing: this.failing && this.outbox.length > 0 };
+  }
+
+  onOutboxChange(cb: () => void) {
+    this.outboxListeners.add(cb);
+    return () => { this.outboxListeners.delete(cb); };
+  }
+
+  /** Put a round into the snapshot as this phone sees it (yours in `rounds`, anyone else's in `friendRounds`). */
+  private applyRound(round: Round) {
+    if (!this.snap) return;
+    const owner = round.ownerId ?? this.userId;
+    const stored: Round = { ...round, ownerId: owner };
+    const mine = owner === this.userId;
+    this.snap = {
+      ...this.snap,
+      rounds: mine ? [...this.snap.rounds.filter((r) => r.id !== round.id), stored] : this.snap.rounds.filter((r) => r.id !== round.id),
+      friendRounds: mine ? this.snap.friendRounds.filter((r) => r.id !== round.id) : [...this.snap.friendRounds.filter((r) => r.id !== round.id), stored],
+    };
+  }
+
+  private applyHoles(round: Round, holes: { hole: number; score: HoleScore | null }[]) {
+    if (!this.snap) return;
+    const owner = round.ownerId ?? this.userId;
+    const apply = (r: Round): Round => {
+      if (r.id !== round.id) return r;
+      const list = (r.scores[owner] ?? r.holeNumbers.map(() => null)).slice();
+      for (const { hole, score } of holes) {
+        const i = r.holeNumbers.indexOf(hole);
+        if (i >= 0) list[i] = score ? { ...score, enteredBy: this.userId } : null;
+      }
+      return { ...r, scores: { ...r.scores, [owner]: list } };
+    };
+    this.snap = { ...this.snap, rounds: this.snap.rounds.map(apply), friendRounds: this.snap.friendRounds.map(apply) };
+  }
+
+  private applyOp(op: OutboxOp) {
+    if (op.kind === 'holes') return this.applyHoles(op.round, op.holes);
+    // A partial save only changes those holes (plus the round's status); a full save replaces the card.
+    if (!op.holes) return this.applyRound(op.round);
+    const owner = op.round.ownerId ?? this.userId;
+    const existing = [...(this.snap?.rounds ?? []), ...(this.snap?.friendRounds ?? [])].find((r) => r.id === op.round.id);
+    if (!existing) return this.applyRound(op.round);
+    const scores = op.round.scores[owner] ?? [];
+    this.applyRound({ ...existing, status: op.round.status, completedAt: op.round.completedAt });
+    this.applyHoles(existing, op.holes.map((hole) => ({ hole, score: scores[op.round.holeNumbers.indexOf(hole)] ?? null })));
+  }
+
+  /** After a refetch, put back everything that hasn't uploaded yet. */
+  private reapplyOutbox() {
+    for (const op of this.outbox) this.applyOp(op);
+  }
+
+  async queueRound(round: Round, opts: { holes?: number[] } = {}): Promise<AppSnapshot> {
+    await this.readOutbox();
+    const op: OutboxOp = { kind: 'round', round, ...(opts.holes ? { holes: opts.holes } : {}) };
+    this.outbox.push(op);
+    this.applyOp(op);
+    this.persistOutbox();
+    void this.flushOutbox();
+    return this.snap!;
+  }
+
+  async queueHoleScores(round: Round, holes: { hole: number; score: HoleScore | null }[]): Promise<AppSnapshot> {
+    if (!holes.length) return this.snap!;
+    await this.readOutbox();
+    const op: OutboxOp = { kind: 'holes', round, holes };
+    this.outbox.push(op);
+    this.applyOp(op);
+    this.persistOutbox();
+    void this.flushOutbox();
+    return this.snap!;
+  }
+
+  /** Upload queued saves in order; on failure, back off (5 s → 60 s) and try again. */
+  async flushOutbox(): Promise<void> {
+    await this.readOutbox();
+    if (this.flushing || !this.outbox.length) return;
+    this.flushing = true;
+    if (this.retryTimer) { clearTimeout(this.retryTimer); this.retryTimer = null; }
+    try {
+      while (this.outbox.length) {
+        const op = this.outbox[0];
+        if (op.kind === 'round') await this.saveRound(op.round, op.holes ? { holes: op.holes } : {});
+        else await this.saveHoleScores(op.round, op.holes);
+        this.outbox.shift();
+        this.reapplyOutbox();
+        this.failing = false;
+        this.retryMs = 5_000;
+        this.persistOutbox();
+      }
+    } catch {
+      this.failing = true;
+      this.persistOutbox();
+      this.retryTimer = setTimeout(() => { void this.flushOutbox(); }, this.retryMs);
+      this.retryMs = Math.min(this.retryMs * 2, 60_000);
+    } finally {
+      this.flushing = false;
+    }
+    // Uploads re-run the snapshot patches; put back anything still waiting on top.
+    this.reapplyOutbox();
   }
 
   async refreshGroup(groupKey: string): Promise<AppSnapshot> {
@@ -337,6 +478,7 @@ export class SupabaseRepository implements Repository {
     // Everyone can edit every card while playing, so the server's copy wins; the play screen keeps its own unsaved
     // edits on top until they're saved.
     this.snap = { ...snap, rounds: merge(snap.rounds, true), friendRounds: merge(snap.friendRounds, false) };
+    this.reapplyOutbox();
     return this.snap;
   }
 
@@ -408,11 +550,17 @@ export class SupabaseRepository implements Repository {
     }
 
     const stored: Round = { ...round, ownerId: owner, ...(keeper ? { scoredBy: me } : {}), scores: { [owner]: scores } };
-    if (this.snap) {
-      this.patch(keeper
-        ? { friendRounds: [...this.snap.friendRounds.filter((r) => r.id !== round.id), stored] }
-        : { rounds: [...this.snap.rounds.filter((r) => r.id !== round.id), stored] });
+    if (!this.snap) return;
+    const current = [...this.snap.rounds, ...this.snap.friendRounds].find((r) => r.id === round.id);
+    if (only && current) {
+      // A partial save only touched those holes (and the status): don't overwrite the rest of the card.
+      this.applyRound({ ...current, status: round.status, completedAt: round.completedAt, ...(keeper ? { scoredBy: me } : {}) });
+      this.applyHoles(current, [...only].map((hole) => ({ hole, score: scores[round.holeNumbers.indexOf(hole)] ?? null })));
+      return;
     }
+    this.patch(keeper
+      ? { friendRounds: [...this.snap.friendRounds.filter((r) => r.id !== round.id), stored] }
+      : { rounds: [...this.snap.rounds.filter((r) => r.id !== round.id), stored] });
   }
 
   /** Shared scoring: write some holes on a round you're playing but don't own (allowed while it's in progress). */
@@ -448,7 +596,16 @@ export class SupabaseRepository implements Repository {
   }
 
   async deleteRound(id: string) {
-    await this.must(this.db.from('rounds').delete().eq('id', id), 'delete round');
+    // Drop anything still queued for it first, so an unsent save can't bring a discarded round back.
+    await this.readOutbox();
+    const queued = this.outbox.filter((op) => op.round.id === id);
+    if (queued.length) {
+      this.outbox = this.outbox.filter((op) => op.round.id !== id);
+      this.persistOutbox();
+    }
+    // Never uploaded (its creation was still queued): nothing on the server to delete.
+    const neverSent = queued.some((op) => op.kind === 'round' && !op.holes) && !this.ownerSlot.has(id);
+    if (!neverSent) await this.must(this.db.from('rounds').delete().eq('id', id), 'delete round');
     this.ownerSlot.delete(id);
     if (this.snap) this.patch({ rounds: this.snap.rounds.filter((r) => r.id !== id), friendRounds: this.snap.friendRounds.filter((r) => r.id !== id) });
   }

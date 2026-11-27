@@ -103,7 +103,9 @@ export default function CourseDetail() {
             <Button label="Log a Round" icon="flag" onPress={() => router.push(`/round/new?courseId=${course.id}`)} style={{ flex: 1.2 }} />
             <Button label="Schedule" icon="calendar" variant="secondary" onPress={() => router.push(`/schedule?courseId=${course.id}`)} style={{ flex: 1 }} />
           </View>
-          <Button label="View your scorecards here" variant="secondary" onPress={() => router.navigate(`/stats?view=rounds&courseId=${course.id}`)} />
+          {rounds.length ? (
+            <Button label={`Your rounds here (${rounds.length})`} variant="secondary" onPress={() => router.navigate(`/stats?view=rounds&courseId=${course.id}`)} />
+          ) : null}
 
           <View style={{ gap: space.md }}>
             <SectionHeader title="Collectibles" count={`${col?.earnedCount ?? 0}/${col?.items.length ?? 0}`} action={tierName ? `${tierName} marker` : undefined} />

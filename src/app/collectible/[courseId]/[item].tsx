@@ -7,16 +7,12 @@ import { Icon } from '@/components/icons';
 import { Card, Empty, IconButton, Loading, ProgressBar } from '@/components/ui';
 import { collectiblesForCourse, TIERS } from '@/data/config/game';
 import { tierRank } from '@/domain/collection';
-import type { CollectibleItem } from '@/domain/types';
 import { formatDate } from '@/lib/format';
 import { shortCourseName } from '@/lib/names';
 import { useAppData, useCourse } from '@/state/app-data';
 import { colors, fonts, radius, space, themed, type } from '@/theme';
 import { Animated, popIn } from '@/components/motion';
 
-const KIND_LABEL: Record<CollectibleItem, string> = {
-  'ball-marker': 'Ball Marker', 'bag-tag': 'Bag Tag', 'pitch-marker': 'Pitch Marker', patch: 'Patch', pin: 'Pin',
-};
 
 export default function CollectibleDetail() {
   const { courseId, item } = useLocalSearchParams<{ courseId: string; item: string }>();
@@ -47,8 +43,9 @@ export default function CollectibleDetail() {
       </View>
 
       <ScrollView style={styles.sheet} contentContainerStyle={styles.sheetContent}>
-        <Text style={styles.title}>{def.name.startsWith(short) ? def.name : `${short} ${def.name}`}</Text>
-        <Text style={styles.subtitle}>{isMarker ? 'Course Collectible' : 'Course Achievement'}  ·  {KIND_LABEL[def.kind]}</Text>
+        {/* The art already carries the course name, so the title is just the item. */}
+        <Text style={styles.title} accessibilityLabel={`${short} ${def.name}`}>{def.name}</Text>
+        <Text style={styles.subtitle}>{isMarker ? 'Course collectible' : 'Course achievement'}</Text>
         <Text style={styles.body}>{def.howToEarn.replace(/ here$/, '')} at {course.name}.</Text>
 
         {state?.earned ? (
