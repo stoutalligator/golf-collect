@@ -1,0 +1,263 @@
+{
+  "_attribution": "© OpenStreetMap contributors (ODbL 1.0) via OpenGolfAPI — https://opengolfapi.org/attribution",
+  "generated": "2026-11-27",
+  "courses": [
+    {
+      "id": "edgewood-golf-course",
+      "name": "Edgewood Golf Course",
+      "city": "Southwick",
+      "state": "MA",
+      "county": "Hampden",
+      "region": "new-england",
+      "access": "public",
+      "location": {
+        "lat": 42.0411567,
+        "lng": -72.7691116
+      },
+      "website": "https://www.edgewoodgolfcourse.com/",
+      "yearOpened": 1963,
+      "description": "Public 18-hole course in Southwick, par 71, playing up to 6,465 yards, dating to 1963.",
+      "holes": [
+        {
+          "number": 1,
+          "par": 5,
+          "handicap": 10
+        },
+        {
+          "number": 2,
+          "par": 4,
+          "handicap": 4
+        },
+        {
+          "number": 3,
+          "par": 4,
+          "handicap": 16
+        },
+        {
+          "number": 4,
+          "par": 5,
+          "handicap": 2
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "handicap": 6
+        },
+        {
+          "number": 6,
+          "par": 3,
+          "handicap": 18
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "handicap": 12
+        },
+        {
+          "number": 8,
+          "par": 3,
+          "handicap": 14
+        },
+        {
+          "number": 9,
+          "par": 4,
+          "handicap": 8
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "handicap": 11
+        },
+        {
+          "number": 11,
+          "par": 3,
+          "handicap": 15
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "handicap": 5
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "handicap": 17
+        },
+        {
+          "number": 14,
+          "par": 5,
+          "handicap": 1
+        },
+        {
+          "number": 15,
+          "par": 5,
+          "handicap": 3
+        },
+        {
+          "number": 16,
+          "par": 4,
+          "handicap": 9
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "handicap": 13
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "handicap": 7
+        }
+      ],
+      "tees": [
+        {
+          "id": "blue",
+          "name": "Blue",
+          "par": 71,
+          "totalYards": 6465,
+          "yardages": [
+            470,
+            435,
+            340,
+            565,
+            415,
+            190,
+            410,
+            195,
+            350,
+            310,
+            180,
+            405,
+            160,
+            575,
+            525,
+            400,
+            175,
+            365
+          ],
+          "ratings": {
+            "men": {
+              "rating": 70.7,
+              "slope": 123
+            }
+          }
+        },
+        {
+          "id": "white",
+          "name": "White",
+          "par": 71,
+          "totalYards": 6015,
+          "yardages": [
+            450,
+            420,
+            315,
+            525,
+            385,
+            170,
+            390,
+            170,
+            340,
+            295,
+            160,
+            375,
+            150,
+            545,
+            480,
+            355,
+            150,
+            340
+          ],
+          "ratings": {
+            "men": {
+              "rating": 68.4,
+              "slope": 118
+            }
+          }
+        },
+        {
+          "id": "yellow",
+          "name": "Yellow",
+          "par": 71,
+          "totalYards": 5735,
+          "yardages": [
+            440,
+            415,
+            305,
+            500,
+            365,
+            160,
+            380,
+            165,
+            330,
+            285,
+            145,
+            355,
+            145,
+            490,
+            465,
+            335,
+            130,
+            325
+          ],
+          "ratings": {
+            "men": {
+              "rating": 66.8,
+              "slope": 114
+            }
+          }
+        },
+        {
+          "id": "red",
+          "name": "Red",
+          "par": 71,
+          "totalYards": 5570,
+          "yardages": [
+            430,
+            400,
+            300,
+            495,
+            355,
+            150,
+            370,
+            160,
+            325,
+            275,
+            135,
+            345,
+            140,
+            480,
+            450,
+            325,
+            120,
+            315
+          ],
+          "ratings": {
+            "women": {
+              "rating": 71.7,
+              "slope": 122
+            }
+          }
+        }
+      ],
+      "verification": {
+        "status": "official",
+        "sources": [
+          {
+            "name": "OpenGolfAPI",
+            "url": "https://api.opengolfapi.org/api/v1/courses/8caf9140-393a-4c79-b6ba-c7a50bb936c6",
+            "checked": "2026-11-27",
+            "license": "ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI"
+          },
+          {
+            "name": "Edgewood Golf Course official scorecard (edgewoodgolfcourse.com, scorecard images)",
+            "url": "https://www.edgewoodgolfcourse.com/pages/scorecard.php",
+            "checked": "2026-11-27"
+          }
+        ],
+        "notes": [
+          "OpenGolfAPI lists a 9-hole par-32 card whose front nine doesn't match the course and whose back nine matches the official Blue yardages, so the whole card (par, stroke index, hole yardages, ratings) comes from the official scorecard. The card's White front-nine total is printed as 3,160 but the holes sum to 3,165; the hole yardages are used. Year opened from the card (\"Est. 1963\"); OpenGolfAPI's architect and 1932 date conflict with it and were dropped. Red rating/slope listed on the card without gender; recorded as women's. Access type (public) from the OpenGolfAPI listing; not yet confirmed."
+        ]
+      }
+    }
+  ]
+}

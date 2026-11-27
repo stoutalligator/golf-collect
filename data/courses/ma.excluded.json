@@ -3,13 +3,6 @@
   "state": "MA",
   "excluded": [
     {
-      "ogapiId": "8caf9140-393a-4c79-b6ba-c7a50bb936c6",
-      "name": "Edgewood Golf Club",
-      "city": "Southwick",
-      "holes": 9,
-      "reason": "9-hole course with extra, non-empty hole data"
-    },
-    {
       "ogapiId": "00ed8d21-b176-43f8-b2e9-ed60afed80eb",
       "name": "Long Meadow Golf Club",
       "city": "Lowell",

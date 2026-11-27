@@ -1,0 +1,31 @@
+{
+  "_comment": "Curated Massachusetts courses (see .claude/skills/course-research). Built by: node scripts/courses/build-ct-seed.mjs --state MA, then carried into data/courses/ma.json by build-seed.mjs --state MA.",
+  "checked": "2026-11-27",
+  "courses": [
+    {
+      "id": "edgewood-golf-course",
+      "name": "Edgewood Golf Course",
+      "county": "Hampden",
+      "ogapi": "Edgewood Golf Club",
+      "override": "edgewood"
+    }
+  ],
+  "overrides": {
+    "edgewood": {
+      "source": { "name": "Edgewood Golf Course official scorecard (edgewoodgolfcourse.com, scorecard images)", "url": "https://www.edgewoodgolfcourse.com/pages/scorecard.php" },
+      "status": "official",
+      "note": "OpenGolfAPI lists a 9-hole par-32 card whose front nine doesn't match the course and whose back nine matches the official Blue yardages, so the whole card (par, stroke index, hole yardages, ratings) comes from the official scorecard. The card's White front-nine total is printed as 3,160 but the holes sum to 3,165; the hole yardages are used. Year opened from the card (\"Est. 1963\"); OpenGolfAPI's architect and 1932 date conflict with it and were dropped. Red rating/slope listed on the card without gender; recorded as women's. Access type (public) from the OpenGolfAPI listing; not yet confirmed.",
+      "website": "https://www.edgewoodgolfcourse.com/",
+      "architect": null,
+      "yearOpened": 1963,
+      "par": [5, 4, 4, 5, 4, 3, 4, 3, 4, 4, 3, 4, 3, 5, 5, 4, 3, 4],
+      "handicap": [10, 4, 16, 2, 6, 18, 12, 14, 8, 11, 15, 5, 17, 1, 3, 9, 13, 7],
+      "tees": [
+        { "id": "blue", "name": "Blue", "ratings": { "men": { "rating": 70.7, "slope": 123 } }, "yardages": [470, 435, 340, 565, 415, 190, 410, 195, 350, 310, 180, 405, 160, 575, 525, 400, 175, 365] },
+        { "id": "white", "name": "White", "ratings": { "men": { "rating": 68.4, "slope": 118 } }, "yardages": [450, 420, 315, 525, 385, 170, 390, 170, 340, 295, 160, 375, 150, 545, 480, 355, 150, 340] },
+        { "id": "yellow", "name": "Yellow", "ratings": { "men": { "rating": 66.8, "slope": 114 } }, "yardages": [440, 415, 305, 500, 365, 160, 380, 165, 330, 285, 145, 355, 145, 490, 465, 335, 130, 325] },
+        { "id": "red", "name": "Red", "ratings": { "women": { "rating": 71.7, "slope": 122 } }, "yardages": [430, 400, 300, 495, 355, 150, 370, 160, 325, 275, 135, 345, 140, 480, 450, 325, 120, 315] }
+      ]
+    }
+  }
+}

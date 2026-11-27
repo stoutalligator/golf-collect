@@ -1,6 +1,6 @@
 # Course data sources
 
-*Generated from `courses.ct.json` on 2026-11-25. Rebuild with `node scripts/courses/build-ct-seed.mjs` (add `--refresh` to re-fetch).*
+*Generated from `courses.ct.json` on 2026-11-25. Rebuild with `node scripts/courses/build-ct-seed.mjs` (add `--state MA` for other states, `--refresh` to re-fetch).*
 
 ## Method
 
@@ -42,6 +42,9 @@ ODbL requires **attribution** ("© OpenStreetMap contributors (ODbL 1.0) via Ope
 | Norwich Golf Club | Norwich | New London | municipal | 71 | **cross-checked** | 4 (4) | OpenGolfAPI hole pars garbled; hole pars and yardages from GolfPass (pars total 71, stroke index matches OpenGolfAPI, all tee totals match). Ratings conflict (GolfPass Blue 69.4/125 vs. 70/131); OpenGolfAPI's kept. Club site unreachable (expired certificate): needs the current card. |
 | Cedar Knob Golf Course | Somers | Tolland | public | 72 | **cross-checked** | 4 (4) | OpenGolfAPI hole pars garbled; hole pars and yardages from GolfPass (stroke index matches OpenGolfAPI). Course site confirms Blue/White/Red totals and ratings. Gold has no rating. |
 | Chippanee Golf Club | Bristol | Hartford | private | 70 | **official** | 3 (3) | Official card on chippanee.com. OpenGolfAPI's 2 extra holes dropped; Red hole 18 is 345 (others show 305); card's White 18 '56' is a typo for 356. Ratings from the card (match GolfPass). |
+| Edgewood Golf Course (MA) | Southwick | Hampden | public | 71 | **official** | 4 (4) | Whole card from the official scorecard (OpenGolfAPI mixed in another 9-hole layout). White front-nine total printed 3,160; holes sum to 3,165. Year opened 1963 per the card. Access from OpenGolfAPI, unconfirmed. Built from `scripts/courses/ma-courses.json` with `--state MA`. |
+| Ticonderoga Golf Course (NY) | Ticonderoga | Essex | public | 72 | **official** | 4 (4) | Card-only (not in cached OpenGolfAPI data). Card from the official PDF; ratings from the club-history USGA list (no gender given: Red recorded as women's); Stymie matches par, stroke index and ratings; GolfPass conflicts and was disregarded. Location from OpenStreetMap. Built from `scripts/courses/ny-courses.json` with `--state NY`. |
+| Pinehurst No. 2 (NC) | Pinehurst | Moore | semi-private (members and resort guests) | 72 | **official** | 5 (5) | Card-only (OpenGolfAPI daily limit reached). Par, men's stroke index and hole yardages from the official 2026 scorecard PDF; course page tables agree. U.S. Open tee is par 70 on the card (8 and 16 as par 4s), scored against the par-72 card. Women's stroke index (Green/Red) not stored. No rating/slope (not published; USGA NCRDB unreachable). Ross/Tufts combo tees left out. Location from OpenStreetMap. Built from `scripts/courses/nc-courses.json` with `--state NC`. |
 
 ### Extra sources
 
@@ -52,3 +55,6 @@ ODbL requires **attribution** ("© OpenStreetMap contributors (ODbL 1.0) via Ope
 - **Norwich Golf Club**: [GolfPass scorecard](https://www.golfpass.com/courses/4403-norwich-golf-club/scorecard-and-layout) · [City of Norwich: Golf Course Authority](https://norwichct.gov/141/Golf-Course-Authority)
 - **Cedar Knob Golf Course**: [GolfPass scorecard](https://www.golfpass.com/courses/4426-cedar-knob-golf-course/scorecard-and-layout) · [Cedar Knob course details](http://www.cedarknobgolfcourse.com/course-details) · [rates](http://www.cedarknobgolfcourse.com/rates)
 - **Chippanee Golf Club**: [Chippanee official scorecard](https://chippanee.com/FACILITIES/Golf.aspx) · [GolfPass scorecard](https://www.golfpass.com/courses/4322-chippanee-golf-club/scorecard-and-layout)
+- **Edgewood Golf Course (MA)**: [Edgewood Golf Course official scorecard (scorecard images)](https://www.edgewoodgolfcourse.com/pages/scorecard.php)
+- **Ticonderoga Golf Course (NY)**: [official scorecard (PDF)](https://ticonderogagolfcourse.com/wp-content/uploads/2025/02/A4-scorecard-1.pdf) · [club history: USGA ratings, architect, dates](https://ticonderogagolfcourse.com/club-history/) · [Stymie scorecard](https://stymie.golf/golf-courses/new-york/essex-county/ticonderoga/ticonderoga-golf-course) · [OpenStreetMap](https://www.openstreetmap.org/way/137702631)
+- **Pinehurst No. 2 (NC)**: [official scorecard, 2026 (PDF)](https://www.pinehurst.com/wp-content/uploads/2025/10/Scorecard_No2_yardage26-1.pdf) · [course page](https://www.pinehurst.com/golf/courses/no-2/) · [Golfers Guide: access](https://www.pinehurst.com/golf/) · [OpenStreetMap](https://www.openstreetmap.org/way/1358696570)

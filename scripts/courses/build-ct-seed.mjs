@@ -1,6 +1,6 @@
-// Builds src/data/seed/courses.ct.json from OpenGolfAPI (ODbL 1.0) + manual overrides.
-// Usage: node scripts/courses/build-ct-seed.mjs [--refresh]
-// Raw API responses are cached in scripts/courses/.cache (gitignored).
+// Builds src/data/seed/courses.<st>.json from OpenGolfAPI (ODbL 1.0) + manual overrides.
+// Usage: node scripts/courses/build-ct-seed.mjs [--state MA] [--refresh]     (default state: CT)
+// Reads scripts/courses/<st>-courses.json. Raw API responses are cached in scripts/courses/.cache (gitignored).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,13 +8,16 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..');
 const cacheDir = join(here, '.cache');
-const outFile = join(root, 'src', 'data', 'seed', 'courses.ct.json');
+const stateArg = process.argv.indexOf('--state');
+const STATE = (stateArg > 0 ? process.argv[stateArg + 1] : 'CT').toUpperCase();
+const st = STATE.toLowerCase();
+const outFile = join(root, 'src', 'data', 'seed', `courses.${st}.json`);
 const API = 'https://api.opengolfapi.org';
 const UA = { 'User-Agent': 'course-research-client' };
 const refresh = process.argv.includes('--refresh');
 const YARDAGE_TOLERANCE = 0.015; // hole sum vs. stated tee total
 
-const config = JSON.parse(readFileSync(join(here, 'ct-courses.json'), 'utf8'));
+const config = JSON.parse(readFileSync(join(here, `${st}-courses.json`), 'utf8'));
 const { regions } = JSON.parse(readFileSync(join(root, 'src', 'data', 'config', 'regions.json'), 'utf8'));
 const regionFor = (state) => {
   const r = regions.find((x) => x.states.includes(state));
@@ -33,10 +36,10 @@ async function getJson(url, cacheName) {
   return json;
 }
 
-async function ctIndex() {
+async function stateIndex() {
   const all = [];
   for (let offset = 0; ; offset += 100) {
-    const page = await getJson(`${API}/v1/courses/state/CT?offset=${offset}&limit=100`, `ct-${offset}.json`);
+    const page = await getJson(`${API}/v1/courses/state/${STATE}?offset=${offset}&limit=100`, `${st}-${offset}.json`);
     all.push(...page.courses);
     if (all.length >= page.total || page.courses.length === 0) break;
   }
@@ -68,19 +71,27 @@ function describe(c) {
   return parts.join(', ') + '.';
 }
 
-const index = await ctIndex();
-const byName = new Map(index.map((c) => [c.name, c]));
+// The state index is fetched only if some entry uses OpenGolfAPI (card-only states make no API calls).
+let byName;
 const courses = [];
 
 for (const entry of config.courses) {
-  const hit = byName.get(entry.ogapi);
-  if (!hit) throw new Error(`Not in OpenGolfAPI CT index: ${entry.ogapi}`);
-  const d = await getJson(`${API}/api/v1/courses/${hit.id}`, `${hit.id}.json`);
+  // Card-only course (not in OpenGolfAPI): the override supplies the whole card plus city and location.
+  let d = { holes_data: [], tees: [] };
+  const sources = [];
+  if (entry.ogapi) {
+    byName ??= new Map((await stateIndex()).map((c) => [c.name, c]));
+    const hit = byName.get(entry.ogapi);
+    if (!hit) throw new Error(`Not in OpenGolfAPI ${STATE} index: ${entry.ogapi}`);
+    d = await getJson(`${API}/api/v1/courses/${hit.id}`, `${hit.id}.json`);
+    sources.push({
+      name: 'OpenGolfAPI', url: `${API}/api/v1/courses/${hit.id}`, checked: config.checked,
+      license: 'ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI',
+    });
+  } else if (!entry.override || !config.overrides[entry.override]?.location || !entry.access) {
+    throw new Error(`${entry.id}: without "ogapi" it needs an override with city and location, and a confirmed access`);
+  }
   const notes = [];
-  const sources = [{
-    name: 'OpenGolfAPI', url: `${API}/api/v1/courses/${hit.id}`, checked: config.checked,
-    license: 'ODbL-1.0 — © OpenStreetMap contributors via OpenGolfAPI',
-  }];
   let status = 'single-source';
 
   let par = d.holes_data.map((h) => h.par);
@@ -114,6 +125,7 @@ for (const entry of config.courses) {
     handicap = ov.handicap;
     tees = ov.tees.map((t) => ({ id: t.id, name: t.name, par: sum(ov.par), totalYards: sum(t.yardages), yardages: t.yardages, ratings: t.ratings }));
     sources.push({ ...ov.source, checked: config.checked });
+    for (const s of ov.extraSources ?? []) sources.push({ ...s, checked: config.checked });
     notes.splice(0, notes.length, ov.note);
     status = ov.status;
   }
@@ -128,21 +140,23 @@ for (const entry of config.courses) {
   }
 
   assertCard(entry.id, par, handicap);
-  if (sum(par) !== d.par) notes.push(`Hole pars sum to ${sum(par)}; source lists ${d.par}.`);
+  if (sum(par) !== d.par && !ov) notes.push(`Hole pars sum to ${sum(par)}; source lists ${d.par}.`);
+  // Overrides may also correct listing facts (null drops a value we can't confirm).
+  const fact = (key, fallback) => (ov && key in ov ? ov[key] ?? undefined : fallback);
 
   const course = {
     id: entry.id,
     name: entry.name,
-    city: d.city,
-    state: 'CT',
+    city: fact('city', d.city),
+    state: STATE,
     county: entry.county,
-    region: regionFor('CT'),
+    region: regionFor(STATE),
     ...(entry.biome ? { biome: entry.biome, biomeSource: entry.biomeSource } : {}),
     access: entry.access ?? ACCESS[String(d.type).toLowerCase()] ?? 'public',
-    location: { lat: d.lat, lng: d.lng },
-    website: d.website?.replace(/\?utm.*$/, '') || undefined,
-    architect: d.architect || undefined,
-    yearOpened: d.year_built || undefined,
+    location: fact('location', { lat: d.lat, lng: d.lng }),
+    website: fact('website', d.website?.replace(/\?utm.*$/, '') || undefined),
+    architect: fact('architect', d.architect || undefined),
+    yearOpened: fact('yearOpened', d.year_built || undefined),
     description: '',
     holes: par.map((p, i) => ({ number: i + 1, par: p, handicap: handicap[i] })),
     tees: tees.sort((a, b) => b.totalYards - a.totalYards),

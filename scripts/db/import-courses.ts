@@ -38,7 +38,11 @@ const stateFiles = existsSync(dataDir)
   ? readdirSync(dataDir).filter((f) => /^[a-z]{2}\.json$/.test(f) && (!only.size || only.has(f.slice(0, 2)))).map((f) => join(dataDir, f))
   : [];
 const seedDir = join(root, 'src', 'data', 'seed');
-const files = stateFiles.length ? stateFiles : readdirSync(seedDir).filter((f) => /^courses\..+\.json$/.test(f)).map((f) => join(seedDir, f));
+// Curated seeds also cover states that have no bulk file yet (e.g. a single researched out-of-region course).
+const bulkStates = new Set(existsSync(dataDir) ? readdirSync(dataDir).filter((f) => /^[a-z]{2}\.json$/.test(f)).map((f) => f.slice(0, 2)) : []);
+const seedFiles = readdirSync(seedDir).filter((f) => /^courses\.[a-z]{2}\.json$/.test(f)).map((f) => f.slice(8, 10))
+  .filter((st) => !(stateFiles.length && bulkStates.has(st)) && (!only.size || only.has(st))).map((st) => join(seedDir, `courses.${st}.json`));
+const files = [...stateFiles, ...seedFiles];
 const courses: SeedCourse[] = files.flatMap((f) => JSON.parse(readFileSync(f, 'utf8')).courses);
 
 async function run(label: string, p: PromiseLike<{ error: { message: string } | null }>) {

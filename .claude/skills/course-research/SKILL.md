@@ -21,7 +21,7 @@ Greens Keeper only ships **researched** course facts. Every number traces to a s
 | File | Role |
 |---|---|
 | `scripts/courses/ct-courses.json` | The research config: which courses, our display name and county, cross-checks, overrides, biome. **This is what you edit.** |
-| `scripts/courses/build-ct-seed.mjs` | Fetches OpenGolfAPI (cached in `scripts/courses/.cache`, gitignored), runs the automated checks, applies overrides and writes the seed. |
+| `scripts/courses/build-ct-seed.mjs` | `--state XX` (default CT) builds from `<st>-courses.json` into `courses.<st>.json`. Overrides may also set `website`, `architect`, `yearOpened` (null drops it), `city`, `location` and `extraSources`. An entry with no `ogapi` is a card-only course: it needs an override with `city` and `location` plus a confirmed `access`, and makes no API calls. `npm run db:import-courses` imports curated seeds for states that have no bulk file. Fetches OpenGolfAPI (cached in `scripts/courses/.cache`, gitignored), runs the automated checks, applies overrides and writes the seed. |
 | `src/data/seed/courses.ct.json` | Generated output the app reads (through `src/data`). |
 | `src/data/seed/SOURCES.md` | Human-readable method + per-course table and extra sources. Update it by hand after every rebuild. |
 | `src/data/config/regions.json` | State → art region. A new state must already be in a region. |

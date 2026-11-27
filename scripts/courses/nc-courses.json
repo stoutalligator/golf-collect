@@ -1,0 +1,39 @@
+{
+  "_comment": "Curated North Carolina courses (see .claude/skills/course-research). Built by: node scripts/courses/build-ct-seed.mjs --state NC. No NC bulk file yet, so npm run db:import-courses imports src/data/seed/courses.nc.json directly.",
+  "checked": "2026-11-27",
+  "courses": [
+    {
+      "id": "pinehurst-no-2",
+      "name": "Pinehurst No. 2",
+      "county": "Moore",
+      "override": "pinehurst-no-2",
+      "access": "semi-private",
+      "accessSource": { "name": "Pinehurst Resort golf page (Golfers Guide)", "url": "https://www.pinehurst.com/golf/", "note": "Site says \"To play Courses No. 2, 4, 6, 7, 8, 9, 10, or 11, you must be a member or resort guest\"; no walk-on play on No. 2, so recorded as semi-private (members plus resort guests)" }
+    }
+  ],
+  "overrides": {
+    "pinehurst-no-2": {
+      "source": { "name": "Pinehurst No. 2 official scorecard, 2026 yardages (PDF)", "url": "https://www.pinehurst.com/wp-content/uploads/2025/10/Scorecard_No2_yardage26-1.pdf" },
+      "extraSources": [
+        { "name": "Pinehurst No. 2 course page (scorecard tables, architect, opening year)", "url": "https://www.pinehurst.com/golf/courses/no-2/" },
+        { "name": "OpenStreetMap (location)", "url": "https://www.openstreetmap.org/way/1358696570", "license": "ODbL-1.0 — © OpenStreetMap contributors" }
+      ],
+      "status": "official",
+      "note": "OpenGolfAPI not consulted (daily limit reached); card-only course. Par, stroke index and hole yardages from the official 2026 scorecard PDF (every nine and total adds up); the course page's tables agree on par and yardages. Standard card is par 72; the card shows the U.S. Open tee at par 70 (holes 8 and 16 as par 4s), but the app scores every tee against the par-72 card. Stroke index is the men's row (U.S. Open/Blue/White); the card gives a separate women's index for Green/Red (9 5 3 1 11 17 13 15 7 | 10 14 12 6 8 18 4 16 2) that the app can't store yet. The course page also lists Ross (6,627) and Tufts (5,949) combo tees that aren't on the card; left out, and its White/Tufts index rows contain duplicate numbers (typos). Course rating and slope not published by the club and USGA NCRDB was unreachable, so no ratings. Architect Donald Ross, opened 1907, restored by Coore & Crenshaw (course page). Location is the OSM course-area centroid.",
+      "city": "Pinehurst",
+      "location": { "lat": 35.1916623, "lng": -79.4637323 },
+      "website": "https://www.pinehurst.com/golf/courses/no-2/",
+      "architect": "Donald Ross",
+      "yearOpened": 1907,
+      "par": [4, 4, 4, 4, 5, 3, 4, 5, 3, 5, 4, 4, 4, 4, 3, 5, 3, 4],
+      "handicap": [11, 3, 9, 1, 15, 5, 7, 17, 13, 18, 8, 10, 6, 2, 12, 16, 14, 4],
+      "tees": [
+        { "id": "us-open", "name": "U.S. Open", "ratings": {}, "yardages": [402, 507, 387, 529, 576, 242, 424, 502, 191, 617, 483, 484, 385, 473, 202, 528, 205, 451] },
+        { "id": "blue", "name": "Blue", "ratings": {}, "yardages": [393, 439, 350, 474, 508, 203, 393, 469, 174, 580, 455, 419, 375, 433, 183, 513, 185, 415] },
+        { "id": "white", "name": "White", "ratings": {}, "yardages": [376, 411, 330, 434, 462, 178, 385, 440, 148, 455, 375, 360, 358, 419, 170, 478, 162, 366] },
+        { "id": "green", "name": "Green", "ratings": {}, "yardages": [366, 390, 309, 326, 432, 170, 313, 419, 140, 438, 358, 336, 327, 347, 153, 437, 152, 358] },
+        { "id": "red", "name": "Red", "ratings": {}, "yardages": [340, 342, 283, 316, 417, 116, 306, 400, 124, 421, 320, 293, 278, 337, 124, 411, 145, 329] }
+      ]
+    }
+  }
+}
